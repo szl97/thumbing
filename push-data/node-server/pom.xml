@@ -8,10 +8,10 @@
         <version>2.3.1.RELEASE</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>com.loserclub</groupId>
-    <artifactId>pushdata</artifactId>
+    <groupId>com.loserclub.pushdata</groupId>
+    <artifactId>nodeserver</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>pushdata</name>
+    <name>nodeserver</name>
     <description>Demo project for Spring Boot</description>
 
     <properties>
@@ -45,32 +45,7 @@
                 </exclusion>
             </exclusions>
         </dependency>
-        <dependency>
-            <groupId>org.apache.curator</groupId>
-            <artifactId>curator-recipes</artifactId>
-            <version>4.1.0</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-lang3</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>io.netty</groupId>
-            <artifactId>netty-all</artifactId>
-            <version>4.1.50.Final</version>
-        </dependency>
-        <dependency>
-            <groupId>com.alibaba</groupId>
-            <artifactId>fastjson</artifactId>
-            <version>1.2.55</version>
-        </dependency>
     </dependencies>
-
-    <modules>
-        <module>common</module>
-        <module>data-center</module>
-        <module>node-server</module>
-    </modules>
 
     <build>
         <plugins>

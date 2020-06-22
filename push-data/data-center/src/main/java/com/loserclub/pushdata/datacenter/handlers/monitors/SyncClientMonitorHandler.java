@@ -24,7 +24,7 @@ public class SyncClientMonitorHandler implements IMonitorsHandler<PushReq> {
     }
 
     @Override
-    public void call(ChannelHandlerContext ctx, PushReq message) {
+    public void call(ChannelHandlerContext ctx, PushReq message) throws Exception {
         pushReqHandler.call(ctx,message);
     }
 }
