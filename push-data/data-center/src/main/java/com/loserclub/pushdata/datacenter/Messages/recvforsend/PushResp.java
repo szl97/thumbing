@@ -1,6 +1,6 @@
-package com.loserclub.pushdata.datacenter.Messages.recvforsend;
+package com.loserclub.pushdata.datacenter.messages.recvforsend;
 
-import com.loserclub.pushdata.datacenter.Messages.NodeMessageResp;
+import com.loserclub.pushdata.datacenter.messages.NodeMessageResp;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

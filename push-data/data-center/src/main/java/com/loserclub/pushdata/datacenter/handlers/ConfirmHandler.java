@@ -3,7 +3,7 @@ package com.loserclub.pushdata.datacenter.handlers;
 import com.loserclub.pushdata.common.channel.IChannelManager;
 import com.loserclub.pushdata.common.constants.AttributeEnum;
 import com.loserclub.pushdata.common.message.DefinedMessage;
-import com.loserclub.pushdata.datacenter.Messages.recvforsync.Confirm;
+import com.loserclub.pushdata.datacenter.messages.recvforsync.Confirm;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import lombok.Data;

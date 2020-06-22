@@ -1,13 +1,13 @@
-package com.loserclub.pushdata.datacenter.Messages;
+package com.loserclub.pushdata.datacenter.messages;
 
 import com.alibaba.fastjson.JSON;
 import com.loserclub.pushdata.common.message.DefinedMessage;
-import com.loserclub.pushdata.datacenter.Messages.recvforsend.PushData;
-import com.loserclub.pushdata.datacenter.Messages.recvforsync.Confirm;
-import com.loserclub.pushdata.datacenter.Messages.recvforsync.Ping;
-import com.loserclub.pushdata.datacenter.Messages.recvforsync.Pong;
-import com.loserclub.pushdata.datacenter.Messages.recvforsync.PushReq;
-import com.loserclub.pushdata.datacenter.Messages.recvforsend.PushResp;
+import com.loserclub.pushdata.datacenter.messages.recvforsend.PushData;
+import com.loserclub.pushdata.datacenter.messages.recvforsync.Confirm;
+import com.loserclub.pushdata.datacenter.messages.recvforsync.Ping;
+import com.loserclub.pushdata.datacenter.messages.recvforsync.Pong;
+import com.loserclub.pushdata.datacenter.messages.recvforsync.PushReq;
+import com.loserclub.pushdata.datacenter.messages.recvforsend.PushResp;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

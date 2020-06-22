@@ -1,8 +1,8 @@
 package com.loserclub.pushdata.datacenter.inbound;
 
 
-import com.loserclub.pushdata.datacenter.Messages.NodeMessage;
-import com.loserclub.pushdata.datacenter.Messages.recvforsync.Ping;
+import com.loserclub.pushdata.datacenter.messages.NodeMessage;
+import com.loserclub.pushdata.datacenter.messages.recvforsync.Ping;
 import com.loserclub.pushdata.datacenter.handlers.INodeToCenterHandler;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;

@@ -2,9 +2,8 @@ package com.loserclub.pushdata.datacenter.handlers;
 
 import com.loserclub.pushdata.common.constants.OperationEnum;
 import com.loserclub.pushdata.common.message.DefinedMessage;
-import com.loserclub.pushdata.datacenter.Messages.recvforsync.PushReq;
+import com.loserclub.pushdata.datacenter.messages.recvforsync.PushReq;
 import com.loserclub.pushdata.datacenter.device.DeviceManager;
-import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
