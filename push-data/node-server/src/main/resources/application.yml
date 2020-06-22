@@ -1,0 +1,21 @@
+server:
+  port: ${random.int[7001,7999]}
+
+spring:
+  redis:
+    host: 127.0.0.1:6379
+
+push-data:
+  node-server:
+    port: ${random.int[9001,9999]}
+    messagePort: ${random.int[8001,8999]}
+    name: NodeServer-${random.int(100)}
+    initializedConnect: 16384
+  zookeeper:
+    servers: localhost:2181,localhost:2182,localhost:2183
+    listen-namespace: namespace-data-center
+    namespace: namespace-node-server
+    session-timeout: 6000
+    connection-timeout: 6000
+    max-retries: 1000
+    retries-sleep-time: 2000

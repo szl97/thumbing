@@ -1,4 +1,4 @@
-package com.loserclub.pushdata.datacenter.channel;
+package com.loserclub.pushdata.nodeserver.channel;
 
 import com.loserclub.pushdata.common.channel.IChannelManager;
 import com.loserclub.pushdata.common.constants.AttributeEnum;
@@ -15,9 +15,10 @@ import java.util.concurrent.ConcurrentHashMap;
 @Slf4j
 @Component
 @Data
-public class NodeToCenterChannelManager implements IChannelManager {
+public class DataFlowChannelManager implements IChannelManager {
 
     private Map<String, Channel> channelPool = new ConcurrentHashMap<>();
+
 
     @PreDestroy
     public void destory() {
@@ -26,10 +27,10 @@ public class NodeToCenterChannelManager implements IChannelManager {
 
     @Override
     public void bindAttributes(String name, Channel channel, List<AttributeEnum> attributeKeys) {
-        channelPool.put(name,channel);
+        channelPool.put(name, channel);
 
-        attributeKeys.forEach(a->{
-            if(a == AttributeEnum.CHANNEL_ATTR_DATACENTER) {
+        attributeKeys.forEach(a -> {
+            if (a == AttributeEnum.CHANNEL_ATTR_DATACENTER) {
                 channel.attr(a.getAttributeKey()).set(name);
             }
         });
@@ -38,21 +39,21 @@ public class NodeToCenterChannelManager implements IChannelManager {
     @Override
     public String getNodeOrDeviceId(Channel channel) {
         return channel.hasAttr(AttributeEnum.CHANNEL_ATTR_DATACENTER.getAttributeKey()) ?
-                channel.attr(AttributeEnum.CHANNEL_ATTR_DATACENTER.getAttributeKey()).get().toString():
+                channel.attr(AttributeEnum.CHANNEL_ATTR_DATACENTER.getAttributeKey()).get().toString() :
                 null;
     }
 
     @Override
     public void removeChannel(Channel channel) {
         String name = getNodeOrDeviceId(channel);
-        if(name != null){
+        if (name != null) {
             channelPool.remove(name);
         }
     }
 
     @Override
     public void removeChannel(String name) {
-        if(channelPool.containsKey(name)){
+        if (channelPool.containsKey(name)) {
             channelPool.remove(name);
         }
     }

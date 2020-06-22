@@ -14,4 +14,6 @@ public interface IChannelManager {
     Channel getChannel(String id);
 
     void removeChannel(Channel channel);
+
+    void removeChannel(String id);
 }

@@ -1,4 +1,4 @@
-package com.loserclub.pushdata.datacenter.channel;
+package com.loserclub.pushdata.nodeserver.channel;
 
 import com.loserclub.pushdata.common.channel.IChannelManager;
 import com.loserclub.pushdata.common.constants.AttributeEnum;
@@ -15,9 +15,10 @@ import java.util.concurrent.ConcurrentHashMap;
 @Slf4j
 @Component
 @Data
-public class NodeToCenterChannelManager implements IChannelManager {
+public class SyncClientChannelManager implements IChannelManager {
 
     private Map<String, Channel> channelPool = new ConcurrentHashMap<>();
+
 
     @PreDestroy
     public void destory() {

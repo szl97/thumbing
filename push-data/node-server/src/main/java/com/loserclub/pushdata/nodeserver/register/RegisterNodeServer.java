@@ -1,4 +1,4 @@
-package com.loserclub.pushdata.datacenter.register;
+package com.loserclub.pushdata.nodeserver.register;
 
 import com.alibaba.fastjson.JSON;
 import com.loserclub.pushdata.common.Infos.DataCenterInfo;
@@ -6,10 +6,8 @@ import com.loserclub.pushdata.common.constants.ZkGroupEnum;
 import com.loserclub.pushdata.common.utils.ip.IpUtils;
 import com.loserclub.pushdata.common.utils.zk.ZkUtils;
 import com.loserclub.pushdata.common.utils.zk.listener.ZkStateListener;
-import com.loserclub.pushdata.datacenter.config.DataCenterConfig;
-import com.loserclub.pushdata.datacenter.config.ZookeeperConfig;
-import com.loserclub.pushdata.datacenter.data.DataFlowBootStrap;
-import com.loserclub.pushdata.datacenter.monitors.ServerConnectMonitorBootStrap;
+import com.loserclub.pushdata.nodeserver.config.NodeServerConfig;
+import com.loserclub.pushdata.nodeserver.config.ZookeeperConfig;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.curator.framework.CuratorFramework;
@@ -24,26 +22,17 @@ import javax.annotation.PreDestroy;
 @Slf4j
 @Component
 @Data
-public class RegisterDataCenter {
-
+public class RegisterNodeServer {
     private ZkUtils zkUtils;
 
     @Autowired
-    private DataCenterConfig dataCenterConfig;
+    private NodeServerConfig dataCenterConfig;
 
     @Autowired
     private ZookeeperConfig zookeeperConfig;
 
-    @Autowired
-    private ServerConnectMonitorBootStrap serverConnectMonitorBootStrap;
-
-    @Autowired
-    private DataFlowBootStrap dataFlowBootStrap;
-
     @PostConstruct
-    public void init() throws InterruptedException {
-        serverConnectMonitorBootStrap.init();
-        dataFlowBootStrap.init();
+    public void init(){
         zkUtils.init(
                 zookeeperConfig.getServers(),
                 zookeeperConfig.getConnectionTimeout(),
@@ -54,19 +43,19 @@ public class RegisterDataCenter {
                 new ZkStateListener() {
                     @Override
                     public void connectedEvent(CuratorFramework curator, ConnectionState state) {
-                        log.info("Data Center 连接zk成功");
+                        log.info("NodeServer 连接zk成功");
                         register();
                     }
 
                     @Override
                     public void reconnectedEvent(CuratorFramework curator, ConnectionState state) {
-                        log.info("Data Center 连接链接zk成功");
+                        log.info("NodeServer 重新连接zk成功");
                         register();
                     }
 
                     @Override
                     public void lostEvent(CuratorFramework curator, ConnectionState state) {
-                        log.info("Data Center 连接zk丢失");
+                        log.info("NodeServer 连接zk丢失");
                     }
                 }
         );
@@ -79,7 +68,7 @@ public class RegisterDataCenter {
     }
 
     private void register(){
-        String root = ZkGroupEnum.DATA_CENTER.getValue();
+        String root = ZkGroupEnum.NODE_SERVER.getValue();
         String name = dataCenterConfig.getName();
         if(!zkUtils.checkExists(root)){
             zkUtils.createNode(root,null, CreateMode.PERSISTENT);
@@ -97,7 +86,7 @@ public class RegisterDataCenter {
     }
 
     public void deRegister(){
-        String root = ZkGroupEnum.DATA_CENTER.getValue();
+        String root = ZkGroupEnum.NODE_SERVER.getValue();
         String name = dataCenterConfig.getName();
         String path = root+"/"+name;
         if(zkUtils.checkExists(path)){

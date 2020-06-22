@@ -39,7 +39,6 @@ public class ServerConnectMonitorBootStrap {
     @Autowired
     private NodeToCenterInBoundMonitorHandler nodeToCenterInBoundMonitorHandler;
 
-    @PostConstruct
     public void init() throws InterruptedException {
         ServerBootstrap bootstrap = new ServerBootstrap();
         bootstrap.group(boss, work)

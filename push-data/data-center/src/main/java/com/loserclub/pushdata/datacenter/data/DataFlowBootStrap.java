@@ -35,7 +35,6 @@ public class DataFlowBootStrap {
     @Autowired
     private NodeToCenterInBoundDataFlowHandler nodeToCenterInBoundDataFlowHandler;
 
-    @PostConstruct
     public void init() throws InterruptedException {
         ServerBootstrap bootstrap = new ServerBootstrap();
         bootstrap.group(boss, work)
@@ -62,8 +61,8 @@ public class DataFlowBootStrap {
                 .childOption(ChannelOption.SO_REUSEADDR, true)
                 .option(ChannelOption.SO_SNDBUF, 2048)
                 .option(ChannelOption.SO_RCVBUF, 1024);
-        bootstrap.bind(dataCenterConfig.getPort()).sync();
-        log.info("Data center successful! listening port: {}", dataCenterConfig.getPort());
+        bootstrap.bind(dataCenterConfig.getMessagePort()).sync();
+        log.info("Data center successful! listening port: {}", dataCenterConfig.getMessagePort());
 
     }
 }
