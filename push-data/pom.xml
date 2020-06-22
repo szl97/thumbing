@@ -66,6 +66,11 @@
         </dependency>
     </dependencies>
 
+    <modules>
+        <module>common</module>
+        <module>data-center</module>
+    </modules>
+
     <build>
         <plugins>
             <plugin>
