@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Slf4j
@@ -37,5 +39,18 @@ public class DeviceManager {
             }
         }
         return false;
+    }
+
+    public String getNodeServer(String deviceId){
+        return clientPool.get(deviceId);
+    }
+
+    /**
+     * 获取当前现在的Client -Server 服务列表
+     *
+     * @return
+     */
+    public Map<String, String> clientPool() {
+        return new HashMap<>(clientPool);
     }
 }

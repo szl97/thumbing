@@ -1,6 +1,5 @@
-package com.loserclub.pushdata.datacenter.messages.recvforsync;
+package com.loserclub.pushdata.datacenter.messages;
 
-import com.loserclub.pushdata.datacenter.messages.NodeMessageReq;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

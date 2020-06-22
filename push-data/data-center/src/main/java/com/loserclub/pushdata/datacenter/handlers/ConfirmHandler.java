@@ -3,7 +3,7 @@ package com.loserclub.pushdata.datacenter.handlers;
 import com.loserclub.pushdata.common.channel.IChannelManager;
 import com.loserclub.pushdata.common.constants.AttributeEnum;
 import com.loserclub.pushdata.common.message.DefinedMessage;
-import com.loserclub.pushdata.datacenter.messages.recvforsync.Confirm;
+import com.loserclub.pushdata.datacenter.messages.Confirm;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import lombok.Data;
@@ -32,6 +32,7 @@ public class ConfirmHandler implements INodeToCenterHandler<Confirm> {
         Channel channel = ctx.channel();
         List<AttributeEnum> attributeEnums = new ArrayList<>();
         attributeEnums.add(AttributeEnum.CHANNEL_ATTR_DATACENTER);
-        channelManager.bindAttributes(message.getNodeIpWithPort(), channel, attributeEnums);
+        channelManager.bindAttributes(message.getName(), channel, attributeEnums);
+        log.debug("Data center receive confirm,channel:{}", channel);
     }
 }

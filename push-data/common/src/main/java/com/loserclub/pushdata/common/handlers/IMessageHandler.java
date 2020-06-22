@@ -18,5 +18,5 @@ public interface IMessageHandler<T> {
      *
      * @param message 节点消息
      */
-    void call(ChannelHandlerContext ctx, T message);
+    void call(ChannelHandlerContext ctx, T message) throws Exception;
 }

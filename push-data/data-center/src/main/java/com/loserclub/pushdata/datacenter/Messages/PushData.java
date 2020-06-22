@@ -1,14 +1,21 @@
-package com.loserclub.pushdata.datacenter.messages.recvforsend;
+package com.loserclub.pushdata.datacenter.messages;
 
-import com.loserclub.pushdata.datacenter.messages.NodeMessageReq;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Builder
 @NoArgsConstructor
+@Data
 public class PushData extends NodeMessageReq<PushData> {
+
+    private List<String> deviceIds;
+
+    private String name;
+
+    private String data;
 
     @Override
     protected Type type() {

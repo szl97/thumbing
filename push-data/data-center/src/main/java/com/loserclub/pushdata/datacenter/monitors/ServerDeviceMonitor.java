@@ -1,10 +1,7 @@
 package com.loserclub.pushdata.datacenter.monitors;
 
-import com.loserclub.pushdata.common.utils.zk.ZkUtils;
-import com.loserclub.pushdata.common.utils.zk.listener.ZkStateListener;
 import com.loserclub.pushdata.datacenter.config.DataCenterConfig;
-import com.loserclub.pushdata.datacenter.config.ZookeeperConfig;
-import com.loserclub.pushdata.datacenter.inbound.NodeToCenterInBoundHandler;
+import com.loserclub.pushdata.datacenter.inbound.NodeToCenterInBoundMonitorHandler;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelOption;
@@ -32,8 +29,6 @@ import java.util.concurrent.ConcurrentHashMap;
 @Data
 public class ServerDeviceMonitor {
 
-    private ConcurrentHashMap<String, String> clientPool;
-
     @Autowired
     private DataCenterConfig dataCenterConfig;
 
@@ -42,13 +37,10 @@ public class ServerDeviceMonitor {
     private NioEventLoopGroup work = new NioEventLoopGroup();
 
     @Autowired
-    private NodeToCenterInBoundHandler nodeToCenterInBoundHandler;
+    private NodeToCenterInBoundMonitorHandler nodeToCenterInBoundMonitorHandler;
 
     @PostConstruct
     public void init() throws InterruptedException {
-
-        clientPool = new ConcurrentHashMap<>(dataCenterConfig.getInitializedConnect());
-
         ServerBootstrap bootstrap = new ServerBootstrap();
         bootstrap.group(boss, work)
                 .childHandler(new ChannelInitializer<SocketChannel>() {
@@ -67,7 +59,7 @@ public class ServerDeviceMonitor {
                         pipeline.addLast("idleStateHandler", new IdleStateHandler(300, 0, 0));
 
                         //处理Node Server成功连接确认事件、心跳事件、Client连接事件
-                        pipeline.addLast(nodeToCenterInBoundHandler);
+                        pipeline.addLast("handler", nodeToCenterInBoundMonitorHandler);
                     }
                 })
                 .option(ChannelOption.TCP_NODELAY, true)
@@ -77,15 +69,6 @@ public class ServerDeviceMonitor {
         bootstrap.bind(dataCenterConfig.getPort()).sync();
         log.info("Data center successful! listening port: {}", dataCenterConfig.getPort());
 
-    }
-
-    /**
-     * 获取当前现在的Client -Server 服务列表
-     *
-     * @return
-     */
-    public Map<String, String> clientPool() {
-        return new HashMap<>(clientPool);
     }
 
 }

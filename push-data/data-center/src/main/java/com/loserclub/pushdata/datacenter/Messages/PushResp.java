@@ -1,28 +1,29 @@
-package com.loserclub.pushdata.datacenter.messages.recvforsync;
+package com.loserclub.pushdata.datacenter.messages;
 
-import com.loserclub.pushdata.datacenter.messages.NodeMessageReq;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Builder
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Confirm extends NodeMessageReq<Confirm> {
+public class PushResp extends NodeMessageResp<PushResp> {
 
-    private String name;
+    private List<String> deviceIds;
 
     private String nodeIpWithPort;
 
     @Override
     protected Type type() {
-        return Type.C;
+        return Type.PR;
     }
 
     @Override
-    protected Confirm getThis() throws Exception {
+    protected PushResp getThis() {
         return this;
     }
 }

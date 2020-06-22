@@ -1,9 +1,9 @@
 package com.loserclub.pushdata.datacenter.inbound;
 
 
+import com.loserclub.pushdata.datacenter.handlers.monitors.IMonitorsHandler;
 import com.loserclub.pushdata.datacenter.messages.NodeMessage;
-import com.loserclub.pushdata.datacenter.messages.recvforsync.Ping;
-import com.loserclub.pushdata.datacenter.handlers.INodeToCenterHandler;
+import com.loserclub.pushdata.datacenter.messages.Ping;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
@@ -18,17 +18,17 @@ import java.util.List;
 @Slf4j
 @ChannelHandler.Sharable
 @Component
-public class NodeToCenterInBoundHandler extends SimpleChannelInboundHandler<String>{
+public class NodeToCenterInBoundMonitorHandler extends SimpleChannelInboundHandler<String>{
 
     @Autowired
-    private List<INodeToCenterHandler> nodeToCenterHandlers;
+    private List<IMonitorsHandler> monitorsHandlers;
 
     @Override
     protected void channelRead0(ChannelHandlerContext channelHandlerContext, String message) throws Exception {
         NodeMessage nodeMessage = NodeMessage.decode(message);
 
-        if (!nodeToCenterHandlers.isEmpty()) {
-            nodeToCenterHandlers.stream().forEach((handler) -> {
+        if (!monitorsHandlers.isEmpty()) {
+            monitorsHandlers.stream().forEach((handler) -> {
                 try {
                     if (handler.support(nodeMessage)) {
                         handler.call(channelHandlerContext, nodeMessage);

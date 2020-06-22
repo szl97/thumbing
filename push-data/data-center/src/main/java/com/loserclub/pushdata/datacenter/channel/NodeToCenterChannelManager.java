@@ -19,12 +19,12 @@ public class NodeToCenterChannelManager implements IChannelManager {
     private static final Map<String, Channel> channelPool = new ConcurrentHashMap<>();
 
     @Override
-    public void bindAttributes(String id, Channel channel, List<AttributeEnum> attributeKeys) {
-        channelPool.put(id,channel);
+    public void bindAttributes(String name, Channel channel, List<AttributeEnum> attributeKeys) {
+        channelPool.put(name,channel);
 
         attributeKeys.forEach(a->{
             if(a == AttributeEnum.CHANNEL_ATTR_DATACENTER) {
-                channel.attr(a.getAttributeKey()).set(id);
+                channel.attr(a.getAttributeKey()).set(name);
             }
         });
     }
@@ -37,7 +37,7 @@ public class NodeToCenterChannelManager implements IChannelManager {
     }
 
     @Override
-    public Channel getChannel(String id) {
-        return channelPool.get(id);
+    public Channel getChannel(String name) {
+        return channelPool.get(name);
     }
 }

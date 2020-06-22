@@ -1,6 +1,6 @@
-package com.loserclub.pushdata.datacenter.messages.recvforsend;
+package com.loserclub.pushdata.datacenter.messages;
 
-import com.loserclub.pushdata.datacenter.messages.NodeMessageResp;
+import com.loserclub.pushdata.common.constants.OperationEnum;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -12,19 +12,21 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class PushResp extends NodeMessageResp<PushResp> {
+public class PushReq extends NodeMessageReq<PushReq> {
 
     private List<String> deviceIds;
 
-    private String nodeIpWithPort;
+    private String name;
+
+    private OperationEnum operation;
 
     @Override
     protected Type type() {
-        return Type.PR;
+        return Type.P;
     }
 
     @Override
-    protected PushResp getThis() {
+    protected PushReq getThis() throws Exception {
         return this;
     }
 }

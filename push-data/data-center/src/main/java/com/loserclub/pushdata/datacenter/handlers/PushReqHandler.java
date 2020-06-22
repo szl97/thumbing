@@ -2,8 +2,9 @@ package com.loserclub.pushdata.datacenter.handlers;
 
 import com.loserclub.pushdata.common.constants.OperationEnum;
 import com.loserclub.pushdata.common.message.DefinedMessage;
-import com.loserclub.pushdata.datacenter.messages.recvforsync.PushReq;
+import com.loserclub.pushdata.datacenter.messages.PushReq;
 import com.loserclub.pushdata.datacenter.device.DeviceManager;
+import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
@@ -27,6 +28,7 @@ public class PushReqHandler implements INodeToCenterHandler<PushReq> {
 
     @Override
     public void call(ChannelHandlerContext ctx, PushReq message) {
+        Channel channel = ctx.channel();
         List<String> ids = message.getDeviceIds();
         if(message.getOperation() == OperationEnum.ADD){
             ids.forEach(i->deviceManager.addOrUpdateClient(i,message.getName()));
@@ -34,5 +36,6 @@ public class PushReqHandler implements INodeToCenterHandler<PushReq> {
         else if(message.getOperation() == OperationEnum.DEL){
             ids.forEach(i->deviceManager.removeClient(i,message.getName()));
         }
+        log.debug("Data center receive sync client request,channel:{}", channel);
     }
 }
