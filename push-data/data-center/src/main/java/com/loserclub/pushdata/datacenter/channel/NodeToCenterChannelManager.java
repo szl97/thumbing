@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PreDestroy;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -16,7 +17,12 @@ import java.util.concurrent.ConcurrentHashMap;
 @Data
 public class NodeToCenterChannelManager implements IChannelManager {
 
-    private static final Map<String, Channel> channelPool = new ConcurrentHashMap<>();
+    private Map<String, Channel> channelPool = new ConcurrentHashMap<>();
+
+    @PreDestroy
+    public void destory() {
+        channelPool.clear();
+    }
 
     @Override
     public void bindAttributes(String name, Channel channel, List<AttributeEnum> attributeKeys) {
@@ -35,6 +41,15 @@ public class NodeToCenterChannelManager implements IChannelManager {
                 channel.attr(AttributeEnum.CHANNEL_ATTR_DATACENTER.getAttributeKey()).get().toString():
                 null;
     }
+
+    @Override
+    public void removeChannel(Channel channel) {
+        String name = getNodeOrDeviceId(channel);
+        if(name != null){
+            channelPool.remove(name);
+        }
+    }
+
 
     @Override
     public Channel getChannel(String name) {

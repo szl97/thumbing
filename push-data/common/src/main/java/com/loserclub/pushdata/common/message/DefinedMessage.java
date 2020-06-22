@@ -15,6 +15,7 @@ public abstract class DefinedMessage<T> {
      * 5)回应
      * 6)消息推送
      * 7)长连接
+     * 8)失败
      */
     protected enum Type {
         C,      // CONFIRM
@@ -24,6 +25,8 @@ public abstract class DefinedMessage<T> {
         PR,     // PUSH_RESP
         PD,     // PUSH_DATA
         HS,     // HandShake
+        F,      // FAIL
+        IN      // INACTIVE
     }
 
     /**

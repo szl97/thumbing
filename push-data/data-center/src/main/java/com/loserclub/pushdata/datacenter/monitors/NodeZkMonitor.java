@@ -6,6 +6,7 @@ import com.loserclub.pushdata.common.constants.ZkGroupEnum;
 import com.loserclub.pushdata.common.utils.zk.ZkUtils;
 import com.loserclub.pushdata.common.utils.zk.listener.ZkStateListener;
 import com.loserclub.pushdata.datacenter.config.ZookeeperConfig;
+import com.loserclub.pushdata.datacenter.device.DeviceManager;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.curator.framework.CuratorFramework;
@@ -20,18 +21,17 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-/**
- * 这个监控应该加在NodeServer中，Node Server去监控Data Center, 然后建立连接
- */
 @Slf4j
 @Component
 @Data
-public class NodeServerMonitor {
+public class NodeZkMonitor {
 
     private ConcurrentHashMap<String, NodeServerInfo> serverPool = new ConcurrentHashMap<>(16);
 
     private ZkUtils zkUtils;
 
+    @Autowired
+    private DeviceManager deviceManager;
 
     @Autowired
     private ZookeeperConfig zookeeperConfig;
@@ -66,6 +66,7 @@ public class NodeServerMonitor {
                 }
         );
         listenNodeServerDiscovery();
+
     }
     @PreDestroy
     public void destory() {
@@ -87,6 +88,7 @@ public class NodeServerMonitor {
      */
     private void initNodeServerDiscovery() {
         serverPool.clear();
+        deviceManager.clear();
         Map<String, String> datas = zkUtils.readTargetChildsData(ZkGroupEnum.NODE_SERVER.getValue());
         if (datas != null) {
             datas.forEach((k, v) -> serverPool.put(k, JSON.parseObject(v, NodeServerInfo.class)));
@@ -132,6 +134,7 @@ public class NodeServerMonitor {
             //检测Node是否还存在，存在的话移除该Node
             serverPool.remove(key);
         }
+        deviceManager.removeNodeServer(data.getName());
 
     }
 
@@ -142,6 +145,7 @@ public class NodeServerMonitor {
         if (!serverPool.containsKey(key)) {
             //开启node,加入到管理器
             serverPool.put(key, data);
+            deviceManager.addNodeServer(data.getName());
         } else {
             log.error("node already! {},{}", key, data);
         }

@@ -12,4 +12,6 @@ public interface IChannelManager {
     String getNodeOrDeviceId(Channel channel);
 
     Channel getChannel(String id);
+
+    void removeChannel(Channel channel);
 }

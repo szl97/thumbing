@@ -27,7 +27,7 @@ import java.util.concurrent.ConcurrentHashMap;
 @Slf4j
 @Component
 @Data
-public class ServerDeviceMonitor {
+public class ServerConnectMonitorBootStrap {
 
     @Autowired
     private DataCenterConfig dataCenterConfig;
@@ -58,7 +58,7 @@ public class ServerDeviceMonitor {
                         //空闲检测
                         pipeline.addLast("idleStateHandler", new IdleStateHandler(300, 0, 0));
 
-                        //处理Node Server成功连接确认事件、心跳事件、Client连接事件
+                        //处理Node 心跳事件、node server与客户端之间连接的建立和删除事件
                         pipeline.addLast("handler", nodeToCenterInBoundMonitorHandler);
                     }
                 })
