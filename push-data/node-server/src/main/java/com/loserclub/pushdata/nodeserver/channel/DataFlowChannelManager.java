@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 import javax.annotation.PreDestroy;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Slf4j
@@ -62,5 +63,12 @@ public class DataFlowChannelManager implements IChannelManager {
     @Override
     public Channel getChannel(String name) {
         return channelPool.get(name);
+    }
+
+    public Channel getRandomChannel(){
+        Object[] names = channelPool.keySet().toArray();
+        int index = (int)(Math.random() * (names.length-1));
+        String name = names[index].toString();
+        return getChannel(name);
     }
 }

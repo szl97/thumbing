@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PreDestroy;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -62,5 +63,14 @@ public class SyncClientChannelManager implements IChannelManager {
     @Override
     public Channel getChannel(String name) {
         return channelPool.get(name);
+    }
+
+    public List<Channel> getAllChannels(){
+        List<Channel> list = new ArrayList<>();
+        channelPool.entrySet().forEach(e-> {
+                        list.add(e.getValue());
+                }
+        );
+        return list;
     }
 }

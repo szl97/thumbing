@@ -45,7 +45,7 @@ public class PushDataHandler implements INodeToCenterHandler<PushData> {
                     //to do 如果要发送到的client还没有建立连接，那么发送到消息队列
                 }
         );
-        channel.writeAndFlush(Confirm.builder().build().encode());
+        //channel.writeAndFlush(Confirm.builder().build().encode());
         log.debug("Data center receive push data request,channel:{}", channel);
     }
 }
