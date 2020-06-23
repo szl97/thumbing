@@ -2,6 +2,8 @@ server:
   port: ${random.int[7001,7999]}
 
 spring:
+  application:
+    name: node-server
   redis:
     host: 127.0.0.1:6379
 

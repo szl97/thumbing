@@ -11,7 +11,7 @@
     <groupId>com.loserclub.pushdata</groupId>
     <artifactId>nodeserver</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>nodeserver</name>
+    <name>node-server</name>
     <description>Demo project for Spring Boot</description>
 
     <properties>

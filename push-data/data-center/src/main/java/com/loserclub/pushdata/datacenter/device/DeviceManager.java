@@ -93,14 +93,27 @@ public class DeviceManager {
     }
 
     public String getNodeServer(String deviceId){
-        Set<Map.Entry<String,ConcurrentHashSet<String>>> entrys = clientPool.entrySet();
-        for(Map.Entry<String,ConcurrentHashSet<String>> e : entrys){
+        Set<Map.Entry<String,ConcurrentHashSet<String>>> entries = clientPool.entrySet();
+        for(Map.Entry<String,ConcurrentHashSet<String>> e : entries){
             ConcurrentHashSet set = e.getValue();
             if(set.contains(deviceId)){
                 return e.getKey();
             }
         }
         return null;
+    }
+
+    public String balancedLoader(){
+        int max = Integer.MAX_VALUE;
+        String name = null;
+        Set<Map.Entry<String, AtomicInteger>> entries = connectCountMap.entrySet();
+        for(Map.Entry<String, AtomicInteger> entry : entries){
+            if(entry.getValue().get() < max){
+                max = entry.getValue().get();
+                name = entry.getKey();
+            }
+        }
+        return name;
     }
 
 }

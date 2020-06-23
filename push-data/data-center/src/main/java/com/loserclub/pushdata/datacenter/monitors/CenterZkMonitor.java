@@ -165,4 +165,10 @@ public class CenterZkMonitor {
         return JSON.parseObject(event.getData().getData(), NodeServerInfo.class);
     }
 
+    public String getIpWithPort(String name){
+        NodeServerInfo info = serverPool.get(name);
+        if(info == null) return null;
+        return info.getIp()+":"+info.getDevicePort();
+    }
+
 }
