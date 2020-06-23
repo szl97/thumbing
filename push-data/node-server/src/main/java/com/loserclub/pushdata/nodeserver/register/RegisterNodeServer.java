@@ -19,6 +19,11 @@ import org.springframework.stereotype.Component;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 
+
+/**
+ * @author Stan Sai
+ * @date 2020-06-22
+ */
 @Slf4j
 @Component
 @Data

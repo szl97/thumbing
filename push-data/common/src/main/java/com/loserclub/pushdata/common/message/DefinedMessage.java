@@ -1,10 +1,11 @@
 package com.loserclub.pushdata.common.message;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
+
+/**
+ * @author Stan Sai
+ * @date 2020-06-21
+ */
 public abstract class DefinedMessage<T> {
     /**r
      * 消息类型

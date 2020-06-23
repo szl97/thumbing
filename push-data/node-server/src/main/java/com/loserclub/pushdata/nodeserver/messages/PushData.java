@@ -5,6 +5,11 @@ import lombok.Data;
 
 import java.util.List;
 
+
+/**
+ * @author Stan Sai
+ * @date 2020-06-22
+ */
 @Builder
 @Data
 public class PushData extends NodeMessageReq<PushData> {

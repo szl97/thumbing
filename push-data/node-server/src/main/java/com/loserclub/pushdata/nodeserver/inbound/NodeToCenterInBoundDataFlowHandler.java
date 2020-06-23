@@ -16,6 +16,11 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 
+
+/**
+ * @author Stan Sai
+ * @date 2020-06-23
+ */
 @Slf4j
 @ChannelHandler.Sharable
 @Component

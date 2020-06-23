@@ -4,6 +4,11 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 
+
+/**
+ * @author Stan Sai
+ * @date 2020-06-21
+ */
 @Builder
 @Data
 @AllArgsConstructor

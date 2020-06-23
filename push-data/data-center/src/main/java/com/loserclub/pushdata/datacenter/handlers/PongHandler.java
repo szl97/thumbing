@@ -8,7 +8,10 @@ import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
-
+/**
+ * @author Stan Sai
+ * @date 2020-06-21
+ */
 @Slf4j
 @Component
 @Data

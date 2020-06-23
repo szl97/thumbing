@@ -5,6 +5,12 @@ import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.util.Enumeration;
 
+
+/**
+ * @author Stan Sai
+ * @date 2020-06-20
+ */
+
 public class IpUtils {
     /***
      * 获取外网IP

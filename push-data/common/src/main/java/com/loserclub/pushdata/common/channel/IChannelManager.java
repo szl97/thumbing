@@ -5,6 +5,10 @@ import io.netty.channel.Channel;
 
 import java.util.List;
 
+/**
+ * @author Stan Sai
+ * @date 2020-06-21
+ */
 public interface IChannelManager {
 
     void bindAttributes(String id, Channel channel, List<AttributeEnum> attributeKeys);

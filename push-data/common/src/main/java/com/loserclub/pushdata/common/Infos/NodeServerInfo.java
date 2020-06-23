@@ -1,12 +1,14 @@
 package com.loserclub.pushdata.common.Infos;
 
-import lombok.AllArgsConstructor;
+
 import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
-import java.util.concurrent.atomic.AtomicInteger;
 
+/**
+ * @author Stan Sai
+ * @date 2020-06-20
+ */
 @Data
 @Builder
 public class NodeServerInfo {

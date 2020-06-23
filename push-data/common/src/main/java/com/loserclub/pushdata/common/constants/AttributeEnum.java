@@ -3,6 +3,11 @@ package com.loserclub.pushdata.common.constants;
 import io.netty.util.AttributeKey;
 import lombok.Getter;
 
+
+/**
+ * @author Stan Sai
+ * @date 2020-06-21
+ */
 @Getter
 public enum AttributeEnum {
     /*****

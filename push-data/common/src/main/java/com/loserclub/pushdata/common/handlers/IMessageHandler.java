@@ -3,6 +3,11 @@ package com.loserclub.pushdata.common.handlers;
 import com.loserclub.pushdata.common.message.DefinedMessage;
 import io.netty.channel.ChannelHandlerContext;
 
+
+/**
+ * @author Stan Sai
+ * @date 2020-06-21
+ */
 public interface IMessageHandler<T> {
     /**
      * 根据各个handler 判断是不是各个handler对应处理的消息

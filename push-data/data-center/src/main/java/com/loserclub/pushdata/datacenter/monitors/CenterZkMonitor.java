@@ -21,6 +21,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+/**
+ * @author Stan Sai
+ * @date 2020-06-20
+ */
 @Slf4j
 @Component
 @Data

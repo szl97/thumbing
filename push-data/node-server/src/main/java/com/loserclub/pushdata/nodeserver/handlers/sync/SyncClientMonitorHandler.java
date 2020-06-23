@@ -10,11 +10,15 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-
-
 /**
  * 此处应该是成功确认操作，以及失败处理操作，以后补上，需要redis和数据库保存消息的状态
  */
+
+/**
+ * @author Stan Sai
+ * @date 2020-06-23
+ */
+
 @Slf4j
 @Component
 @Data
