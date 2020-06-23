@@ -35,6 +35,6 @@ public class PushDataHandler implements INodeToCenterHandler<PushData> {
     public void call(ChannelHandlerContext ctx, PushData message) throws Exception {
         Channel channel = dataFlowChannelManager.getRandomChannel();
         channel.writeAndFlush(message.encode());
-        log.debug("node server send push data request");
+        log.debug("node server send push data");
     }
 }

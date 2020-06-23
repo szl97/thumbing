@@ -1,5 +1,6 @@
 package com.loserclub.pushdata.datacenter.inbound;
 
+import com.loserclub.pushdata.datacenter.handlers.ConfirmHandler;
 import com.loserclub.pushdata.datacenter.handlers.InActiveHandler;
 import com.loserclub.pushdata.datacenter.handlers.data.IDeviceDataHandler;
 import com.loserclub.pushdata.datacenter.messages.NodeMessage;
@@ -48,19 +49,33 @@ public class NodeToCenterInBoundDataFlowHandler extends SimpleChannelInboundHand
     }
 
     @Override
+    public void channelRegistered(ChannelHandlerContext ctx) throws Exception{
+        super.channelRegistered(ctx);
+        log.debug("channel registered, channel:{}", ctx.channel());
+    }
+
+    @Override
+    public void channelUnregistered(ChannelHandlerContext ctx) throws Exception{
+        super.channelUnregistered(ctx);
+        log.debug("channel unRegistered, channel:{}", ctx.channel());
+    }
+
+    @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
+        super.channelActive(ctx);
         log.debug("channel active, channel:{}", ctx.channel());
     }
 
     @Override
     public void channelInactive(ChannelHandlerContext ctx) throws Exception {
+        super.channelInactive(ctx);
         inActiveHandler.call(ctx,null);
         log.debug("channel inactive, channel:{}", ctx.channel());
     }
 
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
-        inActiveHandler.call(ctx,null);
+        super.exceptionCaught(ctx,cause);
         log.debug("exception error:{}, channel:{}", cause.getMessage(), ctx.channel());
         ctx.close();
     }

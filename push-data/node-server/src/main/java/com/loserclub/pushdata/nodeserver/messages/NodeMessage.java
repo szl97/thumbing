@@ -78,6 +78,9 @@ public abstract class NodeMessage<T> extends DefinedMessage<T> {
                 case PD:
                     cls = PushData.class;
                     break;
+                case HS:
+                    cls = HandShake.class;
+                    break;
                 default:
                     throw new Exception();
             }

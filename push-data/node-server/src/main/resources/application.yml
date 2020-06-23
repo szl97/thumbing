@@ -9,6 +9,7 @@ push-data:
   node-server:
     port: ${random.int[9001,9999]}
     messagePort: ${random.int[8001,8999]}
+    devicePort: ${random.int[3001,3999]}
     name: NodeServer-${random.int(100)}
     initializedConnect: 16384
   zookeeper:

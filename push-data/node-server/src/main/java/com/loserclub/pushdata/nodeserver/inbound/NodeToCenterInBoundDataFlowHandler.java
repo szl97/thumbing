@@ -7,6 +7,7 @@ import com.loserclub.pushdata.nodeserver.messages.NodeMessage;
 import com.loserclub.pushdata.nodeserver.messages.Ping;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
+import io.netty.channel.ChannelOutboundHandler;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.handler.timeout.IdleState;
 import io.netty.handler.timeout.IdleStateEvent;
@@ -48,20 +49,23 @@ public class NodeToCenterInBoundDataFlowHandler extends SimpleChannelInboundHand
         }
     }
 
+
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
+        super.channelActive(ctx);
         log.debug("channel active, channel:{}", ctx.channel());
     }
 
     @Override
     public void channelInactive(ChannelHandlerContext ctx) throws Exception {
         inActiveHandler.call(ctx,null);
+        super.channelActive(ctx);
         log.debug("channel inactive, channel:{}", ctx.channel());
     }
 
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
-        inActiveHandler.call(ctx,null);
+        super.exceptionCaught(ctx,cause);
         log.debug("exception error:{}, channel:{}", cause.getMessage(), ctx.channel());
         ctx.close();
     }

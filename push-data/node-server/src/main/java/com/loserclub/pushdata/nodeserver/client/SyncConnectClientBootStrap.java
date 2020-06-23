@@ -2,9 +2,12 @@ package com.loserclub.pushdata.nodeserver.client;
 
 import com.loserclub.pushdata.common.Infos.DataCenterInfo;
 import com.loserclub.pushdata.common.constants.AttributeEnum;
+import com.loserclub.pushdata.common.constants.OperationEnum;
+import com.loserclub.pushdata.nodeserver.channel.DeviceDataChannelManager;
 import com.loserclub.pushdata.nodeserver.channel.SyncClientChannelManager;
 import com.loserclub.pushdata.nodeserver.config.NodeServerConfig;
 import com.loserclub.pushdata.nodeserver.inbound.NodeToCenterInBoundSyncHandler;
+import com.loserclub.pushdata.nodeserver.messages.PushReq;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
@@ -49,6 +52,9 @@ public class SyncConnectClientBootStrap {
     @Autowired
     private NodeToCenterInBoundSyncHandler nodeToCenterInBoundSyncHandler;
 
+    @Autowired
+    private DeviceDataChannelManager deviceDataChannelManager;
+
     @PostConstruct
     public void init() throws InterruptedException {
         bootstrap.group(group)
@@ -86,6 +92,17 @@ public class SyncConnectClientBootStrap {
                         List<AttributeEnum> attributeEnums = new ArrayList<>();
                         attributeEnums.add(AttributeEnum.CHANNEL_ATTR_DATACENTER);
                         channelManager.bindAttributes(info.getName(), channel, attributeEnums);
+                        List<String> devices = deviceDataChannelManager.getAllDevices();
+                        if(devices.size() > 0){
+                            channel.writeAndFlush(
+                                    PushReq.builder()
+                                    .name(nodeServerConfig.getName())
+                                    .operation(OperationEnum.ADD)
+                                    .deviceIds(devices)
+                                    .build()
+                                    .encode()
+                            );
+                        }
                     }
                     else if(retry == 0){
                         //无法连接到Data Center

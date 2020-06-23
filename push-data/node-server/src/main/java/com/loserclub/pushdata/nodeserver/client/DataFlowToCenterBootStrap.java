@@ -1,5 +1,7 @@
 package com.loserclub.pushdata.nodeserver.client;
 
+import com.loserclub.pushdata.common.utils.ip.IpUtils;
+import com.loserclub.pushdata.nodeserver.messages.Confirm;
 import com.loserclub.pushdata.common.Infos.DataCenterInfo;
 import com.loserclub.pushdata.common.constants.AttributeEnum;
 import com.loserclub.pushdata.nodeserver.channel.DataFlowChannelManager;
@@ -85,6 +87,13 @@ public class DataFlowToCenterBootStrap {
                         List<AttributeEnum> attributeEnums = new ArrayList<>();
                         attributeEnums.add(AttributeEnum.CHANNEL_ATTR_DATACENTER);
                         channelManager.bindAttributes(info.getName(), channel, attributeEnums);
+                        String ip = IpUtils.internetIp();
+                        channel.writeAndFlush(
+                                Confirm.builder()
+                                        .name(nodeServerConfig.getName())
+                                        .nodeIpWithPort(ip+":"+nodeServerConfig.getMessagePort())
+                                .build().encode()
+                        );
                     }
                     else if(retry == 0){
                         //无法连接到Data Center

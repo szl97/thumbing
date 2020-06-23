@@ -22,17 +22,17 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Component
 @Data
-public class SyncClientMonitorHandler implements ISyncClientHandler<PushReq> {
+public class SyncClientMonitorHandler{ //implements ISyncClientHandler<PushReq> {
 
     @Autowired
     private PushReqHandler pushReqHandler;
 
-    @Override
+    //@Override
     public boolean support(DefinedMessage<PushReq> message) {
         return pushReqHandler.support(message);
     }
 
-    @Override
+    //@Override
     public void call(ChannelHandlerContext ctx, PushReq message) throws Exception {
         pushReqHandler.call(ctx,message);
     }

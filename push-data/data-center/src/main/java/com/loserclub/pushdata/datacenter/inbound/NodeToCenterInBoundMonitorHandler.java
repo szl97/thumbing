@@ -47,16 +47,19 @@ public class NodeToCenterInBoundMonitorHandler extends SimpleChannelInboundHandl
 
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
+        super.channelActive(ctx);
         log.debug("channel active, channel:{}", ctx.channel());
     }
 
     @Override
     public void channelInactive(ChannelHandlerContext ctx) throws Exception {
+        super.channelInactive(ctx);
         log.debug("channel inactive, channel:{}", ctx.channel());
     }
 
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
+        super.exceptionCaught(ctx,cause);
         log.debug("exception error:{}, channel:{}", cause.getMessage(), ctx.channel());
         ctx.close();
     }

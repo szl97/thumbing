@@ -12,8 +12,8 @@ import org.springframework.context.annotation.Configuration;
 @ConfigurationProperties(prefix = "push-data.data-center")
 @Data
 public class DataCenterConfig {
-    public int port;
-    public int messagePort;
-    public String name;
-    public int initializedConnect;
+    private int port;
+    private int messagePort;
+    private String name;
+    private int initializedConnect;
 }

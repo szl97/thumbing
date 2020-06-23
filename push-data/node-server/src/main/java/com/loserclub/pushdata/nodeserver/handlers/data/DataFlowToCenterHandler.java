@@ -9,8 +9,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+
 /**
- * 此处应该是成功确认操作，以及失败处理操作，以后补上，需要redis和数据库保存消息的状态
+ * 这里也没用，复制DataCenter的先放到这里吧~ 因为node server到data center都是主动发送的
  */
 
 /**
