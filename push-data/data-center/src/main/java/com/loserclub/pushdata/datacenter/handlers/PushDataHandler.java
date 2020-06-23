@@ -13,6 +13,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
 
 /**
  * @author Stan Sai
@@ -37,15 +41,35 @@ public class PushDataHandler implements INodeToCenterHandler<PushData> {
     @Override
     public void call(ChannelHandlerContext ctx, PushData message) throws Exception {
         Channel channel = ctx.channel();
+        HashMap<String, List<String>> map = new HashMap<>();
         message.getDeviceIds().forEach(
-                a->{
+                a -> {
                     String name = deviceManager.getNodeServer(a);
-                    if(name != null){
-                        Channel writeChannel = channelManager.getChannel(name);
-                        if(writeChannel != null){
-                            writeChannel.writeAndFlush(message);
+                    if (name != null) {
+                        if(!map.containsKey(name)){
+                            map.put(name, new ArrayList<>());
                         }
-                        //to do 如果要发送到的client还没有建立连接，那么发送到消息队列
+                        map.get(name).add(a);
+                    }
+                    //to do 如果要发送到的client还没有建立连接，那么发送到消息队列
+                }
+        );
+        map.entrySet().forEach(
+                e->{
+                    Channel writeChannel = channelManager.getChannel(e.getKey());
+                    if (writeChannel != null) {
+                        try {
+                            writeChannel.writeAndFlush(
+                                    PushData.builder()
+                                    .name(e.getKey())
+                                    .data(message.getData())
+                                    .deviceIds(e.getValue())
+                                    .fromUser(message.getFromUser())
+                                    .build().encode()
+                            );
+                        } catch (Exception ex) {
+                            ex.printStackTrace();
+                        }
                     }
                     //to do 如果要发送到的client还没有建立连接，那么发送到消息队列
                 }

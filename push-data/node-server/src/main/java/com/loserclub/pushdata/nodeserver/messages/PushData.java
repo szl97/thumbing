@@ -14,6 +14,8 @@ import java.util.List;
 @Data
 public class PushData extends NodeMessageReq<PushData> {
 
+    private String fromUser;
+
     private List<String> deviceIds;
 
     private String name;
