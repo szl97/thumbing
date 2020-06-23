@@ -62,10 +62,8 @@ public class SyncConnectClientBootStrap {
                              @Override
                              protected void initChannel(SocketChannel socketChannel) throws Exception {
                                  ChannelPipeline pipeline = socketChannel.pipeline();
-                                 //拆包粘包问题
+                                 //拆包粘包问题和编码问题
                                  pipeline.addLast("frameDecoder", new LengthFieldBasedFrameDecoder(Integer.MAX_VALUE, 0, 4, 0, 4));
-
-                                 //编码解码
                                  pipeline.addLast("stringDecoder", new StringDecoder(CharsetUtil.UTF_8));
                                  pipeline.addLast("frameEncoder", new LengthFieldPrepender(4));
                                  pipeline.addLast("stringEncoder", new StringEncoder(CharsetUtil.UTF_8));
