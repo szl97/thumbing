@@ -4,6 +4,7 @@ import com.loserclub.pushdata.common.Infos.DataCenterInfo;
 import com.loserclub.pushdata.common.constants.AttributeEnum;
 import com.loserclub.pushdata.nodeserver.channel.DataFlowChannelManager;
 import com.loserclub.pushdata.nodeserver.config.NodeServerConfig;
+import com.loserclub.pushdata.nodeserver.inbound.NodeToCenterInBoundDataFlowHandler;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
@@ -38,6 +39,9 @@ public class DataFlowToCenterBootStrap {
     @Autowired
     private DataFlowChannelManager channelManager;
 
+    @Autowired
+    NodeToCenterInBoundDataFlowHandler nodeToCenterInBoundDataFlowHandler;
+
     @PostConstruct
     public void init() throws InterruptedException {
         bootstrap.group(group)
@@ -55,6 +59,9 @@ public class DataFlowToCenterBootStrap {
 
                                  //空闲检测
                                  pipeline.addLast("idleStateHandler", new IdleStateHandler(300, 0, 0));
+
+                                 //处理Node Server成功连接确认事件、心跳事件、推送消息事件
+                                 pipeline.addLast("handler", nodeToCenterInBoundDataFlowHandler);
 
                              }
                          }

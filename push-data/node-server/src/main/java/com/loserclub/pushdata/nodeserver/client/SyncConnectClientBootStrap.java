@@ -4,6 +4,7 @@ import com.loserclub.pushdata.common.Infos.DataCenterInfo;
 import com.loserclub.pushdata.common.constants.AttributeEnum;
 import com.loserclub.pushdata.nodeserver.channel.SyncClientChannelManager;
 import com.loserclub.pushdata.nodeserver.config.NodeServerConfig;
+import com.loserclub.pushdata.nodeserver.inbound.NodeToCenterInBoundSyncHandler;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
@@ -40,6 +41,9 @@ public class SyncConnectClientBootStrap {
     @Autowired
     private SyncClientChannelManager channelManager;
 
+    @Autowired
+    private NodeToCenterInBoundSyncHandler nodeToCenterInBoundSyncHandler;
+
     @PostConstruct
     public void init() throws InterruptedException {
         bootstrap.group(group)
@@ -58,6 +62,8 @@ public class SyncConnectClientBootStrap {
                                  //空闲检测
                                  pipeline.addLast("idleStateHandler", new IdleStateHandler(300, 0, 0));
 
+                                 //处理Node 心跳事件、node server与客户端之间连接的建立和删除事件
+                                 pipeline.addLast("handler", nodeToCenterInBoundSyncHandler);
                              }
                          }
                 ).option(ChannelOption.TCP_NODELAY, true)
