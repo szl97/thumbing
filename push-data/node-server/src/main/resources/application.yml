@@ -1,18 +1,24 @@
 server:
-  port: ${random.int[7001,7999]}
+  port: 7001
 
 spring:
   application:
     name: node-server
   redis:
     host: 127.0.0.1:6379
-
+  rabbitmq:
+    addresses: localhost:5672
+    username: root
+    password: root
+    virtual-host: /
+    publisher-returns: true
+    publisher-confirm-type: correlated
 push-data:
   node-server:
-    port: ${random.int[9001,9999]}
-    messagePort: ${random.int[8001,8999]}
-    devicePort: ${random.int[3001,3999]}
-    name: NodeServer-${random.int(100)}
+    port: 9001
+    messagePort: 8001
+    devicePort: 3001
+    name: NodeServer-1
     initializedConnect: 16384
   zookeeper:
     servers: localhost:2181,localhost:2182,localhost:2183

@@ -7,7 +7,6 @@ import com.loserclub.pushdata.nodeserver.messages.NodeMessage;
 import com.loserclub.pushdata.nodeserver.messages.Ping;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.ChannelOutboundHandler;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.handler.timeout.IdleState;
 import io.netty.handler.timeout.IdleStateEvent;

@@ -1,7 +1,8 @@
 package com.loserclub.pushdata.datacenter.messages;
 
-import com.alibaba.fastjson.JSON;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.loserclub.pushdata.common.message.DefinedMessage;
+import com.loserclub.pushdata.common.utils.context.SpringContextUtils;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -14,6 +15,7 @@ import lombok.NoArgsConstructor;
  */
 public abstract class NodeMessage<T> extends DefinedMessage<T> {
 
+    private static ObjectMapper objectMapper = SpringContextUtils.getBean(ObjectMapper.class);
     /**
      * 节点消息转换
      *
@@ -21,7 +23,7 @@ public abstract class NodeMessage<T> extends DefinedMessage<T> {
      * @throws Exception
      */
     protected String toEncode() throws Exception {
-        return JSON.toJSONString(getThis());
+        return objectMapper.writeValueAsString(getThis());
     }
 
 
@@ -38,7 +40,7 @@ public abstract class NodeMessage<T> extends DefinedMessage<T> {
                     .type(type())
                     .message(toEncode())
                     .build();
-            return JSON.toJSONString(message);
+            return objectMapper.writeValueAsString(message);
         } catch (Exception e) {
             throw e;
         }
@@ -55,7 +57,7 @@ public abstract class NodeMessage<T> extends DefinedMessage<T> {
     public static NodeMessage decode(String json) throws Exception {
         try {
 
-            Message msg = JSON.parseObject(json, Message.class);
+            Message msg = objectMapper.readValue(json, Message.class);
 
             Class cls = null;
 
@@ -81,7 +83,7 @@ public abstract class NodeMessage<T> extends DefinedMessage<T> {
                 default:
                     throw new Exception();
             }
-            NodeMessage message = (NodeMessage) JSON.parseObject(msg.message, cls);
+            NodeMessage message = (NodeMessage) objectMapper.readValue(msg.message, cls);
             return message;
         } catch (Exception e) {
             throw e;

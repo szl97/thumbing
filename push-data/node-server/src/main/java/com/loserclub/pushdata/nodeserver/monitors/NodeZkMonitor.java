@@ -1,11 +1,11 @@
 package com.loserclub.pushdata.nodeserver.monitors;
 
-import com.alibaba.fastjson.JSON;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.loserclub.pushdata.common.Infos.DataCenterInfo;
 import com.loserclub.pushdata.common.constants.ZkGroupEnum;
 import com.loserclub.pushdata.common.utils.zk.ZkUtils;
 import com.loserclub.pushdata.common.utils.zk.listener.ZkStateListener;
-import com.loserclub.pushdata.nodeserver.channel.SyncClientChannelManager;
 import com.loserclub.pushdata.nodeserver.client.DataFlowToCenterBootStrap;
 import com.loserclub.pushdata.nodeserver.client.SyncConnectClientBootStrap;
 import com.loserclub.pushdata.nodeserver.config.ZookeeperConfig;
@@ -19,6 +19,7 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -31,6 +32,10 @@ import java.util.concurrent.ConcurrentHashMap;
 @Component
 @Data
 public class NodeZkMonitor {
+
+    @Autowired
+    private ObjectMapper objectMapper;
+
     private ConcurrentHashMap<String, DataCenterInfo> centerPool = new ConcurrentHashMap<>(16);
 
     private ZkUtils zkUtils;
@@ -98,7 +103,13 @@ public class NodeZkMonitor {
         centerPool.clear();
         Map<String, String> datas = zkUtils.readTargetChildsData(ZkGroupEnum.NODE_SERVER.getValue());
         if (datas != null) {
-            datas.forEach((k, v) -> centerPool.put(k, JSON.parseObject(v, DataCenterInfo.class)));
+            datas.forEach((k, v) -> {
+                try {
+                    centerPool.put(k, objectMapper.readValue(v, DataCenterInfo.class));
+                } catch (JsonProcessingException e) {
+                    e.printStackTrace();
+                }
+            });
         }
     }
 
@@ -109,13 +120,25 @@ public class NodeZkMonitor {
         zkUtils.listenerPathChildrenCache(ZkGroupEnum.NODE_SERVER.getValue(), ((client, event) -> {
             switch (event.getType()) {
                 case CHILD_ADDED:
-                    addEvent(event);
+                    try {
+                        addEvent(event);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                     break;
                 case CHILD_REMOVED:
-                    removeEvent(event);
+                    try {
+                        removeEvent(event);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                     break;
                 case CHILD_UPDATED:
-                    updateEvent(event);
+                    try {
+                        updateEvent(event);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                     break;
                 default:
                     break;
@@ -123,7 +146,7 @@ public class NodeZkMonitor {
         }));
     }
 
-    private void updateEvent(PathChildrenCacheEvent event) {
+    private void updateEvent(PathChildrenCacheEvent event) throws IOException {
         DataCenterInfo data = toNodeServerInfo(event);
         String key = data.getName();
         log.debug("center event update! key:{}, data:{}", key, data);
@@ -133,7 +156,7 @@ public class NodeZkMonitor {
         }
     }
 
-    private void removeEvent(PathChildrenCacheEvent event) {
+    private void removeEvent(PathChildrenCacheEvent event) throws IOException {
         DataCenterInfo data = toNodeServerInfo(event);
         String key = data.getName();
         syncConnectClientBootStrap.DisConnect(data);
@@ -146,7 +169,7 @@ public class NodeZkMonitor {
 
     }
 
-    private void addEvent(PathChildrenCacheEvent event) {
+    private void addEvent(PathChildrenCacheEvent event) throws IOException {
         DataCenterInfo data = toNodeServerInfo(event);
         String key = data.getName();
         log.info("center event add! key:{}, data:{}", key, data);
@@ -166,7 +189,7 @@ public class NodeZkMonitor {
         return path.substring(path.lastIndexOf("/")).replaceAll("/", "");
     }
 
-    private DataCenterInfo toNodeServerInfo(PathChildrenCacheEvent event) {
-        return JSON.parseObject(event.getData().getData(),DataCenterInfo.class);
+    private DataCenterInfo toNodeServerInfo(PathChildrenCacheEvent event) throws IOException {
+        return objectMapper.readValue(event.getData().getData(),DataCenterInfo.class);
     }
 }

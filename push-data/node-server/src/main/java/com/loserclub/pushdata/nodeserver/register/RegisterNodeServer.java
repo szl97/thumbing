@@ -1,6 +1,7 @@
 package com.loserclub.pushdata.nodeserver.register;
 
-import com.alibaba.fastjson.JSON;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.loserclub.pushdata.common.Infos.DataCenterInfo;
 import com.loserclub.pushdata.common.constants.ZkGroupEnum;
 import com.loserclub.pushdata.common.utils.ip.IpUtils;
@@ -28,6 +29,9 @@ import javax.annotation.PreDestroy;
 @Component
 @Data
 public class RegisterNodeServer {
+    @Autowired
+    private ObjectMapper objectMapper;
+
     private ZkUtils zkUtils;
 
     @Autowired
@@ -49,13 +53,21 @@ public class RegisterNodeServer {
                     @Override
                     public void connectedEvent(CuratorFramework curator, ConnectionState state) {
                         log.info("NodeServer 连接zk成功");
-                        register();
+                        try {
+                            register();
+                        } catch (JsonProcessingException e) {
+                            e.printStackTrace();
+                        }
                     }
 
                     @Override
                     public void reconnectedEvent(CuratorFramework curator, ConnectionState state) {
                         log.info("NodeServer 重新连接zk成功");
-                        register();
+                        try {
+                            register();
+                        } catch (JsonProcessingException e) {
+                            e.printStackTrace();
+                        }
                     }
 
                     @Override
@@ -72,7 +84,7 @@ public class RegisterNodeServer {
         deRegister();
     }
 
-    private void register(){
+    private void register() throws JsonProcessingException {
         String root = ZkGroupEnum.NODE_SERVER.getValue();
         String name = dataCenterConfig.getName();
         if(!zkUtils.checkExists(root)){
@@ -86,7 +98,7 @@ public class RegisterNodeServer {
                 .build();
         String path = root+"/"+name;
         if(!zkUtils.checkExists(path)){
-            zkUtils.createNode(root, JSON.toJSONString(info), CreateMode.EPHEMERAL);
+            zkUtils.createNode(root, objectMapper.writeValueAsString(info), CreateMode.EPHEMERAL);
         }
     }
 

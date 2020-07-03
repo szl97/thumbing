@@ -1,6 +1,7 @@
 package com.loserclub.pushdata.datacenter.monitors;
 
-import com.alibaba.fastjson.JSON;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.loserclub.pushdata.common.Infos.NodeServerInfo;
 import com.loserclub.pushdata.common.constants.ZkGroupEnum;
 import com.loserclub.pushdata.common.utils.zk.ZkUtils;
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -29,6 +31,9 @@ import java.util.concurrent.ConcurrentHashMap;
 @Component
 @Data
 public class CenterZkMonitor {
+
+    @Autowired
+    private ObjectMapper objectMapper;
 
     private ConcurrentHashMap<String, NodeServerInfo> serverPool = new ConcurrentHashMap<>(16);
 
@@ -95,7 +100,13 @@ public class CenterZkMonitor {
         deviceManager.clear();
         Map<String, String> datas = zkUtils.readTargetChildsData(ZkGroupEnum.NODE_SERVER.getValue());
         if (datas != null) {
-            datas.forEach((k, v) -> serverPool.put(k, JSON.parseObject(v, NodeServerInfo.class)));
+            datas.forEach((k, v) -> {
+                try {
+                    serverPool.put(k, objectMapper.readValue(v, NodeServerInfo.class));
+                } catch (JsonProcessingException e) {
+                    e.printStackTrace();
+                }
+            });
         }
     }
 
@@ -106,13 +117,25 @@ public class CenterZkMonitor {
         zkUtils.listenerPathChildrenCache(ZkGroupEnum.NODE_SERVER.getValue(), ((client, event) -> {
             switch (event.getType()) {
                 case CHILD_ADDED:
-                    addEvent(event);
+                    try {
+                        addEvent(event);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                     break;
                 case CHILD_REMOVED:
-                    removeEvent(event);
+                    try {
+                        removeEvent(event);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                     break;
                 case CHILD_UPDATED:
-                    updateEvent(event);
+                    try {
+                        updateEvent(event);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                     break;
                 default:
                     break;
@@ -120,7 +143,7 @@ public class CenterZkMonitor {
         }));
     }
 
-    private void updateEvent(PathChildrenCacheEvent event) {
+    private void updateEvent(PathChildrenCacheEvent event) throws IOException {
         NodeServerInfo data = toNodeServerInfo(event);
         String key = data.getName();
         log.debug("node event update! key:{}, data:{}", key, data);
@@ -130,7 +153,7 @@ public class CenterZkMonitor {
         }
     }
 
-    private void removeEvent(PathChildrenCacheEvent event) {
+    private void removeEvent(PathChildrenCacheEvent event) throws IOException {
         NodeServerInfo data = toNodeServerInfo(event);
         String key = data.getName();
         log.info("node event remove! key:{}, data:{}", key, data);
@@ -142,7 +165,7 @@ public class CenterZkMonitor {
 
     }
 
-    private void addEvent(PathChildrenCacheEvent event) {
+    private void addEvent(PathChildrenCacheEvent event) throws IOException {
         NodeServerInfo data = toNodeServerInfo(event);
         String key = data.getName();
         log.info("node event add! key:{}, data:{}", key, data);
@@ -161,8 +184,8 @@ public class CenterZkMonitor {
         return path.substring(path.lastIndexOf("/")).replaceAll("/", "");
     }
 
-    private NodeServerInfo toNodeServerInfo(PathChildrenCacheEvent event) {
-        return JSON.parseObject(event.getData().getData(), NodeServerInfo.class);
+    private NodeServerInfo toNodeServerInfo(PathChildrenCacheEvent event) throws IOException {
+        return objectMapper.readValue(event.getData().getData(), NodeServerInfo.class);
     }
 
     public String getIpWithPort(String name){
