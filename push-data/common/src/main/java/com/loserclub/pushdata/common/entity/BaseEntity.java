@@ -1,7 +1,8 @@
 package com.loserclub.pushdata.common.entity;
 
-import com.loserclub.pushdata.common.jpa.AutoFillEntityListener;
-import lombok.Data;
+import com.loserclub.pushdata.common.utils.entity.AutoFillEntityListener;
+import lombok.Getter;
+import lombok.Setter;
 import lombok.experimental.FieldNameConstants;
 import org.hibernate.annotations.GenericGenerator;
 
@@ -18,7 +19,8 @@ import java.io.Serializable;
  */
 @EntityListeners(AutoFillEntityListener.class)
 @MappedSuperclass
-@Data
+@Getter
+@Setter
 @FieldNameConstants
 public class BaseEntity implements Serializable {
     private static final long serialVersionUID = -7455319085169527969L;

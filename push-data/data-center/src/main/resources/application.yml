@@ -81,6 +81,11 @@ spring:
       direct:
         acknowledge-mode: manual
         prefetch: 1
+  data:
+    mongodb:
+      host: localhost
+      port: 27017
+      database: loserclub
 elasticsearch:
   host: 127.0.0.1
   port: 9200

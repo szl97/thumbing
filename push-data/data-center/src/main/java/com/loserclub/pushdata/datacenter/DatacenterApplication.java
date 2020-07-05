@@ -13,7 +13,9 @@ import org.springframework.context.annotation.ComponentScan;
 @SpringBootApplication(scanBasePackages = {
         "com.loserclub.pushdata.common",
 })
-@EnableFeignClients
+@EnableFeignClients(basePackages = {
+        "com.loserclub.pushdata.common"
+})
 public class DatacenterApplication {
 
     public static void main(String[] args) {

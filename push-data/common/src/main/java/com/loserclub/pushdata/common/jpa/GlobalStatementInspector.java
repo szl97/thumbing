@@ -31,8 +31,8 @@ import java.util.List;
  * 全局sql过滤器 仅针对sql 可拓展
  * 参考mybatis-plus得租户过滤实现 其实这一套也可以在mybatis里用 一样可以过滤自定义sql 非常强大 当然有点性能开销
  *
- * @author 王吉
- * @date 2020-04-27 14:01
+ * @author Stan Sai
+ * @date 2020-06-28
  */
 @Slf4j
 @Data

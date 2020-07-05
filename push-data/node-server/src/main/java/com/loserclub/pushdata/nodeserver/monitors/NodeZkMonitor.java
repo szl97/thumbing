@@ -61,19 +61,19 @@ public class NodeZkMonitor {
                 new ZkStateListener() {
                     @Override
                     public void connectedEvent(CuratorFramework curator, ConnectionState state) {
-                        log.info("DataCenterDiscovery 链接zk成功");
+                        log.info("DataCenterDiscovery 连接zk成功");
                         initCenterServerDiscovery();
                     }
 
                     @Override
                     public void reconnectedEvent(CuratorFramework curator, ConnectionState state) {
-                        log.info("DataCenterDiscovery 重新链接zk成功");
+                        log.info("DataCenterDiscovery 重新连接zk成功");
                         initCenterServerDiscovery();
                     }
 
                     @Override
                     public void lostEvent(CuratorFramework curator, ConnectionState state) {
-                        log.info("DataCenterDiscovery 链接zk丢失");
+                        log.info("DataCenterDiscovery 连接zk丢失");
                         centerPool.clear();
                     }
                 }

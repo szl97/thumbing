@@ -1,9 +1,11 @@
-package com.loserclub.generateid;
+package com.loserclub.pushdata.common.utils.generateid;
 
-import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang.StringUtils;
+
 import cn.hutool.core.date.SystemClock;
-import cn.hutool.core.lang.Assert;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.util.Assert;
+
 
 import java.lang.management.ManagementFactory;
 import java.net.InetAddress;
@@ -74,9 +76,9 @@ public class SnowFlake {
      * @param datacenterId 序列号
      */
     public SnowFlake(long workerId, long datacenterId) {
-        Assert.isFalse(workerId > maxWorkerId || workerId < 0,
+        Assert.isTrue(workerId <= maxWorkerId && workerId >= 0,
                 String.format("worker Id can't be greater than %d or less than 0", maxWorkerId));
-        Assert.isFalse(datacenterId > maxDatacenterId || datacenterId < 0,
+        Assert.isTrue(datacenterId <= maxDatacenterId || datacenterId >= 0,
                 String.format("datacenter Id can't be greater than %d or less than 0", maxDatacenterId));
         this.workerId = workerId;
         this.datacenterId = datacenterId;

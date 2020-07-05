@@ -68,7 +68,7 @@ public class RegisterDataCenter {
 
                     @Override
                     public void reconnectedEvent(CuratorFramework curator, ConnectionState state) {
-                        log.info("Data Center 连接链接zk成功");
+                        log.info("Data Center 连接连接zk成功");
                         try {
                             register();
                         } catch (JsonProcessingException e) {
