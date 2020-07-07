@@ -95,7 +95,7 @@ elasticsearch:
     - shardNum: 3
       replicasNum: 2
       name: doc
-      properties: [name, title, tags, content, date]
+      properties: [id, name, title, tags, content, date, userId]
 
 eureka:
   client:

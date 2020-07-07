@@ -102,11 +102,9 @@ public class ElasticUtils {
      */
 
     public boolean indexDoc(String indexName,
-                            String id,
                             String jsonString) {
 
         IndexRequest indexRequest = new IndexRequest(indexName)
-                .id(id)
                 .source(jsonString, XContentType.JSON);
         try {
             IndexResponse indexResponse = client.index(indexRequest, RequestOptions.DEFAULT);
@@ -203,6 +201,7 @@ public class ElasticUtils {
                                   int pageNum,
                                   int pageSize,
                                   Class<T> clazz,
+                                  @Nullable List<Long> blackList,
                                   @Nullable String type,
                                   @Nullable LocalDateTime dateTime) {
 
@@ -211,13 +210,18 @@ public class ElasticUtils {
         SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
         BoolQueryBuilder boolBuilder = QueryBuilders.boolQuery();
         if(StringUtils.isNotBlank(type)){
-            MatchQueryBuilder matchQueryBuilder = QueryBuilders.matchQuery("name", type);
-            boolBuilder.must(matchQueryBuilder);
+            TermQueryBuilder termQueryBuilder = QueryBuilders.termQuery("name", type);
+            boolBuilder.must(termQueryBuilder);
+        }
+        if(blackList != null){
+            TermQueryBuilder termQueryBuilder = QueryBuilders.termQuery("userId", blackList.toArray());
+            boolBuilder.mustNot(termQueryBuilder);
         }
         if(dateTime != null){
             RangeQueryBuilder rangeQueryBuilder = QueryBuilders
                     .rangeQuery("date")
                     .gte(dateTime);
+            boolBuilder.must(rangeQueryBuilder);
         }
         MultiMatchQueryBuilder multiMatchQuery = QueryBuilders
                 .multiMatchQuery(keyword, fieldNames)

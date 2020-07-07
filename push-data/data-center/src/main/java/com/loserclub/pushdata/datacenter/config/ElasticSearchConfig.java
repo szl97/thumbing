@@ -79,12 +79,15 @@ public class ElasticSearchConfig {
                                         for (String s : i.getProperties()) {
                                             builder.startObject(s);
                                             {
-                                                if(!s.equals("date")) {
-                                                    builder.field("type", "string");
-                                                    builder.field("analyzer", "ik_max_word");
+                                                if(s.equals("date")) {
+                                                    builder.field("type", "datetime");
+                                                }
+                                                else if(s.equals("userId") || s.equals("id")){
+                                                    builder.field("type", "long");
                                                 }
                                                 else{
-                                                    builder.field("type", "datetime");
+                                                    builder.field("type", "text");
+                                                    builder.field("analyzer", "ik_max_word");
                                                 }
                                             }
                                             builder.endObject();

@@ -1,7 +1,9 @@
 package com.loserclub.pushdata.nodeserver.messages;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 
@@ -12,6 +14,8 @@ import java.util.List;
  */
 @Builder
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class PushData extends NodeMessageReq<PushData> {
 
     private String fromUser;
