@@ -1,8 +1,7 @@
-package com.loserclub.pushdata.nodeserver.device;
+package com.loserclub.pushdata.datacenter.server;
 
-
-import com.loserclub.pushdata.nodeserver.config.NodeServerConfig;
-import com.loserclub.pushdata.nodeserver.inbound.DeviceToNodeInBoundHandler;
+import com.loserclub.pushdata.datacenter.config.DataCenterConfig;
+import com.loserclub.pushdata.datacenter.inbound.NodeToCenterInBoundMonitorHandler;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelOption;
@@ -20,23 +19,31 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+
+
 /**
+ *
  * @author Stan Sai
- * @date 2020-06-23
+ * @date 2020-06-21
  */
 @Slf4j
 @Component
 @Data
-public class DeviceServerBootStrap {
+public class ServerConnectMonitorBootStrap {
+
     @Autowired
-    private NodeServerConfig nodeServerConfig;
+    private DataCenterConfig dataCenterConfig;
 
     private NioEventLoopGroup boss = new NioEventLoopGroup();
 
     private NioEventLoopGroup work = new NioEventLoopGroup();
 
     @Autowired
-    private DeviceToNodeInBoundHandler deviceToNodeInBoundHandler;
+    private NodeToCenterInBoundMonitorHandler nodeToCenterInBoundMonitorHandler;
 
     public void init() throws InterruptedException {
         ServerBootstrap bootstrap = new ServerBootstrap();
@@ -54,16 +61,17 @@ public class DeviceServerBootStrap {
                         //空闲检测
                         pipeline.addLast("idleStateHandler", new IdleStateHandler(300, 0, 0));
 
-                        //处理Node Server成功连接确认事件、心跳事件、推送消息事件
-                        pipeline.addLast("handler", deviceToNodeInBoundHandler);
+                        //处理Node 心跳事件、node server与客户端之间连接的建立和删除事件
+                        pipeline.addLast("handler", nodeToCenterInBoundMonitorHandler);
                     }
                 })
                 .option(ChannelOption.TCP_NODELAY, true)
                 .childOption(ChannelOption.SO_REUSEADDR, true)
                 .option(ChannelOption.SO_SNDBUF, 2048)
                 .option(ChannelOption.SO_RCVBUF, 1024);
-        bootstrap.bind(nodeServerConfig.getDevicePort()).sync();
-        log.info("Data center successful! listening port: {}", nodeServerConfig.getDevicePort());
+        bootstrap.bind(dataCenterConfig.getPort()).sync();
+        log.info("Data center successful! listening port: {}", dataCenterConfig.getPort());
 
     }
+
 }

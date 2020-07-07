@@ -16,7 +16,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class HandShake extends NodeMessage<HandShake> {
 
-    private String deviceId;
+    private Long deviceId;
 
     @Override
     protected Type type() {

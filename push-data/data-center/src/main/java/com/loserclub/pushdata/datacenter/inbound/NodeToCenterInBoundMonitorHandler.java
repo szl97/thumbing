@@ -17,6 +17,7 @@ import java.util.List;
 
 
 /**
+ * 监控设备客户端连接建立的消息处理类
  * @author Stan Sai
  * @date 2020-06-22
  */

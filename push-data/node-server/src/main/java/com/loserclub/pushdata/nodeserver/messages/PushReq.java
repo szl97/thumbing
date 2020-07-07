@@ -18,7 +18,7 @@ import java.util.List;
 @NoArgsConstructor
 public class PushReq extends NodeMessageReq<PushReq> {
 
-    private List<String> deviceIds;
+    private List<Long> deviceIds;
 
     private String name;
 

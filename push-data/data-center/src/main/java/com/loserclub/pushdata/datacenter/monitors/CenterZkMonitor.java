@@ -24,6 +24,8 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
+ * 获取目前已经注册的node-server，记录他们的地址
+ * 并监听node-server的变化
  * @author Stan Sai
  * @date 2020-06-20
  */

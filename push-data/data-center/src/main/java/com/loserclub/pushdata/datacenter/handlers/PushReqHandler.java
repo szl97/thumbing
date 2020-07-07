@@ -37,7 +37,7 @@ public class PushReqHandler implements INodeToCenterHandler<PushReq> {
     public void call(ChannelHandlerContext ctx, PushReq message) throws Exception {
         Channel channel = ctx.channel();
         if(deviceManager.isExists(message.getName())) {
-            List<String> ids = message.getDeviceIds();
+            List<Long> ids = message.getDeviceIds();
             if (message.getOperation() == OperationEnum.ADD) {
                 ids.forEach(i -> deviceManager.addOrUpdateClient(i, message.getName()));
             } else if (message.getOperation() == OperationEnum.DEL) {

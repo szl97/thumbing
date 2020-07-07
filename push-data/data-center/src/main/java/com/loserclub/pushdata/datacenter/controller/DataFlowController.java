@@ -1,7 +1,7 @@
 package com.loserclub.pushdata.datacenter.controller;
 
 
-import com.loserclub.pushdata.common.controller.PushDataBaseController;
+import com.loserclub.pushdata.common.controller.LoserClubBaseController;
 import com.loserclub.pushdata.datacenter.service.DataFlowService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("/dataFlow")
-public class DataFlowController extends PushDataBaseController {
+public class DataFlowController extends LoserClubBaseController {
 
     @Autowired
     private DataFlowService dataFlowService;

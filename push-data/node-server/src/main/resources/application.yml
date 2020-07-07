@@ -5,7 +5,67 @@ spring:
   application:
     name: node-server
   redis:
-    host: 127.0.0.1:6379
+    password:
+    cluster:
+      nodes: localhost:6379,localhost:6380,localhost:6381
+      max-redirects: 3
+    lettuce:
+      pool:
+        max-idle: 16
+        max-active: 32
+        min-idle: 8
+        max-wait: -1
+    database: 0
+    redis2:
+      password:
+      cluster:
+        nodes: localhost:6382,localhost:6383,localhost:6384
+        max-redirects: 3
+      lettuce:
+        pool:
+          max-idle: 16
+          max-active: 32
+          min-idle: 8
+          max-wait: -1
+      database: 0
+
+    #阿里数据库连接池设置
+    datasource:
+      type: com.alibaba.druid.pool.DruidDataSource
+      driver-class-name: com.mysql.jdbc.Driver
+      url: ${SPRING_DATASOURCE_URL:jdbc:mysql://localhost:5432/loserclub}
+      username: ${SPRING_DATASOURCE_USERNAME:loserclub}
+      password: ${SPRING_DATASOURCE_PASSWORD:loserclub}
+      druid:
+        #最大值
+        max-active: 10
+        #最小值
+        min-idle: 5
+        #初始化大小
+        initial-size: 5
+        #最大等待时间，配置获取连接等待超时，时间单位都是毫秒ms
+        max-wait: 60000
+        # 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒
+        time-between-eviction-runs-millis: 3000
+        # 配置一个连接在池中最小生存的时间，单位是毫秒
+        min-evictable-idle-time-millis: 30000
+        validation-query: SELECT 1
+        test-on-borrow: false
+        test-on-return: false
+        # 打开PSCache
+        pool-prepared-statements: true
+        #最大PSCache连接
+        max-pool-prepared-statement-per-connection-size: 20
+        # 配置监控统计拦截的filters，去掉后监控界面sql无法统计，
+        #'wall'用于防火墙
+        filter:
+          slf4j:
+            statement-sql-pretty-format: true
+            result-set-log-enabled: false
+            statement-executable-sql-log-enable: false
+            enabled: true
+        # 通过connectProperties属性来打开mergeSql功能；慢SQL记录
+        connection-properties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=500
   rabbitmq:
     addresses: localhost:5672
     username: root

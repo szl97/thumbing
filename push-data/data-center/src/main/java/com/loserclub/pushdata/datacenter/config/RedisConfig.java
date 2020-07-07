@@ -8,7 +8,6 @@ import com.fasterxml.jackson.databind.jsontype.impl.LaissezFaireSubTypeValidator
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.loserclub.pushdata.common.utils.redis.RedisUtilsForCollection;
 import com.loserclub.pushdata.common.utils.redis.RedisUtilsForObject;
-import com.sun.istack.Nullable;
 import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -118,7 +117,7 @@ public class RedisConfig extends CachingConfigurerSupport {
      * 用来存储 value 和 hash
      */
     @Configuration
-    public class redisConf {
+    private static class redisConf {
         @Value("${spring.redis.cluster.nodes}")
         private String nodes;
         @Value("${spring.redis.cluster.max-redirects}")
@@ -172,7 +171,7 @@ public class RedisConfig extends CachingConfigurerSupport {
      * 用来存储 list、set、sorted set
      */
     @Configuration
-    public class redisConf2 {
+    private static class redisConf2 {
         @Value("${spring.redis2.cluster.nodes}")
         private String nodes;
         @Value("${spring.redis2.cluster.max-redirects}")

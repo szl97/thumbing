@@ -14,6 +14,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 
 /**
+ * 管理data-center和node-server之间的消息通道，用于客户端的消息推送
  * @author Stan Sai
  * @date 2020-06-21
  */
@@ -21,7 +22,7 @@ import java.util.concurrent.ConcurrentHashMap;
 @Slf4j
 @Component
 @Data
-public class NodeToCenterChannelManager implements IChannelManager {
+public class NodeToCenterChannelManager implements IChannelManager<String> {
 
     private Map<String, Channel> channelPool = new ConcurrentHashMap<>();
 

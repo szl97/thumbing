@@ -9,15 +9,15 @@ import java.util.List;
  * @author Stan Sai
  * @date 2020-06-21
  */
-public interface IChannelManager {
+public interface IChannelManager<T> {
 
-    void bindAttributes(String id, Channel channel, List<AttributeEnum> attributeKeys);
+    void bindAttributes(T id, Channel channel, List<AttributeEnum> attributeKeys);
 
-    String getNodeOrDeviceId(Channel channel);
+    T getNodeOrDeviceId(Channel channel);
 
-    Channel getChannel(String id);
+    Channel getChannel(T id);
 
     void removeChannel(Channel channel);
 
-    void removeChannel(String id);
+    void removeChannel(T id);
 }

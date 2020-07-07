@@ -1,7 +1,8 @@
-package com.loserclub.pushdata.datacenter.data;
+package com.loserclub.pushdata.nodeserver.server;
 
-import com.loserclub.pushdata.datacenter.config.DataCenterConfig;
-import com.loserclub.pushdata.datacenter.inbound.NodeToCenterInBoundDataFlowHandler;
+
+import com.loserclub.pushdata.nodeserver.config.NodeServerConfig;
+import com.loserclub.pushdata.nodeserver.inbound.DeviceToNodeInBoundHandler;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelOption;
@@ -20,23 +21,23 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
+ * 作为服务端接收客户端设备的请求
  * @author Stan Sai
- * @date 2020-06-22
+ * @date 2020-06-23
  */
-
 @Slf4j
 @Component
 @Data
-public class DataFlowBootStrap {
+public class DeviceServerBootStrap {
     @Autowired
-    private DataCenterConfig dataCenterConfig;
+    private NodeServerConfig nodeServerConfig;
 
     private NioEventLoopGroup boss = new NioEventLoopGroup();
 
     private NioEventLoopGroup work = new NioEventLoopGroup();
 
     @Autowired
-    private NodeToCenterInBoundDataFlowHandler nodeToCenterInBoundDataFlowHandler;
+    private DeviceToNodeInBoundHandler deviceToNodeInBoundHandler;
 
     public void init() throws InterruptedException {
         ServerBootstrap bootstrap = new ServerBootstrap();
@@ -55,15 +56,15 @@ public class DataFlowBootStrap {
                         pipeline.addLast("idleStateHandler", new IdleStateHandler(300, 0, 0));
 
                         //处理Node Server成功连接确认事件、心跳事件、推送消息事件
-                        pipeline.addLast("handler", nodeToCenterInBoundDataFlowHandler);
+                        pipeline.addLast("handler", deviceToNodeInBoundHandler);
                     }
                 })
                 .option(ChannelOption.TCP_NODELAY, true)
                 .childOption(ChannelOption.SO_REUSEADDR, true)
                 .option(ChannelOption.SO_SNDBUF, 2048)
                 .option(ChannelOption.SO_RCVBUF, 1024);
-        bootstrap.bind(dataCenterConfig.getMessagePort()).sync();
-        log.info("Data center successful! listening port: {}", dataCenterConfig.getMessagePort());
+        bootstrap.bind(nodeServerConfig.getDevicePort()).sync();
+        log.info("Data center successful! listening port: {}", nodeServerConfig.getDevicePort());
 
     }
 }

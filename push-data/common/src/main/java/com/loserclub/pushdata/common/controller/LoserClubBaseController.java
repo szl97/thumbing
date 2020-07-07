@@ -24,7 +24,7 @@ import java.nio.charset.StandardCharsets;
  * @author Stan Sai
  * @date 2020-06-23
  */
-public class PushDataBaseController extends BaseController {
+public class LoserClubBaseController extends BaseController {
 
     @Autowired
     private ObjectMapper mapper;

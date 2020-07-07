@@ -22,6 +22,7 @@ import javax.annotation.PreDestroy;
 
 
 /**
+ * 启动node-server服务后，在zookeeper上注册自己的地址信息
  * @author Stan Sai
  * @date 2020-06-22
  */

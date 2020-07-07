@@ -41,7 +41,7 @@ public class PushDataHandler implements INodeToCenterHandler<PushData> {
     @Override
     public void call(ChannelHandlerContext ctx, PushData message) throws Exception {
         Channel channel = ctx.channel();
-        HashMap<String, List<String>> map = new HashMap<>();
+        HashMap<String, List<Long>> map = new HashMap<>();
         message.getDeviceIds().forEach(
                 a -> {
                     String name = deviceManager.getNodeServer(a);

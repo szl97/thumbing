@@ -18,9 +18,11 @@ import java.util.List;
 @NoArgsConstructor
 public class PushData extends NodeMessageReq<PushData> {
 
-    private String fromUser;
+    private Long fromUser;
 
-    private List<String> deviceIds;
+    private List<Long> toUsers;
+
+    private List<Long> deviceIds;
 
     private String name;
 

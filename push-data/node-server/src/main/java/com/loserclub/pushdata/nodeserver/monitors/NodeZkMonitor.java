@@ -25,6 +25,8 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
+ *  获取目前已经注册的data-center，记录他们的地址
+ *  并监听data-center的变化
  * @author Stan Sai
  * @date 2020-06-22
  */
@@ -101,7 +103,7 @@ public class NodeZkMonitor {
      */
     private void initCenterServerDiscovery() {
         centerPool.clear();
-        Map<String, String> datas = zkUtils.readTargetChildsData(ZkGroupEnum.NODE_SERVER.getValue());
+        Map<String, String> datas = zkUtils.readTargetChildsData(ZkGroupEnum.DATA_CENTER.getValue());
         if (datas != null) {
             datas.forEach((k, v) -> {
                 try {
@@ -117,7 +119,7 @@ public class NodeZkMonitor {
      * 设置监听发生更新，更新缓存数据，发生新增，删除，更新
      */
     private void listenCenterServerDiscovery() {
-        zkUtils.listenerPathChildrenCache(ZkGroupEnum.NODE_SERVER.getValue(), ((client, event) -> {
+        zkUtils.listenerPathChildrenCache(ZkGroupEnum.DATA_CENTER.getValue(), ((client, event) -> {
             switch (event.getType()) {
                 case CHILD_ADDED:
                     try {
@@ -147,7 +149,7 @@ public class NodeZkMonitor {
     }
 
     private void updateEvent(PathChildrenCacheEvent event) throws IOException {
-        DataCenterInfo data = toNodeServerInfo(event);
+        DataCenterInfo data = toDataCenterInfo(event);
         String key = data.getName();
         log.debug("center event update! key:{}, data:{}", key, data);
         //只需要更新缓存数据就可以了
@@ -157,7 +159,7 @@ public class NodeZkMonitor {
     }
 
     private void removeEvent(PathChildrenCacheEvent event) throws IOException {
-        DataCenterInfo data = toNodeServerInfo(event);
+        DataCenterInfo data = toDataCenterInfo(event);
         String key = data.getName();
         syncConnectClientBootStrap.DisConnect(data);
         dataFlowToCenterBootStrap.DisConnect(data);
@@ -170,7 +172,7 @@ public class NodeZkMonitor {
     }
 
     private void addEvent(PathChildrenCacheEvent event) throws IOException {
-        DataCenterInfo data = toNodeServerInfo(event);
+        DataCenterInfo data = toDataCenterInfo(event);
         String key = data.getName();
         log.info("center event add! key:{}, data:{}", key, data);
         if (!centerPool.containsKey(key)) {
@@ -189,7 +191,7 @@ public class NodeZkMonitor {
         return path.substring(path.lastIndexOf("/")).replaceAll("/", "");
     }
 
-    private DataCenterInfo toNodeServerInfo(PathChildrenCacheEvent event) throws IOException {
+    private DataCenterInfo toDataCenterInfo(PathChildrenCacheEvent event) throws IOException {
         return objectMapper.readValue(event.getData().getData(),DataCenterInfo.class);
     }
 }

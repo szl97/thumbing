@@ -9,8 +9,8 @@ import com.loserclub.pushdata.common.utils.zk.ZkUtils;
 import com.loserclub.pushdata.common.utils.zk.listener.ZkStateListener;
 import com.loserclub.pushdata.datacenter.config.DataCenterConfig;
 import com.loserclub.pushdata.datacenter.config.ZookeeperConfig;
-import com.loserclub.pushdata.datacenter.data.DataFlowBootStrap;
-import com.loserclub.pushdata.datacenter.monitors.ServerConnectMonitorBootStrap;
+import com.loserclub.pushdata.datacenter.server.DataFlowBootStrap;
+import com.loserclub.pushdata.datacenter.server.ServerConnectMonitorBootStrap;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.curator.framework.CuratorFramework;
@@ -22,6 +22,12 @@ import org.springframework.stereotype.Component;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 
+
+/**
+ * 启动data-center服务后，在zookeeper上注册自己的地址信息
+ * @author Stan Sai
+ * @date 2020-06-20
+ */
 @Slf4j
 @Component
 @Data

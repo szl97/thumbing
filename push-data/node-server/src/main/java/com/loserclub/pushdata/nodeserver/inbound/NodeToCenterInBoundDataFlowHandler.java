@@ -18,6 +18,7 @@ import java.util.List;
 
 
 /**
+ * 消息中心发送设备客户端消息的处理类
  * @author Stan Sai
  * @date 2020-06-23
  */

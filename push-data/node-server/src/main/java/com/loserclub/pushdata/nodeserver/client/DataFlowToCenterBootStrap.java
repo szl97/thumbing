@@ -29,6 +29,7 @@ import java.util.concurrent.TimeUnit;
 
 
 /**
+ * 作为消息中心的客户端将设备客户端的消息发送给data-center
  * @author Stan Sai
  * @date 2020-06-22
  */

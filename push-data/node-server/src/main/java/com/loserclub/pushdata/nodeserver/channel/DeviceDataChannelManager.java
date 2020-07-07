@@ -13,11 +13,16 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+/**
+ * 管理客户端和node-server之间的消息通道，用于客户端的消息推送
+ * @author Stan Sai
+ * @date 2020-06-22
+ */
 @Slf4j
 @Component
 @Data
-public class DeviceDataChannelManager implements IChannelManager {
-    private Map<String, Channel> channelPool = new ConcurrentHashMap<>();
+public class DeviceDataChannelManager implements IChannelManager<Long> {
+    private Map<Long, Channel> channelPool = new ConcurrentHashMap<>();
 
     @PreDestroy
     public void destory() {
@@ -25,12 +30,12 @@ public class DeviceDataChannelManager implements IChannelManager {
     }
 
     @Override
-    public void bindAttributes(String name, Channel channel, List<AttributeEnum> attributeKeys) {
-        channelPool.put(name,channel);
+    public void bindAttributes(Long deviceId, Channel channel, List<AttributeEnum> attributeKeys) {
+        channelPool.put(deviceId,channel);
 
         attributeKeys.forEach(a->{
             if(a == AttributeEnum.CHANNEL_ATTR_DEVICE) {
-                channel.attr(a.getAttributeKey()).set(name);
+                channel.attr(a.getAttributeKey()).set(deviceId);
             }
             if(a == AttributeEnum.CHANNEL_ATTR_HANDSHAKE) {
                 channel.attr(a.getAttributeKey()).set(true);
@@ -39,31 +44,31 @@ public class DeviceDataChannelManager implements IChannelManager {
     }
 
     @Override
-    public String getNodeOrDeviceId(Channel channel) {
+    public Long getNodeOrDeviceId(Channel channel) {
         return channel.hasAttr(AttributeEnum.CHANNEL_ATTR_DEVICE.getAttributeKey()) ?
-                channel.attr(AttributeEnum.CHANNEL_ATTR_DEVICE.getAttributeKey()).get().toString():
+                Long.parseLong(channel.attr(AttributeEnum.CHANNEL_ATTR_DEVICE.getAttributeKey()).get().toString()):
                 null;
     }
 
     @Override
     public void removeChannel(Channel channel) {
-        String name = getNodeOrDeviceId(channel);
-        if(name != null){
-            channelPool.remove(name);
+        Long id = getNodeOrDeviceId(channel);
+        if(id != null){
+            channelPool.remove(id);
         }
     }
 
     @Override
-    public void removeChannel(String name) {
-        if(channelPool.containsKey(name)){
-            channelPool.remove(name);
+    public void removeChannel(Long id) {
+        if(channelPool.containsKey(id)){
+            channelPool.remove(id);
         }
     }
 
 
     @Override
-    public Channel getChannel(String name) {
-        return channelPool.get(name);
+    public Channel getChannel(Long id) {
+        return channelPool.get(id);
     }
 
 //    public List<Channel> getAllChannels(){
@@ -75,8 +80,8 @@ public class DeviceDataChannelManager implements IChannelManager {
 //        return list;
 //    }
 
-    public List<String> getAllDevices(){
-        List<String> list = new ArrayList<>();
+    public List<Long> getAllDevices(){
+        List<Long> list = new ArrayList<>();
         channelPool.entrySet().forEach(e-> {
                     list.add(e.getKey());
                 }

@@ -16,6 +16,7 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 /**
+ * 设备客户端消息的处理类
  * @author Stan Sai
  * @date 2020-06-23
  */

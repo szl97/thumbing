@@ -31,6 +31,7 @@ import java.util.concurrent.TimeUnit;
 
 
 /**
+ * 与设备客户端建立连接后，作为消息中心的客户端，将建立连接的消息发送给data-center
  * @author Stan Sai
  * @date 2020-06-22
  */
@@ -90,7 +91,7 @@ public class SyncConnectClientBootStrap {
                         List<AttributeEnum> attributeEnums = new ArrayList<>();
                         attributeEnums.add(AttributeEnum.CHANNEL_ATTR_DATACENTER);
                         channelManager.bindAttributes(info.getName(), channel, attributeEnums);
-                        List<String> devices = deviceDataChannelManager.getAllDevices();
+                        List<Long> devices = deviceDataChannelManager.getAllDevices();
                         if(devices.size() > 0){
                             channel.writeAndFlush(
                                     PushReq.builder()

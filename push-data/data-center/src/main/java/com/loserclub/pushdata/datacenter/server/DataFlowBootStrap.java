@@ -1,7 +1,7 @@
-package com.loserclub.pushdata.datacenter.monitors;
+package com.loserclub.pushdata.datacenter.server;
 
 import com.loserclub.pushdata.datacenter.config.DataCenterConfig;
-import com.loserclub.pushdata.datacenter.inbound.NodeToCenterInBoundMonitorHandler;
+import com.loserclub.pushdata.datacenter.inbound.NodeToCenterInBoundDataFlowHandler;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelOption;
@@ -19,21 +19,15 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-
-
 /**
  * @author Stan Sai
- * @date 2020-06-21
+ * @date 2020-06-22
  */
+
 @Slf4j
 @Component
 @Data
-public class ServerConnectMonitorBootStrap {
-
+public class DataFlowBootStrap {
     @Autowired
     private DataCenterConfig dataCenterConfig;
 
@@ -42,7 +36,7 @@ public class ServerConnectMonitorBootStrap {
     private NioEventLoopGroup work = new NioEventLoopGroup();
 
     @Autowired
-    private NodeToCenterInBoundMonitorHandler nodeToCenterInBoundMonitorHandler;
+    private NodeToCenterInBoundDataFlowHandler nodeToCenterInBoundDataFlowHandler;
 
     public void init() throws InterruptedException {
         ServerBootstrap bootstrap = new ServerBootstrap();
@@ -60,17 +54,16 @@ public class ServerConnectMonitorBootStrap {
                         //空闲检测
                         pipeline.addLast("idleStateHandler", new IdleStateHandler(300, 0, 0));
 
-                        //处理Node 心跳事件、node server与客户端之间连接的建立和删除事件
-                        pipeline.addLast("handler", nodeToCenterInBoundMonitorHandler);
+                        //处理Node Server成功连接确认事件、心跳事件、推送消息事件
+                        pipeline.addLast("handler", nodeToCenterInBoundDataFlowHandler);
                     }
                 })
                 .option(ChannelOption.TCP_NODELAY, true)
                 .childOption(ChannelOption.SO_REUSEADDR, true)
                 .option(ChannelOption.SO_SNDBUF, 2048)
                 .option(ChannelOption.SO_RCVBUF, 1024);
-        bootstrap.bind(dataCenterConfig.getPort()).sync();
-        log.info("Data center successful! listening port: {}", dataCenterConfig.getPort());
+        bootstrap.bind(dataCenterConfig.getMessagePort()).sync();
+        log.info("Data center successful! listening port: {}", dataCenterConfig.getMessagePort());
 
     }
-
 }

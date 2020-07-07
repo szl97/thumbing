@@ -15,13 +15,14 @@ import java.util.concurrent.ConcurrentHashMap;
 
 
 /**
+ * 管理data-center和node-server之间的消息通道，用于和客户端建立连接之后告诉data-center此客户端建立连接的node-server是哪个
  * @author Stan Sai
  * @date 2020-06-22
  */
 @Slf4j
 @Component
 @Data
-public class SyncClientChannelManager implements IChannelManager {
+public class SyncClientChannelManager implements IChannelManager<String> {
 
     private Map<String, Channel> channelPool = new ConcurrentHashMap<>();
 

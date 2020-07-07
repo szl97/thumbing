@@ -15,6 +15,7 @@ import lombok.val;
 import java.io.IOException;
 
 /**
+ * 定义客户端与node-server之间以及node-server与data-center之间传输的数据类型
  * @author Stan Sai
  * @date 2020-06-21
  */
