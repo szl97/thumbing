@@ -1,12 +1,12 @@
 package com.loserclub.pushdata.nodeserver.messages;
 
+import com.loserclub.pushdata.common.constants.OperationEnum;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
-
 
 /**
  * @author Stan Sai
@@ -16,25 +16,21 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class PushData extends NodeMessageReq<PushData> {
-
-    private Long fromUser;
-
-    private List<Long> toUsers;
+public class ConnectSet extends NodeMessageReq<ConnectSet> {
 
     private List<Long> deviceIds;
 
     private String name;
 
-    private String data;
+    private OperationEnum operation;
 
     @Override
     protected Type type() {
-        return Type.PD;
+        return Type.CS;
     }
 
     @Override
-    protected PushData getThis() throws Exception {
+    protected ConnectSet getThis() throws Exception {
         return this;
     }
 }

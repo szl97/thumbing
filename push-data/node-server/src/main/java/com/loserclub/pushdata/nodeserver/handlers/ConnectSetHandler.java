@@ -1,8 +1,9 @@
 package com.loserclub.pushdata.nodeserver.handlers;
 
+import com.loserclub.pushdata.common.handlers.IMessageHandler;
 import com.loserclub.pushdata.common.message.DefinedMessage;
 import com.loserclub.pushdata.nodeserver.channel.SyncClientChannelManager;
-import com.loserclub.pushdata.nodeserver.messages.PushReq;
+import com.loserclub.pushdata.nodeserver.messages.ConnectSet;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import lombok.Data;
@@ -21,18 +22,18 @@ import java.util.List;
 @Slf4j
 @Component
 @Data
-public class PushReqHandler implements INodeToCenterHandler<PushReq> {
+public class ConnectSetHandler implements IMessageHandler<ConnectSet> {
 
     @Autowired
     SyncClientChannelManager syncClientChannelManager;
 
     @Override
     public boolean support(DefinedMessage message) {
-        return message instanceof PushReq;
+        return message instanceof ConnectSet;
     }
 
     @Override
-    public void call(ChannelHandlerContext ctx, PushReq message) {
+    public void call(ChannelHandlerContext ctx, ConnectSet message) {
         List<Channel> channels = syncClientChannelManager.getAllChannels();
 
         channels.forEach(

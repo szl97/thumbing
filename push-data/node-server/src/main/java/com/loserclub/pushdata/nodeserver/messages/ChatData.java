@@ -1,6 +1,5 @@
-package com.loserclub.pushdata.datacenter.messages;
+package com.loserclub.pushdata.nodeserver.messages;
 
-import com.loserclub.pushdata.common.constants.OperationEnum;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -11,27 +10,31 @@ import java.util.List;
 
 /**
  * @author Stan Sai
- * @date 2020-06-21
+ * @date 2020-06-22
  */
 @Builder
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class PushReq extends NodeMessageReq<PushReq> {
+public class ChatData extends NodeMessageReq<ChatData> {
+
+    private Long fromUser;
+
+    private List<Long> toUsers;
 
     private List<Long> deviceIds;
 
     private String name;
 
-    private OperationEnum operation;
+    private String data;
 
     @Override
     protected Type type() {
-        return Type.P;
+        return Type.CD;
     }
 
     @Override
-    protected PushReq getThis() throws Exception {
+    protected ChatData getThis() throws Exception {
         return this;
     }
 }

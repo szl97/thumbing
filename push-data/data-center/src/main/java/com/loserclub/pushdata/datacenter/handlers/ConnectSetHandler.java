@@ -4,7 +4,7 @@ import com.loserclub.pushdata.common.constants.OperationEnum;
 import com.loserclub.pushdata.common.message.DefinedMessage;
 import com.loserclub.pushdata.datacenter.messages.Confirm;
 import com.loserclub.pushdata.datacenter.messages.Fail;
-import com.loserclub.pushdata.datacenter.messages.PushReq;
+import com.loserclub.pushdata.datacenter.messages.ConnectSet;
 import com.loserclub.pushdata.datacenter.device.DeviceManager;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
@@ -23,18 +23,18 @@ import java.util.List;
 @Slf4j
 @Component
 @Data
-public class PushReqHandler implements INodeToCenterHandler<PushReq> {
+public class ConnectSetHandler implements INodeToCenterHandler<ConnectSet> {
 
     @Autowired
     DeviceManager deviceManager;
 
     @Override
     public boolean support(DefinedMessage message) {
-        return message instanceof PushReq;
+        return message instanceof ConnectSet;
     }
 
     @Override
-    public void call(ChannelHandlerContext ctx, PushReq message) throws Exception {
+    public void call(ChannelHandlerContext ctx, ConnectSet message) throws Exception {
         Channel channel = ctx.channel();
         if(deviceManager.isExists(message.getName())) {
             List<Long> ids = message.getDeviceIds();

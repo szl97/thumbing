@@ -7,7 +7,7 @@ import com.loserclub.pushdata.nodeserver.channel.DeviceDataChannelManager;
 import com.loserclub.pushdata.nodeserver.channel.SyncClientChannelManager;
 import com.loserclub.pushdata.nodeserver.config.NodeServerConfig;
 import com.loserclub.pushdata.nodeserver.inbound.NodeToCenterInBoundSyncHandler;
-import com.loserclub.pushdata.nodeserver.messages.PushReq;
+import com.loserclub.pushdata.nodeserver.messages.ConnectSet;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
@@ -25,7 +25,6 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -94,7 +93,7 @@ public class SyncConnectClientBootStrap {
                         List<Long> devices = deviceDataChannelManager.getAllDevices();
                         if(devices.size() > 0){
                             channel.writeAndFlush(
-                                    PushReq.builder()
+                                    ConnectSet.builder()
                                     .name(nodeServerConfig.getName())
                                     .operation(OperationEnum.ADD)
                                     .deviceIds(devices)

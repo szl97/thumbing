@@ -1,8 +1,8 @@
 package com.loserclub.pushdata.nodeserver.handlers.device;
 
 import com.loserclub.pushdata.common.message.DefinedMessage;
-import com.loserclub.pushdata.nodeserver.handlers.PushDataHandler;
-import com.loserclub.pushdata.nodeserver.messages.PushData;
+import com.loserclub.pushdata.nodeserver.handlers.ChatDataHandler;
+import com.loserclub.pushdata.nodeserver.messages.ChatData;
 import io.netty.channel.ChannelHandlerContext;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
@@ -16,18 +16,18 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Component
 @Data
-public class DeviceDataHandler implements IServerDataHandler<PushData> {
+public class ChatDataFromDeviceHandler implements IDeviceDataHandler<ChatData> {
 
     @Autowired
-    private PushDataHandler pushDataHandler;
+    private ChatDataHandler chatDataHandler;
 
     @Override
     public boolean support(DefinedMessage message) {
-        return pushDataHandler.support(message);
+        return chatDataHandler.support(message);
     }
 
     @Override
-    public void call(ChannelHandlerContext ctx, PushData message) throws Exception {
-        pushDataHandler.call(ctx,message);
+    public void call(ChannelHandlerContext ctx, ChatData message) throws Exception {
+        chatDataHandler.call(ctx,message);
     }
 }

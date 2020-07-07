@@ -1,10 +1,8 @@
 package com.loserclub.pushdata.nodeserver.handlers.sync;
 
-import com.loserclub.pushdata.common.channel.IChannelManager;
 import com.loserclub.pushdata.common.constants.AttributeEnum;
 import com.loserclub.pushdata.common.message.DefinedMessage;
 import com.loserclub.pushdata.nodeserver.channel.SyncClientChannelManager;
-import com.loserclub.pushdata.nodeserver.handlers.INodeToCenterHandler;
 import com.loserclub.pushdata.nodeserver.messages.Confirm;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
@@ -28,7 +26,7 @@ import java.util.List;
 @Slf4j
 @Component
 @Data
-public class SyncClientConfirmHandler  {
+public class SyncClientConfirmHandler {
 
     @Autowired
     SyncClientChannelManager channelManager;

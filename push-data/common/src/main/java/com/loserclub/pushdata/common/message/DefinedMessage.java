@@ -39,6 +39,8 @@ public abstract class DefinedMessage<T> {
             if(t.equals(Type.P.type)) return Type.P;
             if(t.equals(Type.PR.type)) return Type.PR;
             if(t.equals(Type.PD.type)) return Type.PD;
+            if(t.equals(Type.CD.type)) return Type.CD;
+            if(t.equals(Type.CS.type)) return Type.CS;
             if(t.equals(Type.HS.type)) return Type.HS;
             if(t.equals(Type.F.type)) return Type.F;
             if(t.equals(Type.IN.type)) return Type.IN;
@@ -50,11 +52,14 @@ public abstract class DefinedMessage<T> {
      * 1)连接成功确认 收到Server Node的连接成功确认将Channel绑定Node Server Name并保存
      * 2)心跳请求
      * 3)心跳响应
-     * 4)Node Server的消息推送(用于通知ClientMonitor，建立了新的Client连接，或者关闭了与某个Client的连接)
+     * 4）请求
      * 5)回应
-     * 6)消息推送
-     * 7)长连接
-     * 8)失败
+     * 6）聊天消息
+     * 7)Node Server通知ClientMonitor，建立了新的Client连接，或者关闭了与某个Client的连接
+     * 8)除聊天外的其他消息推送
+     * 9)长连接
+     * 10)失败
+     * 11）取消连接
      */
     @JsonSerialize(using = TypeSerializer.class)
     @JsonDeserialize(using = TypeDeserializer.class)
@@ -64,6 +69,8 @@ public abstract class DefinedMessage<T> {
         PO("pong"),             // PONG
         P("push_req"),          // PUSH_REQ
         PR("push_resp"),        // PUSH_RESP
+        CD("chat_data"),        // CHAT_DATA
+        CS("connection_set"),   // CONNECTION_SET
         PD("push_data"),        // PUSH_DATA
         HS("hand_shake"),       // HandShake
         F("fail"),              // FAIL

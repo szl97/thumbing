@@ -1,5 +1,6 @@
 package com.loserclub.pushdata.nodeserver.handlers;
 
+import com.loserclub.pushdata.common.handlers.IMessageHandler;
 import com.loserclub.pushdata.common.message.DefinedMessage;
 import com.loserclub.pushdata.nodeserver.messages.Pong;
 import io.netty.channel.Channel;
@@ -16,7 +17,7 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Component
 @Data
-public class PongHandler implements INodeToCenterHandler<Pong> {
+public class PongHandler implements IMessageHandler<Pong> {
     @Override
     public boolean support(DefinedMessage<Pong> message) {
         return message instanceof Pong;

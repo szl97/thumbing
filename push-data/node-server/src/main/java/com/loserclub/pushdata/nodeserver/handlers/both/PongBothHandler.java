@@ -3,10 +3,9 @@ package com.loserclub.pushdata.nodeserver.handlers.both;
 
 import com.loserclub.pushdata.common.message.DefinedMessage;
 import com.loserclub.pushdata.nodeserver.handlers.PongHandler;
-import com.loserclub.pushdata.nodeserver.handlers.data.IDeviceDataHandler;
-import com.loserclub.pushdata.nodeserver.handlers.device.IServerDataHandler;
+import com.loserclub.pushdata.nodeserver.handlers.center.ICenterDataHandler;
+import com.loserclub.pushdata.nodeserver.handlers.device.IDeviceDataHandler;
 import com.loserclub.pushdata.nodeserver.handlers.sync.ISyncClientHandler;
-import com.loserclub.pushdata.nodeserver.messages.Ping;
 import com.loserclub.pushdata.nodeserver.messages.Pong;
 import io.netty.channel.ChannelHandlerContext;
 import lombok.Data;
@@ -21,7 +20,7 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Component
 @Data
-public class PongBothHandler implements ISyncClientHandler<Pong>, IDeviceDataHandler<Pong>, IServerDataHandler<Pong> {
+public class PongBothHandler implements ISyncClientHandler<Pong>, ICenterDataHandler<Pong>, IDeviceDataHandler<Pong> {
 
     @Autowired
     private PongHandler pongHandler;

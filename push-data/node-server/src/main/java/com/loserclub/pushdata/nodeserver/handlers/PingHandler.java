@@ -1,6 +1,7 @@
 package com.loserclub.pushdata.nodeserver.handlers;
 
 
+import com.loserclub.pushdata.common.handlers.IMessageHandler;
 import com.loserclub.pushdata.common.message.DefinedMessage;
 import com.loserclub.pushdata.nodeserver.channel.SyncClientChannelManager;
 import com.loserclub.pushdata.nodeserver.messages.Ping;
@@ -22,7 +23,7 @@ import java.util.List;
 @Slf4j
 @Component
 @Data
-public class PingHandler implements INodeToCenterHandler<Ping> {
+public class PingHandler implements IMessageHandler<Ping> {
 
     @Autowired
     SyncClientChannelManager syncClientChannelManager;

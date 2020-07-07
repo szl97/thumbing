@@ -21,7 +21,7 @@ import java.util.List;
 @Slf4j
 @Component
 @Data
-public class HandShakeHandler implements IServerDataHandler<HandShake> {
+public class HandShakeHandler implements IDeviceDataHandler<HandShake> {
 
     @Autowired
     private DeviceDataChannelManager channelManager;

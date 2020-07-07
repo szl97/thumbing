@@ -1,7 +1,7 @@
 package com.loserclub.pushdata.nodeserver.inbound;
 
 
-import com.loserclub.pushdata.nodeserver.handlers.data.InActiveHandlerForDataFlow;
+import com.loserclub.pushdata.nodeserver.handlers.center.InActiveHandlerForDataFlow;
 import com.loserclub.pushdata.nodeserver.handlers.sync.ISyncClientHandler;
 import com.loserclub.pushdata.nodeserver.messages.NodeMessage;
 import com.loserclub.pushdata.nodeserver.messages.Ping;

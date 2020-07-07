@@ -1,9 +1,7 @@
 package com.loserclub.pushdata.nodeserver.handlers.device;
 
 import com.loserclub.pushdata.common.message.DefinedMessage;
-import com.loserclub.pushdata.nodeserver.channel.DataFlowChannelManager;
 import com.loserclub.pushdata.nodeserver.channel.DeviceDataChannelManager;
-import com.loserclub.pushdata.nodeserver.handlers.INodeToCenterHandler;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import lombok.Data;
@@ -18,7 +16,7 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Component
 @Data
-public class InActiveHandlerForDevice implements INodeToCenterHandler {
+public class InActiveHandlerForDevice implements IDeviceDataHandler {
 
     @Autowired
     DeviceDataChannelManager channelManager;

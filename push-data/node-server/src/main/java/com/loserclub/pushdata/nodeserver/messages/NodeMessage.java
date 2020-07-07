@@ -71,14 +71,17 @@ public abstract class NodeMessage<T> extends DefinedMessage<T> {
                 case PO:
                     cls = Pong.class;
                     break;
-                case P:
-                    cls = PushReq.class;
+                case CS:
+                    cls = ConnectSet.class;
                     break;
                 case PR:
                     cls = PushResp.class;
                     break;
+                case CD:
+                    cls = ChatData.class;
+                    break;
                 case PD:
-                    cls = PushData.class;
+                    cls = ChatData.class;
                     break;
                 case HS:
                     cls = HandShake.class;

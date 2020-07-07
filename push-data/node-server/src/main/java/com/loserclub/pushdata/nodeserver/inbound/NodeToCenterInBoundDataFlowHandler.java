@@ -1,8 +1,8 @@
 package com.loserclub.pushdata.nodeserver.inbound;
 
 
-import com.loserclub.pushdata.nodeserver.handlers.data.IDeviceDataHandler;
-import com.loserclub.pushdata.nodeserver.handlers.data.InActiveHandlerForDataFlow;
+import com.loserclub.pushdata.nodeserver.handlers.center.ICenterDataHandler;
+import com.loserclub.pushdata.nodeserver.handlers.center.InActiveHandlerForDataFlow;
 import com.loserclub.pushdata.nodeserver.messages.NodeMessage;
 import com.loserclub.pushdata.nodeserver.messages.Ping;
 import io.netty.channel.ChannelHandler;
@@ -27,7 +27,7 @@ import java.util.List;
 @Component
 public class NodeToCenterInBoundDataFlowHandler extends SimpleChannelInboundHandler<String> {
     @Autowired
-    private List<IDeviceDataHandler> dataFlowHandlers;
+    private List<ICenterDataHandler> dataFlowHandlers;
 
     @Autowired
     private InActiveHandlerForDataFlow inActiveHandler;

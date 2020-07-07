@@ -1,9 +1,8 @@
-package com.loserclub.pushdata.nodeserver.handlers.data;
+package com.loserclub.pushdata.nodeserver.handlers.center;
 
+import com.loserclub.pushdata.common.handlers.IMessageHandler;
 import com.loserclub.pushdata.common.message.DefinedMessage;
 import com.loserclub.pushdata.nodeserver.channel.DataFlowChannelManager;
-import com.loserclub.pushdata.nodeserver.channel.SyncClientChannelManager;
-import com.loserclub.pushdata.nodeserver.handlers.INodeToCenterHandler;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import lombok.Data;
@@ -18,7 +17,7 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Component
 @Data
-public class InActiveHandlerForDataFlow implements INodeToCenterHandler {
+public class InActiveHandlerForDataFlow implements IMessageHandler {
 
     @Autowired
     DataFlowChannelManager channelManager;

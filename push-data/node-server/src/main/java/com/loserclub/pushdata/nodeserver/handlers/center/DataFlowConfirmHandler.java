@@ -1,9 +1,8 @@
-package com.loserclub.pushdata.nodeserver.handlers.data;
+package com.loserclub.pushdata.nodeserver.handlers.center;
 
 import com.loserclub.pushdata.common.constants.AttributeEnum;
 import com.loserclub.pushdata.common.message.DefinedMessage;
 import com.loserclub.pushdata.nodeserver.channel.DataFlowChannelManager;
-import com.loserclub.pushdata.nodeserver.handlers.INodeToCenterHandler;
 import com.loserclub.pushdata.nodeserver.messages.Confirm;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
@@ -26,7 +25,7 @@ import java.util.List;
 @Slf4j
 @Component
 @Data
-public class DataFlowConfirmHandler implements INodeToCenterHandler<Confirm> {
+public class DataFlowConfirmHandler implements ICenterDataHandler<Confirm> {
 
     @Autowired
     DataFlowChannelManager channelManager;

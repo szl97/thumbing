@@ -2,7 +2,6 @@ package com.loserclub.pushdata.nodeserver.handlers.sync;
 
 import com.loserclub.pushdata.common.message.DefinedMessage;
 import com.loserclub.pushdata.nodeserver.channel.SyncClientChannelManager;
-import com.loserclub.pushdata.nodeserver.handlers.INodeToCenterHandler;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import lombok.Data;
@@ -17,7 +16,7 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Component
 @Data
-public class InActiveHandlerForSyncClient implements INodeToCenterHandler {
+public class InActiveHandlerForSyncClient implements ISyncClientHandler {
 
     @Autowired
     SyncClientChannelManager channelManager;

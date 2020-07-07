@@ -6,5 +6,5 @@ import com.loserclub.pushdata.common.handlers.IMessageHandler;
  * @author Stan Sai
  * @date 2020-06-23
  */
-public interface IServerDataHandler<T> extends IMessageHandler<T> {
+public interface IDeviceDataHandler<T> extends IMessageHandler<T> {
 }

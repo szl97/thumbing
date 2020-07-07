@@ -2,10 +2,8 @@ package com.loserclub.pushdata.datacenter.handlers;
 
 import com.loserclub.pushdata.common.channel.IChannelManager;
 import com.loserclub.pushdata.common.message.DefinedMessage;
-import com.loserclub.pushdata.datacenter.channel.NodeToCenterChannelManager;
 import com.loserclub.pushdata.datacenter.device.DeviceManager;
-import com.loserclub.pushdata.datacenter.messages.Confirm;
-import com.loserclub.pushdata.datacenter.messages.PushData;
+import com.loserclub.pushdata.datacenter.messages.ChatData;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import lombok.Data;
@@ -25,7 +23,7 @@ import java.util.List;
 @Slf4j
 @Component
 @Data
-public class PushDataHandler implements INodeToCenterHandler<PushData> {
+public class ChatDataHandler implements INodeToCenterHandler<ChatData> {
 
     @Autowired
     IChannelManager channelManager;
@@ -35,11 +33,11 @@ public class PushDataHandler implements INodeToCenterHandler<PushData> {
 
     @Override
     public boolean support(DefinedMessage message) {
-        return message instanceof PushData;
+        return message instanceof ChatData;
     }
 
     @Override
-    public void call(ChannelHandlerContext ctx, PushData message) throws Exception {
+    public void call(ChannelHandlerContext ctx, ChatData message) throws Exception {
         Channel channel = ctx.channel();
         HashMap<String, List<Long>> map = new HashMap<>();
         message.getDeviceIds().forEach(
@@ -60,7 +58,7 @@ public class PushDataHandler implements INodeToCenterHandler<PushData> {
                     if (writeChannel != null) {
                         try {
                             writeChannel.writeAndFlush(
-                                    PushData.builder()
+                                    ChatData.builder()
                                     .name(e.getKey())
                                     .data(message.getData())
                                     .deviceIds(e.getValue())

@@ -1,9 +1,8 @@
 package com.loserclub.pushdata.datacenter.handlers.monitors;
 
 import com.loserclub.pushdata.common.message.DefinedMessage;
-import com.loserclub.pushdata.datacenter.handlers.PushReqHandler;
-import com.loserclub.pushdata.datacenter.handlers.monitors.IMonitorsHandler;
-import com.loserclub.pushdata.datacenter.messages.PushReq;
+import com.loserclub.pushdata.datacenter.handlers.ConnectSetHandler;
+import com.loserclub.pushdata.datacenter.messages.ConnectSet;
 import io.netty.channel.ChannelHandlerContext;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
@@ -17,18 +16,18 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Component
 @Data
-public class SyncClientMonitorHandler implements IMonitorsHandler<PushReq> {
+public class SyncClientMonitorHandler implements IMonitorsHandler<ConnectSet> {
 
     @Autowired
-    private PushReqHandler pushReqHandler;
+    private ConnectSetHandler connectSetHandler;
 
     @Override
-    public boolean support(DefinedMessage<PushReq> message) {
-        return pushReqHandler.support(message);
+    public boolean support(DefinedMessage<ConnectSet> message) {
+        return connectSetHandler.support(message);
     }
 
     @Override
-    public void call(ChannelHandlerContext ctx, PushReq message) throws Exception {
-        pushReqHandler.call(ctx,message);
+    public void call(ChannelHandlerContext ctx, ConnectSet message) throws Exception {
+        connectSetHandler.call(ctx,message);
     }
 }
