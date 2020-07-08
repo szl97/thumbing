@@ -3,11 +3,13 @@ package com.loserclub.pushdata.datacenter.server;
 import com.loserclub.pushdata.datacenter.config.DataCenterConfig;
 import com.loserclub.pushdata.datacenter.inbound.NodeToCenterInBoundDataFlowHandler;
 import io.netty.bootstrap.ServerBootstrap;
+import io.netty.channel.Channel;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelOption;
 import io.netty.channel.ChannelPipeline;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
+import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
 import io.netty.handler.codec.LengthFieldPrepender;
 import io.netty.handler.codec.string.StringDecoder;
@@ -31,6 +33,8 @@ public class DataFlowBootStrap {
     @Autowired
     private DataCenterConfig dataCenterConfig;
 
+    private ServerBootstrap bootstrap;
+
     private NioEventLoopGroup boss = new NioEventLoopGroup();
 
     private NioEventLoopGroup work = new NioEventLoopGroup();
@@ -39,11 +43,12 @@ public class DataFlowBootStrap {
     private NodeToCenterInBoundDataFlowHandler nodeToCenterInBoundDataFlowHandler;
 
     public void init() throws InterruptedException {
-        ServerBootstrap bootstrap = new ServerBootstrap();
+        bootstrap = new ServerBootstrap();
         bootstrap.group(boss, work)
-                .childHandler(new ChannelInitializer<SocketChannel>() {
+                .channelFactory(NioServerSocketChannel::new)
+                .childHandler(new ChannelInitializer<Channel>() {
                     @Override
-                    protected void initChannel(SocketChannel socketChannel) throws Exception{
+                    protected void initChannel(Channel socketChannel) throws Exception{
                         ChannelPipeline pipeline = socketChannel.pipeline();
                         //拆包粘包问题和编码问题
                         pipeline.addLast("frameDecoder", new LengthFieldBasedFrameDecoder(Integer.MAX_VALUE, 0, 4, 0, 4));
@@ -63,7 +68,7 @@ public class DataFlowBootStrap {
                 .option(ChannelOption.SO_SNDBUF, 2048)
                 .option(ChannelOption.SO_RCVBUF, 1024);
         bootstrap.bind(dataCenterConfig.getMessagePort()).sync();
-        log.info("Data center successful! listening port: {}", dataCenterConfig.getMessagePort());
+        log.info("Data center DataFlowBootStrap successful! listening port: {}", dataCenterConfig.getMessagePort());
 
     }
 }

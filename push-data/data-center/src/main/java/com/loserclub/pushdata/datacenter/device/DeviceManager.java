@@ -39,7 +39,9 @@ public class DeviceManager {
     }
 
     public void addNodeServer(String name){
-        clientPool.put(name, new ConcurrentHashSet(dataCenterConfig.getInitializedConnect()));
+        if(!clientPool.contains(name)) {
+            clientPool.put(name, new ConcurrentHashSet(dataCenterConfig.getInitializedConnect()));
+        }
     }
 
     public void removeNodeServer(String name){

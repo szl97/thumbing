@@ -12,6 +12,8 @@ import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
+import io.netty.channel.socket.nio.NioServerSocketChannel;
+import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
 import io.netty.handler.codec.LengthFieldPrepender;
 import io.netty.handler.codec.string.StringDecoder;
@@ -44,8 +46,6 @@ public class SyncConnectClientBootStrap {
 
     private NioEventLoopGroup group = new NioEventLoopGroup();
 
-    private Bootstrap bootstrap = new Bootstrap();
-
     @Autowired
     private SyncClientChannelManager channelManager;
 
@@ -55,12 +55,14 @@ public class SyncConnectClientBootStrap {
     @Autowired
     private DeviceDataChannelManager deviceDataChannelManager;
 
-    @PostConstruct
-    public void init() throws InterruptedException {
+    public Bootstrap init(String ip, int port)  {
+        Bootstrap bootstrap = new Bootstrap();
         bootstrap.group(group)
-                .handler(new ChannelInitializer<SocketChannel>() {
+                .remoteAddress(ip, port)
+                .channel(NioSocketChannel.class)
+                .handler(new ChannelInitializer<Channel>() {
                              @Override
-                             protected void initChannel(SocketChannel socketChannel) throws Exception {
+                             protected void initChannel(Channel socketChannel) throws Exception {
                                  ChannelPipeline pipeline = socketChannel.pipeline();
                                  //拆包粘包问题和编码问题
                                  pipeline.addLast("frameDecoder", new LengthFieldBasedFrameDecoder(Integer.MAX_VALUE, 0, 4, 0, 4));
@@ -75,17 +77,20 @@ public class SyncConnectClientBootStrap {
                                  pipeline.addLast("handler", nodeToCenterInBoundSyncHandler);
                              }
                          }
-                ).option(ChannelOption.TCP_NODELAY, true)
-                .option(ChannelOption.SO_SNDBUF, 2048)
-                .option(ChannelOption.SO_RCVBUF, 1024);
-        bootstrap.bind(nodeServerConfig.getPort()).sync();
-        log.info("node server successful! listening port: {}", nodeServerConfig.getPort());
+                ).option(ChannelOption.CONNECT_TIMEOUT_MILLIS,5000)
+                .option(ChannelOption.SO_KEEPALIVE,true)
+                .option(ChannelOption.TCP_NODELAY,true);;
+        //bootstrap.bind(nodeServerConfig.getPort()).sync();
+        //log.info("node server successful! listening port: {}", nodeServerConfig.getPort());
+        return bootstrap;
     }
 
     public void Connect(DataCenterInfo info, int retry, int times){
-        bootstrap.connect(info.getIp(),info.getPort())
+        Bootstrap bootstrap = init(info.getIp(), info.getPort());
+        bootstrap.connect()
                 .addListener(future -> {
                     if(future.isSuccess()){
+                        log.info("连接数据中心成功");
                         Channel channel = ((ChannelFuture)future).channel();
                         List<AttributeEnum> attributeEnums = new ArrayList<>();
                         attributeEnums.add(AttributeEnum.CHANNEL_ATTR_DATACENTER);
@@ -104,11 +109,12 @@ public class SyncConnectClientBootStrap {
                     }
                     else if(retry == 0){
                         //无法连接到Data Center
+                        log.error("无法连接到Data Center");
                     }
                     else{
                         bootstrap.config().group().schedule(()->{Connect(info, retry-1, times+1);}, 1<<times, TimeUnit.SECONDS);
                     }
-                });
+                }).channel();
     }
 
     public void DisConnect(DataCenterInfo info){

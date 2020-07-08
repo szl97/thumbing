@@ -7,10 +7,13 @@ import com.loserclub.pushdata.common.constants.AttributeEnum;
 import com.loserclub.pushdata.nodeserver.channel.DataFlowChannelManager;
 import com.loserclub.pushdata.nodeserver.config.NodeServerConfig;
 import com.loserclub.pushdata.nodeserver.inbound.NodeToCenterInBoundDataFlowHandler;
+import com.loserclub.pushdata.nodeserver.server.DeviceServerBootStrap;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
+import io.netty.channel.socket.nio.NioServerSocketChannel;
+import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
 import io.netty.handler.codec.LengthFieldPrepender;
 import io.netty.handler.codec.string.StringDecoder;
@@ -42,20 +45,23 @@ public class DataFlowToCenterBootStrap {
 
     private NioEventLoopGroup group = new NioEventLoopGroup();
 
-    private Bootstrap bootstrap = new Bootstrap();
-
     @Autowired
     private DataFlowChannelManager channelManager;
 
     @Autowired
     NodeToCenterInBoundDataFlowHandler nodeToCenterInBoundDataFlowHandler;
 
-    @PostConstruct
-    public void init() throws InterruptedException {
+    @Autowired
+    DeviceServerBootStrap deviceServerBootStrap;
+
+    public Bootstrap init(String ip, int port) {
+        Bootstrap bootstrap = new Bootstrap();
         bootstrap.group(group)
-                .handler(new ChannelInitializer<SocketChannel>() {
+                .remoteAddress(ip, port)
+                .channel(NioSocketChannel.class)
+                .handler(new ChannelInitializer<Channel>() {
                              @Override
-                             protected void initChannel(SocketChannel socketChannel) throws Exception {
+                             protected void initChannel(Channel socketChannel) throws Exception {
                                  ChannelPipeline pipeline = socketChannel.pipeline();
                                  //拆包粘包问题和编码问题
                                  pipeline.addLast("frameDecoder", new LengthFieldBasedFrameDecoder(Integer.MAX_VALUE, 0, 4, 0, 4));
@@ -71,36 +77,39 @@ public class DataFlowToCenterBootStrap {
 
                              }
                          }
-                ).option(ChannelOption.TCP_NODELAY, true)
-                .option(ChannelOption.SO_SNDBUF, 2048)
-                .option(ChannelOption.SO_RCVBUF, 1024);
-        bootstrap.bind(nodeServerConfig.getMessagePort()).sync();
-        log.info("node server successful! listening port: {}", nodeServerConfig.getMessagePort());
+                )
+                .option(ChannelOption.TCP_NODELAY,true);;
+        //bootstrap.bind(nodeServerConfig.getMessagePort()).sync();
+        //log.info("node server successful! listening port: {}", nodeServerConfig.getMessagePort());
+        return bootstrap;
     }
 
-    public void Connect(DataCenterInfo info, int retry, int times){
-        bootstrap.connect(info.getIp(),info.getPort())
+    public void Connect(DataCenterInfo info, int retry, int times) {
+        Bootstrap bootstrap = init(info.getIp(), info.getMessagePort());
+        bootstrap.connect()
                 .addListener(future -> {
                     if(future.isSuccess()){
+                        log.info("连接数据中心成功");
                         Channel channel = ((ChannelFuture)future).channel();
                         List<AttributeEnum> attributeEnums = new ArrayList<>();
                         attributeEnums.add(AttributeEnum.CHANNEL_ATTR_DATACENTER);
                         channelManager.bindAttributes(info.getName(), channel, attributeEnums);
-                        String ip = IpUtils.internetIp();
+                        String ip = "127.0.0.1";//IpUtils.internetIp();
                         channel.writeAndFlush(
                                 Confirm.builder()
                                         .name(nodeServerConfig.getName())
                                         .nodeIpWithPort(ip+":"+nodeServerConfig.getMessagePort())
                                 .build().encode()
                         );
+                        deviceServerBootStrap.init();
                     }
                     else if(retry == 0){
-                        //无法连接到Data Center
+                        log.error("无法连接到Data Center");
                     }
                     else{
                         bootstrap.config().group().schedule(()->{Connect(info, retry-1, times+1);}, 1<<times, TimeUnit.SECONDS);
                     }
-                });
+                }).channel();
     }
 
     public void DisConnect(DataCenterInfo info){

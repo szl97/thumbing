@@ -33,10 +33,10 @@ public class RegisterNodeServer {
     @Autowired
     private ObjectMapper objectMapper;
 
-    private ZkUtils zkUtils;
+    private ZkUtils zkUtils = new ZkUtils();
 
     @Autowired
-    private NodeServerConfig dataCenterConfig;
+    private NodeServerConfig nodeServerConfig;
 
     @Autowired
     private ZookeeperConfig zookeeperConfig;
@@ -49,7 +49,7 @@ public class RegisterNodeServer {
                 zookeeperConfig.getSessionTimeout(),
                 zookeeperConfig.getMaxRetries(),
                 zookeeperConfig.getRetriesSleepTime(),
-                zookeeperConfig.getListenNamespace(),
+                zookeeperConfig.getNamespace(),
                 new ZkStateListener() {
                     @Override
                     public void connectedEvent(CuratorFramework curator, ConnectionState state) {
@@ -87,25 +87,28 @@ public class RegisterNodeServer {
 
     private void register() throws JsonProcessingException {
         String root = ZkGroupEnum.NODE_SERVER.getValue();
-        String name = dataCenterConfig.getName();
+        String name = nodeServerConfig.getName();
         if(!zkUtils.checkExists(root)){
-            zkUtils.createNode(root,null, CreateMode.PERSISTENT);
+            zkUtils.createNode(root, null, CreateMode.PERSISTENT);
         }
         DataCenterInfo info = DataCenterInfo.builder()
-                .ip(IpUtils.internetIp())
+                .ip("127.0.0.1")//(IpUtils.internetIp())
                 .name(name)
-                .port(dataCenterConfig.getPort())
-                .messagePort(dataCenterConfig.getMessagePort())
+                .port(nodeServerConfig.getPort())
+                .messagePort(nodeServerConfig.getMessagePort())
                 .build();
-        String path = root+"/"+name;
+        String path = root + "/" + name;
         if(!zkUtils.checkExists(path)){
-            zkUtils.createNode(root, objectMapper.writeValueAsString(info), CreateMode.EPHEMERAL);
+            zkUtils.createNode(path, objectMapper.writeValueAsString(info), CreateMode.EPHEMERAL);
+        }
+        else{
+            zkUtils.setNodeData(path,objectMapper.writeValueAsString(info));
         }
     }
 
     public void deRegister(){
         String root = ZkGroupEnum.NODE_SERVER.getValue();
-        String name = dataCenterConfig.getName();
+        String name = nodeServerConfig.getName();
         String path = root+"/"+name;
         if(zkUtils.checkExists(path)){
             zkUtils.deleteNode(path);

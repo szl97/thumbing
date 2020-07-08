@@ -43,13 +43,11 @@ public class ZkUtils{
 
     ExecutorService pool =
             new ThreadPoolExecutor(
-                    Runtime.getRuntime().availableProcessors() * 2,
+                    4,
                     10,
                     0L,
                     TimeUnit.MILLISECONDS,
-                    new LinkedBlockingQueue<Runnable>(1024),
-                    new BasicThreadFactory.Builder().namingPattern("example-schedule-pool-%d").daemon(true).build(),
-                    new ThreadPoolExecutor.AbortPolicy()
+                    new LinkedBlockingQueue<Runnable>(1024)
             );
 //            Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors() * 2);
 

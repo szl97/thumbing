@@ -9,6 +9,7 @@ import org.elasticsearch.common.xcontent.XContentBuilder;
 import org.elasticsearch.common.xcontent.XContentFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -21,20 +22,30 @@ import java.util.List;
 
 @Data
 @Configuration
-@ConfigurationProperties(prefix = "elasticsearch")
+//@ConfigurationProperties(prefix = "elasticsearch")
 public class ElasticSearchConfig {
-
+    @Value("${elasticsearch.host}")
     private String host;
+    @Value("${elasticsearch.port}")
     private int port;
+    @Value("${elasticsearch.clusterName}")
     private String clusterName;
+    @Value("${elasticsearch.schema}")
     private String schema;
-    private List<Index> index;
+
+    @Autowired
+    private Index index;
 
     @Data
+    @Configuration
     public class Index {
+        @Value("${elasticsearch.index.name}")
         private String name;
+        @Value("${elasticsearch.index.shardNum}")
         private int shardNum;
+        @Value("${elasticsearch.index.replicasNum}")
         private int replicasNum;
+        @Value("${elasticsearch.index.properties}")
         private String[] properties;
 
     }
@@ -58,56 +69,55 @@ public class ElasticSearchConfig {
         @Autowired
         private ElasticUtils esUtils;
         private Object lock = new Object();
+
         @Override
         public void run(ApplicationArguments args) throws Exception {
 
-            for (Index i : index) {
-                if (!esUtils.existIndex(i.getName())) {
 
-                    synchronized (lock) {
+            if (!esUtils.existIndex(index.getName())) {
 
-                        if (!esUtils.existIndex(i.getName())) {
-                            //设置mapping
-                            XContentBuilder builder = null;
-                            try {
-                                builder = XContentFactory.jsonBuilder();
+                synchronized (lock) {
 
-                                builder.startObject();
+                    if (!esUtils.existIndex(index.getName())) {
+                        //设置mapping
+                        XContentBuilder builder = null;
+                        try {
+                            builder = XContentFactory.jsonBuilder();
+
+                            builder.startObject();
+                            {
+                                builder.startObject("properties");
                                 {
-                                    builder.startObject("properties");
-                                    {
-                                        for (String s : i.getProperties()) {
-                                            builder.startObject(s);
-                                            {
-                                                if(s.equals("date")) {
-                                                    builder.field("type", "datetime");
-                                                }
-                                                else if(s.equals("userId") || s.equals("id")){
-                                                    builder.field("type", "long");
-                                                }
-                                                else{
-                                                    builder.field("type", "text");
-                                                    builder.field("analyzer", "ik_max_word");
-                                                }
+                                    for (String s : index.getProperties()) {
+                                        builder.startObject(s);
+                                        {
+                                            if (s.equals("date")) {
+                                                builder.field("type", "datetime");
+                                            } else if (s.equals("userId") || s.equals("id")) {
+                                                builder.field("type", "long");
+                                            } else {
+                                                builder.field("type", "text");
+                                                builder.field("analyzer", "ik_max_word");
                                             }
-                                            builder.endObject();
                                         }
+                                        builder.endObject();
                                     }
-                                    builder.endObject();
                                 }
                                 builder.endObject();
-
-                                //初始化索引
-                                Boolean isSuccess = esUtils.initIndex(i.getName(), i.getShardNum(), i.getReplicasNum(), builder);
-
-                            } catch (IOException e) {
-                                e.printStackTrace();
                             }
+                            builder.endObject();
+
+                            //初始化索引
+                            Boolean isSuccess = esUtils.initIndex(index.getName(), index.getShardNum(), index.getReplicasNum(), builder);
+
+                        } catch (IOException e) {
+                            e.printStackTrace();
                         }
                     }
                 }
             }
         }
+
     }
 
 }

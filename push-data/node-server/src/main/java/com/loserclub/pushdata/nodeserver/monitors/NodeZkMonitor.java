@@ -40,7 +40,7 @@ public class NodeZkMonitor {
 
     private ConcurrentHashMap<String, DataCenterInfo> centerPool = new ConcurrentHashMap<>(16);
 
-    private ZkUtils zkUtils;
+    private ZkUtils zkUtils = new ZkUtils();
 
     @Autowired
     SyncConnectClientBootStrap syncConnectClientBootStrap;
@@ -59,7 +59,7 @@ public class NodeZkMonitor {
                 zookeeperConfig.getSessionTimeout(),
                 zookeeperConfig.getMaxRetries(),
                 zookeeperConfig.getRetriesSleepTime(),
-                zookeeperConfig.getListenNamespace(),
+                zookeeperConfig.getNamespace(),
                 new ZkStateListener() {
                     @Override
                     public void connectedEvent(CuratorFramework curator, ConnectionState state) {
@@ -107,7 +107,10 @@ public class NodeZkMonitor {
         if (datas != null) {
             datas.forEach((k, v) -> {
                 try {
-                    centerPool.put(k, objectMapper.readValue(v, DataCenterInfo.class));
+                    DataCenterInfo data = objectMapper.readValue(v, DataCenterInfo.class);
+                    centerPool.put(k, data);
+                    syncConnectClientBootStrap.Connect(data, 5, 1);
+                    dataFlowToCenterBootStrap.Connect(data, 5,1);
                 } catch (JsonProcessingException e) {
                     e.printStackTrace();
                 }

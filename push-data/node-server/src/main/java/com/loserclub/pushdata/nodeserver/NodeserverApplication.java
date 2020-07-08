@@ -8,9 +8,13 @@ import org.springframework.context.annotation.ComponentScan;
  * @author Stan Sai
  * @date 2020-06-22
  */
-@ComponentScan("com.loserclub.pushdata.common")
+@ComponentScan({
+        "com.loserclub.pushdata.common",
+        "com.loserclub.pushdata.nodeserver"
+        })
 @SpringBootApplication(scanBasePackages = {
         "com.loserclub.pushdata.common",
+        "com.loserclub.pushdata.nodeserver"
 })
 public class NodeserverApplication {
 

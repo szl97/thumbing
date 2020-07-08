@@ -8,6 +8,8 @@ import com.fasterxml.jackson.databind.jsontype.impl.LaissezFaireSubTypeValidator
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.loserclub.pushdata.common.utils.redis.RedisUtilsForCollection;
 import com.loserclub.pushdata.common.utils.redis.RedisUtilsForObject;
+import lombok.Data;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -87,13 +89,12 @@ public class RedisConfig extends CachingConfigurerSupport {
      * @param redisConfig 使用第一个redis的配置
      * @return
      */
-    @Bean(name = "redisFactoryForObject")
+    @Bean(name = "redisFactoryForObject", destroyMethod = "destroy")
     @Primary
     public LettuceConnectionFactory redisConnectionFactoryForObject(@Qualifier("redisPoolForObject") GenericObjectPoolConfig redisPool,
                                                          @Qualifier("redisConfigForObject") RedisClusterConfiguration redisConfig) {
         LettuceClientConfiguration clientConfiguration = LettucePoolingClientConfiguration.builder().poolConfig(redisPool).build();
         LettuceConnectionFactory factory = new LettuceConnectionFactory(redisConfig, clientConfiguration);
-        factory.afterPropertiesSet();
         return factory;
     }
 
@@ -103,12 +104,11 @@ public class RedisConfig extends CachingConfigurerSupport {
      * @param redisConfig 使用第二个redis的配置
      * @return
      */
-    @Bean(name = "redisFactoryForCollection")
+    @Bean(name = "redisFactoryForCollection", destroyMethod = "destroy")
     public LettuceConnectionFactory redisConnectionFactoryForCollection(@Qualifier("redisPoolForCollection") GenericObjectPoolConfig redisPool,
                                                            @Qualifier("redisConfigForCollection") RedisClusterConfiguration redisConfig) {
         LettuceClientConfiguration clientConfiguration = LettucePoolingClientConfiguration.builder().poolConfig(redisPool).build();
         LettuceConnectionFactory factory = new LettuceConnectionFactory(redisConfig, clientConfiguration);
-        factory.afterPropertiesSet();
         return factory;
     }
 
@@ -116,6 +116,7 @@ public class RedisConfig extends CachingConfigurerSupport {
      * 第一个redis的配置
      * 用来存储 value 和 hash
      */
+    @Data
     @Configuration
     private static class redisConf {
         @Value("${spring.redis.cluster.nodes}")
@@ -161,7 +162,9 @@ public class RedisConfig extends CachingConfigurerSupport {
 
             config.setClusterNodes(nodeList);
             config.setMaxRedirects(maxRedirects);
-            config.setPassword(RedisPassword.of(password));
+            if(StringUtils.isNotBlank(password)) {
+                config.setPassword(RedisPassword.of(password));
+            }
             return config;
         }
     }
@@ -170,6 +173,7 @@ public class RedisConfig extends CachingConfigurerSupport {
      * 第二个redis的配置
      * 用来存储 list、set、sorted set
      */
+    @Data
     @Configuration
     private static class redisConf2 {
         @Value("${spring.redis2.cluster.nodes}")
@@ -215,7 +219,9 @@ public class RedisConfig extends CachingConfigurerSupport {
 
             config.setClusterNodes(nodeList);
             config.setMaxRedirects(maxRedirects);
-            config.setPassword(RedisPassword.of(password));
+            if(StringUtils.isNotBlank(password)) {
+                config.setPassword(RedisPassword.of(password));
+            }
             return config;
         }
     }

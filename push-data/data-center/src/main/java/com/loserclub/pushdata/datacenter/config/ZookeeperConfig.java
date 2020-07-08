@@ -15,8 +15,6 @@ public class ZookeeperConfig {
 
     private String namespace;
 
-    private String listenNamespace;
-
     private int sessionTimeout;
 
     private int connectionTimeout;

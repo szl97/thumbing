@@ -8,7 +8,7 @@ spring:
   redis:
     password:
     cluster:
-      nodes: localhost:6379,localhost:6380,localhost:6381
+      nodes: 192.168.89.1:6380
       max-redirects: 3
     lettuce:
       pool:
@@ -20,7 +20,7 @@ spring:
   redis2:
     password:
     cluster:
-      nodes: localhost:6382,localhost:6383,localhost:6384
+      nodes: 192.168.89.1:6381
       max-redirects: 3
     lettuce:
       pool:
@@ -34,9 +34,9 @@ spring:
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource
     driver-class-name: com.mysql.jdbc.Driver
-    url: ${SPRING_DATASOURCE_URL:jdbc:mysql://localhost:5432/loserclub}
-    username: ${SPRING_DATASOURCE_USERNAME:loserclub}
-    password: ${SPRING_DATASOURCE_PASSWORD:loserclub}
+    url: ${SPRING_DATASOURCE_URL:jdbc:mysql://192.168.89.1:3306/mysql_loserclub}
+    username: ${SPRING_DATASOURCE_USERNAME:root}
+    password: ${SPRING_DATASOURCE_PASSWORD:123456}
     druid:
       #最大值
       max-active: 10
@@ -68,8 +68,8 @@ spring:
       # 通过connectProperties属性来打开mergeSql功能；慢SQL记录
       connection-properties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=500
   rabbitmq:
-    username: root
-    password: root
+    username: guest
+    password: guest
     addresses: localhost:5672
     virtual-host: /
     listener:
@@ -83,19 +83,26 @@ spring:
         prefetch: 1
   data:
     mongodb:
-      host: localhost
+      host: 192.168.89.1
       port: 27017
-      database: loserclub
+      database: mongo_loserclub
 elasticsearch:
   host: 127.0.0.1
   port: 9200
-  clusterName: es
+  clusterName: loser_club
   schema: http
   index:
-    - shardNum: 3
-      replicasNum: 2
-      name: doc
-      properties: [id, name, title, tags, content, date, userId]
+    name: doc
+    shardNum: 3
+    replicasNum: 2
+    properties:
+      -id
+      -name
+      -title
+      -tags
+      -content
+      -date
+      -userId
 
 eureka:
   client:
@@ -107,12 +114,11 @@ push-data:
   data-center:
     port: 4001
     messagePort: 6001
-    name: DataCenter-1
+    name: center1
     initializedConnect: 16384
   zookeeper:
     servers: localhost:2181,localhost:2182,localhost:2183
-    listen-namespace: namespace-node-server
-    namespace: namespace-data-center
+    namespace: loser-club
     session-timeout: 6000
     connection-timeout: 6000
     max-retries: 1000

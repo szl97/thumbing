@@ -39,7 +39,7 @@ public class CenterZkMonitor {
 
     private ConcurrentHashMap<String, NodeServerInfo> serverPool = new ConcurrentHashMap<>(16);
 
-    private ZkUtils zkUtils;
+    private ZkUtils zkUtils = new ZkUtils();
 
     @Autowired
     private DeviceManager deviceManager;
@@ -55,7 +55,7 @@ public class CenterZkMonitor {
                 zookeeperConfig.getSessionTimeout(),
                 zookeeperConfig.getMaxRetries(),
                 zookeeperConfig.getRetriesSleepTime(),
-                zookeeperConfig.getListenNamespace(),
+                zookeeperConfig.getNamespace(),
                 new ZkStateListener() {
                     @Override
                     public void connectedEvent(CuratorFramework curator, ConnectionState state) {

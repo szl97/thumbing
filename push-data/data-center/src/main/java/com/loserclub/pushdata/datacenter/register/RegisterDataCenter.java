@@ -36,7 +36,7 @@ public class RegisterDataCenter {
     @Autowired
     private ObjectMapper objectMapper;
 
-    private ZkUtils zkUtils;
+    private ZkUtils zkUtils = new ZkUtils();;
 
     @Autowired
     private DataCenterConfig dataCenterConfig;
@@ -60,7 +60,7 @@ public class RegisterDataCenter {
                 zookeeperConfig.getSessionTimeout(),
                 zookeeperConfig.getMaxRetries(),
                 zookeeperConfig.getRetriesSleepTime(),
-                zookeeperConfig.getListenNamespace(),
+                zookeeperConfig.getNamespace(),
                 new ZkStateListener() {
                     @Override
                     public void connectedEvent(CuratorFramework curator, ConnectionState state) {
@@ -100,17 +100,20 @@ public class RegisterDataCenter {
         String root = ZkGroupEnum.DATA_CENTER.getValue();
         String name = dataCenterConfig.getName();
         if(!zkUtils.checkExists(root)){
-            zkUtils.createNode(root,null, CreateMode.PERSISTENT);
+            zkUtils.createNode(root, null, CreateMode.PERSISTENT);
         }
         DataCenterInfo info = DataCenterInfo.builder()
-                .ip(IpUtils.internetIp())
+                .ip("127.0.0.1")//(IpUtils.internetIp())
                 .name(name)
                 .port(dataCenterConfig.getPort())
                 .messagePort(dataCenterConfig.getMessagePort())
                 .build();
-        String path = root+"/"+name;
+        String path = root + "/" + name;
         if(!zkUtils.checkExists(path)){
-            zkUtils.createNode(root, objectMapper.writeValueAsString(info), CreateMode.EPHEMERAL);
+            zkUtils.createNode(path, objectMapper.writeValueAsString(info), CreateMode.EPHEMERAL);
+        }
+        else{
+            zkUtils.setNodeData(path,objectMapper.writeValueAsString(info));
         }
     }
 
