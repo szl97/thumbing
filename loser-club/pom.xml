@@ -11,13 +11,14 @@
     <groupId>com</groupId>
     <artifactId>loserclub</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>loserclub</name>
+    <name>loser-club</name>
     <packaging>pom</packaging>
 
     <properties>
         <java.version>1.14</java.version>
         <spring-cloud.version>Hoxton.SR6</spring-cloud.version>
         <maven-compiler-plugin.version>3.8.0</maven-compiler-plugin.version>
+        <springfox.version>2.9.2</springfox.version>
     </properties>
 
     <dependencies>
@@ -37,6 +38,7 @@
         <module>eureka-server</module>
         <module>push-data</module>
         <module>shared</module>
+        <module>gateway</module>
     </modules>
     <dependencyManagement>
         <dependencies>

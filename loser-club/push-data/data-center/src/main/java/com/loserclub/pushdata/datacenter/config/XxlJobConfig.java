@@ -6,6 +6,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+/**
+ * @author Stan Sai
+ * @date 2020-07-09
+ */
 @Slf4j
 @Configuration
 public class XxlJobConfig {

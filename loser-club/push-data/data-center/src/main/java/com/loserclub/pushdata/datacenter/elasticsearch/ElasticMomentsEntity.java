@@ -2,6 +2,10 @@ package com.loserclub.pushdata.datacenter.elasticsearch;
 
 import lombok.Data;
 
+/**
+ * @author Stan Sai
+ * @date 2020-07-03
+ */
 @Data
 public class ElasticMomentsEntity extends ElasticBaseEntity {
     public ElasticMomentsEntity() {

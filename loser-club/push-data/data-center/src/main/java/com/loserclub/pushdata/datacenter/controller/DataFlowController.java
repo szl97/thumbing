@@ -3,6 +3,7 @@ package com.loserclub.pushdata.datacenter.controller;
 
 import com.loserclub.pushdata.datacenter.service.DataFlowService;
 import com.loserclub.shared.controller.LoserClubBaseController;
+import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("/dataFlow")
+@Api(tags = "消息中心")
 public class DataFlowController extends LoserClubBaseController {
 
     @Autowired

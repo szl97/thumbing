@@ -12,6 +12,10 @@ import lombok.NoArgsConstructor;
 import java.io.IOException;
 import java.time.LocalDateTime;
 
+/**
+ * @author Stan Sai
+ * @date 2020-07-03
+ */
 @Data
 @NoArgsConstructor
 public class ElasticBaseEntity {

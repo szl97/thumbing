@@ -20,9 +20,12 @@ import org.springframework.stereotype.Component;
 import java.io.IOException;
 import java.util.List;
 
+/**
+ * @author Stan Sai
+ * @date 2020-07-03
+ */
 @Data
 @Configuration
-//@ConfigurationProperties(prefix = "elasticsearch")
 public class ElasticSearchConfig {
     @Value("${elasticsearch.host}")
     private String host;

@@ -35,7 +35,10 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-
+/**
+ * @author Stan Sai
+ * @date 2020-07-03
+ */
 @Slf4j
 @Data
 public class ElasticUtils {
