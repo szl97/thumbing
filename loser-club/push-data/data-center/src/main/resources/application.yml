@@ -1,0 +1,142 @@
+server:
+  port: 5001
+spring:
+  application:
+    name: data-center
+  jackson:
+    serialization:
+      FAIL_ON_EMPTY_BEANS: false
+
+  redis:
+    password:
+    cluster:
+      nodes: 192.168.89.1:6380
+      max-redirects: 3
+    lettuce:
+      pool:
+        max-idle: 16
+        max-active: 32
+        min-idle: 8
+        max-wait: -1
+    database: 0
+  redis2:
+    password:
+    cluster:
+      nodes: 192.168.89.1:6381
+      max-redirects: 3
+    lettuce:
+      pool:
+        max-idle: 16
+        max-active: 32
+        min-idle: 8
+        max-wait: -1
+    database: 0
+
+  #阿里数据库连接池设置
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    driver-class-name: com.mysql.jdbc.Driver
+    url: ${SPRING_DATASOURCE_URL:jdbc:mysql://192.168.89.1:3306/mysql_loserclub}
+    username: ${SPRING_DATASOURCE_USERNAME:root}
+    password: ${SPRING_DATASOURCE_PASSWORD:123456}
+    druid:
+      #最大值
+      max-active: 10
+      #最小值
+      min-idle: 5
+      #初始化大小
+      initial-size: 5
+      #最大等待时间，配置获取连接等待超时，时间单位都是毫秒ms
+      max-wait: 60000
+      # 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒
+      time-between-eviction-runs-millis: 3000
+      # 配置一个连接在池中最小生存的时间，单位是毫秒
+      min-evictable-idle-time-millis: 30000
+      validation-query: SELECT 1
+      test-on-borrow: false
+      test-on-return: false
+      # 打开PSCache
+      pool-prepared-statements: true
+      #最大PSCache连接
+      max-pool-prepared-statement-per-connection-size: 20
+      # 配置监控统计拦截的filters，去掉后监控界面sql无法统计，
+      #'wall'用于防火墙
+      filter:
+        slf4j:
+          statement-sql-pretty-format: true
+          result-set-log-enabled: false
+          statement-executable-sql-log-enable: false
+          enabled: true
+      # 通过connectProperties属性来打开mergeSql功能；慢SQL记录
+      connection-properties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=500
+  rabbitmq:
+    username: guest
+    password: guest
+    addresses: localhost:5672
+    virtual-host: /
+    listener:
+      simple:
+        concurrency: 5
+        acknowledge-mode: manual
+        max-concurrency: 10
+        prefetch: 1
+      direct:
+        acknowledge-mode: manual
+        prefetch: 1
+  data:
+    mongodb:
+      host: 192.168.89.1
+      port: 27017
+      database: mongo_loserclub
+elasticsearch:
+  host: 127.0.0.1
+  port: 9200
+  clusterName: loser_club
+  schema: http
+  index:
+    name: doc
+    shardNum: 3
+    replicasNum: 2
+    properties:
+      -id
+      -name
+      -title
+      -tags
+      -content
+      -date
+      -userId
+
+eureka:
+  client:
+    #设置服务注册中心的URL
+    service-url:
+      defaultZone: http://localhost:1901/eureka/
+
+xxl:
+  job:
+    admin:
+      addresses: http://127.0.0.1:7070/xxl-job-admin
+    accessToken:
+    executor:
+      appname: data-executor
+      #注册地址[选填]，优先使用该配置作为注册地址，为空时使用内嵌服务 ”IP:PORT“ 作为注册地址
+      address:
+      #执行器IP[选填]，为空则自动获取
+      ip:
+      port: 9999
+      logpath: /data/applogs/xxl-job/jobhandler
+      logretentiondays: 30
+
+push-data:
+  data-center:
+    port: 4001
+    messagePort: 6001
+    name: center1
+    initializedConnect: 16384
+  zookeeper:
+    servers: localhost:2181,localhost:2182,localhost:2183
+    namespace: loser-club
+    session-timeout: 6000
+    connection-timeout: 6000
+    max-retries: 1000
+    retries-sleep-time: 2000
