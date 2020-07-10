@@ -1,5 +1,6 @@
 package com.loserclub.pushdata.datacenter.config;
 
+import com.loserclub.pushdata.common.config.BaseZookeeperConfig;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
@@ -11,16 +12,6 @@ import org.springframework.context.annotation.Configuration;
 @Data
 @Configuration
 @ConfigurationProperties(prefix = "push-data.zookeeper")
-public class ZookeeperConfig {
-    private String servers;
+public class ZookeeperConfig extends BaseZookeeperConfig {
 
-    private String namespace;
-
-    private int sessionTimeout;
-
-    private int connectionTimeout;
-
-    private int maxRetries;
-
-    private int retriesSleepTime;
 }

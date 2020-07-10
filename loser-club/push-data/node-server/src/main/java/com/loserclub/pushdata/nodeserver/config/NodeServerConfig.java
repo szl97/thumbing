@@ -1,5 +1,6 @@
 package com.loserclub.pushdata.nodeserver.config;
 
+import com.loserclub.pushdata.common.config.BaseAppConfig;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
@@ -12,10 +13,6 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @ConfigurationProperties(prefix = "push-data.node-server")
 @Data
-public class NodeServerConfig {
-    private int port;
-    private int messagePort;
-    private int devicePort;
-    private String name;
-    private int initializedConnect;
+public class NodeServerConfig extends BaseAppConfig {
+
 }

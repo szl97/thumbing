@@ -1,6 +1,8 @@
 package com.loserclub.pushdata.nodeserver.client;
 
+import com.loserclub.pushdata.common.Infos.BaseAppInfo;
 import com.loserclub.pushdata.common.Infos.DataCenterInfo;
+import com.loserclub.pushdata.common.client.BaseClientBootStrap;
 import com.loserclub.pushdata.common.constants.AttributeEnum;
 import com.loserclub.pushdata.common.constants.OperationEnum;
 import com.loserclub.pushdata.common.message.ConnectSet;
@@ -37,86 +39,33 @@ import java.util.concurrent.TimeUnit;
 @Slf4j
 @Component
 @Data
-public class SyncConnectClientBootStrap {
+public class SyncConnectClientBootStrap extends BaseClientBootStrap<SyncClientChannelManager, NodeServerConfig, NodeToCenterInBoundSyncHandler> {
 
-    @Autowired
-    private NodeServerConfig nodeServerConfig;
-
-    private NioEventLoopGroup group = new NioEventLoopGroup();
-
-    @Autowired
-    private SyncClientChannelManager channelManager;
-
-    @Autowired
-    private NodeToCenterInBoundSyncHandler nodeToCenterInBoundSyncHandler;
 
     @Autowired
     private DeviceDataChannelManager deviceDataChannelManager;
 
-    public Bootstrap init(String ip, int port) {
-        Bootstrap bootstrap = new Bootstrap();
-        bootstrap.group(group)
-                .remoteAddress(ip, port)
-                .channel(NioSocketChannel.class)
-                .handler(new ChannelInitializer<Channel>() {
-                             @Override
-                             protected void initChannel(Channel socketChannel) throws Exception {
-                                 ChannelPipeline pipeline = socketChannel.pipeline();
-                                 //拆包粘包问题和编码问题
-                                 pipeline.addLast("frameDecoder", new LengthFieldBasedFrameDecoder(Integer.MAX_VALUE, 0, 4, 0, 4));
-                                 pipeline.addLast("stringDecoder", new StringDecoder(CharsetUtil.UTF_8));
-                                 pipeline.addLast("frameEncoder", new LengthFieldPrepender(4));
-                                 pipeline.addLast("stringEncoder", new StringEncoder(CharsetUtil.UTF_8));
 
-                                 //空闲检测
-                                 pipeline.addLast("idleStateHandler", new IdleStateHandler(300, 0, 0));
-
-                                 //处理Node 心跳事件、node server与客户端之间连接的建立和删除事件
-                                 pipeline.addLast("handler", nodeToCenterInBoundSyncHandler);
-                             }
-                         }
-                ).option(ChannelOption.CONNECT_TIMEOUT_MILLIS, 5000)
-                .option(ChannelOption.SO_KEEPALIVE, true)
-                .option(ChannelOption.TCP_NODELAY, true);
-        ;
-        //bootstrap.bind(nodeServerConfig.getPort()).sync();
-        //log.info("node server successful! listening port: {}", nodeServerConfig.getPort());
-        return bootstrap;
+    @Override
+    protected int getServerPort(DataCenterInfo info) {
+        return info.getPort();
     }
 
-    public void Connect(DataCenterInfo info, int retry, int times) {
-        Bootstrap bootstrap = init(info.getIp(), info.getPort());
-        bootstrap.connect()
-                .addListener(future -> {
-                    if (future.isSuccess()) {
-                        log.info("连接数据中心成功");
-                        Channel channel = ((ChannelFuture) future).channel();
-                        List<AttributeEnum> attributeEnums = new ArrayList<>();
-                        attributeEnums.add(AttributeEnum.CHANNEL_ATTR_DATACENTER);
-                        channelManager.bindAttributes(info.getName(), channel, attributeEnums);
-                        List<Long> devices = deviceDataChannelManager.getAllDevices();
-                        if (devices.size() > 0) {
-                            channel.writeAndFlush(
-                                    ConnectSet.builder()
-                                            .name(nodeServerConfig.getName())
-                                            .operation(OperationEnum.ADD)
-                                            .deviceIds(devices)
-                                            .build()
-                                            .encode()
-                            );
-                        }
-                    } else if (retry == 0) {
-                        //无法连接到Data Center
-                        log.error("无法连接到Data Center");
-                    } else {
-                        bootstrap.config().group().schedule(() -> {
-                            Connect(info, retry - 1, times + 1);
-                        }, 1 << times, TimeUnit.SECONDS);
-                    }
-                }).channel();
+
+    @Override
+    protected void success(Channel channel) throws Exception {
+        List<Long> devices = deviceDataChannelManager.getAllDevices();
+        if (devices.size() > 0) {
+            channel.writeAndFlush(
+                    ConnectSet.builder()
+                            .name(getAppConfig().getName())
+                            .operation(OperationEnum.ADD)
+                            .deviceIds(devices)
+                            .build()
+                            .encode()
+            );
+        }
+        log.info("连接data center监控通道成功");
     }
 
-    public void DisConnect(DataCenterInfo info) {
-        channelManager.removeChannel(info.getName());
-    }
 }

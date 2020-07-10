@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.loserclub.pushdata.common.Infos.DataCenterInfo;
 import com.loserclub.pushdata.common.constants.ZkGroupEnum;
+import com.loserclub.pushdata.common.register.BaseRegister;
 import com.loserclub.shared.utils.ip.*;
 import com.loserclub.pushdata.common.utils.zk.ZkUtils;
 import com.loserclub.pushdata.common.utils.zk.listener.ZkStateListener;
@@ -13,9 +14,6 @@ import com.loserclub.pushdata.datacenter.server.DataFlowBootStrap;
 import com.loserclub.pushdata.datacenter.server.ServerConnectMonitorBootStrap;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.curator.framework.CuratorFramework;
-import org.apache.curator.framework.state.ConnectionState;
-import org.apache.zookeeper.CreateMode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -32,19 +30,10 @@ import javax.annotation.PreDestroy;
 @Slf4j
 @Component
 @Data
-public class RegisterDataCenter {
+public class RegisterDataCenter extends BaseRegister<ZookeeperConfig, DataCenterConfig> {
 
     @Autowired
     private ObjectMapper objectMapper;
-
-    private ZkUtils zkUtils = new ZkUtils();
-    ;
-
-    @Autowired
-    private DataCenterConfig dataCenterConfig;
-
-    @Autowired
-    private ZookeeperConfig zookeeperConfig;
 
     @Autowired
     private ServerConnectMonitorBootStrap serverConnectMonitorBootStrap;
@@ -56,74 +45,28 @@ public class RegisterDataCenter {
     public void init() throws InterruptedException {
         serverConnectMonitorBootStrap.init();
         dataFlowBootStrap.init();
-        zkUtils.init(
-                zookeeperConfig.getServers(),
-                zookeeperConfig.getConnectionTimeout(),
-                zookeeperConfig.getSessionTimeout(),
-                zookeeperConfig.getMaxRetries(),
-                zookeeperConfig.getRetriesSleepTime(),
-                zookeeperConfig.getNamespace(),
-                new ZkStateListener() {
-                    @Override
-                    public void connectedEvent(CuratorFramework curator, ConnectionState state) {
-                        log.info("Data Center 连接zk成功");
-                        try {
-                            register();
-                        } catch (JsonProcessingException e) {
-                            e.printStackTrace();
-                        }
-                    }
-
-                    @Override
-                    public void reconnectedEvent(CuratorFramework curator, ConnectionState state) {
-                        log.info("Data Center 连接连接zk成功");
-                        try {
-                            register();
-                        } catch (JsonProcessingException e) {
-                            e.printStackTrace();
-                        }
-                    }
-
-                    @Override
-                    public void lostEvent(CuratorFramework curator, ConnectionState state) {
-                        log.info("Data Center 连接zk丢失");
-                    }
-                }
-        );
-
+        super.init();
     }
 
     @PreDestroy
     public void destory() {
-        deRegister();
+        super.destory();
     }
 
-    private void register() throws JsonProcessingException {
-        String root = ZkGroupEnum.DATA_CENTER.getValue();
-        String name = dataCenterConfig.getName();
-        if (!zkUtils.checkExists(root)) {
-            zkUtils.createNode(root, null, CreateMode.PERSISTENT);
-        }
+
+    @Override
+    protected String getRootValue() {
+        return ZkGroupEnum.DATA_CENTER.getValue();
+    }
+
+    @Override
+    protected String getInfo() throws JsonProcessingException {
         DataCenterInfo info = DataCenterInfo.builder()
                 .ip(IpUtils.getIp())
-                .name(name)
-                .port(dataCenterConfig.getPort())
-                .messagePort(dataCenterConfig.getMessagePort())
+                .name(getAppConfig().getName())
+                .port(getAppConfig().getPort())
+                .messagePort(getAppConfig().getMessagePort())
                 .build();
-        String path = root + "/" + name;
-        if (!zkUtils.checkExists(path)) {
-            zkUtils.createNode(path, objectMapper.writeValueAsString(info), CreateMode.EPHEMERAL);
-        } else {
-            zkUtils.setNodeData(path, objectMapper.writeValueAsString(info));
-        }
-    }
-
-    public void deRegister() {
-        String root = ZkGroupEnum.DATA_CENTER.getValue();
-        String name = dataCenterConfig.getName();
-        String path = root + "/" + name;
-        if (zkUtils.checkExists(path)) {
-            zkUtils.deleteNode(path);
-        }
+        return objectMapper.writeValueAsString(info);
     }
 }

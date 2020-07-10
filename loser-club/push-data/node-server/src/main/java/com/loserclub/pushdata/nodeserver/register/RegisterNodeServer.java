@@ -3,7 +3,9 @@ package com.loserclub.pushdata.nodeserver.register;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.loserclub.pushdata.common.Infos.DataCenterInfo;
+import com.loserclub.pushdata.common.Infos.NodeServerInfo;
 import com.loserclub.pushdata.common.constants.ZkGroupEnum;
+import com.loserclub.pushdata.common.register.BaseRegister;
 import com.loserclub.shared.utils.ip.*;
 import com.loserclub.pushdata.common.utils.zk.ZkUtils;
 import com.loserclub.pushdata.common.utils.zk.listener.ZkStateListener;
@@ -30,88 +32,34 @@ import javax.annotation.PreDestroy;
 @Slf4j
 @Component
 @Data
-public class RegisterNodeServer {
+public class RegisterNodeServer extends BaseRegister<ZookeeperConfig, NodeServerConfig>{
     @Autowired
     private ObjectMapper objectMapper;
 
-    private ZkUtils zkUtils = new ZkUtils();
-
-    @Autowired
-    private NodeServerConfig nodeServerConfig;
-
-    @Autowired
-    private ZookeeperConfig zookeeperConfig;
-
     @PostConstruct
-    public void init() {
-        zkUtils.init(
-                zookeeperConfig.getServers(),
-                zookeeperConfig.getConnectionTimeout(),
-                zookeeperConfig.getSessionTimeout(),
-                zookeeperConfig.getMaxRetries(),
-                zookeeperConfig.getRetriesSleepTime(),
-                zookeeperConfig.getNamespace(),
-                new ZkStateListener() {
-                    @Override
-                    public void connectedEvent(CuratorFramework curator, ConnectionState state) {
-                        log.info("NodeServer 连接zk成功");
-                        try {
-                            register();
-                        } catch (JsonProcessingException e) {
-                            e.printStackTrace();
-                        }
-                    }
-
-                    @Override
-                    public void reconnectedEvent(CuratorFramework curator, ConnectionState state) {
-                        log.info("NodeServer 重新连接zk成功");
-                        try {
-                            register();
-                        } catch (JsonProcessingException e) {
-                            e.printStackTrace();
-                        }
-                    }
-
-                    @Override
-                    public void lostEvent(CuratorFramework curator, ConnectionState state) {
-                        log.info("NodeServer 连接zk丢失");
-                    }
-                }
-        );
-
+    public void init() throws InterruptedException {
+        super.init();
     }
 
     @PreDestroy
     public void destory() {
-        deRegister();
+        super.destory();
     }
 
-    private void register() throws JsonProcessingException {
-        String root = ZkGroupEnum.NODE_SERVER.getValue();
-        String name = nodeServerConfig.getName();
-        if (!zkUtils.checkExists(root)) {
-            zkUtils.createNode(root, null, CreateMode.PERSISTENT);
-        }
-        DataCenterInfo info = DataCenterInfo.builder()
+    @Override
+    protected String getRootValue() {
+        return ZkGroupEnum.NODE_SERVER.getValue();
+    }
+
+    @Override
+    protected String getInfo() throws JsonProcessingException {
+        NodeServerInfo info = NodeServerInfo.builder()
                 .ip(IpUtils.getIp())
-                .name(name)
-                .port(nodeServerConfig.getPort())
-                .messagePort(nodeServerConfig.getMessagePort())
+                .name(getAppConfig().getName())
+                .port(getAppConfig().getPort())
+                .messagePort(getAppConfig().getMessagePort())
+                .devicePort(getAppConfig().getDevicePort())
                 .build();
-        String path = root + "/" + name;
-        if (!zkUtils.checkExists(path)) {
-            zkUtils.createNode(path, objectMapper.writeValueAsString(info), CreateMode.EPHEMERAL);
-        } else {
-            zkUtils.setNodeData(path, objectMapper.writeValueAsString(info));
-        }
-    }
-
-    public void deRegister() {
-        String root = ZkGroupEnum.NODE_SERVER.getValue();
-        String name = nodeServerConfig.getName();
-        String path = root + "/" + name;
-        if (zkUtils.checkExists(path)) {
-            zkUtils.deleteNode(path);
-        }
+        return objectMapper.writeValueAsString(info);
     }
 }

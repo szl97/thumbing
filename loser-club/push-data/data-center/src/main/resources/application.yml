@@ -131,6 +131,7 @@ push-data:
   data-center:
     port: 4001
     messagePort: 6001
+    devicePort: 0
     name: center1
     initializedConnect: 16384
   zookeeper:

@@ -1,24 +1,10 @@
 package com.loserclub.pushdata.datacenter.server;
 
+import com.loserclub.pushdata.common.server.BaseServerBootStrap;
 import com.loserclub.pushdata.datacenter.config.DataCenterConfig;
 import com.loserclub.pushdata.datacenter.inbound.NodeToCenterInBoundDataFlowHandler;
-import io.netty.bootstrap.ServerBootstrap;
-import io.netty.channel.Channel;
-import io.netty.channel.ChannelInitializer;
-import io.netty.channel.ChannelOption;
-import io.netty.channel.ChannelPipeline;
-import io.netty.channel.nio.NioEventLoopGroup;
-import io.netty.channel.socket.SocketChannel;
-import io.netty.channel.socket.nio.NioServerSocketChannel;
-import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
-import io.netty.handler.codec.LengthFieldPrepender;
-import io.netty.handler.codec.string.StringDecoder;
-import io.netty.handler.codec.string.StringEncoder;
-import io.netty.handler.timeout.IdleStateHandler;
-import io.netty.util.CharsetUtil;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
@@ -29,46 +15,15 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Component
 @Data
-public class DataFlowBootStrap {
-    @Autowired
-    private DataCenterConfig dataCenterConfig;
+public class DataFlowBootStrap extends BaseServerBootStrap<NodeToCenterInBoundDataFlowHandler, DataCenterConfig> {
 
-    private ServerBootstrap bootstrap;
+    @Override
+    protected int getPort() {
+        return getAppConfig().getMessagePort();
+    }
 
-    private NioEventLoopGroup boss = new NioEventLoopGroup();
-
-    private NioEventLoopGroup work = new NioEventLoopGroup();
-
-    @Autowired
-    private NodeToCenterInBoundDataFlowHandler nodeToCenterInBoundDataFlowHandler;
-
-    public void init() throws InterruptedException {
-        bootstrap = new ServerBootstrap();
-        bootstrap.group(boss, work)
-                .channelFactory(NioServerSocketChannel::new)
-                .childHandler(new ChannelInitializer<Channel>() {
-                    @Override
-                    protected void initChannel(Channel socketChannel) throws Exception {
-                        ChannelPipeline pipeline = socketChannel.pipeline();
-                        //拆包粘包问题和编码问题
-                        pipeline.addLast("frameDecoder", new LengthFieldBasedFrameDecoder(Integer.MAX_VALUE, 0, 4, 0, 4));
-                        pipeline.addLast("stringDecoder", new StringDecoder(CharsetUtil.UTF_8));
-                        pipeline.addLast("frameEncoder", new LengthFieldPrepender(4));
-                        pipeline.addLast("stringEncoder", new StringEncoder(CharsetUtil.UTF_8));
-
-                        //空闲检测
-                        pipeline.addLast("idleStateHandler", new IdleStateHandler(300, 0, 0));
-
-                        //处理Node Server成功连接确认事件、心跳事件、推送消息事件
-                        pipeline.addLast("handler", nodeToCenterInBoundDataFlowHandler);
-                    }
-                })
-                .option(ChannelOption.TCP_NODELAY, true)
-                .childOption(ChannelOption.SO_REUSEADDR, true)
-                .option(ChannelOption.SO_SNDBUF, 2048)
-                .option(ChannelOption.SO_RCVBUF, 1024);
-        bootstrap.bind(dataCenterConfig.getMessagePort()).sync();
-        log.info("Data center DataFlowBootStrap successful! listening port: {}", dataCenterConfig.getMessagePort());
-
+    @Override
+    protected void success() {
+        log.info("Data center DataFlowBootStrap successful! listening port: {}", getAppConfig().getMessagePort());
     }
 }

@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class DataCenterInfo {
+public class DataCenterInfo extends BaseAppInfo{
     private String name;
     private String ip;
     private int port;

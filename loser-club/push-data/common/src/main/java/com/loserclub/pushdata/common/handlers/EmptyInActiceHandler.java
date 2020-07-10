@@ -4,6 +4,10 @@ import com.loserclub.pushdata.common.message.DefinedMessage;
 import io.netty.channel.ChannelHandlerContext;
 import org.springframework.stereotype.Component;
 
+/**
+ * @author Stan Sai
+ * @date 2020-07-10
+ */
 @Component
 public class EmptyInActiceHandler implements IInActiveHandler {
     @Override

@@ -15,9 +15,10 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class NodeServerInfo {
+public class NodeServerInfo extends BaseAppInfo {
     private String name;
     private String ip;
+    private int port;
+    private int messagePort;
     private int devicePort;
-    private int nodePort;
 }
