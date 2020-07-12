@@ -7,6 +7,7 @@ import org.springframework.boot.autoconfigure.data.redis.RedisRepositoriesAutoCo
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.ComponentScan;
+import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 /**
  * @author Stan Sai
@@ -26,12 +27,14 @@ import org.springframework.context.annotation.ComponentScan;
                 RedisAutoConfiguration.class,
                 RedisRepositoriesAutoConfiguration.class
         })
-@EnableFeignClients(basePackages = {
-        "com.loserclub.shared",
-        "com.loserclub.pushdata.common",
-        "com.loserclub.pushdata.datacenter"
-})
+//@EnableFeignClients(basePackages = {
+//        "com.loserclub.shared",
+//        "com.loserclub.pushdata.common",
+//        "com.loserclub.pushdata.datacenter"
+//})
+@EnableFeignClients
 @EnableDiscoveryClient
+@EnableSwagger2
 public class DatacenterApplication {
 
     public static void main(String[] args) {

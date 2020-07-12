@@ -39,6 +39,7 @@
         <module>push-data</module>
         <module>shared</module>
         <module>gateway</module>
+        <module>upload-file</module>
     </modules>
     <dependencyManagement>
         <dependencies>

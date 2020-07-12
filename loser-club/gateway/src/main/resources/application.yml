@@ -22,10 +22,15 @@ spring:
           predicates:
             - Path=/api/data/**
           filters:
-            - SwaggerHeaderFilter
             - StripPrefix=2
+        - id: file
+          uri: lb://upload-file
+          predicates:
+            - Path=/api/file/**
+          filters:
+            - StripPrefix=2
+
 eureka:
   client:
-    #设置服务注册中心的URL
     service-url:
       defaultZone: http://localhost:1901/eureka/
