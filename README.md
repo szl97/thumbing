@@ -48,13 +48,23 @@ redis管理工具：another redis desktop management
 
 ###学习技能和知识：
 1.netty：https://github.com/netty/netty https://netty.io/wiki/user-guide-for-4.x.html
+
 2.zookeeper: https://zookeeper.apache.org/ https://www.jianshu.com/p/f5cbe7b6ef73
+
 3.redis: https://redis.io/
+
 4.jpa: https://github.com/wenhao/jpa-spec 大部分jpa的工具类模仿了jpa specification
-5.mongodb: https://www.runoob.com/mongodb/mongodb-tutorial.html 看菜鸟教程清楚概念会用即可
+
+5.mongodb: https://www.runoob.com/mongodb/mongodb-tutorial.html 清楚概念会用即可
+
 6.elasticsearch: https://www.elastic.co/ https://www.elastic.co/cn/elasticsearch/
+
 7.xxl-job: https://www.xuxueli.com/xxl-job
+
 8.docker: 自行搜索
+
 9.Spring Cloud: gateway, security, eureka, feign, ribbon, hystric, nocas和dubbo没有采用，但是道理差不多，也可以学习 https://spring.io/projects/spring-cloud
+
 10.https
+
 11.阿里云部署
