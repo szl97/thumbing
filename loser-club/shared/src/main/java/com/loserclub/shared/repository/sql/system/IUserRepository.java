@@ -1,4 +1,4 @@
-package com.loserclub.shared.repository.sql.user;
+package com.loserclub.shared.repository.sql.system;
 
 import com.loserclub.shared.entity.sql.system.User;
 import com.loserclub.shared.repository.sql.IBaseSqlRepository;

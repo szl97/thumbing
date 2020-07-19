@@ -19,6 +19,9 @@ import java.util.Set;
 @Getter
 @Setter
 @FieldNameConstants
+@NamedEntityGraph(name = "device.all_users",attributeNodes = {
+        @NamedAttributeNode("users")
+})
 //user_ids, current_user_id, device_id, device_name, device_info
 public class Device extends SqlEditionEntity {
     /**
@@ -44,7 +47,7 @@ public class Device extends SqlEditionEntity {
     /**
      * 设备的当前用户
      */
-    @OneToOne(targetEntity = User.class)
+    @OneToOne(targetEntity = User.class, fetch = FetchType.EAGER)
     @JoinColumn(name = "current_user_id", referencedColumnName = BaseEntity.Fields.id)
     private User currentUserId;
 

@@ -8,7 +8,7 @@ import com.loserclub.shared.exception.BusinessException;
 import com.loserclub.shared.exception.UserContextException;
 import com.loserclub.shared.jwt.JwtTokenFactory;
 import com.loserclub.shared.jwt.extractor.JwtHeaderTokenExtractor;
-import com.loserclub.shared.repository.sql.user.IUserRepository;
+import com.loserclub.shared.repository.sql.system.IUserRepository;
 import com.loserclub.shared.service.IAuthService;
 import com.loserclub.shared.utils.user.UserContextUtils;
 import lombok.extern.slf4j.Slf4j;
