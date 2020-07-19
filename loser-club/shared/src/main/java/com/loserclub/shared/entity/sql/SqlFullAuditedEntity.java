@@ -1,7 +1,7 @@
 package com.loserclub.shared.entity.sql;
 
 import com.loserclub.shared.constants.EntityConstants;
-import com.loserclub.shared.jpa.LogicDelete;
+import com.loserclub.shared.annotation.LogicDelete;
 import lombok.Getter;
 import lombok.Setter;
 

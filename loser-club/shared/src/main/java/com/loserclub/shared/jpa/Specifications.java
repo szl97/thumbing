@@ -1,9 +1,11 @@
 package com.loserclub.shared.jpa;
 
-import com.loserclub.shared.utils.entity.*;
+import com.loserclub.shared.annotation.QueryIgnore;
+import com.loserclub.shared.annotation.QueryOperator;
+import com.loserclub.shared.utils.entity.EntityUtils;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.util.StringUtils;
-import com.loserclub.shared.utils.entity.*;
+
 import javax.persistence.JoinColumn;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;

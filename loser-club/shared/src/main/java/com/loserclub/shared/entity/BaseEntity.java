@@ -1,6 +1,6 @@
 package com.loserclub.shared.entity;
 
-import com.loserclub.shared.utils.entity.AutoFillEntityListener;
+import com.loserclub.shared.utils.entity.*;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.FieldNameConstants;

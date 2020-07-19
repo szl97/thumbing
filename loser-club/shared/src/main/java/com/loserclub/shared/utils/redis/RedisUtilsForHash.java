@@ -4,7 +4,6 @@ import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.HashOperations;
 
-import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -17,7 +16,7 @@ import java.util.Set;
 @Data
 public class RedisUtilsForHash {
 
-    HashOperations<String, String, Serializable> hashOperations;
+    HashOperations<String, String, String> hashOperations;
 
     private static RedisUtilsForHash INSTANCE = new RedisUtilsForHash();
 
@@ -71,12 +70,9 @@ public class RedisUtilsForHash {
      * @param hashKey
      * @return
      */
-    public <T extends Serializable> T get(String key, String hashKey) {
-        Serializable val = hashOperations.get(key, hashKey);
-        if (val == null) {
-            return null;
-        }
-        return ((T) val);
+    public String get(String key, String hashKey) {
+        String val = hashOperations.get(key, hashKey);
+        return  val;
     }
 
 
@@ -87,11 +83,8 @@ public class RedisUtilsForHash {
      * @param hashKeys
      * @return
      */
-    public List<Serializable> get(String key, List<String> hashKeys) {
-        List<Serializable> val = hashOperations.multiGet(key, hashKeys);
-        if (val == null || val.size() == 0) {
-            return null;
-        }
+    public List<String> get(String key, List<String> hashKeys) {
+        List<String> val = hashOperations.multiGet(key, hashKeys);
         return val;
     }
 
@@ -111,7 +104,7 @@ public class RedisUtilsForHash {
      * @param key
      * @return
      */
-    public List<Serializable> getAllValues(String key) {
+    public List<String> getAllValues(String key) {
         return hashOperations.values(key);
     }
 
@@ -121,7 +114,7 @@ public class RedisUtilsForHash {
      * @param key
      * @return
      */
-    public Map<String, Serializable> getAllEntries(String key) {
+    public Map<String, String> getAllEntries(String key) {
         return hashOperations.entries(key);
     }
 
@@ -146,7 +139,7 @@ public class RedisUtilsForHash {
      * @param hashKey
      * @param value
      */
-    public void put(String key, String hashKey, Serializable value) {
+    public void put(String key, String hashKey, String value) {
         hashOperations.put(key, hashKey, value);
     }
 
@@ -156,7 +149,7 @@ public class RedisUtilsForHash {
      * @param key
      * @param map
      */
-    public void put(String key, Map<String, Serializable> map) {
+    public void put(String key, Map<String, String> map) {
         hashOperations.putAll(key, map);
     }
 
@@ -169,7 +162,7 @@ public class RedisUtilsForHash {
      * @param value
      * @return
      */
-    public Boolean setNx(String key, String hashKey, Serializable value) {
+    public Boolean setNx(String key, String hashKey, String value) {
         return hashOperations.putIfAbsent(key, hashKey, value);
     }
 

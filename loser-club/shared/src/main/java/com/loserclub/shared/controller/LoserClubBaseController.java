@@ -1,15 +1,18 @@
 package com.loserclub.shared.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.loserclub.shared.annotation.IgnoreResponseAdvice;
+import com.loserclub.shared.auth.model.UserContext;
 import com.loserclub.shared.exception.ValidInputException;
 import com.loserclub.shared.exception.BusinessException;
 import com.loserclub.shared.response.BaseApiResult;
+import com.loserclub.shared.utils.security.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageNotReadableException;
-import org.springframework.messaging.handler.annotation.support.MethodArgumentNotValidException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -24,10 +27,14 @@ import java.nio.charset.StandardCharsets;
  * @author Stan Sai
  * @date 2020-06-23
  */
-public class LoserClubBaseController extends BaseController {
+@IgnoreResponseAdvice
+public abstract class LoserClubBaseController extends BaseController {
 
     @Autowired
     private ObjectMapper mapper;
+
+    @Autowired
+    private SecurityUtils securityUtils;
 
     // 客户端参数异常
     @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -84,5 +91,14 @@ public class LoserClubBaseController extends BaseController {
         response.setCharacterEncoding(StandardCharsets.UTF_8.toString());
         response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
         return BaseApiResult.errorServer("服务端异常:" + e.getMessage() + "");
+    }
+
+    /**
+     * 获取请求用户上下文
+     *
+     * @return
+     */
+    public UserContext getCurrentUser() {
+        return securityUtils.getCurrentUser();
     }
 }

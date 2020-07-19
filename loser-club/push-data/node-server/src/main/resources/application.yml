@@ -28,3 +28,6 @@ push-data:
     connection-timeout: 6000
     max-retries: 1000
     retries-sleep-time: 2000
+use:
+  redis: false
+  security: false

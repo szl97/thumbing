@@ -1,7 +1,10 @@
 package com.loserclub.shared.response;
 
+import lombok.Data;
+
 import java.io.Serializable;
 
+@Data
 public class BaseApiResult<T extends Object> implements Serializable {
     private static int CODE_SUCCESS = 0;//默认值
     public static int CODE_ERROR_SERVER = 1; //服务端错误 与前端约定好的 1是不允许使用的code

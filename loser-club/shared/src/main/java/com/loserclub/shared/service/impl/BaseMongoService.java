@@ -2,8 +2,8 @@ package com.loserclub.shared.service.impl;
 
 
 import com.loserclub.shared.entity.mongo.BaseMongoEntity;
-import com.loserclub.shared.repository.IBaseMongoRepository;
-import com.loserclub.shared.service.IBaseMongoService;
+import com.loserclub.shared.repository.mongo.IBaseMongoRepository;
+import com.loserclub.shared.service.mongo.IBaseMongoService;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
@@ -12,5 +12,5 @@ import org.springframework.beans.factory.annotation.Autowired;
  */
 public class BaseMongoService<T extends BaseMongoEntity, K extends IBaseMongoRepository<T>> implements IBaseMongoService<T, K> {
     @Autowired
-    protected K repository;
+    protected K mRepository;
 }

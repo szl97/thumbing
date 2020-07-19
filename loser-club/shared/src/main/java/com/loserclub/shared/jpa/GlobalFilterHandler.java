@@ -1,7 +1,9 @@
 package com.loserclub.shared.jpa;
 
-import com.loserclub.shared.utils.entity.*;
+import com.loserclub.shared.annotation.LogicDelete;
 import com.loserclub.shared.constants.EntityConstants;
+import com.loserclub.shared.entity.sql.BaseSqlEntity;
+import com.loserclub.shared.utils.entity.EntityUtils;
 import net.sf.jsqlparser.expression.Expression;
 import net.sf.jsqlparser.expression.LongValue;
 import net.sf.jsqlparser.expression.operators.relational.EqualsTo;
@@ -40,22 +42,23 @@ public class GlobalFilterHandler {
         Map<String, EntityPersister> persisterMap = sessionFactory.getMetamodel().entityPersisters();
         for (Map.Entry<String, EntityPersister> entity : persisterMap.entrySet()) {
             Class targetClass = entity.getValue().getMappedClass();
-            SingleTableEntityPersister persister = (SingleTableEntityPersister) entity.getValue();
-            Iterable<AttributeDefinition> attributes = persister.getAttributes();
-            String entityName = targetClass.getSimpleName();//Entity的名称
-            String tableName = persister.getTableName();//Entity对应的表的英文名
-            //属性
-            for (AttributeDefinition attr : attributes) {
-                String propertyName = attr.getName(); //在entity中的属性名称
-                String[] columnName = persister.getPropertyColumnNames(propertyName);
-                if (checkHasAnnotation(propertyName, targetClass, LogicDelete.class)) {
-                    //如果字段存在逻辑删除 不考虑支持自定义逻辑删除字段 必须使用框架生命得字段名
-                    if (!HAS_LOGIC_TABLES.contains(tableName)) {
-                        HAS_LOGIC_TABLES.add(tableName);
+            if(targetClass.isAssignableFrom(BaseSqlEntity.class)) {
+                SingleTableEntityPersister persister = (SingleTableEntityPersister) entity.getValue();
+                Iterable<AttributeDefinition> attributes = persister.getAttributes();
+                String entityName = targetClass.getSimpleName();//Entity的名称
+                String tableName = persister.getTableName();//Entity对应的表的英文名
+                //属性
+                for (AttributeDefinition attr : attributes) {
+                    String propertyName = attr.getName(); //在entity中的属性名称
+                    String[] columnName = persister.getPropertyColumnNames(propertyName);
+                    if (checkHasAnnotation(propertyName, targetClass, LogicDelete.class)) {
+                        //如果字段存在逻辑删除 不考虑支持自定义逻辑删除字段 必须使用框架生命得字段名
+                        if (!HAS_LOGIC_TABLES.contains(tableName)) {
+                            HAS_LOGIC_TABLES.add(tableName);
+                        }
                     }
                 }
             }
-
         }
     }
 

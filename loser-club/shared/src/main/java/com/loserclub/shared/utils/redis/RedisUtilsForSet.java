@@ -4,7 +4,6 @@ import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.SetOperations;
 
-import java.io.Serializable;
 import java.util.List;
 import java.util.Set;
 
@@ -17,7 +16,7 @@ import java.util.Set;
 @Data
 public class RedisUtilsForSet {
 
-    SetOperations<String, Serializable> setOperations;
+    SetOperations<String, String> setOperations;
 
     private static RedisUtilsForSet INSTANCE = new RedisUtilsForSet();
 
@@ -59,7 +58,7 @@ public class RedisUtilsForSet {
      * @param value
      * @return
      */
-    public Long add(String key, Serializable... value) {
+    public Long add(String key, String... value) {
         return setOperations.add(key, value);
     }
 
@@ -70,7 +69,7 @@ public class RedisUtilsForSet {
      * @param value
      * @return
      */
-    public Long remove(String key, Serializable... value) {
+    public Long remove(String key, String... value) {
         return setOperations.remove(key, value);
     }
 
@@ -78,15 +77,11 @@ public class RedisUtilsForSet {
      * 集合中随机删除一个值并返回
      *
      * @param key
-     * @param <T>
      * @return
      */
-    public <T extends Serializable> T pop(String key) {
-        Serializable val = setOperations.pop(key);
-        if (val == null) {
-            return null;
-        }
-        return ((T) val);
+    public String pop(String key) {
+        String val = setOperations.pop(key);
+        return val;
     }
 
     /**
@@ -97,7 +92,7 @@ public class RedisUtilsForSet {
      * @param destKey
      * @return
      */
-    public Boolean move(String sourceKey, Serializable value, String destKey) {
+    public Boolean move(String sourceKey, String value, String destKey) {
         return setOperations.move(sourceKey, value, destKey);
     }
 
@@ -119,7 +114,7 @@ public class RedisUtilsForSet {
      * @param value
      * @return
      */
-    public Boolean isExist(String key, Serializable value) {
+    public Boolean isExist(String key, String value) {
         return setOperations.isMember(key, value);
     }
 
@@ -131,7 +126,7 @@ public class RedisUtilsForSet {
      * @param otherKey
      * @return
      */
-    public Set<Serializable> intersect(String key, String otherKey) {
+    public Set<String> intersect(String key, String otherKey) {
         return setOperations.intersect(key, otherKey);
     }
 
@@ -142,7 +137,7 @@ public class RedisUtilsForSet {
      * @param otherKeys
      * @return
      */
-    public Set<Serializable> intersect(String key, List<String> otherKeys) {
+    public Set<String> intersect(String key, List<String> otherKeys) {
         return setOperations.intersect(key, otherKeys);
     }
 
@@ -177,7 +172,7 @@ public class RedisUtilsForSet {
      * @param otherKey
      * @return
      */
-    public Set<Serializable> Union(String key, String otherKey) {
+    public Set<String> Union(String key, String otherKey) {
         return setOperations.union(key, otherKey);
     }
 
@@ -188,7 +183,7 @@ public class RedisUtilsForSet {
      * @param otherKeys
      * @return
      */
-    public Set<Serializable> union(String key, List<String> otherKeys) {
+    public Set<String> union(String key, List<String> otherKeys) {
         return setOperations.union(key, otherKeys);
     }
 
@@ -223,7 +218,7 @@ public class RedisUtilsForSet {
      * @param otherKey
      * @return
      */
-    public Set<Serializable> difference(String key, String otherKey) {
+    public Set<String> difference(String key, String otherKey) {
         return setOperations.difference(key, otherKey);
     }
 
@@ -234,7 +229,7 @@ public class RedisUtilsForSet {
      * @param otherKeys
      * @return
      */
-    public Set<Serializable> difference(String key, List<String> otherKeys) {
+    public Set<String> difference(String key, List<String> otherKeys) {
         return setOperations.difference(key, otherKeys);
     }
 
@@ -268,7 +263,7 @@ public class RedisUtilsForSet {
      * @param key
      * @return
      */
-    public Set<Serializable> members(String key) {
+    public Set<String> members(String key) {
         return setOperations.members(key);
     }
 
@@ -276,15 +271,11 @@ public class RedisUtilsForSet {
      * 随机获取集合中的一个元素
      *
      * @param key
-     * @param <T>
      * @return
      */
-    public <T extends Serializable> T randomMember(String key) {
-        Serializable val = setOperations.randomMember(key);
-        if (val == null) {
-            return null;
-        }
-        return ((T) val);
+    public String randomMember(String key) {
+        String val = setOperations.randomMember(key);
+        return  val;
     }
 
     /**
@@ -294,7 +285,7 @@ public class RedisUtilsForSet {
      * @param count
      * @return
      */
-    public Set<Serializable> distinctRandomMembers(String key, long count) {
+    public Set<String> distinctRandomMembers(String key, long count) {
         return setOperations.distinctRandomMembers(key, count);
     }
 
@@ -305,7 +296,7 @@ public class RedisUtilsForSet {
      * @param count
      * @return
      */
-    public List<Serializable> randomMembers(String key, long count) {
+    public List<String> randomMembers(String key, long count) {
         return setOperations.randomMembers(key, count);
     }
 

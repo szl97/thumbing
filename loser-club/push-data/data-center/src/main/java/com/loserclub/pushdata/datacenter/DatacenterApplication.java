@@ -22,11 +22,13 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
         "com.loserclub.shared",
         "com.loserclub.pushdata.common",
         "com.loserclub.pushdata.datacenter",
-},
-        exclude = {
-                RedisAutoConfiguration.class,
-                RedisRepositoriesAutoConfiguration.class
-        })
+}
+//,
+//        exclude = {
+//                RedisAutoConfiguration.class,
+//                RedisRepositoriesAutoConfiguration.class
+//        }
+)
 //@EnableFeignClients(basePackages = {
 //        "com.loserclub.shared",
 //        "com.loserclub.pushdata.common",

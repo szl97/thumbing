@@ -5,7 +5,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.connection.RedisZSetCommands;
 import org.springframework.data.redis.core.ZSetOperations;
 
-import java.io.Serializable;
 import java.util.List;
 import java.util.Set;
 
@@ -13,7 +12,7 @@ import java.util.Set;
 @Slf4j
 public class RedisUtilsForZSet {
 
-    ZSetOperations<String, Serializable> zSetOperations;
+    ZSetOperations<String, String> zSetOperations;
 
     private static RedisUtilsForZSet INSTANCE = new RedisUtilsForZSet();
 
@@ -56,7 +55,7 @@ public class RedisUtilsForZSet {
      * @param score
      * @return
      */
-    public Boolean add(String key, Serializable value, double score) {
+    public Boolean add(String key, String value, double score) {
         return zSetOperations.add(key, value, score);
     }
 
@@ -72,7 +71,7 @@ public class RedisUtilsForZSet {
      * @Nullable Double getScore();
      * }
      */
-    public Long add(String key, Set<ZSetOperations.TypedTuple<Serializable>> set) {
+    public Long add(String key, Set<ZSetOperations.TypedTuple<String>> set) {
         return zSetOperations.add(key, set);
     }
 
@@ -83,7 +82,7 @@ public class RedisUtilsForZSet {
      * @param value
      * @return 集合长度
      */
-    public Long remove(String key, Serializable... value) {
+    public Long remove(String key, String... value) {
         return zSetOperations.remove(key, value);
     }
 
@@ -95,7 +94,7 @@ public class RedisUtilsForZSet {
      * @param score
      * @return 分数
      */
-    public Double incrementScore(String key, Serializable value, double score) {
+    public Double incrementScore(String key, String value, double score) {
         return zSetOperations.incrementScore(key, value, score);
     }
 
@@ -106,7 +105,7 @@ public class RedisUtilsForZSet {
      * @param value
      * @return
      */
-    public Long rank(String key, Serializable value) {
+    public Long rank(String key, String value) {
         return zSetOperations.rank(key, value);
     }
 
@@ -117,7 +116,7 @@ public class RedisUtilsForZSet {
      * @param value
      * @return
      */
-    public Long reserveRank(String key, Serializable value) {
+    public Long reserveRank(String key, String value) {
         return zSetOperations.rank(key, value);
     }
 
@@ -129,7 +128,7 @@ public class RedisUtilsForZSet {
      * @param end
      * @return
      */
-    public Set<Serializable> range(String key, long start, long end) {
+    public Set<String> range(String key, long start, long end) {
         return zSetOperations.range(key, start, end);
     }
 
@@ -141,7 +140,7 @@ public class RedisUtilsForZSet {
      * @param end
      * @return
      */
-    public Set<ZSetOperations.TypedTuple<Serializable>> rangeWithScores(String key, long start, long end) {
+    public Set<ZSetOperations.TypedTuple<String>> rangeWithScores(String key, long start, long end) {
         return zSetOperations.rangeWithScores(key, start, end);
     }
 
@@ -153,7 +152,7 @@ public class RedisUtilsForZSet {
      * @param max
      * @return
      */
-    public Set<Serializable> rangeByScore(String key, double min, double max) {
+    public Set<String> rangeByScore(String key, double min, double max) {
         return zSetOperations.rangeByScore(key, min, max);
     }
 
@@ -165,7 +164,7 @@ public class RedisUtilsForZSet {
      * @param max
      * @return
      */
-    public Set<ZSetOperations.TypedTuple<Serializable>> rangeByScoreWithScores(String key, double min, double max) {
+    public Set<ZSetOperations.TypedTuple<String>> rangeByScoreWithScores(String key, double min, double max) {
         return zSetOperations.rangeByScoreWithScores(key, min, max);
     }
 
@@ -177,7 +176,7 @@ public class RedisUtilsForZSet {
      * @param max
      * @return
      */
-    public Set<Serializable> rangeByScore(String key, double min, double max, long offSet, long count) {
+    public Set<String> rangeByScore(String key, double min, double max, long offSet, long count) {
         return zSetOperations.rangeByScore(key, min, max, offSet, count);
     }
 
@@ -189,7 +188,7 @@ public class RedisUtilsForZSet {
      * @param max
      * @return
      */
-    public Set<ZSetOperations.TypedTuple<Serializable>> rangeByScoreWithScores(String key, double min, double max, long offSet, long count) {
+    public Set<ZSetOperations.TypedTuple<String>> rangeByScoreWithScores(String key, double min, double max, long offSet, long count) {
         return zSetOperations.rangeByScoreWithScores(key, min, max, offSet, count);
     }
 
@@ -201,7 +200,7 @@ public class RedisUtilsForZSet {
      * @param end
      * @return
      */
-    public Set<Serializable> reverseRange(String key, long start, long end) {
+    public Set<String> reverseRange(String key, long start, long end) {
         return zSetOperations.reverseRange(key, start, end);
     }
 
@@ -213,7 +212,7 @@ public class RedisUtilsForZSet {
      * @param end
      * @return
      */
-    public Set<ZSetOperations.TypedTuple<Serializable>> reverseRangeWithScores(String key, long start, long end) {
+    public Set<ZSetOperations.TypedTuple<String>> reverseRangeWithScores(String key, long start, long end) {
         return zSetOperations.reverseRangeWithScores(key, start, end);
     }
 
@@ -225,7 +224,7 @@ public class RedisUtilsForZSet {
      * @param max
      * @return
      */
-    public Set<Serializable> reverseRangeByScore(String key, double min, double max) {
+    public Set<String> reverseRangeByScore(String key, double min, double max) {
         return zSetOperations.reverseRangeByScore(key, min, max);
     }
 
@@ -237,7 +236,7 @@ public class RedisUtilsForZSet {
      * @param max
      * @return
      */
-    public Set<ZSetOperations.TypedTuple<Serializable>> reverseRangeByScoreWithScores(String key, double min, double max) {
+    public Set<ZSetOperations.TypedTuple<String>> reverseRangeByScoreWithScores(String key, double min, double max) {
         return zSetOperations.reverseRangeByScoreWithScores(key, min, max);
     }
 
@@ -249,7 +248,7 @@ public class RedisUtilsForZSet {
      * @param max
      * @return
      */
-    public Set<Serializable> reverseRangeByScore(String key, double min, double max, long offSet, long count) {
+    public Set<String> reverseRangeByScore(String key, double min, double max, long offSet, long count) {
         return zSetOperations.reverseRangeByScore(key, min, max, offSet, count);
     }
 
@@ -261,7 +260,7 @@ public class RedisUtilsForZSet {
      * @param max
      * @return
      */
-    public Set<ZSetOperations.TypedTuple<Serializable>> reverseRangeByScoreWithScores(String key, double min, double max, long offSet, long count) {
+    public Set<ZSetOperations.TypedTuple<String>> reverseRangeByScoreWithScores(String key, double min, double max, long offSet, long count) {
         return zSetOperations.reverseRangeByScoreWithScores(key, min, max, offSet, count);
     }
 
@@ -294,7 +293,7 @@ public class RedisUtilsForZSet {
      * @param value
      * @return
      */
-    public Double score(String Key, Serializable value) {
+    public Double score(String Key, String value) {
         return zSetOperations.score(Key, value);
     }
 

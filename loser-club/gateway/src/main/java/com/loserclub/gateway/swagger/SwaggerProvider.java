@@ -1,6 +1,7 @@
 package com.loserclub.gateway.swagger;
 
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.gateway.config.GatewayProperties;
 import org.springframework.cloud.gateway.route.RouteDefinition;
@@ -22,9 +23,9 @@ import java.util.stream.Collectors;
  */
 @Component
 @Primary
-@AllArgsConstructor
+@Slf4j
 public class SwaggerProvider implements SwaggerResourcesProvider {
-    public static final String API_URI = "/v2/api-docs";
+    private static final String API_URI = "/v2/api-docs";
     @Autowired
     GatewayProperties gatewayProperties;
 

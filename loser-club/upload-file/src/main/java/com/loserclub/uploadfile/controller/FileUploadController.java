@@ -1,10 +1,14 @@
 package com.loserclub.uploadfile.controller;
 
 import com.aliyun.oss.model.OSSObjectSummary;
+import com.loserclub.shared.annotation.Authorize;
+import com.loserclub.shared.auth.permission.PermissionConstants;
 import com.loserclub.shared.controller.LoserClubBaseController;
 import com.loserclub.uploadfile.dto.FileUploadResult;
 import com.loserclub.uploadfile.service.FileUploadService;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -18,8 +22,8 @@ import java.util.List;
  * @Date: 2020/7/11 14:27
  */
 @Api(tags = "上传文件")
-@RequestMapping
 @RestController
+@RequestMapping(value = "/oss")
 public class FileUploadController extends LoserClubBaseController {
     @Autowired
     private FileUploadService fileUploadService;
@@ -29,7 +33,11 @@ public class FileUploadController extends LoserClubBaseController {
      * @return FileUploadResult
      * @Param uploadFile
      */
-    @PostMapping("/upload")
+    @ApiImplicitParams(
+            @ApiImplicitParam(name = "uploadFile", paramType = "org.springframework.web.multipart.MultipartFile")
+    )
+    @Authorize(PermissionConstants.ACCESS)
+    @RequestMapping(value = "/upload", method = RequestMethod.POST)
     public FileUploadResult upload(@RequestParam("file") MultipartFile uploadFile) throws Exception {
         return this.fileUploadService.upload(uploadFile);
     }
@@ -39,7 +47,8 @@ public class FileUploadController extends LoserClubBaseController {
      * @desc 根据文件名删除oss上的文件
      * @Param objectName
      */
-    @DeleteMapping("/delete")
+    @Authorize(PermissionConstants.ACCESS)
+    @RequestMapping(value = "/delete", method = RequestMethod.DELETE)
     public FileUploadResult delete(@RequestParam("fileName") String objectName)
             throws Exception {
         return this.fileUploadService.delete(objectName);
@@ -50,7 +59,8 @@ public class FileUploadController extends LoserClubBaseController {
      * @return List<OSSObjectSummary>
      * @Param
      */
-    @GetMapping("/list")
+    @Authorize(PermissionConstants.ACCESS)
+    @RequestMapping(value = "/list", method = RequestMethod.GET)
     public List<OSSObjectSummary> list() throws Exception {
         return this.fileUploadService.list();
     }
@@ -60,7 +70,8 @@ public class FileUploadController extends LoserClubBaseController {
      * @return
      * @Param objectName
      */
-    @PostMapping("/download")
+    @Authorize(PermissionConstants.ACCESS)
+    @RequestMapping(value = "/download", method = RequestMethod.POST)
     public void download(@RequestParam("fileName") String objectName, HttpServletResponse response) throws IOException {
         //通知浏览器以附件形式下载
         response.setHeader("Content-Disposition",

@@ -15,15 +15,14 @@ import java.util.Optional;
  * @author Stan Sai
  * @date 2020-07-10
  */
+
 @RestController
 @RequestMapping("/swagger-resources")
 public class SwaggerHandler {
     @Autowired(required = false)
     private SecurityConfiguration securityConfiguration;
-
     @Autowired(required = false)
     private UiConfiguration uiConfiguration;
-
     private final SwaggerResourcesProvider swaggerResources;
 
     @Autowired

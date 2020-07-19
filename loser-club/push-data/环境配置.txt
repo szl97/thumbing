@@ -9,8 +9,8 @@ docker run -d --name mysql -p 3306:3306 -e MYSQL_ROOT_PASSWORD=123456 mysql:5.7
  -v /usr/local/docker/redis/data:/data -d redis:alpine redis-server /etc/redis/redis.conf --appendonly yes
 
 docker pull redis:6.0.5
-docker run -d  --name redis_for_obj -p 6380:6379 -v C:/Users/saizhuolin.UT/redis/redis.conf:/etc/redis/redis.conf  redis:6.0.5 redis-server /etc/redis/redis.conf --appendonly yes
-docker run -d  --name redis_for_col -p 6381:6379  -v C:/Users/saizhuolin.UT/redis/redis.conf:/etc/redis/redis.conf  redis:6.0.5 redis-server /etc/redis/redis.conf --appendonly yes
+docker run -d  --name redis_for_obj -p 6380:6380 -v C:/Users/saizhuolin.UT/redis/redis.conf:/etc/redis/redis.conf  redis:6.0.5 redis-server /etc/redis/redis.conf --appendonly yes
+docker run -d  --name redis_for_col -p 6381:6381  -v C:/Users/saizhuolin.UT/redis/redis.conf:/etc/redis/redis.conf  redis:6.0.5 redis-server /etc/redis/redis.conf --appendonly yes
 
 docker pull mongo:latest
 docker run -d --name mongo -p 27017:27017 mongo:latest --auth

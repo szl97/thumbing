@@ -4,6 +4,15 @@ server:
 spring:
   application:
     name: upload-file
+  redis:
+    host: localhost
+    port: 6379
+    password:
+    lettuce:
+      pool:
+        max-active: 8
+        max-idle: 0
+        max-wait: -1ms
 eureka:
   client:
     service-url:
@@ -11,8 +20,33 @@ eureka:
 
 
 aliyun:
-  endpoint:
-  accessKeyId: 
-  accessKeySecret: 
-  bucketName: 
-  urlPrefix: 
+  endpoint: oss-cn-shenzhen.aliyuncs.com
+  accessKeyId: LTAI4G9kPmWqneRHiLPBbE8N
+  accessKeySecret: J9eH5pJWvz6pdzLRy2rW4oucDzTTHb
+  bucketName: loserclub
+  urlPrefix: loserclub.oss-cn-shenzhen.aliyuncs.com
+
+use:
+  redis: true
+  security: true
+  feign: true
+
+security:
+  ignores: /error/**;/swagger-resources/**;/swagger-ui.html;/v2/api-docs;/webjars/**
+feign:
+  client:
+    config:
+      default:
+        connectTimeout: 5000   #连接超时3秒，连接失败时直接调用降级方法
+        readTimeout: 100000     #连接成功，处理数据的时间限制10秒 100000   读取时间过短会抛异常java.net.SocketTimeoutException: Read timed out
+        loggerLevel: full      #日志输出等级
+  hystrix:
+    enabled: true
+
+hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 5000  #服务连接成功，但是时间过长，降级方法调用时间   60000   5000

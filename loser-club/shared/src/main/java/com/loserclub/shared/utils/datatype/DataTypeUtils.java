@@ -2,6 +2,10 @@ package com.loserclub.shared.utils.datatype;
 
 import org.apache.commons.lang3.StringUtils;
 
+/**
+ * @author Stan Sai
+ * @date 2020-06-28
+ */
 public class DataTypeUtils {
     public static String parseString(String text) {
         String trim = StringUtils.trimToEmpty(text);

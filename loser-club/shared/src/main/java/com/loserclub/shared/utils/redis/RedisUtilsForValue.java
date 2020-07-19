@@ -4,7 +4,6 @@ import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.ValueOperations;
 
-import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -17,7 +16,7 @@ import java.util.concurrent.TimeUnit;
 @Data
 public class RedisUtilsForValue {
 
-    ValueOperations<String, Serializable> valueOperations;
+    ValueOperations<String, String> valueOperations;
 
     private static RedisUtilsForValue INSTANCE = new RedisUtilsForValue();
 
@@ -58,7 +57,7 @@ public class RedisUtilsForValue {
      * @param key
      * @return
      */
-    public Object getObject(String key) {
+    public String getObject(String key) {
         return valueOperations.get(key);
     }
 
@@ -67,15 +66,11 @@ public class RedisUtilsForValue {
      * 根据 key 获取指定类型的value 如果key不存在则返回null
      *
      * @param key
-     * @param <T>
      * @return
      */
-    public <T extends Serializable> T get(String key) {
-        Serializable val = valueOperations.get(key);
-        if (val == null) {
-            return null;
-        }
-        return ((T) val);
+    public String get(String key) {
+        String val = valueOperations.get(key);
+        return val;
     }
 
 
@@ -83,15 +78,11 @@ public class RedisUtilsForValue {
      * 获取原值，并设置新值
      *
      * @param key
-     * @param <T>
      * @return
      */
-    public <T extends Serializable> T getAndSet(String key, T value) {
-        Serializable val = valueOperations.getAndSet(key, value);
-        if (val == null) {
-            return null;
-        }
-        return ((T) val);
+    public String getAndSet(String key, String value) {
+        String val = valueOperations.getAndSet(key, value);
+        return  val;
     }
 
     /**
@@ -100,11 +91,8 @@ public class RedisUtilsForValue {
      * @param keys
      * @return
      */
-    public List<Serializable> get(List<String> keys) {
-        List<Serializable> val = valueOperations.multiGet(keys);
-        if (val == null || val.size() == 0) {
-            return null;
-        }
+    public List<String> get(List<String> keys) {
+        List<String> val = valueOperations.multiGet(keys);
         return val;
     }
 
@@ -146,7 +134,7 @@ public class RedisUtilsForValue {
      * @param key
      * @param value
      */
-    public void set(String key, Serializable value) {
+    public void set(String key, String value) {
         valueOperations.set(key, value);
     }
 
@@ -161,7 +149,7 @@ public class RedisUtilsForValue {
      * @param timeout
      * @param unit
      */
-    public void setWithExpireTime(String key, Serializable value, long timeout, TimeUnit unit) {
+    public void setWithExpireTime(String key, String value, long timeout, TimeUnit unit) {
         valueOperations.set(key, value, timeout, unit);
     }
 
@@ -171,7 +159,7 @@ public class RedisUtilsForValue {
      *
      * @param map
      */
-    public void set(Map<String, Serializable> map) {
+    public void set(Map<String, String> map) {
 
         valueOperations.multiSet(map);
     }
@@ -184,7 +172,7 @@ public class RedisUtilsForValue {
      * @param value
      * @param offset 偏移量
      */
-    public void set(String key, Serializable value, long offset) {
+    public void set(String key, String value, long offset) {
         valueOperations.set(key, value, offset);
     }
 
@@ -196,7 +184,7 @@ public class RedisUtilsForValue {
      * @param value
      * @return
      */
-    public Boolean setNx(String key, Serializable value) {
+    public Boolean setNx(String key, String value) {
         return valueOperations.setIfAbsent(key, value);
     }
 
@@ -213,7 +201,7 @@ public class RedisUtilsForValue {
      * @param unit
      * @return
      */
-    public Boolean setNx(String key, Serializable value, long timeout, TimeUnit unit) {
+    public Boolean setNx(String key, String value, long timeout, TimeUnit unit) {
         return valueOperations.setIfAbsent(key, value, timeout, unit);
     }
 

@@ -17,7 +17,7 @@ import java.util.concurrent.TimeUnit;
 @NoArgsConstructor
 public class RedisUtils {
 
-    RedisTemplate<String, Serializable> redisTemplate;
+    RedisTemplate<String, String> redisTemplate;
 
     /**
      * 删除某个key

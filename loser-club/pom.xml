@@ -19,6 +19,7 @@
         <spring-cloud.version>Hoxton.SR6</spring-cloud.version>
         <maven-compiler-plugin.version>3.8.0</maven-compiler-plugin.version>
         <springfox.version>2.9.2</springfox.version>
+        <jjwt.version>0.11.1</jjwt.version>
     </properties>
 
     <dependencies>
@@ -40,6 +41,7 @@
         <module>shared</module>
         <module>gateway</module>
         <module>upload-file</module>
+        <module>auth-server</module>
     </modules>
     <dependencyManagement>
         <dependencies>

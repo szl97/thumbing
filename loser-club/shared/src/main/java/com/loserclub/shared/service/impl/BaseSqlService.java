@@ -2,8 +2,8 @@ package com.loserclub.shared.service.impl;
 
 import com.loserclub.shared.entity.sql.BaseSqlEntity;
 import com.loserclub.shared.jpa.Specifications;
-import com.loserclub.shared.repository.IBaseSqlRepository;
-import com.loserclub.shared.service.IBaseSqlService;
+import com.loserclub.shared.repository.sql.IBaseSqlRepository;
+import com.loserclub.shared.service.sql.IBaseSqlService;
 
 import com.loserclub.shared.utils.property.PropertyUtils;
 import org.springframework.beans.factory.annotation.Autowired;

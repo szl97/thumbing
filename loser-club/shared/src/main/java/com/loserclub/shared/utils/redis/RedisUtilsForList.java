@@ -4,7 +4,6 @@ import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.ListOperations;
 
-import java.io.Serializable;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -16,7 +15,7 @@ import java.util.concurrent.TimeUnit;
 @Data
 public class RedisUtilsForList {
 
-    ListOperations<String, Serializable> listOperations;
+    ListOperations<String, String> listOperations;
 
     private static RedisUtilsForList INSTANCE = new RedisUtilsForList();
 
@@ -57,7 +56,7 @@ public class RedisUtilsForList {
      * @param key
      * @return
      */
-    public List<Serializable> getAll(String key) {
+    public List<String> getAll(String key) {
         return listOperations.range(key, 0, -1);
     }
 
@@ -67,7 +66,7 @@ public class RedisUtilsForList {
      * @param key
      * @return
      */
-    public List<Serializable> get(String key, long start, long end) {
+    public List<String> get(String key, long start, long end) {
         return listOperations.range(key, start, end);
     }
 
@@ -99,7 +98,7 @@ public class RedisUtilsForList {
      * @param value
      * @return 列表插入后的长度
      */
-    public Long leftPush(String key, Serializable value) {
+    public Long leftPush(String key, String value) {
         return listOperations.leftPush(key, value);
     }
 
@@ -110,7 +109,7 @@ public class RedisUtilsForList {
      * @param value
      * @return 列表插入后的长度
      */
-    public Long leftPush(String key, Serializable... value) {
+    public Long leftPush(String key, String... value) {
         return listOperations.leftPushAll(key, value);
     }
 
@@ -121,7 +120,7 @@ public class RedisUtilsForList {
      * @param value
      * @return 列表插入后的长度
      */
-    public Long leftPush(String key, List<Serializable> value) {
+    public Long leftPush(String key, List<String> value) {
         return listOperations.leftPushAll(key, value);
     }
 
@@ -132,7 +131,7 @@ public class RedisUtilsForList {
      * @param value
      * @return
      */
-    public Boolean leftPushNx(String key, Serializable value) {
+    public Boolean leftPushNx(String key, String value) {
         Long origin = size(key);
         return origin == listOperations.leftPushIfPresent(key, value) - 1;
     }
@@ -146,7 +145,7 @@ public class RedisUtilsForList {
      * @param value
      * @return
      */
-    public Boolean leftPush(String key, Serializable next, Serializable value) {
+    public Boolean leftPush(String key, String next, String value) {
         Long origin = size(key);
         return origin == listOperations.leftPush(key, next, value) - 1;
     }
@@ -158,7 +157,7 @@ public class RedisUtilsForList {
      * @param value
      * @return 列表插入后的长度
      */
-    public Long rightPush(String key, Serializable value) {
+    public Long rightPush(String key, String value) {
         return listOperations.rightPush(key, value);
     }
 
@@ -169,7 +168,7 @@ public class RedisUtilsForList {
      * @param value
      * @return 列表插入后的长度
      */
-    public Long rightPush(String key, Serializable... value) {
+    public Long rightPush(String key, String... value) {
         return listOperations.rightPushAll(key, value);
     }
 
@@ -180,7 +179,7 @@ public class RedisUtilsForList {
      * @param value
      * @return 列表插入后的长度
      */
-    public Long rightPush(String key, List<Serializable> value) {
+    public Long rightPush(String key, List<String> value) {
         return listOperations.rightPushAll(key, value);
     }
 
@@ -191,7 +190,7 @@ public class RedisUtilsForList {
      * @param value
      * @return
      */
-    public Boolean rightPushNx(String key, Serializable value) {
+    public Boolean rightPushNx(String key, String value) {
         Long origin = size(key);
         return origin == listOperations.rightPushIfPresent(key, value) - 1;
     }
@@ -205,7 +204,7 @@ public class RedisUtilsForList {
      * @param value
      * @return
      */
-    public Boolean rightPush(String key, Serializable next, Serializable value) {
+    public Boolean rightPush(String key, String next, String value) {
         Long origin = size(key);
         return origin == listOperations.rightPush(key, next, value) - 1;
     }
@@ -218,7 +217,7 @@ public class RedisUtilsForList {
      * @param index
      * @param value
      */
-    public void setListValue(String key, long index, Serializable value) {
+    public void setListValue(String key, long index, String value) {
         listOperations.set(key, index, value);
     }
 
@@ -230,7 +229,7 @@ public class RedisUtilsForList {
      * @param value
      * @return
      */
-    public Long remove(String key, long count, Serializable value) {
+    public Long remove(String key, long count, String value) {
         Long origin = size(key);
         Long newSize = listOperations.remove(key, count, value);
         return origin - newSize;
@@ -241,15 +240,11 @@ public class RedisUtilsForList {
      *
      * @param key
      * @param index
-     * @param <T>
      * @return
      */
-    public <T extends Serializable> T get(String key, long index) {
-        Serializable val = listOperations.index(key, index);
-        if (val == null) {
-            return null;
-        }
-        return ((T) val);
+    public String get(String key, long index) {
+        String val = listOperations.index(key, index);
+        return val;
     }
 
 
@@ -260,12 +255,9 @@ public class RedisUtilsForList {
      * @param <T>
      * @return
      */
-    public <T extends Serializable> T leftPop(String key) {
-        Serializable val = listOperations.leftPop(key);
-        if (val == null) {
-            return null;
-        }
-        return ((T) val);
+    public String leftPop(String key) {
+        String val = listOperations.leftPop(key);
+        return  val;
     }
 
     /**
@@ -279,27 +271,19 @@ public class RedisUtilsForList {
      * @param <T>
      * @return
      */
-    public <T extends Serializable> T leftPop(String key, long times, TimeUnit unit) {
-        Serializable val = listOperations.leftPop(key, times, unit);
-        if (val == null) {
-            return null;
-        }
-        return ((T) val);
+    public String leftPop(String key, long times, TimeUnit unit) {
+        String val = listOperations.leftPop(key, times, unit);
+        return val;
     }
 
     /**
      * 移除列表中的倒数第一个值，并返回该值
-     *
      * @param key
-     * @param <T>
      * @return
      */
-    public <T extends Serializable> T rightPop(String key) {
-        Serializable val = listOperations.rightPop(key);
-        if (val == null) {
-            return null;
-        }
-        return ((T) val);
+    public String rightPop(String key) {
+        String val = listOperations.rightPop(key);
+        return val;
     }
 
     /**
@@ -310,15 +294,11 @@ public class RedisUtilsForList {
      * @param key
      * @param times
      * @param unit
-     * @param <T>
      * @return
      */
-    public <T extends Serializable> T rightPop(String key, long times, TimeUnit unit) {
-        Serializable val = listOperations.rightPop(key, times, unit);
-        if (val == null) {
-            return null;
-        }
-        return ((T) val);
+    public String rightPop(String key, long times, TimeUnit unit) {
+        String val = listOperations.rightPop(key, times, unit);
+        return val;
     }
 
     /**
@@ -327,15 +307,11 @@ public class RedisUtilsForList {
      *
      * @param sourceKey
      * @param destKey
-     * @param <T>
      * @return
      */
-    public <T extends Serializable> T rightPopAndLeftPush(String sourceKey, String destKey) {
-        Serializable val = listOperations.rightPopAndLeftPush(sourceKey, destKey);
-        if (val == null) {
-            return null;
-        }
-        return ((T) val);
+    public String rightPopAndLeftPush(String sourceKey, String destKey) {
+        String val = listOperations.rightPopAndLeftPush(sourceKey, destKey);
+        return  val;
     }
 
     /**
@@ -346,14 +322,10 @@ public class RedisUtilsForList {
      *
      * @param sourceKey
      * @param destKey
-     * @param <T>
      * @return
      */
-    public <T extends Serializable> T rightPopAndLeftPush(String sourceKey, String destKey, long times, TimeUnit unit) {
-        Serializable val = listOperations.rightPopAndLeftPush(sourceKey, destKey, times, unit);
-        if (val == null) {
-            return null;
-        }
-        return ((T) val);
+    public String rightPopAndLeftPush(String sourceKey, String destKey, long times, TimeUnit unit) {
+        String val = listOperations.rightPopAndLeftPush(sourceKey, destKey, times, unit);
+        return  val;
     }
 }
