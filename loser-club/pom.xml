@@ -42,6 +42,7 @@
         <module>gateway</module>
         <module>upload-file</module>
         <module>auth-server</module>
+        <module>data-access</module>
     </modules>
     <dependencyManagement>
         <dependencies>

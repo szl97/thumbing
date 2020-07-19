@@ -1,4 +1,4 @@
-package com.loserclub.shared.service;
+package com.loserclub.pushdata.datacenter.service;
 
 /**
  * @author Stan Sai

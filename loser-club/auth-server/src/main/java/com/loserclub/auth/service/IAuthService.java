@@ -1,4 +1,4 @@
-package com.loserclub.shared.service;
+package com.loserclub.auth.service;
 
 import com.loserclub.shared.auth.model.UserContext;
 import com.loserclub.shared.entity.sql.system.User;

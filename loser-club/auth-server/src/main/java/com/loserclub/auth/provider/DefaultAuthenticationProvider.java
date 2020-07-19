@@ -3,7 +3,7 @@ package com.loserclub.auth.provider;
 import com.loserclub.shared.auth.model.UserContext;
 import com.loserclub.shared.auth.permission.PermissionConstants;
 import com.loserclub.shared.entity.sql.system.User;
-import com.loserclub.shared.service.IAuthService;
+import com.loserclub.auth.service.IAuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -13,7 +13,6 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
-import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
