@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:thumbing/pages/content/push_content.dart';
-import 'package:thumbing/pages/personal/my_article.dart';
-import 'package:thumbing/pages/personal/my_moment.dart';
-import 'package:thumbing/pages/personal/my_roast.dart';
-import 'package:thumbing/pages/home/guid.dart';
+import 'package:thumbing/presentation/pages/content/push_content.dart';
+import 'package:thumbing/presentation/pages/personal/my_article.dart';
+import 'package:thumbing/presentation/pages/personal/my_moment.dart';
+import 'package:thumbing/presentation/pages/personal/my_roast.dart';
+import 'package:thumbing/presentation/pages/home/guid.dart';
 
 //配置路由
 final routes = {

@@ -8,7 +8,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
-import 'package:thumbing/pages/home/my_home_tab_bar.dart';
+import 'package:thumbing/presentation/pages/home/my_home_tab_bar.dart';
 
 // Examples can assume:
 // void _airDress() { }
@@ -670,7 +670,7 @@ class _SliverAppBarDelegate extends SliverPersistentHeaderDelegate {
                 deltaExtent)
         .clamp(0.0, 1.0);
 
-    Color color = Color.lerp(Colors.white, Colors.green, t);
+    Color color = Color.lerp(Colors.white, Colors.black26, t);
 
 //    List<>getTabBarText(bottom);
     bottom = HomeTabBar(
@@ -719,8 +719,8 @@ class _SliverAppBarDelegate extends SliverPersistentHeaderDelegate {
         centerTitle: centerTitle,
         titleSpacing: titleSpacing,
         toolbarOpacity: toolbarOpacity,
-        bottomOpacity:
-            pinned ? 1.0 : (visibleMainHeight / _bottomHeight).clamp(0.0, 1.0),
+        // bottomOpacity:
+        //     pinned ? 1.0 : (visibleMainHeight / _bottomHeight).clamp(0.0, 1.0),
       ),
     );
 

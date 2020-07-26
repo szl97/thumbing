@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:thumbing/pages/personal/personal.dart';
-
-import 'package:thumbing/pages/home/home.dart';
-import 'package:thumbing/pages/message/message.dart';
-import 'package:thumbing/pages/settings/settings.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:thumbing/logic/bloc/content/all_content_bloc.dart';
+import 'package:thumbing/presentation/pages/personal/personal.dart';
+import 'package:thumbing/presentation/pages/home/home.dart';
+import 'package:thumbing/presentation/pages/message/message.dart';
+import 'package:thumbing/presentation/pages/settings/settings.dart';
+import 'package:thumbing/logic/event/content/all_content_event.dart';
 
 class Guid extends StatefulWidget {
   final index;
@@ -20,7 +22,10 @@ class _GuidState extends State<Guid> {
     this.currentIndex = index;
   }
   List pageList = [
-    Home(),
+    BlocProvider(
+      create: (context) => AllContentBloc()..add(AllContentFetched()),
+      child: Home(),
+    ),
     Message(),
     Personal(name: "Stan Sai"),
     Settings(),

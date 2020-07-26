@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:thumbing/util/screen_utils.dart';
+import 'package:thumbing/presentation/util/screen_utils.dart';
 
 const double _kTabHeight = 46.0;
 const double _kTextAndIconTabHeight = 42.0;
@@ -47,26 +47,30 @@ class _HomeTabBarState extends State<HomeTabBar> {
                 top: 3.0, bottom: 3.0, right: 10.0, left: 5.0),
             decoration: BoxDecoration(
                 color: const Color.fromARGB(245, 236, 236, 236),
-                borderRadius: BorderRadius.all(Radius.circular(17.0))),
+                borderRadius: BorderRadius.all(Radius.circular(10.0))),
             child: Row(
               children: <Widget>[
-                Icon(
-                  Icons.search,
-                  color: const Color.fromARGB(255, 128, 128, 129),
-                ),
-                Expanded(
-                  child: GestureDetector(
-                    child: Align(
-                      alignment: Alignment(1.0, 0.0),
-                      child: Text(
-                        '搜索',
-                        style: TextStyle(
-                            fontSize: 16.0,
-                            color: const Color.fromARGB(255, 192, 192, 192)),
-                      ),
+                Column(
+                  children: <Widget>[
+                    Icon(
+                      Icons.search,
+                      color: const Color.fromARGB(255, 128, 128, 129),
                     ),
-                    onTap: () {},
-                  ),
+                    Expanded(
+                      child: GestureDetector(
+                        child: Align(
+                          child: Text(
+                            '搜索',
+                            style: TextStyle(
+                                fontSize: 16.0,
+                                color:
+                                    const Color.fromARGB(255, 192, 192, 192)),
+                          ),
+                        ),
+                        onTap: () {},
+                      ),
+                    )
+                  ],
                 )
               ],
             ),
