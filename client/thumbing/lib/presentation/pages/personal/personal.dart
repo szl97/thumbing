@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:thumbing/logic/bloc/user/auth_bloc.dart';
+import 'package:thumbing/logic/event/user/auth_event.dart';
 
 class Personal extends StatelessWidget {
   String name;
@@ -86,7 +89,28 @@ class Personal extends StatelessWidget {
                   ),
                   onTap: () =>
                       Navigator.pushNamed(context, '/personal/myArticle'),
-                ))
+                )),
+                SliverToBoxAdapter(
+                    child: GestureDetector(
+                        behavior: HitTestBehavior.opaque,
+                        child: Row(
+                          children: <Widget>[
+                            Padding(
+                              padding: EdgeInsets.only(
+                                  left: 25.0,
+                                  top: 15.0,
+                                  bottom: 20.0,
+                                  right: 10.0),
+                              child: Text("退出登录"),
+                            )
+                          ],
+                        ),
+                        onTap: () {
+                          BlocProvider.of<AuthBloc>(context)
+                              .add(CancelAuthentication());
+                          Navigator.pushNamedAndRemoveUntil(
+                              context, '/', (route) => false);
+                        }))
               ],
             ),
           )),

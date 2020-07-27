@@ -15,3 +15,7 @@ class FinishLogin extends AuthEvent {
 }
 
 class FinishLogout extends AuthEvent {}
+
+class Initialize extends AuthEvent {}
+
+class CancelAuthentication extends AuthEvent {}

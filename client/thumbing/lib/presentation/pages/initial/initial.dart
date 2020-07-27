@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:thumbing/logic/bloc/user/auth_bloc.dart';
 import 'package:thumbing/logic/bloc/user/login_bloc.dart';
+import 'package:thumbing/logic/event/user/auth_event.dart';
 import 'package:thumbing/logic/state/user/auth_state.dart';
 import 'package:thumbing/presentation/pages/home/guid.dart';
 import 'package:thumbing/presentation/pages/login/login.dart';
@@ -15,8 +16,8 @@ class Initial extends StatelessWidget {
       providers: [
         BlocProvider(create: (context) => LoginBloc()),
         BlocProvider(
-          create: (context) => AuthBloc(BlocProvider.of<LoginBloc>(context)),
-        )
+            create: (context) => AuthBloc(BlocProvider.of<LoginBloc>(context))
+              ..add(Initialize()))
       ],
       child: InitialView(),
     );

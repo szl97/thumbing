@@ -1,4 +1,6 @@
 import 'package:bloc/bloc.dart';
+import 'package:thumbing/data/model/user/user.dart';
+import 'package:thumbing/data/local/save_util.dart';
 import 'package:thumbing/data/repository/user/user_rep.dart';
 import 'package:thumbing/logic/event/user/login_event.dart';
 import 'package:thumbing/logic/state/user/login_state.dart';
@@ -11,6 +13,18 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   @override
   Stream<LoginState> mapEventToState(LoginEvent event) async* {
     final currentState = state;
+    if (event is InitializeLogin) {
+      if (currentState is LoginInitial) {
+        try {
+          var userName = await SaveUtil.getSavedByKey("userName");
+          var password = await SaveUtil.getSavedByKey("password");
+          if (userName != null && password != null) {
+            yield currentState.copyWith(userName: userName, password: password);
+            this.add(Login(userName: userName, password: password));
+          }
+        } catch (_) {}
+      }
+    }
     if (event is Login) {
       if (currentState is LoginInitial) {
         try {
@@ -21,6 +35,8 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
             yield LoginFailure(
                 message: "用户名或密码错误", times: currentState.times + 1);
           yield LoginSuccess(userInfo: user);
+          await SaveUtil.saveBydate("userName", user.userName);
+          await SaveUtil.saveBydate("password", user.password);
         } catch (_) {
           yield LoginFailure(
               userName: currentState.userName,

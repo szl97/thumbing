@@ -9,17 +9,32 @@ class User extends Equatable {
   final DateTime lastLogin;
   final int continueDay;
 
-  const User(this.id, this.userName, this.password, this.token, this.lastLogin,
-      this.continueDay);
+  const User(
+      {this.id,
+      this.userName,
+      this.password,
+      this.token,
+      this.lastLogin,
+      this.continueDay});
 
   static User getUser() {
     return User(
-        Uuid().v4(),
-        "stan",
-        "123456",
-        "Bear sadawsdqdqwedhjqwedhjiquwdhiuquijdqiujdwjqwioj",
-        DateTime.now().add(Duration(days: 1)),
-        20);
+        id: Uuid().v4(),
+        userName: "stan",
+        password: "123456",
+        token: "Bear sadawsdqdqwedhjqwedhjiquwdhiuquijdqiujdwjqwioj",
+        lastLogin: DateTime.now().add(Duration(days: 1)),
+        continueDay: 20);
+  }
+
+  factory User.fromJson(Map<String, dynamic> json) {
+    return User(
+        id: json['id'],
+        userName: json['userName'],
+        password: json['password'],
+        token: json['token'],
+        lastLogin: json['lastLogin'],
+        continueDay: json['continueDay']);
   }
 
   @override

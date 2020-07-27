@@ -40,7 +40,15 @@ class _UsernameInput extends StatelessWidget {
     return BlocBuilder<LoginBloc, LoginState>(
       //buildWhen: (previous, current) => previous.username != current.username,
       builder: (context, state) {
+        // TextEditingController controller = new TextEditingController();
+        // if (state is LoginInitial) {
+        //   controller.text = state.userName;
+        // }
+        // if (state is LoginFailure) {
+        //   controller.text = state.userName;
+        // }
         return TextField(
+          //controller: controller,
           key: const Key('loginForm_usernameInput_textField'),
           onChanged: (username) => {
             context
@@ -65,7 +73,15 @@ class _PasswordInput extends StatelessWidget {
     return BlocBuilder<LoginBloc, LoginState>(
       //buildWhen: (previous, current) => previous.password != current.password,
       builder: (context, state) {
+        //TextEditingController controller = new TextEditingController();
+        // if (state is LoginInitial) {
+        //   controller.text = state.password;
+        // }
+        // if (state is LoginFailure) {
+        //   controller.text = state.password;
+        // }
         return TextField(
+          //controller: controller,
           key: const Key('loginForm_passwordInput_textField'),
           onChanged: (password) => context
               .bloc<LoginBloc>()

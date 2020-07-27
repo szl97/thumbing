@@ -26,9 +26,9 @@ class _GuidState extends State<Guid> {
       create: (context) => AllContentBloc()..add(AllContentFetched()),
       child: Home(),
     ),
+    Settings(),
     Message(),
     Personal(name: "Stan Sai"),
-    Settings(),
   ];
   @override
   Widget build(BuildContext context) {
@@ -66,11 +66,11 @@ class _GuidState extends State<Guid> {
           items: [
             BottomNavigationBarItem(icon: Icon(Icons.home), title: Text("首页")),
             BottomNavigationBarItem(
+                icon: Icon(Icons.beach_access), title: Text("港湾")),
+            BottomNavigationBarItem(
                 icon: Icon(Icons.message), title: Text("消息")),
             BottomNavigationBarItem(
                 icon: Icon(Icons.person), title: Text("我的")),
-            BottomNavigationBarItem(
-                icon: Icon(Icons.settings), title: Text("设置")),
           ]),
     );
   }
