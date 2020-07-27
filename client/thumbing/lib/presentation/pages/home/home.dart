@@ -59,8 +59,6 @@ class _HomeState extends State<Home> {
     // 这里不要忘了将监听移除
     _mScrollController.dispose();
     _aScrollController.dispose();
-    momentsBloc.close();
-    articleBloc.close();
   }
 
   Future<Null> _loadMoreMoments() async {
@@ -134,44 +132,43 @@ class _HomeState extends State<Home> {
               ),
             ];
           },
-          body: TabBarView(children: <Widget>[
-            BlocProvider(
-              create: (context) => momentsBloc,
-              child: Center(
-                child: Container(
-                    padding: EdgeInsets.only(top: 30),
-                    margin: EdgeInsets.only(top: 10),
-                    child: RefreshIndicator(
-                        child: getMonmets(), onRefresh: _handleRefreshMoments)),
-              ),
-            ),
-            BlocProvider(
-              create: (context) => momentsBloc,
-              child: Center(
-                child: Container(
-                    padding: EdgeInsets.only(top: 30),
-                    margin: EdgeInsets.only(top: 10),
-                    child: RefreshIndicator(
-                        child: getMonmets(), onRefresh: _handleRefreshMoments)),
-              ),
-            ),
-            BlocProvider(
-              create: (context) => articleBloc,
-              child: Center(
-                child: Container(
-                    padding: EdgeInsets.only(top: 30),
-                    margin: EdgeInsets.only(top: 10),
-                    child: RefreshIndicator(
-                        child: getArticles(),
-                        onRefresh: _handleRefreshArticles)),
-              ),
-            )
-          ])),
+          body: MultiBlocProvider(
+              providers: [
+                BlocProvider(create: (context) => momentsBloc),
+                BlocProvider(create: (context) => articleBloc),
+              ],
+              child: TabBarView(children: <Widget>[
+                Center(
+                  child: Container(
+                      padding: EdgeInsets.only(top: 30),
+                      margin: EdgeInsets.only(top: 10),
+                      child: RefreshIndicator(
+                          child: getMonmets(),
+                          onRefresh: _handleRefreshMoments)),
+                ),
+                Center(
+                  child: Container(
+                      padding: EdgeInsets.only(top: 30),
+                      margin: EdgeInsets.only(top: 10),
+                      child: RefreshIndicator(
+                          child: getMonmets(),
+                          onRefresh: _handleRefreshMoments)),
+                ),
+                Center(
+                  child: Container(
+                      padding: EdgeInsets.only(top: 30),
+                      margin: EdgeInsets.only(top: 10),
+                      child: RefreshIndicator(
+                          child: getArticles(),
+                          onRefresh: _handleRefreshArticles)),
+                ),
+              ]))),
     );
   }
 
   getMonmets() {
     return BlocBuilder<MomentsBloc, MomentState>(
+      bloc: momentsBloc,
       builder: (context, state) {
         if (state is MomentsInitial) {
           return Center(
@@ -201,6 +198,7 @@ class _HomeState extends State<Home> {
 
   getArticles() {
     return BlocBuilder<ArticleBloc, ArticleState>(
+      bloc: articleBloc,
       builder: (context, state) {
         if (state is ArticleInitial) {
           return Center(
@@ -316,12 +314,14 @@ class ArticleWidget extends StatelessWidget {
                   title: Text(article.title),
                   subtitle: Column(
                     children: <Widget>[
+                      SizedBox(height: 5.0),
                       Row(children: <Widget>[
                         Text(
                           article.nickName,
                           style: TextStyle(fontSize: 14),
                         )
                       ]),
+                      SizedBox(height: 5.0),
                       Text(
                         article.abstracts,
                         style: TextStyle(height: 1.8),
