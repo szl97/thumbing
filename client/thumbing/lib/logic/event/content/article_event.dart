@@ -13,7 +13,7 @@ class ArticleRefresh extends ArticleEvent {}
 
 class ArticleInitialSuccess extends ArticleEvent {
   final List<Article> articles;
-  const ArticleInitialSuccess({this.articles});
+  const ArticleInitialSuccess({this.articles}) : super();
   @override
   List<Object> get props => [articles];
 }

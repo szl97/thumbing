@@ -18,7 +18,7 @@ class Home extends StatefulWidget {
   _HomeState createState() => _HomeState();
 }
 
-var _tabs = ['动态', '诉说', "文章"];
+var _tabs = ['帖子', '诉说', "文章"];
 
 class _HomeState extends State<Home> {
   MomentsBloc momentsBloc;
@@ -176,7 +176,6 @@ class _HomeState extends State<Home> {
           );
         } else if (state is MomentSuccess) {
           return ListView.builder(
-            shrinkWrap: true,
             itemCount: state.hasReachedMax
                 ? state.moments.length
                 : state.moments.length + 1,
@@ -206,7 +205,6 @@ class _HomeState extends State<Home> {
           );
         } else if (state is ArticleSuccess) {
           return ListView.builder(
-            shrinkWrap: true,
             itemCount: state.hasReachedMax
                 ? state.articles.length
                 : state.articles.length + 1,
