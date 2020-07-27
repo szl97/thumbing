@@ -18,7 +18,7 @@ class Home extends StatefulWidget {
   _HomeState createState() => _HomeState();
 }
 
-var _tabs = ['帖子', '诉说', "文章"];
+var _tabs = ['帖子', "文章"];
 
 class _HomeState extends State<Home> {
   MomentsBloc momentsBloc;
@@ -140,23 +140,6 @@ class _HomeState extends State<Home> {
                 ];
               },
               body: TabBarView(children: <Widget>[
-                // CustomScrollView(
-                //   key: PageStorageKey<String>(_tabs[1]),
-                //   slivers: <Widget>[
-                //     SliverOverlapInjector(
-                //         handle: NestedScrollView.sliverOverlapAbsorberHandleFor(
-                //             context)),
-                //     SliverFixedExtentList(delegate: null, itemExtent: null)
-                //   ],
-                // ),
-                Center(
-                  child: Container(
-                      padding: EdgeInsets.only(top: 30),
-                      margin: EdgeInsets.only(top: 10),
-                      child: RefreshIndicator(
-                          child: getMonmets(),
-                          onRefresh: _handleRefreshMoments)),
-                ),
                 Center(
                   child: Container(
                       padding: EdgeInsets.only(top: 30),
