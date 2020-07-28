@@ -6,6 +6,7 @@ import 'package:thumbing/logic/bloc/roast/roast_bolc.dart';
 import 'package:thumbing/logic/event/roast/roast_event.dart';
 import 'package:thumbing/logic/state/roast/roast_state.dart';
 import 'package:thumbing/presentation/widgets/bottom_loader.dart';
+import 'package:thumbing/presentation/util/screen_utils.dart';
 
 class Harbor extends StatefulWidget {
   Harbor({Key key}) : super(key: key);
@@ -70,7 +71,7 @@ class _HarborState extends State<Harbor> {
           child: Column(
             children: <Widget>[
               Container(
-                height: 350.0,
+                height: ScreenUtils.getInstance().getHeight(270),
                 child: BlocBuilder<RoastBloc, RoastState>(
                   bloc: roastBloc,
                   builder: (context, state) {
@@ -99,7 +100,7 @@ class _HarborState extends State<Harbor> {
                 ),
               ),
               Container(
-                height: 30,
+                height: ScreenUtils.getInstance().getHeight(24),
                 margin: EdgeInsets.only(top: 10),
                 child: BlocBuilder<MyRoastBloc, RoastState>(
                     builder: (context, state) {
@@ -123,7 +124,7 @@ class _HarborState extends State<Harbor> {
                 }),
               ),
               Container(
-                height: 230.0,
+                height: ScreenUtils.getInstance().getHeight(224),
                 child: BlocBuilder<MyRoastBloc, RoastState>(
                   bloc: myRoastBloc,
                   builder: (context, state) {
@@ -177,9 +178,10 @@ class RoastWidget extends StatelessWidget {
             child: GestureDetector(
               child: Container(
                 padding: EdgeInsets.all(10),
-                margin: EdgeInsets.only(top: 50),
-                height: 130.0,
-                width: 200.0,
+                margin: EdgeInsets.only(
+                    top: ScreenUtils.getInstance().getHeight(40)),
+                height: ScreenUtils.getInstance().getHeight(120),
+                width: ScreenUtils.getInstance().getWidth(260),
                 child: Text(
                   roast.content,
                   style: TextStyle(height: 1.8),
@@ -187,13 +189,15 @@ class RoastWidget extends StatelessWidget {
                   overflow: TextOverflow.ellipsis,
                 ),
               ),
-              onTap: () => {},
+              onTap: () => {Navigator.pushNamed(context, '/personal/myMoment')},
             ),
           ),
           Container(
-            margin: EdgeInsets.only(top: 20.0, bottom: 20.0),
-            width: 200.0,
-            height: 20.0,
+            margin: EdgeInsets.only(
+              top: ScreenUtils.getInstance().getHeight(16),
+            ),
+            width: ScreenUtils.getInstance().getWidth(200),
+            height: ScreenUtils.getInstance().getHeight(15),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
@@ -206,23 +210,27 @@ class RoastWidget extends StatelessWidget {
             ),
           ),
           Spacer(),
-          GestureDetector(
-            child: Container(
-              margin: EdgeInsets.only(top: 20.0, bottom: 20.0),
-              width: 200.0,
-              height: 20.0,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Spacer(),
-                  Text(
+          Container(
+            margin: EdgeInsets.only(
+              top: ScreenUtils.getInstance().getHeight(16),
+              bottom: ScreenUtils.getInstance().getHeight(15),
+            ),
+            width: ScreenUtils.getInstance().getWidth(260),
+            height: ScreenUtils.getInstance().getHeight(15),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Spacer(),
+                GestureDetector(
+                  child: Text(
                     "抱一抱",
                     style: TextStyle(color: Colors.blueAccent),
                   ),
-                ],
-              ),
+                  onTap: () =>
+                      {Navigator.pushNamed(context, '/personal/myMoment')},
+                ),
+              ],
             ),
-            onTap: () => {},
           )
         ],
       ),
