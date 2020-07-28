@@ -19,5 +19,6 @@ class Moments extends Equatable {
   }
 
   @override
-  List<Object> get props => [id];
+  List<Object> get props =>
+      [id, nickName, abstracts, tags, thumbings, comments];
 }

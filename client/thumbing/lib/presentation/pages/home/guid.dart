@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_icons/flutter_icons.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:thumbing/logic/bloc/content/all_content_bloc.dart';
 import 'package:thumbing/presentation/pages/personal/personal.dart';
 import 'package:thumbing/presentation/pages/home/home.dart';
 import 'package:thumbing/presentation/pages/message/message.dart';
-import 'package:thumbing/presentation/pages/settings/settings.dart';
+import 'package:thumbing/presentation/pages/roast/harbor.dart';
 import 'package:thumbing/logic/event/content/all_content_event.dart';
 
 class Guid extends StatefulWidget {
@@ -26,7 +27,7 @@ class _GuidState extends State<Guid> {
       create: (context) => AllContentBloc()..add(AllContentFetched()),
       child: Home(),
     ),
-    Settings(),
+    Harbor(),
     Message(),
     Personal(name: "Stan Sai"),
   ];
@@ -66,7 +67,7 @@ class _GuidState extends State<Guid> {
           items: [
             BottomNavigationBarItem(icon: Icon(Icons.home), title: Text("首页")),
             BottomNavigationBarItem(
-                icon: Icon(Icons.beach_access), title: Text("港湾")),
+                icon: Icon(MaterialCommunityIcons.sailing), title: Text("港湾")),
             BottomNavigationBarItem(
                 icon: Icon(Icons.message), title: Text("消息")),
             BottomNavigationBarItem(

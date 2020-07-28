@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:thumbing/presentation/widgets/bottom_loader.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:thumbing/logic/bloc/content/all_content_bloc.dart';
 import 'package:thumbing/logic/bloc/content/moments_bloc.dart';
@@ -94,7 +95,9 @@ class _HomeState extends State<Home> {
                     handle: NestedScrollView.sliverOverlapAbsorberHandleFor(
                         context),
                     sliver: home_bar.SliverAppBar(
+                      floating: true,
                       pinned: true,
+                      snap: true,
                       expandedHeight: 120.0,
                       primary: true,
                       titleSpacing: 0.0,
@@ -142,16 +145,14 @@ class _HomeState extends State<Home> {
               body: TabBarView(children: <Widget>[
                 Center(
                   child: Container(
-                      padding: EdgeInsets.only(top: 30),
-                      margin: EdgeInsets.only(top: 10),
+                      margin: EdgeInsets.only(top: 100),
                       child: RefreshIndicator(
                           child: getMonmets(),
                           onRefresh: _handleRefreshMoments)),
                 ),
                 Center(
                   child: Container(
-                      padding: EdgeInsets.only(top: 30),
-                      margin: EdgeInsets.only(top: 10),
+                      margin: EdgeInsets.only(top: 100),
                       child: RefreshIndicator(
                           child: getArticles(),
                           onRefresh: _handleRefreshArticles)),
@@ -179,10 +180,11 @@ class _HomeState extends State<Home> {
                   : MomentsWidget(moments: state.moments[index]);
             },
             controller: _mScrollController,
+            shrinkWrap: true,
           );
         } else {
           return Center(
-            child: Text('failed to fetch moments'),
+            child: Text('加载失败'),
           );
         }
       },
@@ -208,31 +210,14 @@ class _HomeState extends State<Home> {
                   : ArticleWidget(article: state.articles[index]);
             },
             controller: _aScrollController,
+            shrinkWrap: true,
           );
         } else {
           return Center(
-            child: Text('failed to fetch moments'),
+            child: Text('加载失败'),
           );
         }
       },
-    );
-  }
-}
-
-class BottomLoader extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      alignment: Alignment.center,
-      child: Center(
-        child: SizedBox(
-          width: 33,
-          height: 33,
-          child: CircularProgressIndicator(
-            strokeWidth: 1.5,
-          ),
-        ),
-      ),
     );
   }
 }
