@@ -9,6 +9,7 @@ import javax.persistence.Entity;
 import java.util.List;
 
 /**
+ * 用于显示用户的评论记录
  * @Author: Stan Sai
  * @Date: 2020/7/18 12:51
  */

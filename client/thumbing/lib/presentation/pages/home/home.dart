@@ -177,7 +177,9 @@ class _HomeState extends State<Home> {
             itemBuilder: (BuildContext context, int index) {
               return index >= state.moments.length
                   ? BottomLoader()
-                  : MomentsWidget(moments: state.moments[index]);
+                  : MomentsWidget(
+                      moments: state.moments[index],
+                    );
             },
             controller: _mScrollController,
             shrinkWrap: true,
@@ -229,7 +231,7 @@ class MomentsWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      elevation: 1,
+      elevation: 3,
       child: Container(
           padding: EdgeInsets.all(10),
           margin: EdgeInsets.only(bottom: 10),
@@ -267,7 +269,13 @@ class MomentsWidget extends StatelessWidget {
                 )
               ],
             ),
-            onTap: () => Navigator.pushNamed(context, '/personal/myMoment'),
+            onTap: () {
+              Navigator.pushNamed(
+                context,
+                '/content/momentsDetail',
+                arguments: {"id": moments.id},
+              );
+            },
           )),
     );
   }
@@ -275,12 +283,12 @@ class MomentsWidget extends StatelessWidget {
 
 class ArticleWidget extends StatelessWidget {
   final Article article;
-  const ArticleWidget({this.article, Key key}) : super(key: key);
+  const ArticleWidget({@required this.article, Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Card(
-      elevation: 1,
+      elevation: 3,
       child: Container(
           padding: EdgeInsets.all(10),
           margin: EdgeInsets.only(bottom: 10),
@@ -323,7 +331,15 @@ class ArticleWidget extends StatelessWidget {
                 )
               ],
             ),
-            onTap: () => Navigator.pushNamed(context, '/personal/myMoment'),
+            onTap: () {
+              Navigator.pushNamed(
+                context,
+                '/content/momentsDetail',
+                arguments: {
+                  "id": article.id,
+                },
+              );
+            },
           )),
     );
   }

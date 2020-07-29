@@ -9,14 +9,14 @@ import java.util.Set;
 
 /**
  * 文章或动态下的评论
- * 树结构
+ * 树结构，只有一层子树，评论下的评论全部打平显示
  * @Author: Stan Sai
  * @Date: 2020/7/18 12:24
  */
 @Data
 public class InnerComment implements Serializable {
     /**
-     * 同级中的位置
+     * 位置(是否需要显示在同级中的位置？)
      */
     private int id;
     /**
@@ -51,4 +51,8 @@ public class InnerComment implements Serializable {
      * 时间
      */
     private LocalDateTime dateTime;
+    /**
+     * 是否是第一层
+     */
+    private boolean isParent;
 }

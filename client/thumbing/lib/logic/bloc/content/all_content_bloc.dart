@@ -18,10 +18,6 @@ class AllContentBloc extends Bloc<AllContentEvent, AllContentState> {
         if (currentState is AllContentInitial) {
           final allContent = await allContentRepository.getAllContent();
           yield AllContentSuccess(allContent: allContent);
-          return;
-        }
-        if (currentState is AllContentSuccess) {
-          yield state;
         }
       } catch (_) {
         yield AllContentFailure();

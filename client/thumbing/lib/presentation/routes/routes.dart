@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:thumbing/presentation/pages/content/moments_detail.dart';
 import 'package:thumbing/presentation/pages/content/push_content.dart';
 import 'package:thumbing/presentation/pages/initial/initial.dart';
 import 'package:thumbing/presentation/pages/login/login.dart';
@@ -15,7 +16,9 @@ final routes = {
   '/personal/myArticle': (context) => MyArticle(),
   '/personal/myMoment': (context) => MyMoment(),
   '/personal/myRoast': (context) => MyRoast(),
-  '/content/pushContent': (context) => PushContent()
+  '/content/pushContent': (context) => PushContent(),
+  '/content/momentsDetail': (context, {arguments}) =>
+      MomentsDetailPage(id: arguments["id"]),
 };
 
 var onGenerateRoute = (RouteSettings settings) {
