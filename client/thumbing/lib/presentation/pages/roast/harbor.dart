@@ -8,55 +8,36 @@ import 'package:thumbing/logic/state/roast/roast_state.dart';
 import 'package:thumbing/presentation/widgets/bottom_loader.dart';
 import 'package:thumbing/presentation/util/screen_utils.dart';
 
-class Harbor extends StatefulWidget {
-  Harbor({Key key}) : super(key: key);
+class Harbor extends StatelessWidget {
+  const Harbor({Key key}) : super(key: key);
 
   @override
-  _HarborState createState() => _HarborState();
-}
+  Widget build(BuildContext context) {
+    final RoastBloc roastBloc = RoastBloc();
 
-class _HarborState extends State<Harbor> {
-  RoastBloc roastBloc;
-  MyRoastBloc myRoastBloc;
-  PageController pageController;
-  ScrollController scrollController;
+    final MyRoastBloc myRoastBloc = MyRoastBloc();
 
-  @override
-  void initState() {
-    super.initState();
-    roastBloc = RoastBloc();
-    myRoastBloc = MyRoastBloc();
     roastBloc.add(RoastFetched());
     myRoastBloc.add(RoastFetched());
-    pageController = PageController();
+
+    final PageController pageController = PageController();
     pageController.addListener(() {
-      nextPage();
+      if (roastBloc.state is RoastSuccess) {
+        roastBloc.add(NextRoast(position: pageController.page.floor()));
+      }
     });
-    scrollController = ScrollController();
+
+    final ScrollController scrollController = ScrollController();
     scrollController.addListener(() {
       if (scrollController.position.pixels >=
           scrollController.position.maxScrollExtent) {
         // 滑动到了底部
         // 这里可以执行上拉加载逻辑
-        loadMoreMyRoast();
+        if (myRoastBloc.state is RoastSuccess) {
+          myRoastBloc.add(RoastFetched());
+        }
       }
     });
-  }
-
-  Future<Null> nextPage() async {
-    if (roastBloc.state is RoastSuccess) {
-      roastBloc.add(NextRoast(position: pageController.page.floor()));
-    }
-  }
-
-  Future<Null> loadMoreMyRoast() async {
-    if (myRoastBloc.state is RoastSuccess) {
-      myRoastBloc.add(RoastFetched());
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
     return Container(
         child: Scaffold(
       appBar: AppBar(
