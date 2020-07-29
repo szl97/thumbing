@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:thumbing/data/model/content/comment.dart';
 import 'package:thumbing/data/model/content/moments_detail.dart';
 import 'package:thumbing/logic/bloc/content/detail/d_moments_bloc.dart';
 import 'package:thumbing/logic/event/content/detail/d_moments_event.dart';
 import 'package:thumbing/logic/state/content/detail/d_moments_state.dart';
-import 'package:thumbing/presentation/util/screen_utils.dart';
-import 'package:thumbing/presentation/widgets/send_big_widget.dart';
+import 'package:thumbing/presentation/pages/content/comment.dart';
 import 'package:thumbing/presentation/widgets/send_text_widget.dart';
 
 class MomentsDetailPage extends StatelessWidget {
@@ -60,10 +58,14 @@ class MomentsDetailPage extends StatelessWidget {
                                         margin: EdgeInsets.all(20),
                                         child: Text("暂无评论"),
                                       )
-                                    : MomentsCommentsWidget(
+                                    : CommentsWidget(
                                         comment: state.momentsDetail
                                             .innerComments[index - 2],
                                         index: index - 1,
+                                        onSubmit: (value) {
+                                          Navigator.pushNamed(
+                                              context, '/personal/myMoment');
+                                        },
                                       );
                       },
                     ),
@@ -131,136 +133,23 @@ class MomentsContentWidget extends StatelessWidget {
             child:
                 Text(momentsDetail.content, style: TextStyle(fontSize: 16.0)),
           ),
+          Container(
+            margin: EdgeInsets.only(right: 20),
+            child: Row(
+              children: <Widget>[
+                Spacer(),
+                IconButton(
+                    icon: Icon(
+                      Icons.thumb_up,
+                      color: Colors.grey,
+                    ),
+                    onPressed: () => {}),
+                Text(momentsDetail.thumbings.toString()),
+              ],
+            ),
+          ),
         ],
       ),
     ));
-  }
-}
-
-class CommentsTitleWidget extends StatelessWidget {
-  const CommentsTitleWidget({Key key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.only(left: 20.0),
-      padding: EdgeInsets.all(10),
-      child: Text(
-        "评论",
-        style: TextStyle(fontWeight: FontWeight.w500),
-      ),
-    );
-  }
-}
-
-class MomentsCommentsWidget extends StatelessWidget {
-  final InnerComment comment;
-  final int index;
-
-  const MomentsCommentsWidget(
-      {@required this.comment, @required this.index, Key key})
-      : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      child: Card(
-        elevation: 10,
-        child: Column(
-          children: <Widget>[
-            Row(
-              children: <Widget>[
-                Container(
-                  padding: EdgeInsets.only(top: 10),
-                  margin: EdgeInsets.only(left: 20.0),
-                  child: Text(
-                    comment.fromName,
-                    style: TextStyle(fontSize: 14.0),
-                  ),
-                ),
-                Spacer(),
-                Container(
-                  margin: EdgeInsets.only(right: 20.0),
-                  child: Text(
-                    index.toString() + "楼",
-                    style: TextStyle(fontSize: 14.0, color: Colors.grey),
-                  ),
-                ),
-              ],
-            ),
-            Row(
-              children: <Widget>[
-                Container(
-                  margin: EdgeInsets.only(left: 20.0, right: 20.0),
-                  child: Text(comment.howLongBefore,
-                      style: TextStyle(fontSize: 12.0, color: Colors.grey)),
-                ),
-              ],
-            ),
-            GestureDetector(
-              child: Container(
-                margin: EdgeInsets.only(left: 20.0, right: 20.0),
-                padding: EdgeInsets.only(bottom: 20),
-                child: Builder(builder: (context) {
-                  if (comment.innerComments == null ||
-                      comment.innerComments.length == 0) {
-                    return Text(
-                      comment.content,
-                      style: TextStyle(fontSize: 16.0),
-                    );
-                  } else {
-                    return Column(
-                      children: <Widget>[
-                        Container(
-                          child: Text(
-                            comment.content,
-                            style: TextStyle(fontSize: 16.0),
-                          ),
-                        ),
-                        Container(
-                          margin: EdgeInsets.only(left: 30.0, right: 30.0),
-                          child: GestureDetector(
-                            child: Row(children: <Widget>[
-                              Icon(
-                                Icons.keyboard_arrow_down,
-                                color: Colors.grey,
-                              ),
-                              Text(
-                                "查看其他回复",
-                                style: TextStyle(
-                                    fontSize: 12.0, color: Colors.grey),
-                              ),
-                            ]),
-                            onTap: () => {},
-                          ),
-                        ),
-                      ],
-                    );
-                  }
-                }),
-              ),
-              onTap: () {
-                showModalBottomSheet(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return SendTextBigFieldWidget(
-                      height: ScreenUtils.getInstance().getHeight(300),
-                      autoFocus: false,
-                      margin: const EdgeInsets.only(
-                          left: 15.0, right: 15.0, bottom: 5),
-                      hintText: "请输入评论内容",
-                      onSubmitted: (value) {
-                        Navigator.pushNamed(context, '/personal/myMoment');
-                      },
-                      onTab: () {},
-                    );
-                  },
-                );
-              },
-            ),
-          ],
-        ),
-      ),
-    );
   }
 }

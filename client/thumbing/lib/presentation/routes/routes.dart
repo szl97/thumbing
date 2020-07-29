@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:thumbing/presentation/pages/content/comment.dart';
 import 'package:thumbing/presentation/pages/content/moments_detail.dart';
 import 'package:thumbing/presentation/pages/content/push_content.dart';
 import 'package:thumbing/presentation/pages/initial/initial.dart';
@@ -19,6 +20,12 @@ final routes = {
   '/content/pushContent': (context) => PushContent(),
   '/content/momentsDetail': (context, {arguments}) =>
       MomentsDetailPage(id: arguments["id"]),
+  '/content/childComment': (context, {arguments}) => ChildCommentListWidget(
+        index: arguments["index"],
+        comment: arguments["comment"],
+        comments: arguments["comments"],
+        onSubmit: arguments["onSubmit"],
+      )
 };
 
 var onGenerateRoute = (RouteSettings settings) {
