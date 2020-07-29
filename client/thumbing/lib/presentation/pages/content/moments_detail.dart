@@ -218,16 +218,18 @@ class MomentsCommentsWidget extends StatelessWidget {
                           ),
                         ),
                         Container(
-                          margin: EdgeInsets.only(top: 10),
+                          margin: EdgeInsets.only(left: 30.0, right: 30.0),
                           child: GestureDetector(
                             child: Row(children: <Widget>[
-                              Spacer(),
-                              Text(
-                                "展开其他回复",
-                                style: TextStyle(
-                                    fontSize: 12.0, color: Colors.blue),
+                              Icon(
+                                Icons.keyboard_arrow_down,
+                                color: Colors.grey,
                               ),
-                              Spacer(),
+                              Text(
+                                "查看其他回复",
+                                style: TextStyle(
+                                    fontSize: 12.0, color: Colors.grey),
+                              ),
                             ]),
                             onTap: () => {},
                           ),
