@@ -61,7 +61,6 @@ class Personal extends StatelessWidget {
                         Navigator.pushNamed(context, '/personal/myMoment'),
                   ),
                 ),
-                Divider(height: 1),
                 SliverToBoxAdapter(
                   child: GestureDetector(
                     behavior: HitTestBehavior.opaque,
@@ -78,7 +77,6 @@ class Personal extends StatelessWidget {
                         Navigator.pushNamed(context, '/personal/myRoast'),
                   ),
                 ),
-                Divider(height: 1),
                 SliverToBoxAdapter(
                   child: GestureDetector(
                     behavior: HitTestBehavior.opaque,
@@ -95,7 +93,6 @@ class Personal extends StatelessWidget {
                         Navigator.pushNamed(context, '/personal/myArticle'),
                   ),
                 ),
-                Divider(height: 1),
                 SliverToBoxAdapter(
                   child: GestureDetector(
                     behavior: HitTestBehavior.opaque,
