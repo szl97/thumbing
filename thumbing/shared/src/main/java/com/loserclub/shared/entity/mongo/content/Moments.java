@@ -2,11 +2,10 @@ package com.loserclub.shared.entity.mongo.content;
 
 import com.loserclub.shared.entity.mongo.MongoFullAuditedEntity;
 import com.loserclub.shared.entity.mongo.content.inner.InnerComment;
-import com.loserclub.shared.entity.mongo.content.inner.NickUser;
+import com.loserclub.shared.entity.mongo.common.NickUser;
 import lombok.Data;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import javax.persistence.Entity;
 import java.util.List;
 import java.util.Set;
 

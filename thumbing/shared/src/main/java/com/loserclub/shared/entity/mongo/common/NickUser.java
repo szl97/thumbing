@@ -1,4 +1,4 @@
-package com.loserclub.shared.entity.mongo.content.inner;
+package com.loserclub.shared.entity.mongo.common;
 
 import lombok.Getter;
 import lombok.Setter;
