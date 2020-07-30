@@ -9,11 +9,10 @@ import 'package:thumbing/logic/state/content/moments_state.dart';
 
 class MomentsBloc extends Bloc<MomentsEvent, MomentState> {
   MomentsRepository momentsRepository;
-  @required
   AllContentBloc allContentBloc;
   StreamSubscription allContentSubscription;
 
-  MomentsBloc(this.allContentBloc) : super(MomentsInitial()) {
+  MomentsBloc({@required this.allContentBloc}) : super(MomentsInitial()) {
     momentsRepository = MomentsRepository();
     allContentSubscription = allContentBloc.listen((state) {
       if (state is AllContentFailure) {

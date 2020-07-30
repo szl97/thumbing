@@ -71,15 +71,18 @@ class MomentsDetailPage extends StatelessWidget {
                     ),
                   ),
                   Divider(height: 1.0),
-                  SendTextFieldWidget(
-                    autoFocus: false,
-                    margin: const EdgeInsets.only(
-                        left: 15.0, right: 15.0, bottom: 5),
-                    hintText: "请输入评论内容",
-                    onSubmitted: (value) {
-                      Navigator.pushNamed(context, '/personal/myMoment');
-                    },
-                    onTab: () {},
+                  Container(
+                    padding: EdgeInsets.only(top: 5, bottom: 5),
+                    child: SendTextFieldWidget(
+                      autoFocus: false,
+                      margin: const EdgeInsets.only(
+                          left: 15.0, right: 15.0, bottom: 5),
+                      hintText: "请输入评论内容",
+                      onSubmitted: (value) {
+                        Navigator.pushNamed(context, '/personal/myMoment');
+                      },
+                      onTab: () {},
+                    ),
                   ),
                 ],
               );

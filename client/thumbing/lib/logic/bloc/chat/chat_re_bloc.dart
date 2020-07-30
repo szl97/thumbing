@@ -1,11 +1,15 @@
 import 'package:bloc/bloc.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:thumbing/data/repository/chat/chat_re_rep.dart';
+import 'package:thumbing/logic/bloc/chat/chat_se_bloc.dart';
 import 'package:thumbing/logic/event/chat/chat_re_event.dart';
 import 'package:thumbing/logic/state/chat/chat_re_state.dart';
 
 class ChatRecordBloc extends Bloc<ChatRecordEvent, ChatRecordState> {
   ChatRecordRepository chatRecordRepository;
-  ChatRecordBloc() : super(ChatRecordInitial()) {
+  ChatSessionBloc chatSessionBloc;
+  ChatRecordBloc({@required this.chatSessionBloc})
+      : super(ChatRecordInitial()) {
     chatRecordRepository = ChatRecordRepository();
   }
   @override

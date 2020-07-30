@@ -29,8 +29,8 @@ class _HomeState extends State<Home> {
   @override
   void initState() {
     super.initState();
-    AllContentBloc allContentBloc = BlocProvider.of<AllContentBloc>(context);
-    momentsBloc = MomentsBloc(allContentBloc);
+    momentsBloc =
+        MomentsBloc(allContentBloc: BlocProvider.of<AllContentBloc>(context));
     _mScrollController = ScrollController();
     // 监听ListView是否滚动到底部
     _mScrollController.addListener(() {
@@ -41,7 +41,8 @@ class _HomeState extends State<Home> {
         _loadMoreMoments();
       }
     });
-    articleBloc = ArticleBloc(allContentBloc);
+    articleBloc =
+        ArticleBloc(allContentBloc: BlocProvider.of<AllContentBloc>(context));
     _aScrollController = ScrollController();
     // 监听ListView是否滚动到底部
     _aScrollController.addListener(() {

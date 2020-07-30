@@ -9,11 +9,11 @@ import 'package:thumbing/logic/state/content/article_state.dart';
 
 class ArticleBloc extends Bloc<ArticleEvent, ArticleState> {
   ArticleRepository articleRepository;
-  @required
+
   AllContentBloc allContentBloc;
   StreamSubscription allContentSubscription;
 
-  ArticleBloc(this.allContentBloc) : super(ArticleInitial()) {
+  ArticleBloc({@required this.allContentBloc}) : super(ArticleInitial()) {
     articleRepository = ArticleRepository();
     allContentSubscription = allContentBloc.listen((state) {
       if (state is AllContentFailure) {
