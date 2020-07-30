@@ -46,71 +46,76 @@ class Personal extends StatelessWidget {
                   expandedHeight: 200.0,
                 ),
                 SliverToBoxAdapter(
-                    child: GestureDetector(
-                  behavior: HitTestBehavior.opaque,
-                  child: Row(
-                    children: <Widget>[
-                      Padding(
-                        padding: EdgeInsets.only(
-                            left: 25.0, top: 15.0, bottom: 20.0, right: 10.0),
-                        child: Text("我的动态"),
-                      )
-                    ],
+                  child: GestureDetector(
+                    behavior: HitTestBehavior.opaque,
+                    child: Row(
+                      children: <Widget>[
+                        Padding(
+                          padding: EdgeInsets.only(
+                              left: 25.0, top: 15.0, bottom: 20.0, right: 10.0),
+                          child: Text("我的帖子"),
+                        )
+                      ],
+                    ),
+                    onTap: () =>
+                        Navigator.pushNamed(context, '/personal/myMoment'),
                   ),
-                  onTap: () =>
-                      Navigator.pushNamed(context, '/personal/myMoment'),
-                )),
+                ),
+                Divider(height: 1),
                 SliverToBoxAdapter(
-                    child: GestureDetector(
-                  behavior: HitTestBehavior.opaque,
-                  child: Row(
-                    children: <Widget>[
-                      Padding(
-                        padding: EdgeInsets.only(
-                            left: 25.0, top: 15.0, bottom: 20.0, right: 10.0),
-                        child: Text("我的诉说"),
-                      )
-                    ],
+                  child: GestureDetector(
+                    behavior: HitTestBehavior.opaque,
+                    child: Row(
+                      children: <Widget>[
+                        Padding(
+                          padding: EdgeInsets.only(
+                              left: 25.0, top: 15.0, bottom: 20.0, right: 10.0),
+                          child: Text("我的诉说"),
+                        )
+                      ],
+                    ),
+                    onTap: () =>
+                        Navigator.pushNamed(context, '/personal/myRoast'),
                   ),
-                  onTap: () =>
-                      Navigator.pushNamed(context, '/personal/myRoast'),
-                )),
+                ),
+                Divider(height: 1),
                 SliverToBoxAdapter(
-                    child: GestureDetector(
-                  behavior: HitTestBehavior.opaque,
-                  child: Row(
-                    children: <Widget>[
-                      Padding(
-                        padding: EdgeInsets.only(
-                            left: 25.0, top: 15.0, bottom: 20.0, right: 10.0),
-                        child: Text("我的文章"),
-                      )
-                    ],
+                  child: GestureDetector(
+                    behavior: HitTestBehavior.opaque,
+                    child: Row(
+                      children: <Widget>[
+                        Padding(
+                          padding: EdgeInsets.only(
+                              left: 25.0, top: 15.0, bottom: 20.0, right: 10.0),
+                          child: Text("我的文章"),
+                        )
+                      ],
+                    ),
+                    onTap: () =>
+                        Navigator.pushNamed(context, '/personal/myArticle'),
                   ),
-                  onTap: () =>
-                      Navigator.pushNamed(context, '/personal/myArticle'),
-                )),
+                ),
+                Divider(height: 1),
                 SliverToBoxAdapter(
-                    child: GestureDetector(
-                        behavior: HitTestBehavior.opaque,
-                        child: Row(
-                          children: <Widget>[
-                            Padding(
-                              padding: EdgeInsets.only(
-                                  left: 25.0,
-                                  top: 15.0,
-                                  bottom: 20.0,
-                                  right: 10.0),
-                              child: Text("退出登录"),
-                            )
-                          ],
-                        ),
-                        onTap: () {
-                          BlocProvider.of<AuthBloc>(context)
-                              .add(CancelAuthentication());
-                          Navigator.pushNamedAndRemoveUntil(
-                              context, '/', (route) => false);
-                        }))
+                  child: GestureDetector(
+                    behavior: HitTestBehavior.opaque,
+                    child: Row(
+                      children: <Widget>[
+                        Padding(
+                          padding: EdgeInsets.only(
+                              left: 25.0, top: 15.0, bottom: 20.0, right: 10.0),
+                          child: Text("退出登录"),
+                        )
+                      ],
+                    ),
+                    onTap: () {
+                      BlocProvider.of<AuthBloc>(context)
+                          .add(CancelAuthentication());
+                      Navigator.pushNamedAndRemoveUntil(
+                          context, '/', (route) => false);
+                    },
+                  ),
+                )
               ],
             ),
           )),
