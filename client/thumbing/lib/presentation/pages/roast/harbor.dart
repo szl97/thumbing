@@ -9,18 +9,15 @@ import 'package:thumbing/presentation/widgets/bottom_loader.dart';
 import 'package:thumbing/presentation/util/screen_utils.dart';
 
 class Harbor extends StatelessWidget {
-  const Harbor({Key key}) : super(key: key);
+  final RoastBloc roastBloc = RoastBloc();
+  final MyRoastBloc myRoastBloc = MyRoastBloc();
+  final PageController pageController = PageController();
 
   @override
   Widget build(BuildContext context) {
-    final RoastBloc roastBloc = RoastBloc();
-
-    final MyRoastBloc myRoastBloc = MyRoastBloc();
-
     roastBloc.add(RoastFetched());
     myRoastBloc.add(RoastFetched());
 
-    final PageController pageController = PageController();
     pageController.addListener(() {
       if (roastBloc.state is RoastSuccess) {
         roastBloc.add(NextRoast(position: pageController.page.floor()));
