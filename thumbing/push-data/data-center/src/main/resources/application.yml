@@ -15,7 +15,7 @@ spring:
     properties:
       hibernate:
         session_factory:
-          statement_inspector: com.loserclub.shared.jpa.GlobalStatementInspector
+          statement_inspector: com.thumbing.shared.jpa.GlobalStatementInspector
   redis:
     host: localhost
     port: 6379

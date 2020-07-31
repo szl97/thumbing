@@ -3,11 +3,11 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <artifactId>loserclub</artifactId>
+        <artifactId>thumbing</artifactId>
         <groupId>com</groupId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
-    <groupId>com.loserclub</groupId>
+    <groupId>com.thumbing</groupId>
     <artifactId>gateway</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>gateway</name>
@@ -15,8 +15,8 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.loserclub.pushdata</groupId>
-            <artifactId>common</artifactId>
+            <groupId>com.thumbing</groupId>
+            <artifactId>shared</artifactId>
             <version>0.0.1-SNAPSHOT</version>
             <exclusions>
                 <exclusion>

@@ -9,7 +9,7 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com</groupId>
-    <artifactId>loserclub</artifactId>
+    <artifactId>thumbing</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>loser-club</name>
     <packaging>pom</packaging>

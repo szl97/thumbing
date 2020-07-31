@@ -4,17 +4,17 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <artifactId>pushdata</artifactId>
-        <groupId>com.loserclub</groupId>
+        <groupId>com.thumbing</groupId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
-    <groupId>com.loserclub.pushdata</groupId>
+    <groupId>com.thumbing.pushdata</groupId>
     <artifactId>nodeserver</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>node-server</name>
 
     <dependencies>
         <dependency>
-            <groupId>com.loserclub.pushdata</groupId>
+            <groupId>com.thumbing.pushdata</groupId>
             <artifactId>common</artifactId>
             <version>0.0.1-SNAPSHOT</version>
             <exclusions>
@@ -29,10 +29,6 @@
                 <exclusion>
                     <groupId>org.springframework.boot</groupId>
                     <artifactId>spring-boot-starter-data-redis</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.apache.tomcat.embed</groupId>
-                    <artifactId>tomcat-embed-core</artifactId>
                 </exclusion>
                 <exclusion>
                     <groupId>com.github.jsqlparser</groupId>
@@ -73,10 +69,6 @@
                 <exclusion>
                     <groupId>org.springframework.cloud</groupId>
                     <artifactId>spring-cloud-starter-openfeign</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.apache.httpcomponents</groupId>
-                    <artifactId>httpclient</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>
