@@ -37,7 +37,7 @@
 ###开发环境配置：
 docker: mysql:5.7, mongo:latest(4.2), redis:6.0.5 ,rabbitmq:management
 zookeepr 1~3
-elasticserach + elasticserach head + ik分词器插件
+elasticserach 7 + elasticserach head + ik分词器插件
 
 需要启动的项目:eureka server， xxl-job-admin
 
