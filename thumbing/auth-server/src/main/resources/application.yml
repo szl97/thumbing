@@ -84,5 +84,5 @@ hystrix:
 
 authentication:
   expirationTime: 3600 # Number of minutes
-  issuer: loserclub
+  issuer: thumbing
   signingKey: xm8EV6Hy5RMFK4EEACIDAwQus48djvcnjsdksfksjdfwiuersdkjhfskjdhfskjdf

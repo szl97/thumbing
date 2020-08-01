@@ -23,7 +23,7 @@ push-data:
     initializedConnect: 16384
   zookeeper:
     servers: localhost:2181,localhost:2182,localhost:2183
-    namespace: loser-club
+    namespace: thumbing
     session-timeout: 6000
     connection-timeout: 6000
     max-retries: 1000
@@ -31,3 +31,4 @@ push-data:
 use:
   redis: false
   security: false
+  feign: false

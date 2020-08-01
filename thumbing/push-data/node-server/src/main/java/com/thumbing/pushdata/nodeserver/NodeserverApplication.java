@@ -13,7 +13,6 @@ import org.springframework.context.annotation.FilterType;
         "com.thumbing.shared",
         "com.thumbing.pushdata.common",
         "com.thumbing.pushdata.nodeserver"
-
 }
 )
 @SpringBootApplication(scanBasePackages = {
