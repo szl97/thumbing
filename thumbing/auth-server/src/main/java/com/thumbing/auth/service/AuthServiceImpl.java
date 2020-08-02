@@ -3,22 +3,25 @@ package com.thumbing.auth.service;
 import com.thumbing.shared.auth.model.UserContext;
 import com.thumbing.shared.cache.PermissionCache;
 import com.thumbing.shared.auth.permission.SkipPathRequestMatcher;
+import com.thumbing.shared.dto.PagedAndSortedInput;
 import com.thumbing.shared.entity.sql.system.User;
 import com.thumbing.shared.exception.BusinessException;
 import com.thumbing.shared.exception.UserContextException;
+import com.thumbing.shared.jpa.Specifications;
 import com.thumbing.shared.jwt.JwtTokenFactory;
 import com.thumbing.shared.jwt.extractor.JwtHeaderTokenExtractor;
 import com.thumbing.shared.repository.sql.system.IUserRepository;
 import com.thumbing.shared.utils.user.UserContextUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 
 /**

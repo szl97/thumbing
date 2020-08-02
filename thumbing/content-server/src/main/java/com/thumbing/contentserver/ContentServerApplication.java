@@ -1,4 +1,4 @@
-package com.thumbing.dataaccess;
+package com.thumbing.contentserver;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -12,11 +12,11 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 @ComponentScan({
         "com.thumbing.shared",
-        "com.thumbing.dataaccess",
+        "com.thumbing.contentserver",
 })
 @SpringBootApplication(scanBasePackages = {
         "com.thumbing.shared",
-        "com.thumbing.dataaccess",
+        "com.thumbing.contentserver",
 }
 )
 @EntityScan(basePackages = "com.thumbing.shared")
@@ -24,10 +24,10 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @EnableFeignClients
 @EnableDiscoveryClient
 @EnableSwagger2
-public class DataAccessApplication {
+public class ContentServerApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(DataAccessApplication.class, args);
+        SpringApplication.run(ContentServerApplication.class, args);
     }
 
 }

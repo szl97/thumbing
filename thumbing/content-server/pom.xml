@@ -8,9 +8,9 @@
         <version>0.0.1-SNAPSHOT</version>
     </parent>
     <groupId>com.thumbing</groupId>
-    <artifactId>dataaccess</artifactId>
+    <artifactId>contentserver</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>data-access</name>
+    <name>content-server</name>
 
     <properties>
         <java.version>14</java.version>

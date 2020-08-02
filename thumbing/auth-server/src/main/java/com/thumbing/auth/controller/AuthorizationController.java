@@ -47,7 +47,7 @@ public class AuthorizationController extends LoserClubBaseController{
 
     @ApiOperation("认证")
     @AllowAnonymous
-    @RequestMapping(value = "checkAuthorization", method = RequestMethod.GET)
+    @RequestMapping(value = "/checkAuthorization", method = RequestMethod.GET)
     public Boolean checkAuthorization(@RequestParam(name = "authorization", required = false) String authorization,
                              @RequestParam("applicationName") String applicationName,
                              @RequestParam("url") String url){

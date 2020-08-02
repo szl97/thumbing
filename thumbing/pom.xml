@@ -11,7 +11,7 @@
     <groupId>com</groupId>
     <artifactId>thumbing</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>loser-club</name>
+    <name>thumbing</name>
     <packaging>pom</packaging>
 
     <properties>
@@ -42,7 +42,7 @@
         <module>gateway</module>
         <module>upload-file</module>
         <module>auth-server</module>
-        <module>data-access</module>
+        <module>content-server</module>
     </modules>
     <dependencyManagement>
         <dependencies>
