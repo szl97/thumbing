@@ -28,7 +28,7 @@ spring:
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource
     driver-class-name: com.mysql.jdbc.Driver
-    url: ${SPRING_DATASOURCE_URL:jdbc:mysql://192.168.89.1:3306/mysql_loserclub}
+    url: ${SPRING_DATASOURCE_URL:jdbc:mysql://192.168.89.1:3306/thumbing?serverTimezone=Asia/Shanghai}
     username: ${SPRING_DATASOURCE_USERNAME:root}
     password: ${SPRING_DATASOURCE_PASSWORD:123456}
     druid:
