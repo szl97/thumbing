@@ -2,6 +2,7 @@ package com.thumbing.shared.swagger;
 
 import com.thumbing.shared.condition.RedisCondition;
 import com.thumbing.shared.condition.SecurityCondition;
+import com.thumbing.shared.condition.SwaggerCondition;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Conditional;
@@ -29,12 +30,8 @@ import java.util.List;
 )
 @Configuration
 @EnableSwagger2
-@Conditional({
-        RedisCondition.class,
-        SecurityCondition.class
-})
+@Conditional(SwaggerCondition.class)
 public class SwaggerConfig {
-
     @Bean
     public Docket api() {
         //移除掉默认的OperationNameGenerator实现

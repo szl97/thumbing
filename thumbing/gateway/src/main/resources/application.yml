@@ -45,6 +45,12 @@ spring:
             - Path=/api/auth/**
           filters:
             - StripPrefix=2
+        - id: content
+          uri: lb://content-server
+          predicates:
+            - Path=/api/content/**
+          filters:
+            - StripPrefix=2
 eureka:
   client:
     service-url:
@@ -53,6 +59,7 @@ use:
   redis: false
   security: false
   feign: true
+  swagger: false
 
 security:
   ignores: /error/**;/swagger-resources/**;/swagger-ui.html;/v2/api-docs;/webjars/**

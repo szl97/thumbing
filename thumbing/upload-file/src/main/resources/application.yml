@@ -30,6 +30,7 @@ use:
   redis: true
   security: true
   feign: true
+  swagger: true
 
 security:
   ignores: /error/**;/swagger-resources/**;/swagger-ui.html;/v2/api-docs;/webjars/**

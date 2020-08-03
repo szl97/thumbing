@@ -1,5 +1,7 @@
 package com.thumbing.shared.swagger;
 
+import com.thumbing.shared.condition.SwaggerCondition;
+import org.springframework.context.annotation.Conditional;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
 import springfox.documentation.OperationNameGenerator;
@@ -11,6 +13,7 @@ import springfox.documentation.OperationNameGenerator;
  */
 @Component
 @Primary
+@Conditional(SwaggerCondition.class)
 public class DefaultOperationNameGenerator implements OperationNameGenerator {
     @Override
     public String startingWith(String s) {

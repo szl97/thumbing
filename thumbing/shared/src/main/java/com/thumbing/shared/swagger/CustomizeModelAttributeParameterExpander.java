@@ -11,9 +11,13 @@ import com.google.common.base.Predicate;
 import com.google.common.collect.FluentIterable;
 import com.google.common.collect.Sets;
 import com.thumbing.shared.annotation.IgnoreSwaggerParameter;
+import com.thumbing.shared.condition.RedisCondition;
+import com.thumbing.shared.condition.SecurityCondition;
+import com.thumbing.shared.condition.SwaggerCondition;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Conditional;
 import org.springframework.context.annotation.Primary;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
@@ -62,6 +66,7 @@ import static springfox.documentation.schema.Types.typeNameFor;
  */
 @Component
 @Primary
+@Conditional(SwaggerCondition.class)
 public class CustomizeModelAttributeParameterExpander extends ModelAttributeParameterExpander {
     private static final Logger LOG = LoggerFactory.getLogger(ModelAttributeParameterExpander.class);
     private final FieldProvider fields;

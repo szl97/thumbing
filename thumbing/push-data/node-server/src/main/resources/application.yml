@@ -32,3 +32,4 @@ use:
   redis: false
   security: false
   feign: false
+  swagger: false

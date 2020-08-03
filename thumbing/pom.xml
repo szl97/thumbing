@@ -20,6 +20,18 @@
         <maven-compiler-plugin.version>3.8.0</maven-compiler-plugin.version>
         <springfox.version>2.9.2</springfox.version>
         <jjwt.version>0.11.1</jjwt.version>
+        <hutoo.version>4.5.7</hutoo.version>
+        <tomcat.version>9.0.36</tomcat.version>
+        <jackson.version>2.9.5</jackson.version>
+        <mapper.version>6.5.0</mapper.version>
+        <netty.version>4.1.50.Final</netty.version>
+        <xxljob.version>2.2.0</xxljob.version>
+        <sqlconnetor.version>8.0.16</sqlconnetor.version>
+        <druid.version>1.1.22</druid.version>
+        <elasticsearch.version>7.8.0</elasticsearch.version>
+        <curator.version>4.1.0</curator.version>
+        <oss.version>2.8.3</oss.version>
+        <joda-time.version>2.9.9</joda-time.version>
     </properties>
 
     <dependencies>
