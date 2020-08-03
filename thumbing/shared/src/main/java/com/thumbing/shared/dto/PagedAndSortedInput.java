@@ -1,5 +1,6 @@
 package com.thumbing.shared.dto;
 
+import com.thumbing.shared.annotation.IgnoreSwaggerParameter;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AccessLevel;
 import lombok.Data;
@@ -37,8 +38,10 @@ public class PagedAndSortedInput {
      */
     private Integer position;
 
+    @ApiModelProperty(hidden=true)
     @Getter(AccessLevel.NONE)
     @Setter(AccessLevel.NONE)
+    @IgnoreSwaggerParameter
     private Pageable pageable;
 
     public Pageable getPageable() {
