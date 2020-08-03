@@ -1,6 +1,7 @@
-package com.thumbing.auth.service;
+package com.thumbing.auth.service.impl;
 
 import com.github.dozermapper.core.Mapper;
+import com.thumbing.auth.service.IAuthService;
 import com.thumbing.shared.auth.model.UserContext;
 import com.thumbing.shared.auth.permission.PermissionCache;
 import com.thumbing.shared.auth.permission.SkipPathRequestMatcher;
@@ -31,7 +32,7 @@ import java.util.List;
 @Service
 @Slf4j
 @Transactional
-public class AuthServiceImpl implements IAuthService {
+public class AuthService implements IAuthService {
     @Autowired
     JwtTokenFactory jwtTokenFactory;
     @Autowired

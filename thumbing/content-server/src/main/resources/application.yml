@@ -50,6 +50,25 @@ spring:
           statement-executable-sql-log-enable: false
           enabled: true
       connection-properties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=500
+  rabbitmq:
+    username: guest
+    password: guest
+    addresses: 192.168.89.1:5672
+    virtual-host: /
+    listener:
+      simple:
+        concurrency: 5
+        acknowledge-mode: manual
+        max-concurrency: 10
+        prefetch: 1
+      direct:
+        acknowledge-mode: manual
+        prefetch: 1
+    data:
+      mongodb:
+        host: 192.168.89.1
+        port: 27017
+        database: thumbing
 
 eureka:
   client:

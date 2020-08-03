@@ -1,13 +1,12 @@
 package com.thumbing.auth.controller;
 
 import com.thumbing.auth.model.LoginRequest;
-import com.thumbing.auth.service.AuthServiceImpl;
+import com.thumbing.auth.service.impl.AuthService;
 import com.thumbing.shared.annotation.AllowAnonymous;
 import com.thumbing.shared.annotation.EnableResponseAdvice;
 import com.thumbing.shared.auth.model.UserContext;
 import com.thumbing.shared.controller.ThumbingBaseController;
 import com.thumbing.shared.dto.UserDto;
-import com.thumbing.shared.entity.sql.system.User;
 import com.thumbing.shared.exception.BusinessException;
 import com.thumbing.shared.jwt.JwtTokenFactory;
 import io.swagger.annotations.ApiOperation;
@@ -28,7 +27,7 @@ import javax.validation.Valid;
 @RequestMapping(value = "/authorization")
 public class AuthorizationController extends ThumbingBaseController {
     @Autowired
-    AuthServiceImpl authService;
+    private AuthService authService;
     @Autowired
     private JwtTokenFactory jwtTokenFactory;
     @Autowired
