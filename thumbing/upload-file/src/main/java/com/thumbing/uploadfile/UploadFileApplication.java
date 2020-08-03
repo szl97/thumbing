@@ -1,6 +1,6 @@
 package com.thumbing.uploadfile;
 
-import com.thumbing.shared.controller.LoserClubBaseController;
+import com.thumbing.shared.controller.ThumbingBaseController;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
@@ -19,7 +19,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @EnableFeignClients
 @EnableDiscoveryClient
 @EnableSwagger2
-public class UploadFileApplication extends LoserClubBaseController {
+public class UploadFileApplication extends ThumbingBaseController {
 
     public static void main(String[] args) {
         SpringApplication.run(UploadFileApplication.class, args);

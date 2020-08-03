@@ -1,9 +1,11 @@
 package com.thumbing.auth.service;
 
+import com.github.dozermapper.core.Mapper;
 import com.thumbing.shared.auth.model.UserContext;
 import com.thumbing.shared.cache.PermissionCache;
 import com.thumbing.shared.auth.permission.SkipPathRequestMatcher;
 import com.thumbing.shared.dto.PagedAndSortedInput;
+import com.thumbing.shared.dto.UserDto;
 import com.thumbing.shared.entity.sql.system.User;
 import com.thumbing.shared.exception.BusinessException;
 import com.thumbing.shared.exception.UserContextException;
@@ -22,6 +24,8 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.util.List;
 
 /**
@@ -30,6 +34,7 @@ import java.util.List;
  */
 @Service
 @Slf4j
+@Transactional
 public class AuthServiceImpl implements IAuthService {
     @Autowired
     JwtTokenFactory jwtTokenFactory;
@@ -45,6 +50,8 @@ public class AuthServiceImpl implements IAuthService {
     private PasswordEncoder passwordEncoder;
     @Autowired
     private IUserRepository repository;
+    @Autowired
+    private Mapper dozerMapper;
 
     @Override
     public boolean auth(String authorization, String applicationName, String url) {
@@ -62,7 +69,6 @@ public class AuthServiceImpl implements IAuthService {
 
     /**
      * 是否跳过权限验证
-     *
      * @param url
      * @return
      */
@@ -87,5 +93,18 @@ public class AuthServiceImpl implements IAuthService {
         GrantedAuthority needAuthority = new SimpleGrantedAuthority(urlPermission);
         List<GrantedAuthority> authorities = userContext.getAuthorities();
         return authorities.contains(needAuthority);
+    }
+
+    public UserDto createUser(){
+        User  u = new User();
+        u.setUserName("test");
+        u.setPassword("test");
+        User s = repository.save(u);
+        return dozerMapper.map(s, UserDto.class);
+    }
+
+    public void deleteUser(Long id){
+        User u = repository.findById(id).orElse(null);
+        repository.delete(u);
     }
 }

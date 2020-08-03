@@ -1,11 +1,14 @@
 package com.thumbing.shared.entity.sql.personal;
 
+import com.thumbing.shared.constants.EntityConstants;
 import com.thumbing.shared.entity.BaseEntity;
 import com.thumbing.shared.entity.sql.SqlFullAuditedEntity;
 import com.thumbing.shared.entity.sql.system.User;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.FieldNameConstants;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -20,6 +23,8 @@ import java.util.Set;
 @Getter
 @Setter
 @FieldNameConstants
+@SQLDelete(sql =  "update personal " + EntityConstants.DELETION)
+@Where(clause = "is_delete=0")
 //phone_num, email, gender, birth_date, birth_year,
 // birth_month, birth_day, constellation, interest_id(fk),
 // is_student, occupation_id(fk), job_id(fk), currentCountry, nativeCountry

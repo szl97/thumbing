@@ -52,8 +52,8 @@ public class ChatGroup extends SqlFullAuditedEntity {
      * 成员列表
      */
     @ManyToMany
-    @JoinTable(name = "group_user",
-            joinColumns = { @JoinColumn(name = "group_id") },
+    @JoinTable(name = "chat_group_user",
+            joinColumns = { @JoinColumn(name = "chat_group_id") },
             inverseJoinColumns = {@JoinColumn(name = "user_id")})
     private Set<User> users;
 

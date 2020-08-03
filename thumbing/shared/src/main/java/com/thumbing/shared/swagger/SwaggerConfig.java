@@ -37,9 +37,7 @@ public class SwaggerConfig {
 
     @Bean
     public Docket api() {
-
         //移除掉默认的OperationNameGenerator实现
-
         return new Docket(DocumentationType.SWAGGER_2)
                 .apiInfo(apiInfo())
                 .select()
@@ -51,11 +49,11 @@ public class SwaggerConfig {
     }
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
-                .title("Swagger API")
-                .description("swagger")
-                .termsOfServiceUrl("")
+                .version("1.0.0")
+                .title("Thumbing API doc")
+                .description("Definition of API")
+                //.termsOfServiceUrl("")
                 .contact(new Contact("Stan Sai", "", ""))
-                .version("2.0")
                 .build();
     }
     private ApiKey[] apiKeys() {

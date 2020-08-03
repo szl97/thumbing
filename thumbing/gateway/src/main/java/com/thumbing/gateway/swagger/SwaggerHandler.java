@@ -1,5 +1,6 @@
 package com.thumbing.gateway.swagger;
 
+import com.thumbing.shared.annotation.EnableResponseAdvice;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,7 +16,7 @@ import java.util.Optional;
  * @author Stan Sai
  * @date 2020-07-10
  */
-
+@EnableResponseAdvice
 @RestController
 @RequestMapping("/swagger-resources")
 public class SwaggerHandler {
@@ -43,7 +44,7 @@ public class SwaggerHandler {
                 Optional.ofNullable(uiConfiguration).orElse(UiConfigurationBuilder.builder().build()), HttpStatus.OK));
     }
 
-    @GetMapping("")
+    @GetMapping
     public Mono<ResponseEntity> swaggerResources() {
         return Mono.just((new ResponseEntity<>(swaggerResources.get(), HttpStatus.OK)));
     }

@@ -1,23 +1,21 @@
 package com.thumbing.shared.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.thumbing.shared.annotation.IgnoreResponseAdvice;
+import com.thumbing.shared.annotation.EnableResponseAdvice;
 import com.thumbing.shared.auth.model.UserContext;
-import com.thumbing.shared.exception.ValidInputException;
 import com.thumbing.shared.exception.BusinessException;
+import com.thumbing.shared.exception.ValidInputException;
 import com.thumbing.shared.response.BaseApiResult;
 import com.thumbing.shared.utils.security.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageNotReadableException;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
-
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -27,8 +25,8 @@ import java.nio.charset.StandardCharsets;
  * @author Stan Sai
  * @date 2020-06-23
  */
-@IgnoreResponseAdvice
-public abstract class LoserClubBaseController extends BaseController {
+
+public abstract class ThumbingBaseController extends BaseController {
 
     @Autowired
     private ObjectMapper mapper;

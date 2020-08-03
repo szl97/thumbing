@@ -1,9 +1,12 @@
 package com.thumbing.shared.entity.mongo.content;
 
+import com.thumbing.shared.constants.EntityConstants;
 import com.thumbing.shared.entity.mongo.MongoFullAuditedEntity;
 import com.thumbing.shared.entity.mongo.content.inner.InnerComment;
 import com.thumbing.shared.entity.mongo.common.NickUser;
 import lombok.Data;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.List;
@@ -15,6 +18,8 @@ import java.util.Set;
  */
 @Document(collection = "article")
 @Data
+@SQLDelete(sql =  "update article " + EntityConstants.NO_VERSION_DELETION)
+@Where(clause = "is_delete=0")
 //user_id, title, tags_ids, content, thumb_user_ids, innerComments,next_nick_name, graph_ids, browse_user_ids
 public class Article extends MongoFullAuditedEntity {
     /**

@@ -1,9 +1,9 @@
 package com.thumbing.shared.entity.sql;
 
 import com.thumbing.shared.constants.EntityConstants;
-import com.thumbing.shared.annotation.LogicDelete;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
@@ -18,7 +18,6 @@ import javax.persistence.MappedSuperclass;
 public class SqlFullAuditedEntity extends SqlEditionEntity {
     private static final long serialVersionUID = -8674477960395112975L;
 
-    @LogicDelete
-    @Column(name = EntityConstants.DR)
-    private int dr;
+    @Column(name = EntityConstants.IS_DELETE)
+    private int is_delete;
 }

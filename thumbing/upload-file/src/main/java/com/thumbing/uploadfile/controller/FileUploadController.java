@@ -3,7 +3,7 @@ package com.thumbing.uploadfile.controller;
 import com.aliyun.oss.model.OSSObjectSummary;
 import com.thumbing.shared.annotation.Authorize;
 import com.thumbing.shared.auth.permission.PermissionConstants;
-import com.thumbing.shared.controller.LoserClubBaseController;
+import com.thumbing.shared.controller.ThumbingBaseController;
 import com.thumbing.uploadfile.dto.FileUploadResult;
 import com.thumbing.uploadfile.service.FileUploadService;
 import io.swagger.annotations.Api;
@@ -24,7 +24,7 @@ import java.util.List;
 @Api(tags = "上传文件")
 @RestController
 @RequestMapping(value = "/oss")
-public class FileUploadController extends LoserClubBaseController {
+public class FileUploadController extends ThumbingBaseController {
     @Autowired
     private FileUploadService fileUploadService;
 

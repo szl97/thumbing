@@ -1,7 +1,7 @@
 package com.thumbing.shared.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.thumbing.shared.annotation.IgnoreResponseAdvice;
+import com.thumbing.shared.annotation.EnableResponseAdvice;
 import com.thumbing.shared.response.BaseApiResult;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,12 +47,12 @@ public class CommonResponseDataAdvice implements ResponseBodyAdvice<Object> {
 
         //跳过又自定义注解的返回
         // 检查注解是否存在
-        if (methodParameter.getDeclaringClass().isAnnotationPresent(IgnoreResponseAdvice.class)) {
-            return false;
+        if (methodParameter.getDeclaringClass().isAnnotationPresent(EnableResponseAdvice.class)) {
+            return true;
         }
-        if (methodParameter.getMethod().isAnnotationPresent(IgnoreResponseAdvice.class)) {
-            return false;
+        if (methodParameter.getMethod().isAnnotationPresent(EnableResponseAdvice.class)) {
+            return true;
         }
-        return true;
+        return false;
     }
 }

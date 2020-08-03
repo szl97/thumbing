@@ -24,7 +24,7 @@ public class EntityConstants {
     public final static String VERSION = "version";
 
     //逻辑删除
-    public final static String DR = "dr";
+    public final static String IS_DELETE = "is_delete";
 
 
     //创建人id
@@ -33,17 +33,11 @@ public class EntityConstants {
     //创建时间
     public final static String CREATE_TIME_PROPERTY = "createTime";
 
-    //修改人id
-    public final static String LAST_MODIFY_ID_PROPERTY = "lastModifyId";
-
     //最后修改时间
     public final static String LAST_MODIFY_TIME_PROPERTY = "lastModifyTime";
 
-    public final static String TENANT_ID_PROPERTY = "tenantId";
 
-    /**
-     * 逻辑删除得值
-     */
-    public final static int LOGIC_DELETE_VALUE = 1;
-    public final static int LOGIC_UN_DELETE_VALUE = 0;
+    public final static String DELETION =  "set is_delete = 1 where id = ? and version=?";
+
+    public final static String NO_VERSION_DELETION =  "set is_delete = 1 where id = ?";
 }

@@ -1,11 +1,14 @@
 package com.thumbing.shared.entity.sql.relation;
 
+import com.thumbing.shared.constants.EntityConstants;
 import com.thumbing.shared.entity.BaseEntity;
 import com.thumbing.shared.entity.sql.SqlFullAuditedEntity;
 import com.thumbing.shared.entity.sql.system.User;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.FieldNameConstants;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 
@@ -18,6 +21,8 @@ import javax.persistence.*;
 @Getter
 @Setter
 @FieldNameConstants
+@SQLDelete(sql =  "update relation " + EntityConstants.DELETION)
+@Where(clause = "is_delete=0")
 //user_id(fk), target_id(fk), status, continue_day, rest_day, is_black, nick_name
 public class Relation extends SqlFullAuditedEntity {
     /**

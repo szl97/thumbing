@@ -4,7 +4,7 @@ package com.thumbing.pushdata.datacenter.controller;
 import com.thumbing.pushdata.datacenter.service.DataFlowService;
 import com.thumbing.shared.annotation.Authorize;
 import com.thumbing.shared.auth.permission.PermissionConstants;
-import com.thumbing.shared.controller.LoserClubBaseController;
+import com.thumbing.shared.controller.ThumbingBaseController;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/dataFlow")
 @Api(tags = "消息中心")
-public class DataFlowController extends LoserClubBaseController {
+public class DataFlowController extends ThumbingBaseController {
 
     @Autowired
     private DataFlowService dataFlowService;
