@@ -9,7 +9,6 @@ import com.thumbing.shared.entity.sql.relation.Relation;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.FieldNameConstants;
-import org.apache.commons.lang3.StringUtils;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
@@ -29,13 +28,8 @@ import java.util.Set;
 @FieldNameConstants
 @SQLDelete(sql =  "update sys_user " + EntityConstants.DELETION)
 @Where(clause = "is_delete=0")
-@NamedEntityGraph(name = "withPersonalAndChatGroups",attributeNodes = {
-        @NamedAttributeNode("personal"),
-        @NamedAttributeNode("chatGroups")
-})
 //user_name, pwd, personal_id(fk), is_active, last_login,
-// continue_day, is_access, relation_id(fk), chat_group_num
-//devices, current_device_id
+// continue_day, is_access, devices, current_device_id
 public class User extends SqlFullAuditedEntity {
     /**
      * 用户名
@@ -65,30 +59,6 @@ public class User extends SqlFullAuditedEntity {
      * 是否是管理员账号
      */
     private boolean admin;
-    /**
-     * 用户的个人信息
-     */
-    @OneToOne(targetEntity = Personal.class)
-    @JoinColumn(name = "personal_id", referencedColumnName = BaseEntity.Fields.id)
-    private Personal personal;
-    /**
-     * 关系列表
-     */
-    @OneToMany(targetEntity = Relation.class, mappedBy = Relation.Fields.user, cascade = CascadeType.ALL)
-    private List<Relation> relations;
-    /**
-     * 加入聊天室列表
-     */
-    @ManyToMany
-    @JoinTable(name = "chat_group_user",
-            joinColumns = { @JoinColumn(name = "user_id") },
-            inverseJoinColumns = {@JoinColumn(name = "chat_group_id")})
-    private Set<ChatGroup> chatGroups;
-    /**
-     * 创建的聊天室列表
-     */
-    @OneToMany(targetEntity = ChatGroup.class, mappedBy = ChatGroup.Fields.creator)
-    private Set<ChatGroup> createChatGroups;
     /**
      * 用户登录过的所有设备
      */

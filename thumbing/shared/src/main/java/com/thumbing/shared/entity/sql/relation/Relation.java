@@ -4,6 +4,7 @@ import com.thumbing.shared.constants.EntityConstants;
 import com.thumbing.shared.entity.BaseEntity;
 import com.thumbing.shared.entity.sql.SqlFullAuditedEntity;
 import com.thumbing.shared.entity.sql.system.User;
+import com.thumbing.shared.entity.sql.user.UserInfo;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.FieldNameConstants;
@@ -28,15 +29,15 @@ public class Relation extends SqlFullAuditedEntity {
     /**
      * 标识建立关系的用户
      */
-    @ManyToOne(targetEntity = User.class, fetch = FetchType.EAGER)
+    @ManyToOne(targetEntity = UserInfo.class, fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id", referencedColumnName = BaseEntity.Fields.id)
-    private User user;
+    private UserInfo user;
     /**
      * 标识关系另一方的用户
      */
-    @OneToOne(targetEntity = User.class, fetch = FetchType.EAGER)
+    @OneToOne(targetEntity = UserInfo.class, fetch = FetchType.EAGER)
     @JoinColumn(name = "target_user_id", referencedColumnName = BaseEntity.Fields.id)
-    private User targetUser;
+    private UserInfo targetUser;
     /**
      * 状态 代表持续聊天的时间到达的关系等级
      * year month week day

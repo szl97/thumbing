@@ -50,8 +50,8 @@ eureka:
     service-url:
       defaultZone: http://localhost:1901/eureka/
 use:
-  redis: true
-  security: true
+  redis: false
+  security: false
   feign: true
 
 security:

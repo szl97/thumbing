@@ -1,4 +1,4 @@
-package com.thumbing.shared.cache;
+package com.thumbing.shared.auth.permission;
 
 import com.thumbing.shared.condition.RedisCondition;
 import com.thumbing.shared.condition.SecurityCondition;
@@ -23,6 +23,11 @@ import java.util.Map;
         SecurityCondition.class
 })
 @Component
+/**
+ * 可匿名访问路径要用list+set保存的原因是，set没有getALl()方法，判断是否匿名访问是需要用match方法，不能单纯contains判断
+ * 而list又会重复增加相同的路径
+ * 所以采用set+list
+ */
 public class PermissionCache {
     private final String AUTH_SET_PERMISSION_URL_KEY = "AUTH:SET:PERMISSION:URL:APP:";
     private final String AUTH_PERMISSION_URL_KEY = "AUTH:PERMISSION:URL:APP:";

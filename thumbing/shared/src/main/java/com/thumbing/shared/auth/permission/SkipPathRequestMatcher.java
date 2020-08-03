@@ -1,6 +1,5 @@
 package com.thumbing.shared.auth.permission;
 
-import com.thumbing.shared.cache.PermissionCache;
 import com.thumbing.shared.condition.RedisCondition;
 import com.thumbing.shared.condition.SecurityCondition;
 import org.springframework.beans.factory.annotation.Autowired;

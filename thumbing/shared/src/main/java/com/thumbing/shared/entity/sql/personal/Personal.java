@@ -4,6 +4,7 @@ import com.thumbing.shared.constants.EntityConstants;
 import com.thumbing.shared.entity.BaseEntity;
 import com.thumbing.shared.entity.sql.SqlFullAuditedEntity;
 import com.thumbing.shared.entity.sql.system.User;
+import com.thumbing.shared.entity.sql.user.UserInfo;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.FieldNameConstants;
@@ -32,9 +33,9 @@ public class Personal extends SqlFullAuditedEntity {
     /**
      * 标识身份信息所属的唯一用户
      */
-    @OneToOne(targetEntity = User.class)
+    @OneToOne(targetEntity = UserInfo.class)
     @JoinColumn(name = "user_id", referencedColumnName = BaseEntity.Fields.id)
-    private User user;
+    private UserInfo user;
     /**
      * 民字
      */

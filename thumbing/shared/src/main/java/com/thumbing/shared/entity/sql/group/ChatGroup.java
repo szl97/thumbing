@@ -4,6 +4,7 @@ import com.thumbing.shared.entity.BaseEntity;
 import com.thumbing.shared.entity.sql.SqlCreationEntity;
 import com.thumbing.shared.entity.sql.SqlFullAuditedEntity;
 import com.thumbing.shared.entity.sql.system.User;
+import com.thumbing.shared.entity.sql.user.UserInfo;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.FieldNameConstants;
@@ -45,9 +46,9 @@ public class ChatGroup extends SqlFullAuditedEntity {
     /**
      * 创建人
      */
-    @ManyToOne(targetEntity = User.class)
+    @ManyToOne(targetEntity = UserInfo.class)
     @JoinColumn(name= SqlCreationEntity.Fields.createId, referencedColumnName = BaseEntity.Fields.id, insertable = false, updatable = false)
-    private User creator;
+    private UserInfo creator;
     /**
      * 成员列表
      */
@@ -55,7 +56,7 @@ public class ChatGroup extends SqlFullAuditedEntity {
     @JoinTable(name = "chat_group_user",
             joinColumns = { @JoinColumn(name = "chat_group_id") },
             inverseJoinColumns = {@JoinColumn(name = "user_id")})
-    private Set<User> users;
+    private Set<UserInfo> users;
 
     @Override
     public boolean equals(Object object){
