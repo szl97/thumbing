@@ -18,14 +18,12 @@ import java.util.Set;
  */
 @Document(collection = "moments")
 @Data
-@SQLDelete(sql =  "update moments " + EntityConstants.NO_VERSION_DELETION)
-@Where(clause = "is_delete=0")
 //user_id, tags_ids, content, total_days, thumb_user_ids, comments, next_nick_name, graph_ids, browse_user_ids
 public class Moments extends MongoFullAuditedEntity {
     /**
      * 用户id
      */
-    private long user_id;
+    private long userId;
     /**
      * 标题
      */
@@ -33,7 +31,7 @@ public class Moments extends MongoFullAuditedEntity {
     /**
      * 标签
      */
-    private Set<Long> tags_ids;
+    private Set<Long> tagIds;
     /**
      * 可见天数
      */

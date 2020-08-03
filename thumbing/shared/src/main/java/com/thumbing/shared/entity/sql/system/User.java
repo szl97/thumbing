@@ -1,11 +1,8 @@
 package com.thumbing.shared.entity.sql.system;
 
 import com.thumbing.shared.constants.EntityConstants;
-import com.thumbing.shared.entity.BaseEntity;
+import com.thumbing.shared.entity.sql.BaseSqlEntity;
 import com.thumbing.shared.entity.sql.SqlFullAuditedEntity;
-import com.thumbing.shared.entity.sql.group.ChatGroup;
-import com.thumbing.shared.entity.sql.personal.Personal;
-import com.thumbing.shared.entity.sql.relation.Relation;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.FieldNameConstants;
@@ -14,7 +11,6 @@ import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Set;
 
 /**
@@ -71,7 +67,7 @@ public class User extends SqlFullAuditedEntity {
      * 用户的当前设备
      */
     @OneToOne(targetEntity = Device.class)
-    @JoinColumn(name = "current_device_id", referencedColumnName = BaseEntity.Fields.id)
+    @JoinColumn(name = "current_device_id", referencedColumnName = BaseSqlEntity.Fields.id)
     private Device currentDevice;
 
     @Override

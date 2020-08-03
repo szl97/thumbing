@@ -4,11 +4,15 @@ import com.thumbing.shared.constants.EntityConstants;
 import com.thumbing.shared.entity.mongo.MongoFullAuditedEntity;
 import com.thumbing.shared.entity.mongo.content.inner.InnerComment;
 import com.thumbing.shared.entity.mongo.common.NickUser;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 
@@ -18,14 +22,12 @@ import java.util.Set;
  */
 @Document(collection = "article")
 @Data
-@SQLDelete(sql =  "update article " + EntityConstants.NO_VERSION_DELETION)
-@Where(clause = "is_delete=0")
 //user_id, title, tags_ids, content, thumb_user_ids, innerComments,next_nick_name, graph_ids, browse_user_ids
 public class Article extends MongoFullAuditedEntity {
     /**
      * 用户id
      */
-    private long user_id;
+    private Long userId;
     /**
      * 标题
      */
@@ -33,7 +35,7 @@ public class Article extends MongoFullAuditedEntity {
     /**
      * 标签
      */
-    private Set<Long> tags_ids;
+    private Set<Long> tagIds;
     /**
      * 内容
      */
@@ -62,4 +64,5 @@ public class Article extends MongoFullAuditedEntity {
      * 浏览过的用户id
      */
     private Set<Long> browseUserIds;
+
 }

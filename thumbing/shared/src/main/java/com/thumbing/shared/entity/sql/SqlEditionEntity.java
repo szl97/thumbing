@@ -19,8 +19,6 @@ import java.time.LocalDateTime;
 public class SqlEditionEntity extends SqlCreationEntity {
     private static final long serialVersionUID = -8674477960395112975L;
 
-    @Column(name = EntityConstants.LAST_MODIFY_ID)
-    private Long lastModifyId;
 
     @Column(name = EntityConstants.LAST_MODIFY_TIME)
     private LocalDateTime lastModifyTime;

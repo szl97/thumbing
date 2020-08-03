@@ -15,41 +15,6 @@ spring:
   jackson:
     serialization:
       FAIL_ON_EMPTY_BEANS: false
-  #jpa setting
-  jpa:
-    hibernate:
-      ddl-auto: update
-    show-sql: true
-    open-in-view: true
-    properties:
-      hibernate:
-        session_factory:
-          statement_inspector: com.thumbing.shared.jpa.GlobalStatementInspector
-  datasource:
-    type: com.alibaba.druid.pool.DruidDataSource
-    driver-class-name: com.mysql.jdbc.Driver
-    url: ${SPRING_DATASOURCE_URL:jdbc:mysql://192.168.89.1:3306/mysql_loserclub}
-    username: ${SPRING_DATASOURCE_USERNAME:root}
-    password: ${SPRING_DATASOURCE_PASSWORD:123456}
-    druid:
-      max-active: 10
-      min-idle: 5
-      initial-size: 5
-      max-wait: 60000
-      time-between-eviction-runs-millis: 3000
-      min-evictable-idle-time-millis: 30000
-      validation-query: SELECT 1
-      test-on-borrow: false
-      test-on-return: false
-      pool-prepared-statements: true
-      max-pool-prepared-statement-per-connection-size: 20
-      filter:
-        slf4j:
-          statement-sql-pretty-format: true
-          result-set-log-enabled: false
-          statement-executable-sql-log-enable: false
-          enabled: true
-      connection-properties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=500
   rabbitmq:
     username: guest
     password: guest

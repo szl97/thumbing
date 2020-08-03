@@ -23,7 +23,7 @@ public interface IBaseMongoService<T extends BaseMongoEntity, K extends IBaseMon
 
     List<T> findAll(Sort sort);
 
-    Iterable<T> findAllById(Iterable<Long> iterable);
+    Iterable<T> findAllById(Iterable<String> iterable);
 
     <S extends T> List<S> saveAll(Iterable<S> iterable);
 
@@ -44,13 +44,13 @@ public interface IBaseMongoService<T extends BaseMongoEntity, K extends IBaseMon
 
     <S extends T> S save(S s);
 
-    Optional<T> findById(long id);
+    Optional<T> findById(String id);
 
-    boolean existsById(long id);
+    boolean existsById(String id);
 
     long count();
 
-    void deleteById(long id);
+    void deleteById(String id);
 
     void delete(T t);
 
@@ -66,7 +66,7 @@ public interface IBaseMongoService<T extends BaseMongoEntity, K extends IBaseMon
      * @param value     字段名对应的值
      * @return 唯一时返回true
      */
-    //boolean checkUnique(Long id, String fieldName, String value);
+    //boolean checkUnique(String id, String fieldName, String value);
 
     /**
      * 比较两个列表的项目，删除不存在的项目

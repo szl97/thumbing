@@ -1,6 +1,6 @@
 package com.thumbing.shared.entity.sql.system;
 
-import com.thumbing.shared.entity.BaseEntity;
+import com.thumbing.shared.entity.sql.BaseSqlEntity;
 import com.thumbing.shared.entity.sql.SqlEditionEntity;
 import lombok.Getter;
 import lombok.Setter;
@@ -48,7 +48,7 @@ public class Device extends SqlEditionEntity {
      * 设备的当前用户
      */
     @OneToOne(targetEntity = User.class, fetch = FetchType.EAGER)
-    @JoinColumn(name = "current_user_id", referencedColumnName = BaseEntity.Fields.id)
+    @JoinColumn(name = "current_user_id", referencedColumnName = BaseSqlEntity.Fields.id)
     private User currentUserId;
 
     @Override

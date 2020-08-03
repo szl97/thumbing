@@ -41,7 +41,7 @@ public class BaseMongoService<T extends BaseMongoEntity, K extends IBaseMongoRep
     }
 
     @Override
-    public Iterable<T> findAllById(Iterable<Long> iterable) {
+    public Iterable<T> findAllById(Iterable<String> iterable) {
         return repository.findAllById(iterable);
     }
 
@@ -88,12 +88,12 @@ public class BaseMongoService<T extends BaseMongoEntity, K extends IBaseMongoRep
     }
 
     @Override
-    public Optional<T> findById(long id) {
+    public Optional<T> findById(String id) {
         return repository.findById(id);
     }
 
     @Override
-    public boolean existsById(long id) {
+    public boolean existsById(String id) {
         return repository.existsById(id);
     }
 
@@ -103,7 +103,7 @@ public class BaseMongoService<T extends BaseMongoEntity, K extends IBaseMongoRep
     }
 
     @Override
-    public void deleteById(long id) {
+    public void deleteById(String id) {
         repository.deleteById(id);
     }
 

@@ -8,14 +8,8 @@ public class EntityConstants {
     //主键
     public final static String ID = "id";
 
-    //创建人id
-    public final static String CREATE_ID = "create_id";
-
     //创建时间
     public final static String CREATE_TIME = "create_time";
-
-    //修改人id
-    public final static String LAST_MODIFY_ID = "last_modify_id";
 
     //最后修改时间
     public final static String LAST_MODIFY_TIME = "last_modify_time";
@@ -25,10 +19,6 @@ public class EntityConstants {
 
     //逻辑删除
     public final static String IS_DELETE = "is_delete";
-
-
-    //创建人id
-    public final static String CREATE_ID_PROPERTY = "createId";
 
     //创建时间
     public final static String CREATE_TIME_PROPERTY = "createTime";

@@ -1,6 +1,8 @@
 package com.thumbing.shared.entity.mongo.common;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.io.Serializable;
@@ -11,8 +13,10 @@ import java.io.Serializable;
  */
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class NickUser implements Serializable {
-    private long userId;
+    private Long userId;
     private String nickName;
     @Override
     public String toString(){

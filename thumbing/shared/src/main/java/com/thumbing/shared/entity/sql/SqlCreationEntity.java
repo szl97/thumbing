@@ -20,7 +20,7 @@ import java.time.LocalDateTime;
 @FieldNameConstants
 public class SqlCreationEntity extends BaseSqlEntity {
     private static final long serialVersionUID = -305433542418558052L;
-    private Long createId;
+
     @Column(name = EntityConstants.CREATE_TIME)
     private LocalDateTime createTime;
 }

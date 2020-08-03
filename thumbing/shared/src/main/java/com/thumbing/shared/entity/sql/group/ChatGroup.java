@@ -1,9 +1,8 @@
 package com.thumbing.shared.entity.sql.group;
 
-import com.thumbing.shared.entity.BaseEntity;
+import com.thumbing.shared.entity.sql.BaseSqlEntity;
 import com.thumbing.shared.entity.sql.SqlCreationEntity;
 import com.thumbing.shared.entity.sql.SqlFullAuditedEntity;
-import com.thumbing.shared.entity.sql.system.User;
 import com.thumbing.shared.entity.sql.user.UserInfo;
 import lombok.Getter;
 import lombok.Setter;
@@ -47,7 +46,7 @@ public class ChatGroup extends SqlFullAuditedEntity {
      * 创建人
      */
     @ManyToOne(targetEntity = UserInfo.class)
-    @JoinColumn(name= SqlCreationEntity.Fields.createId, referencedColumnName = BaseEntity.Fields.id, insertable = false, updatable = false)
+    @JoinColumn(name= "create_id", referencedColumnName = BaseSqlEntity.Fields.id)
     private UserInfo creator;
     /**
      * 成员列表

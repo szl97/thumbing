@@ -1,9 +1,8 @@
 package com.thumbing.shared.entity.sql.personal;
 
 import com.thumbing.shared.constants.EntityConstants;
-import com.thumbing.shared.entity.BaseEntity;
+import com.thumbing.shared.entity.sql.BaseSqlEntity;
 import com.thumbing.shared.entity.sql.SqlFullAuditedEntity;
-import com.thumbing.shared.entity.sql.system.User;
 import com.thumbing.shared.entity.sql.user.UserInfo;
 import lombok.Getter;
 import lombok.Setter;
@@ -34,7 +33,7 @@ public class Personal extends SqlFullAuditedEntity {
      * 标识身份信息所属的唯一用户
      */
     @OneToOne(targetEntity = UserInfo.class)
-    @JoinColumn(name = "user_id", referencedColumnName = BaseEntity.Fields.id)
+    @JoinColumn(name = "user_id", referencedColumnName = BaseSqlEntity.Fields.id)
     private UserInfo user;
     /**
      * 民字
@@ -96,13 +95,13 @@ public class Personal extends SqlFullAuditedEntity {
      * 专业（所学或所擅长）
      */
     @ManyToOne(targetEntity = Occupation.class, fetch = FetchType.EAGER)
-    @JoinColumn(name = "occupation_id", referencedColumnName = BaseEntity.Fields.id)
+    @JoinColumn(name = "occupation_id", referencedColumnName = BaseSqlEntity.Fields.id)
     private Occupation occupation;
     /**
      * 职业
      */
     @ManyToOne(targetEntity = Job.class, fetch = FetchType.EAGER)
-    @JoinColumn(name = "job_id", referencedColumnName = BaseEntity.Fields.id)
+    @JoinColumn(name = "job_id", referencedColumnName = BaseSqlEntity.Fields.id)
     private Job job;
 
     @Override

@@ -22,7 +22,7 @@ public class Roast extends MongoFullAuditedEntity {
     /**
      * 用户id
      */
-    private long user_id;
+    private long userId;
     /**
      * 标题
      */

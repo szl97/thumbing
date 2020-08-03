@@ -19,9 +19,6 @@ import java.time.LocalDateTime;
 @Component
 public class AutoFillEntityListener {
 
-    @Autowired
-    SecurityUtils securityUtils;
-
     //新增得时候字段得值注入 通过反射去查询是否存在字段 写入
     //需要监控新增得值 包括 id 创建人 创建时间
     @PrePersist
@@ -31,12 +28,9 @@ public class AutoFillEntityListener {
         if (id == null) {
             throw new Exception("获取ID失败");
         }
-        EntityUtils.setFieldValue(EntityConstants.CREATE_TIME_PROPERTY, LocalDateTime.now(), entity);
         EntityUtils.setFieldValue(EntityConstants.ID, id, entity);
-        UserContext currentUser = securityUtils.getCurrentUser();
-        if (currentUser != null) {
-            EntityUtils.setFieldValue(EntityConstants.CREATE_ID_PROPERTY, currentUser.getId(), entity);
-        }
+        EntityUtils.setFieldValue(EntityConstants.CREATE_TIME_PROPERTY, LocalDateTime.now(), entity);
+
     }
 
 
@@ -45,9 +39,5 @@ public class AutoFillEntityListener {
     @PreUpdate
     public void setUpdatedOn(Object entity) {
         EntityUtils.setFieldValue(EntityConstants.LAST_MODIFY_TIME_PROPERTY, LocalDateTime.now(), entity);
-        UserContext currentUser = securityUtils.getCurrentUser();
-        if (currentUser != null) {
-            EntityUtils.setFieldValue(EntityConstants.LAST_MODIFY_ID, currentUser.getId(), entity);
-        }
     }
 }
