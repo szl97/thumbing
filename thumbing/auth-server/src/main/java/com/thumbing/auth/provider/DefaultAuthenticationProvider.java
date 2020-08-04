@@ -38,9 +38,6 @@ public class DefaultAuthenticationProvider implements AuthenticationProvider {
         context.setId(user.getId());
         context.setName(user.getUserName());
         List<GrantedAuthority> authorities = new ArrayList<>();
-        if (user.isAdmin()) {
-            authorities.add(new SimpleGrantedAuthority(PermissionConstants.ADMIN));
-        }
         if(user.isAccess()){
             authorities.add(new SimpleGrantedAuthority(PermissionConstants.ACCESS));
         }

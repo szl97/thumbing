@@ -52,10 +52,6 @@ public class User extends SqlFullAuditedEntity {
      */
     private boolean access;
     /**
-     * 是否是管理员账号
-     */
-    private boolean admin;
-    /**
      * 用户登录过的所有设备
      */
     @ManyToMany

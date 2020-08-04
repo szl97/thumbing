@@ -9,7 +9,6 @@ import lombok.experimental.UtilityClass;
  */
 @UtilityClass
 public class PermissionConstants {
-    public final static String ADMIN = "admin";
     public final static String ACCESS = "access";
     public final static String REGISTER = "register";
 }
