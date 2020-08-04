@@ -11,6 +11,7 @@ import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -18,15 +19,22 @@ import java.util.Set;
  * @Date: 2020/7/13 11:38
  */
 @Entity
-@Table(name = "sys_user")
+@Table(name = "sys_user", indexes = {
+        @Index(name = "name", columnList = "userName", unique = true),
+        @Index(name = "phone", columnList = "phoneNum"),
+        @Index(name = "email", columnList = "email")
+})
 @Getter
 @Setter
 @FieldNameConstants
 @SQLDelete(sql =  "update sys_user " + EntityConstants.DELETION)
 @Where(clause = "is_delete=0")
-//user_name, pwd, personal_id(fk), is_active, last_login,
+//user_name, pwd, personal_id(fk), is_active, last_login, phone_num, email
 // continue_day, is_access, devices, current_device_id
 public class User extends SqlFullAuditedEntity {
+    public User(){
+        devices = new HashSet<>();
+    }
     /**
      * 用户名
      */
@@ -52,6 +60,14 @@ public class User extends SqlFullAuditedEntity {
      */
     private boolean access;
     /**
+     * 电话号码
+     */
+    private String phoneNum;
+    /**
+     * 电子邮件
+     */
+    private String email;
+    /**
      * 用户登录过的所有设备
      */
     @ManyToMany
@@ -62,8 +78,9 @@ public class User extends SqlFullAuditedEntity {
     /**
      * 用户的当前设备
      */
+    private Long currentDeviceId;
     @OneToOne(targetEntity = Device.class)
-    @JoinColumn(name = "current_device_id", referencedColumnName = BaseSqlEntity.Fields.id)
+    @JoinColumn(name = Fields.currentDeviceId, referencedColumnName = BaseSqlEntity.Fields.id, insertable = false, updatable = false)
     private Device currentDevice;
 
     @Override

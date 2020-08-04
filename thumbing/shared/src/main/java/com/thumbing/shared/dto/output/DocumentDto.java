@@ -1,4 +1,4 @@
-package com.thumbing.shared.dto;
+package com.thumbing.shared.dto.output;
 
 import lombok.Data;
 

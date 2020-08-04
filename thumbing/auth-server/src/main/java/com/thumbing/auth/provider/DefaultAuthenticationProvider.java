@@ -1,9 +1,9 @@
 package com.thumbing.auth.provider;
 
+import com.thumbing.auth.service.IAuthService;
 import com.thumbing.shared.auth.model.UserContext;
 import com.thumbing.shared.auth.permission.PermissionConstants;
 import com.thumbing.shared.entity.sql.system.User;
-import com.thumbing.auth.service.IAuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

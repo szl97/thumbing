@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.AntPathMatcher;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * @Author: Stan Sai
@@ -20,10 +21,16 @@ import java.util.List;
 @Component
 public class SkipPathRequestMatcher {
     @Autowired
-    PermissionCache permissionCache;
+    private PermissionCache permissionCache;
+
+    private final String LOGIN = "/login";
+    private final String LOGIN_APP = "auth-server";
 
     public boolean matches(String applicationName, String url){
-        List<String> anonymousPath = permissionCache.getAnonymousPath(applicationName);
+        if(url.equals(LOGIN) && applicationName.equals(LOGIN_APP)){
+            return true;
+        }
+        Set<String> anonymousPath = permissionCache.getAnonymousPath(applicationName);
         AntPathMatcher pathMatcher=new AntPathMatcher();
         if(anonymousPath != null && anonymousPath.size()>0){
             for(String path:anonymousPath){

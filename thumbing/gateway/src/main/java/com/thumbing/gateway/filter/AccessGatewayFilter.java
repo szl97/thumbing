@@ -2,6 +2,7 @@ package com.thumbing.gateway.filter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.thumbing.gateway.client.IAuthServiceClient;
+import com.thumbing.shared.auth.authentication.AuthorizationContextHolder;
 import com.thumbing.shared.response.BaseApiResult;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -43,7 +44,6 @@ public class AccessGatewayFilter implements GlobalFilter, Ordered {
         String url = request.getPath().value();
         String destServiceName = ((Route) exchange.getAttribute(GATEWAY_ROUTE_ATTR)).getUri().getHost();
         log.debug("url:{},method:{},headers:{}", url, method, request.getHeaders());
-
         //todo:通过指定的serviceName以及url去auth服务调用 如果跳过则跳过，如果需要权限验证 不通过则返回false
 
         BaseApiResult authorized = authService.auth(authentication, destServiceName, url);

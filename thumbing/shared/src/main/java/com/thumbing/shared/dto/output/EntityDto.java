@@ -1,4 +1,4 @@
-package com.thumbing.shared.dto;
+package com.thumbing.shared.dto.output;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;

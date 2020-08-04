@@ -16,7 +16,7 @@ import java.util.concurrent.TimeUnit;
 @Data
 public class RedisUtilsForValue {
 
-    ValueOperations<String, String> valueOperations;
+    ValueOperations valueOperations;
 
     private static RedisUtilsForValue INSTANCE = new RedisUtilsForValue();
 
@@ -57,7 +57,7 @@ public class RedisUtilsForValue {
      * @param key
      * @return
      */
-    public String getObject(String key) {
+    public Object getObject(String key) {
         return valueOperations.get(key);
     }
 
@@ -68,8 +68,8 @@ public class RedisUtilsForValue {
      * @param key
      * @return
      */
-    public String get(String key) {
-        String val = valueOperations.get(key);
+    public Object get(String key) {
+        Object val = valueOperations.get(key);
         return val;
     }
 
@@ -80,8 +80,8 @@ public class RedisUtilsForValue {
      * @param key
      * @return
      */
-    public String getAndSet(String key, String value) {
-        String val = valueOperations.getAndSet(key, value);
+    public Object getAndSet(String key, Object value) {
+        Object val = valueOperations.getAndSet(key, value);
         return  val;
     }
 
@@ -91,8 +91,8 @@ public class RedisUtilsForValue {
      * @param keys
      * @return
      */
-    public List<String> get(List<String> keys) {
-        List<String> val = valueOperations.multiGet(keys);
+    public List<Object> get(List<String> keys) {
+        List<Object> val = valueOperations.multiGet(keys);
         return val;
     }
 
@@ -149,7 +149,7 @@ public class RedisUtilsForValue {
      * @param timeout
      * @param unit
      */
-    public void setWithExpireTime(String key, String value, long timeout, TimeUnit unit) {
+    public void setWithExpireTime(String key, Object value, long timeout, TimeUnit unit) {
         valueOperations.set(key, value, timeout, unit);
     }
 
@@ -172,7 +172,7 @@ public class RedisUtilsForValue {
      * @param value
      * @param offset 偏移量
      */
-    public void set(String key, String value, long offset) {
+    public void set(String key, Object value, long offset) {
         valueOperations.set(key, value, offset);
     }
 
@@ -184,7 +184,7 @@ public class RedisUtilsForValue {
      * @param value
      * @return
      */
-    public Boolean setNx(String key, String value) {
+    public Boolean setNx(String key, Object value) {
         return valueOperations.setIfAbsent(key, value);
     }
 
@@ -201,7 +201,7 @@ public class RedisUtilsForValue {
      * @param unit
      * @return
      */
-    public Boolean setNx(String key, String value, long timeout, TimeUnit unit) {
+    public Boolean setNx(String key, Object value, long timeout, TimeUnit unit) {
         return valueOperations.setIfAbsent(key, value, timeout, unit);
     }
 

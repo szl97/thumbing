@@ -1,4 +1,4 @@
-package com.thumbing.shared.dto;
+package com.thumbing.shared.dto.input;
 
 import com.thumbing.shared.annotation.IgnoreSwaggerParameter;
 import io.swagger.annotations.ApiModelProperty;

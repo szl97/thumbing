@@ -1,4 +1,4 @@
-package com.thumbing.uploadfile.service;
+package com.thumbing.uploadfile.service.impl;
 
 import com.aliyun.oss.OSS;
 import com.aliyun.oss.model.ListObjectsRequest;
@@ -7,6 +7,7 @@ import com.aliyun.oss.model.OSSObjectSummary;
 import com.aliyun.oss.model.ObjectListing;
 import com.thumbing.uploadfile.config.AliyunConfig;
 import com.thumbing.uploadfile.dto.FileUploadResult;
+import com.thumbing.uploadfile.service.IFileUploadService;
 import org.apache.commons.lang3.RandomUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
@@ -22,7 +23,7 @@ import java.util.List;
  * @Date: 2020/7/11 14:18
  */
 @Service
-public class FileUploadService {
+public class FileUploadService implements IFileUploadService {
     // 允许上传的格式
     private static final String[] IMAGE_TYPE = new String[]{".bmp", ".jpg", ".jpeg", ".gif", ".png"};
     @Autowired

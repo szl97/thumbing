@@ -9,6 +9,14 @@ import lombok.experimental.UtilityClass;
  */
 @UtilityClass
 public class PermissionConstants {
+    /**
+     * 通过认证后拥有的权限
+     * 对应sys_user中的access
+     */
     public final static String ACCESS = "access";
+    /**
+     * 通过手机激活后用有的权限
+     * 对应sys_user中的active
+     */
     public final static String REGISTER = "register";
 }

@@ -1,6 +1,10 @@
 package com.thumbing.auth.handlers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.thumbing.auth.context.LoginRequestContextHolder;
+import com.thumbing.auth.dto.input.LoginRequest;
+import com.thumbing.auth.service.IAuthService;
+import com.thumbing.shared.exception.AccountLockException;
 import com.thumbing.shared.exception.UserLoginException;
 import com.thumbing.shared.jwt.exception.JwtExpiredTokenException;
 import com.thumbing.shared.response.BaseApiResult;
@@ -27,8 +31,11 @@ import java.nio.charset.StandardCharsets;
 public class DefaultAuthenticationFailureHandler implements AuthenticationFailureHandler {
     @Autowired
     private ObjectMapper mapper;
+    @Autowired
+    private IAuthService authService;
+
     @Override
-    public void onAuthenticationFailure(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, AuthenticationException e) throws IOException, ServletException {
+    public void onAuthenticationFailure(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, AuthenticationException e) throws IOException {
         httpServletResponse.setCharacterEncoding(StandardCharsets.UTF_8.toString());
         httpServletResponse.setContentType(MediaType.APPLICATION_JSON_VALUE);
 
@@ -39,13 +46,19 @@ public class DefaultAuthenticationFailureHandler implements AuthenticationFailur
             mapper.writeValue(httpServletResponse.getWriter(), BaseApiResult.errorServer(e.getMessage()));
         } else if (e instanceof JwtExpiredTokenException) {
             mapper.writeValue(httpServletResponse.getWriter(), BaseApiResult.errorServer("登陆已过期，请重新登陆"));
-        }
-        if(e instanceof UserLoginException){
+        } else if(e instanceof UserLoginException){
+            httpServletResponse.setStatus(HttpStatus.OK.value());
+            LoginRequest loginRequest = LoginRequestContextHolder.getLoginRequest();
+            authService.failLogin(loginRequest);
+            BaseApiResult result = new BaseApiResult(((UserLoginException) e).getCode(),e.getMessage(),null,true);
+            mapper.writeValue(httpServletResponse.getWriter(), result);
+        } else if(e instanceof AccountLockException){
             httpServletResponse.setStatus(HttpStatus.OK.value());
             BaseApiResult result = new BaseApiResult(((UserLoginException) e).getCode(),e.getMessage(),null,true);
             mapper.writeValue(httpServletResponse.getWriter(), result);
         }
         //TODO:细化错误返回
         mapper.writeValue(httpServletResponse.getWriter(),  BaseApiResult.errorServer("无效访问："+e.getMessage()));
+        LoginRequestContextHolder.clear();
     }
 }

@@ -20,7 +20,6 @@ public class RedisUtils {
 
     /**
      * 删除某个key
-     *
      * @param key
      * @return
      */
@@ -31,7 +30,6 @@ public class RedisUtils {
 
     /**
      * 判断key是否存在
-     *
      * @param key
      * @return
      */
@@ -42,7 +40,6 @@ public class RedisUtils {
 
     /**
      * 设置key的过期时间
-     *
      * @param key
      * @param timeout
      * @param unit

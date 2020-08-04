@@ -1,21 +1,29 @@
 package com.thumbing.auth.service.impl;
 
 import com.github.dozermapper.core.Mapper;
+import com.thumbing.auth.cache.FailureLoginCache;
+import com.thumbing.auth.cache.TokenCache;
+import com.thumbing.auth.dto.input.LoginRequest;
 import com.thumbing.auth.service.IAuthService;
 import com.thumbing.shared.auth.model.UserContext;
 import com.thumbing.shared.auth.permission.PermissionCache;
 import com.thumbing.shared.auth.permission.SkipPathRequestMatcher;
-import com.thumbing.shared.dto.UserDto;
+import com.thumbing.shared.entity.sql.system.Device;
 import com.thumbing.shared.entity.sql.system.User;
+import com.thumbing.shared.exception.AccountLockException;
 import com.thumbing.shared.exception.BusinessException;
 import com.thumbing.shared.exception.UserContextException;
+import com.thumbing.shared.exception.UserLoginException;
 import com.thumbing.shared.jwt.JwtTokenFactory;
 import com.thumbing.shared.jwt.extractor.JwtHeaderTokenExtractor;
 import com.thumbing.shared.repository.sql.system.IUserRepository;
 import com.thumbing.shared.utils.user.UserContextUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -23,6 +31,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -33,6 +43,9 @@ import java.util.List;
 @Slf4j
 @Transactional
 public class AuthService implements IAuthService {
+    private final Integer MAX_FAILURE_TIMES = 5;
+    @Autowired
+    private AuthenticationManager authenticationManager;
     @Autowired
     JwtTokenFactory jwtTokenFactory;
     @Autowired
@@ -48,7 +61,23 @@ public class AuthService implements IAuthService {
     @Autowired
     private IUserRepository repository;
     @Autowired
-    private Mapper dozerMapper;
+    private Mapper mapper;
+    @Autowired
+    private FailureLoginCache failureLoginCache;
+
+    @Override
+    public String getAuthorization(LoginRequest input) {
+        UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(input.getUsername(), input.getPassword());
+        Authentication authResult = authenticationManager.authenticate(token);
+        if (authResult.isAuthenticated()) {
+            UserContext userContext = (UserContext) authResult.getPrincipal();
+            succeedLogin(input);
+            return jwtTokenFactory.createJwtToken(userContext);
+        } else {
+            failLogin(input);
+            throw new BusinessException("帐户名或者密码错误");
+        }
+    }
 
     @Override
     public boolean auth(String authorization, String applicationName, String url) {
@@ -58,10 +87,33 @@ public class AuthService implements IAuthService {
 
     @Override
     public User checkAndGetUser(String userName, String password) {
+        if(failureLoginCache.getFailureTimes(userName) >= 5){
+            throw new AccountLockException("登录失败次数过多，账户已冻结");
+        }
         User user = repository.findByUserName(userName).orElseThrow(()-> new UsernameNotFoundException("用户名不存在"));
-        if(!passwordEncoder.matches(password, user.getPassword())) throw new BadCredentialsException("密码错误");
-        if(!user.isActive()) throw new BusinessException("未绑定手机或邮箱");
+        if(!passwordEncoder.matches(password, user.getPassword())) throw new UserLoginException("密码错误");
         return user;
+    }
+
+    @Override
+    public void succeedLogin(LoginRequest loginRequest) {
+        failureLoginCache.clear(loginRequest.getUsername());
+        User user = repository.findByUserName(loginRequest.getUsername()).orElseThrow(()->new BusinessException("未知错误"));
+        if(!user.getLastLogin().toLocalDate().equals(LocalDate.now())){
+            user.setContinueDays(user.getContinueDays() + 1);
+        }
+        user.setLastLogin(LocalDateTime.now());
+        if(loginRequest.getDeviceInput() != null) {
+            Device device = mapper.map(loginRequest.getDeviceInput(), Device.class);
+            user.getDevices().add(device);
+            user.setCurrentDevice(device);
+        }
+        repository.save(user);
+    }
+
+    @Override
+    public void failLogin(LoginRequest loginRequest) {
+        failureLoginCache.increment(loginRequest.getUsername());
     }
 
     /**
@@ -92,16 +144,4 @@ public class AuthService implements IAuthService {
         return authorities.contains(needAuthority);
     }
 
-    public UserDto createUser(){
-        User  u = new User();
-        u.setUserName("test");
-        u.setPassword("test");
-        User s = repository.save(u);
-        return dozerMapper.map(s, UserDto.class);
-    }
-
-    public void deleteUser(Long id){
-        User u = repository.findById(id).orElse(null);
-        repository.delete(u);
-    }
 }

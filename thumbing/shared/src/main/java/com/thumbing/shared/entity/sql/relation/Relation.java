@@ -26,16 +26,24 @@ import javax.persistence.*;
 //user_id(fk), target_id(fk), status, continue_day, rest_day, is_black, nick_name
 public class Relation extends SqlFullAuditedEntity {
     /**
+     * 关系一方的用户ID，userID < targetUserID
+     */
+    private Long userId;
+    /**
+     * 关系另一方的用户ID，userID < targetUserID
+     */
+    private Long targetUserId;
+    /**
      * 标识建立关系的用户
      */
     @ManyToOne(targetEntity = UserInfo.class, fetch = FetchType.EAGER)
-    @JoinColumn(name = "user_id", referencedColumnName = BaseSqlEntity.Fields.id)
+    @JoinColumn(name = Fields.userId, referencedColumnName = BaseSqlEntity.Fields.id, insertable = false, updatable = false)
     private UserInfo user;
     /**
      * 标识关系另一方的用户
      */
     @OneToOne(targetEntity = UserInfo.class, fetch = FetchType.EAGER)
-    @JoinColumn(name = "target_user_id", referencedColumnName = BaseSqlEntity.Fields.id)
+    @JoinColumn(name = Fields.targetUserId, referencedColumnName = BaseSqlEntity.Fields.id, insertable = false, updatable = false)
     private UserInfo targetUser;
     /**
      * 状态 代表持续聊天的时间到达的关系等级

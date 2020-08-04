@@ -2,6 +2,7 @@ package com.thumbing.shared.auth.permission;
 
 import com.thumbing.shared.condition.RedisCondition;
 import com.thumbing.shared.condition.SecurityCondition;
+import com.thumbing.shared.constants.CacheKeyConstants;
 import com.thumbing.shared.utils.redis.RedisUtilsForCollection;
 import com.thumbing.shared.utils.redis.RedisUtilsForObject;
 import lombok.Data;
@@ -10,9 +11,9 @@ import org.springframework.context.annotation.Conditional;
 import org.springframework.stereotype.Component;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * @Author: Stan Sai
@@ -23,19 +24,13 @@ import java.util.Map;
         SecurityCondition.class
 })
 @Component
-/**
- * 可匿名访问路径要用list+set保存的原因是，set没有getALl()方法，判断是否匿名访问是需要用match方法，不能单纯contains判断
- * 而list又会重复增加相同的路径
- * 所以采用set+list
- */
 public class PermissionCache {
-    private final String AUTH_SET_PERMISSION_URL_KEY = "AUTH:SET:PERMISSION:URL:APP:";
-    private final String AUTH_PERMISSION_URL_KEY = "AUTH:PERMISSION:URL:APP:";
-    private final String AUTH_PERMISSION_ANONYMOUS_KEY = "AUTH:PERMISSION:ANONYMOUS:APP:";
+    private final String AUTH_PERMISSION_URL_KEY = CacheKeyConstants.AUTH_PERMISSION_URL_KEY;
+    private final String AUTH_PERMISSION_ANONYMOUS_KEY = CacheKeyConstants.AUTH_PERMISSION_ANONYMOUS_KEY;
     @Autowired
-    RedisUtilsForCollection redisUtilsForCollection;
+    private RedisUtilsForCollection redisUtilsForCollection;
     @Autowired
-    RedisUtilsForObject redisUtilsForObject;
+    private RedisUtilsForObject redisUtilsForObject;
 
     @Data
     private class urlPermission implements Serializable {
@@ -43,24 +38,16 @@ public class PermissionCache {
         private String name;
     }
 
-    public List<String> getAnonymousPath(String applicationName){
+    public Set<String> getAnonymousPath(String applicationName){
         String key = getAnonymousKey(applicationName);
-        return redisUtilsForCollection.getRedisUtilForList().getAll(key);
+        return redisUtilsForCollection.getRedisUtilsForSet().members(key);
     }
 
     public void addAnonymousPath(String applicationName, List<String> path){
-        String setKey = AUTH_SET_PERMISSION_URL_KEY + applicationName;
-        List<String> newPath = new ArrayList<>();
-        for(String p : path) {
-            if (!redisUtilsForCollection.getRedisUtilsForSet().isExist(setKey, p)){
-                redisUtilsForCollection.getRedisUtilsForSet().add(setKey, p);
-                newPath.add(p);
-            }
-        }
-        if(newPath.size() > 0) {
+            String[] p = new String[path.size()];
             String key = getAnonymousKey(applicationName);
-            redisUtilsForCollection.getRedisUtilForList().rightPush(key, newPath);
-        }
+            redisUtilsForCollection.getRedisUtilsForSet().add(key, path.toArray(p));
+
     }
 
     private String getAnonymousKey(String applicationName){

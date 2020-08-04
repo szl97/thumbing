@@ -1,8 +1,13 @@
 package com.thumbing.gateway.feign;
 
+import com.thumbing.shared.auth.authentication.AuthorizationContextHolder;
+import com.thumbing.shared.config.FeignConfiguration;
+import feign.RequestInterceptor;
+import feign.RequestTemplate;
 import feign.codec.Decoder;
 import feign.codec.Encoder;
 import org.springframework.beans.factory.ObjectFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.http.HttpMessageConverters;
 import org.springframework.cloud.openfeign.support.ResponseEntityDecoder;
 import org.springframework.cloud.openfeign.support.SpringDecoder;
@@ -21,6 +26,7 @@ import java.util.List;
  */
 @Configuration
 public class FeignConfig {
+
 
     @Bean
     public Decoder feignDecoder() {

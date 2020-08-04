@@ -43,7 +43,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Autowired
     private DefaultAuthenticationProvider authenticationProvider;
 
-
     @Autowired
     private DefaultAuthenticationFailureHandler authenticationFailureHandler;
 

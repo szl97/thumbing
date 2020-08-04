@@ -25,28 +25,24 @@ import java.util.Set;
 @FieldNameConstants
 @SQLDelete(sql =  "update personal " + EntityConstants.DELETION)
 @Where(clause = "is_delete=0")
-//phone_num, email, gender, birth_date, birth_year,
+// gender, birth_date, birth_year,
 // birth_month, birth_day, constellation, interest_id(fk),
 // is_student, occupation_id(fk), job_id(fk), currentCountry, nativeCountry
 public class Personal extends SqlFullAuditedEntity {
     /**
-     * 标识身份信息所属的唯一用户
+     * 身份信息所属的唯一用户的ID
+     */
+    private Long userId;
+    /**
+     * 身份信息所属的唯一用户
      */
     @OneToOne(targetEntity = UserInfo.class)
-    @JoinColumn(name = "user_id", referencedColumnName = BaseSqlEntity.Fields.id)
+    @JoinColumn(name = Fields.userId, referencedColumnName = BaseSqlEntity.Fields.id, insertable = false, updatable = false)
     private UserInfo user;
     /**
-     * 民字
+     * 名字
      */
     private String name;
-    /**
-     * 电话号码
-     */
-    private String phone_num;
-    /**
-     * 邮件
-     */
-    private String email;
     /**
      * 性别
      */
@@ -94,14 +90,16 @@ public class Personal extends SqlFullAuditedEntity {
     /**
      * 专业（所学或所擅长）
      */
+    private Long occupationId;
     @ManyToOne(targetEntity = Occupation.class, fetch = FetchType.EAGER)
-    @JoinColumn(name = "occupation_id", referencedColumnName = BaseSqlEntity.Fields.id)
+    @JoinColumn(name = Fields.occupationId, referencedColumnName = BaseSqlEntity.Fields.id, insertable = false, updatable = false)
     private Occupation occupation;
     /**
      * 职业
      */
+    private Long jobId;
     @ManyToOne(targetEntity = Job.class, fetch = FetchType.EAGER)
-    @JoinColumn(name = "job_id", referencedColumnName = BaseSqlEntity.Fields.id)
+    @JoinColumn(name = Fields.jobId, referencedColumnName = BaseSqlEntity.Fields.id, insertable = false, updatable = false)
     private Job job;
 
     @Override

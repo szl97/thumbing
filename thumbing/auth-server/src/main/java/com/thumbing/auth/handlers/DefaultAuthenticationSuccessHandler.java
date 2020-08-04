@@ -1,6 +1,10 @@
 package com.thumbing.auth.handlers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.thumbing.auth.context.LoginRequestContextHolder;
+import com.thumbing.auth.dto.input.LoginRequest;
+import com.thumbing.auth.service.IAccountService;
+import com.thumbing.auth.service.IAuthService;
 import com.thumbing.shared.auth.model.UserContext;
 import com.thumbing.shared.jwt.JwtTokenFactory;
 import com.thumbing.shared.response.BaseApiResult;
@@ -28,7 +32,8 @@ public class DefaultAuthenticationSuccessHandler implements AuthenticationSucces
     private ObjectMapper mapper;
     @Autowired
     private JwtTokenFactory jwtTokenFactory;
-
+    @Autowired
+    private IAuthService authService;
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Authentication authentication) throws IOException, ServletException {
@@ -36,8 +41,11 @@ public class DefaultAuthenticationSuccessHandler implements AuthenticationSucces
         String accessToken = jwtTokenFactory.createJwtToken(userContext);
         httpServletResponse.setContentType(MediaType.APPLICATION_JSON_VALUE);
         httpServletResponse.setCharacterEncoding(StandardCharsets.UTF_8.toString());
+        LoginRequest loginRequest = LoginRequestContextHolder.getLoginRequest();
+        authService.succeedLogin(loginRequest);
         mapper.writeValue(httpServletResponse.getWriter(),  BaseApiResult.success(accessToken,"登录成功"));
         clearAuthenticationAttributes(httpServletRequest);
+        LoginRequestContextHolder.clear();
     }
 
     private  void clearAuthenticationAttributes(HttpServletRequest request) {

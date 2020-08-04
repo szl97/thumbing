@@ -11,4 +11,6 @@ import java.util.Optional;
  */
 public interface IUserRepository extends IBaseSqlRepository<User> {
     Optional<User> findByUserName(String userName);
+    Optional<User> findByEmail(String email);
+    Optional<User> findByPhoneNum(String phoneNum);
 }

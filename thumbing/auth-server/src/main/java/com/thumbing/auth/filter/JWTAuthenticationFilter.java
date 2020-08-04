@@ -2,7 +2,8 @@ package com.thumbing.auth.filter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.exc.MismatchedInputException;
-import com.thumbing.auth.model.LoginRequest;
+import com.thumbing.auth.context.LoginRequestContextHolder;
+import com.thumbing.auth.dto.input.LoginRequest;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,9 +33,7 @@ public class JWTAuthenticationFilter extends AbstractAuthenticationProcessingFil
 
     private AuthenticationSuccessHandler successHandler;
     private AuthenticationFailureHandler failureHandler;
-
     private ObjectMapper objectMapper;
-
 
     public JWTAuthenticationFilter(String defaultProcessUrl, AuthenticationSuccessHandler successHandler,
                                    AuthenticationFailureHandler failureHandler, ObjectMapper mapper) {
@@ -49,17 +48,14 @@ public class JWTAuthenticationFilter extends AbstractAuthenticationProcessingFil
         UsernamePasswordAuthenticationToken token = null;
         try {
             LoginRequest loginRequest = objectMapper.readValue(request.getReader(), LoginRequest.class);
-
+            LoginRequestContextHolder.setLoginRequest(loginRequest);
             if (StringUtils.isBlank(loginRequest.getUsername()) || StringUtils.isBlank(loginRequest.getPassword())) {
                 throw new BadCredentialsException("帐户名或密码不能为空");
             }
-
             token = new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword());
         } catch (MismatchedInputException ex) {
-            throw new BadCredentialsException("帐户名或密码不能为空");
+            throw new BadCredentialsException("认证失败");
         }
-
-
         return this.getAuthenticationManager().authenticate(token);
     }
 

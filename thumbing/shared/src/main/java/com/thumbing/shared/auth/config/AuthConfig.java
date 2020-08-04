@@ -1,4 +1,4 @@
-package com.thumbing.shared.config;
+package com.thumbing.shared.auth.config;
 
 import com.thumbing.shared.annotation.AllowAnonymous;
 import com.thumbing.shared.auth.permission.CustomAuthProvider;

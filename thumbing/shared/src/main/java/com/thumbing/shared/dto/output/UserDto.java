@@ -1,5 +1,6 @@
-package com.thumbing.shared.dto;
+package com.thumbing.shared.dto.output;
 
+import com.thumbing.shared.dto.output.EntityDto;
 import lombok.Data;
 
 /**
