@@ -107,4 +107,16 @@ public class AccountService extends BaseSqlService<User, IUserRepository> implem
         }
         return null == user;
     }
+
+    @Override
+    public Boolean simulateRegisterSms(String phoneNum) {
+        validationCache.storeRegisterCode(phoneNum, "1234");
+        return true;
+    }
+
+    @Override
+    public Boolean simulateChangePasswordSms(String phoneNum) {
+        validationCache.storeChangerCode(phoneNum, "1234");
+        return true;
+    }
 }

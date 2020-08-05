@@ -10,10 +10,7 @@ import com.thumbing.shared.annotation.EnableResponseAdvice;
 import com.thumbing.shared.controller.ThumbingBaseController;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
@@ -47,5 +44,19 @@ public class AccountController extends ThumbingBaseController {
     @RequestMapping(value = "/checkUnique", method = RequestMethod.POST)
     public Boolean checkUnique(@Valid @RequestBody CheckUniqueInput checkUniqueInput){
         return accountService.checkUnique(checkUniqueInput);
+    }
+
+    @ApiOperation("模拟注册短信发送")
+    @AllowAnonymous
+    @RequestMapping(value = "/registerSms", method = RequestMethod.GET)
+    public Boolean registerSms(@RequestParam String phoneNum){
+        return accountService.simulateRegisterSms(phoneNum);
+    }
+
+    @ApiOperation("模拟修改密码短信发送")
+    @AllowAnonymous
+    @RequestMapping(value = "/changerSms", method = RequestMethod.GET)
+    public Boolean changerSms(@RequestParam String phoneNum){
+        return accountService.simulateChangePasswordSms(phoneNum);
     }
 }
