@@ -17,6 +17,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.util.List;
 
 /**
  * @author Stan Sai
@@ -28,7 +29,7 @@ public class ElasticSearchConfig {
     @Value("${elasticsearch.host}")
     private String host;
     @Value("${elasticsearch.port}")
-    private int port;
+    private String port;
     @Value("${elasticsearch.clusterName}")
     private String clusterName;
     @Value("${elasticsearch.schema}")
@@ -53,10 +54,13 @@ public class ElasticSearchConfig {
 
     @Bean(name = "restHighLevelClient")
     public RestHighLevelClient getRestClient() {
-
-        RestHighLevelClient client = new RestHighLevelClient(
-                RestClient.builder(
-                        new HttpHost(host, port, schema)));
+        String[] hosts = host.split(",");
+        String[] ports = port.split(",");
+        HttpHost[] httpHosts = new HttpHost[hosts.length];
+        for(int i = 0; i < hosts.length; i++){
+            httpHosts[i] = new HttpHost(hosts[i], Integer.parseInt(ports[i]), schema);
+        }
+        RestHighLevelClient client = new RestHighLevelClient(RestClient.builder(httpHosts));
         return client;
     }
 
