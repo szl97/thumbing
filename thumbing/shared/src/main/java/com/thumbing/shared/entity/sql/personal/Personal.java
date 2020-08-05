@@ -25,9 +25,6 @@ import java.util.Set;
 @FieldNameConstants
 @SQLDelete(sql =  "update personal " + EntityConstants.DELETION)
 @Where(clause = "is_delete=0")
-// gender, birth_date, birth_year,
-// birth_month, birth_day, constellation, interest_id(fk),
-// is_student, occupation_id(fk), job_id(fk), currentCountry, nativeCountry
 public class Personal extends SqlFullAuditedEntity {
     /**
      * 身份信息所属的唯一用户的ID
@@ -82,7 +79,7 @@ public class Personal extends SqlFullAuditedEntity {
     /**
      * 兴趣爱好
      */
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany
     @JoinTable(name = "personal_interest",
             joinColumns = { @JoinColumn(name = "personal_id") },
             inverseJoinColumns = {@JoinColumn(name = "interest_id")})

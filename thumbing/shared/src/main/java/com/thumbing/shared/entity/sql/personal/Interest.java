@@ -20,7 +20,7 @@ import java.util.Set;
 public class Interest extends BaseSqlEntity {
     private String name;
     private int sort;
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany
     @JoinTable(name = "personal_interest",
             joinColumns = { @JoinColumn(name = "interest_id") },
             inverseJoinColumns = {@JoinColumn(name = "personal_id")})

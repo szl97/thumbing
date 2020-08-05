@@ -29,8 +29,6 @@ import java.util.Set;
 @FieldNameConstants
 @SQLDelete(sql =  "update sys_user " + EntityConstants.DELETION)
 @Where(clause = "is_delete=0")
-//user_name, pwd, personal_id(fk), is_active, last_login, phone_num, email
-// continue_day, is_access, devices, current_device_id
 public class User extends SqlFullAuditedEntity {
     public User(){
         devices = new HashSet<>();

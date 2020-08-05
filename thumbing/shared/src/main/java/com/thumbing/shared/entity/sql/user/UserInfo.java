@@ -21,7 +21,9 @@ import java.util.Set;
  * @Date: 2020/7/13 11:38
  */
 @Entity
-@Table(name = "user_info")
+@Table(name = "user_info", indexes = {
+        @Index(name = "name", columnList = "userName", unique = true),
+})
 @Getter
 @Setter
 @FieldNameConstants
@@ -31,7 +33,6 @@ import java.util.Set;
         @NamedAttributeNode("personal"),
         @NamedAttributeNode("chatGroups")
 })
-//nick_name, pwd, personal_id(fk), relation_id(fk), chat_group_num
 public class UserInfo extends SqlFullAuditedEntity {
     /**
      * 用户名
@@ -47,11 +48,6 @@ public class UserInfo extends SqlFullAuditedEntity {
     @OneToOne(targetEntity = Personal.class)
     @JoinColumn(name = "personal_id", referencedColumnName = BaseSqlEntity.Fields.id)
     private Personal personal;
-    /**
-     * 关系列表
-     */
-    @OneToMany(targetEntity = Relation.class, mappedBy = Relation.Fields.user, cascade = CascadeType.ALL)
-    private List<Relation> relations;
     /**
      * 加入聊天室列表
      */

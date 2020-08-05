@@ -20,7 +20,6 @@ import java.util.Set;
 @Getter
 @Setter
 @FieldNameConstants
-//user_id(fk), current, total_hours
 public class ChatGroup extends SqlFullAuditedEntity {
     /**
      * 名字

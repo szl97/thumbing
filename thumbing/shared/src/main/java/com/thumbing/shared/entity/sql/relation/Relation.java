@@ -23,28 +23,27 @@ import javax.persistence.*;
 @FieldNameConstants
 @SQLDelete(sql =  "update relation " + EntityConstants.DELETION)
 @Where(clause = "is_delete=0")
-//user_id(fk), target_id(fk), status, continue_day, rest_day, is_black, nick_name
 public class Relation extends SqlFullAuditedEntity {
     /**
-     * 关系一方的用户ID，userID < targetUserID
+     * 关系一方的用户ID, 申请添加一方为user1
      */
-    private Long userId;
+    private String userNameOne;
     /**
-     * 关系另一方的用户ID，userID < targetUserID
+     * 关系另一方的用户ID, 同意添加一方为user2
      */
-    private Long targetUserId;
+    private String userNameTwo;
     /**
      * 标识建立关系的用户
      */
-    @ManyToOne(targetEntity = UserInfo.class, fetch = FetchType.EAGER)
-    @JoinColumn(name = Fields.userId, referencedColumnName = BaseSqlEntity.Fields.id, insertable = false, updatable = false)
-    private UserInfo user;
+    @ManyToOne(targetEntity = UserInfo.class)
+    @JoinColumn(name = Fields.userNameOne, referencedColumnName = UserInfo.Fields.userName, insertable = false, updatable = false)
+    private UserInfo userOne;
     /**
      * 标识关系另一方的用户
      */
-    @OneToOne(targetEntity = UserInfo.class, fetch = FetchType.EAGER)
-    @JoinColumn(name = Fields.targetUserId, referencedColumnName = BaseSqlEntity.Fields.id, insertable = false, updatable = false)
-    private UserInfo targetUser;
+    @ManyToOne(targetEntity = UserInfo.class)
+    @JoinColumn(name = Fields.userNameTwo, referencedColumnName = UserInfo.Fields.userName, insertable = false, updatable = false)
+    private UserInfo UserTwo;
     /**
      * 状态 代表持续聊天的时间到达的关系等级
      * year month week day
@@ -53,20 +52,31 @@ public class Relation extends SqlFullAuditedEntity {
     /**
      * 持续聊天天数
      */
-    private int continue_day;
+    private int continueDay;
     /**
      * 关系剩余时间
      * 代表多久不发消息就会取消好友关系
      */
-    private int rest_day;
+    private int restDay;
     /**
      * 是否是黑名单
      */
     private boolean black;
     /**
-     * 昵称
+     * 0代表未拉黑
+     * 1代表user一方拉黑
+     * 2代表target一方拉黑
+     * 3代表互相拉黑
      */
-    private String nickName;
+    private short blackSides;
+    /**
+     * user1一方的昵称
+     */
+    private String nickNameOne;
+    /**
+     * user2一方的昵称
+     */
+    private String nickNameTwo;
 
     @Override
     public boolean equals(Object object){

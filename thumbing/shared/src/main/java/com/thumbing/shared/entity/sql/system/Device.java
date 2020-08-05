@@ -22,7 +22,6 @@ import java.util.Set;
 @NamedEntityGraph(name = "device.all_users",attributeNodes = {
         @NamedAttributeNode("users")
 })
-//user_ids, current_user_id, device_id, device_name, device_info
 public class Device extends SqlEditionEntity {
     /**
      * 设备的固有Id
