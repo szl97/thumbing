@@ -58,7 +58,7 @@ public class ElasticSearchConfig {
         String[] ports = port.split(",");
         HttpHost[] httpHosts = new HttpHost[hosts.length];
         for(int i = 0; i < hosts.length; i++){
-            httpHosts[i] = new HttpHost(hosts[i], Integer.parseInt(ports[i]), schema);
+            httpHosts[i] = new HttpHost(hosts[i].trim(), Integer.parseInt(ports[i].trim()), schema);
         }
         RestHighLevelClient client = new RestHighLevelClient(RestClient.builder(httpHosts));
         return client;
