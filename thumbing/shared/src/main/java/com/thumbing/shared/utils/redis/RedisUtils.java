@@ -5,6 +5,7 @@ import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
 
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -25,6 +26,17 @@ public class RedisUtils {
     public Boolean remove(RedisTemplate redisTemplate, String key) {
 
         return redisTemplate.delete(key);
+    }
+
+    /**
+     * 批量删除key
+     * 返回删除的数量
+     * @param redisTemplate
+     * @param keys
+     * @return
+     */
+    public Long removeAll(RedisTemplate redisTemplate, List<String> keys){
+        return redisTemplate.delete(keys);
     }
 
     /**
