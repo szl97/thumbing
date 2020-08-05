@@ -30,5 +30,5 @@ public interface IAccountService {
     Boolean checkUnique(CheckUniqueInput checkUniqueInput);
 
     Boolean simulateRegisterSms(String phoneNum);
-    Boolean simulateChangePasswordSms(String phoneNum)
+    Boolean simulateChangePasswordSms(String phoneNum);
 }
