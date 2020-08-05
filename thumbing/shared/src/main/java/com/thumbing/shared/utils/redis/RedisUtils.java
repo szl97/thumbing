@@ -1,7 +1,7 @@
 package com.thumbing.shared.utils.redis;
 
 import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
 
@@ -13,17 +13,16 @@ import java.util.concurrent.TimeUnit;
  */
 @Slf4j
 @Data
-@NoArgsConstructor
+@UtilityClass
 public class RedisUtils {
 
-    RedisTemplate<String, String> redisTemplate;
 
     /**
      * 删除某个key
      * @param key
      * @return
      */
-    public Boolean remove(String key) {
+    public Boolean remove(RedisTemplate redisTemplate, String key) {
 
         return redisTemplate.delete(key);
     }
@@ -33,7 +32,7 @@ public class RedisUtils {
      * @param key
      * @return
      */
-    public Boolean hasKey(String key) {
+    public Boolean hasKey(RedisTemplate redisTemplate, String key) {
 
         return redisTemplate.hasKey(key);
     }
@@ -45,7 +44,7 @@ public class RedisUtils {
      * @param unit
      * @return
      */
-    public Boolean expire(String key, long timeout, TimeUnit unit) {
+    public Boolean expire(RedisTemplate redisTemplate, String key, long timeout, TimeUnit unit) {
         return redisTemplate.expire(key, timeout, unit);
     }
 }

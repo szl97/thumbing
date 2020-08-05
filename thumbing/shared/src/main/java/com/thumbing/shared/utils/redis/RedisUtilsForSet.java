@@ -1,6 +1,7 @@
 package com.thumbing.shared.utils.redis;
 
 import lombok.Data;
+import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.SetOperations;
 
@@ -14,43 +15,8 @@ import java.util.Set;
  */
 @Slf4j
 @Data
+@UtilityClass
 public class RedisUtilsForSet {
-
-    SetOperations<String, String> setOperations;
-
-    private static RedisUtilsForSet INSTANCE = new RedisUtilsForSet();
-
-    private static Object lock = new Object();
-
-    private RedisUtilsForSet() {
-
-    }
-
-    /**
-     * 多线程下的单例模式
-     * 保证setOperations不会被初始化两次
-     *
-     * @param setOperations
-     * @return
-     */
-    public static RedisUtilsForSet getInstance(SetOperations setOperations) {
-        if (INSTANCE.getSetOperations() == null) {
-            synchronized (lock) {
-                if (INSTANCE.getSetOperations() == null) {
-                    INSTANCE.setSetOperations(setOperations);
-                }
-            }
-        }
-        return INSTANCE;
-    }
-
-    public static RedisUtilsForSet getInstance() {
-        if (INSTANCE.getSetOperations() == null) {
-            return null;
-        }
-        return INSTANCE;
-    }
-
     /**
      * 给集合key添加多个值，集合不存在创建后再添加
      *
@@ -58,7 +24,7 @@ public class RedisUtilsForSet {
      * @param value
      * @return
      */
-    public Long add(String key, String... value) {
+    public <T> Long add(SetOperations<String, T> setOperations, String key, T... value) {
         return setOperations.add(key, value);
     }
 
@@ -69,7 +35,7 @@ public class RedisUtilsForSet {
      * @param value
      * @return
      */
-    public Long remove(String key, String... value) {
+    public <T> Long remove(SetOperations<String, T> setOperations, String key, T... value) {
         return setOperations.remove(key, value);
     }
 
@@ -79,8 +45,8 @@ public class RedisUtilsForSet {
      * @param key
      * @return
      */
-    public String pop(String key) {
-        String val = setOperations.pop(key);
+    public <T> T pop(SetOperations<String, T> setOperations, String key) {
+        T val = setOperations.pop(key);
         return val;
     }
 
@@ -92,7 +58,7 @@ public class RedisUtilsForSet {
      * @param destKey
      * @return
      */
-    public Boolean move(String sourceKey, String value, String destKey) {
+    public <T> Boolean move(SetOperations<String, T> setOperations, String sourceKey, T value, String destKey) {
         return setOperations.move(sourceKey, value, destKey);
     }
 
@@ -102,7 +68,7 @@ public class RedisUtilsForSet {
      * @param key
      * @return
      */
-    public Long size(String key) {
+    public <T> Long size(SetOperations<String, T> setOperations, String key) {
         return setOperations.size(key);
     }
 
@@ -114,7 +80,7 @@ public class RedisUtilsForSet {
      * @param value
      * @return
      */
-    public Boolean isExist(String key, String value) {
+    public <T> Boolean isExist(SetOperations<String, T> setOperations, String key, T value) {
         return setOperations.isMember(key, value);
     }
 
@@ -126,7 +92,7 @@ public class RedisUtilsForSet {
      * @param otherKey
      * @return
      */
-    public Set<String> intersect(String key, String otherKey) {
+    public <T> Set<T> intersect(SetOperations<String, T> setOperations, String key, String otherKey) {
         return setOperations.intersect(key, otherKey);
     }
 
@@ -137,7 +103,7 @@ public class RedisUtilsForSet {
      * @param otherKeys
      * @return
      */
-    public Set<String> intersect(String key, List<String> otherKeys) {
+    public <T> Set<T> intersect(SetOperations<String, T> setOperations, String key, List<String> otherKeys) {
         return setOperations.intersect(key, otherKeys);
     }
 
@@ -149,7 +115,7 @@ public class RedisUtilsForSet {
      * @param destKey
      * @return 返回目标集合的长度
      */
-    public Long intersectAndStore(String key, String otherKey, String destKey) {
+    public <T> Long intersectAndStore(SetOperations<String, T> setOperations, String key, String otherKey, String destKey) {
         return setOperations.intersectAndStore(key, otherKey, destKey);
     }
 
@@ -161,7 +127,7 @@ public class RedisUtilsForSet {
      * @param destKey
      * @return 返回目标集合的长度
      */
-    public Long intersectAndStore(String key, List<String> otherKeys, String destKey) {
+    public <T> Long intersectAndStore(SetOperations<String, T> setOperations, String key, List<String> otherKeys, String destKey) {
         return setOperations.intersectAndStore(key, otherKeys, destKey);
     }
 
@@ -172,7 +138,7 @@ public class RedisUtilsForSet {
      * @param otherKey
      * @return
      */
-    public Set<String> Union(String key, String otherKey) {
+    public <T> Set<T> Union(SetOperations<String, T> setOperations, String key, String otherKey) {
         return setOperations.union(key, otherKey);
     }
 
@@ -183,7 +149,7 @@ public class RedisUtilsForSet {
      * @param otherKeys
      * @return
      */
-    public Set<String> union(String key, List<String> otherKeys) {
+    public <T> Set<T> union(SetOperations<String, T> setOperations, String key, List<String> otherKeys) {
         return setOperations.union(key, otherKeys);
     }
 
@@ -195,7 +161,7 @@ public class RedisUtilsForSet {
      * @param destKey
      * @return 返回目标集合的长度
      */
-    public Long unionAndStore(String key, String otherKey, String destKey) {
+    public <T> Long unionAndStore(SetOperations<String, T> setOperations, String key, String otherKey, String destKey) {
         return setOperations.unionAndStore(key, otherKey, destKey);
     }
 
@@ -207,7 +173,7 @@ public class RedisUtilsForSet {
      * @param destKey
      * @return 返回目标集合的长度
      */
-    public Long unionAndStore(String key, List<String> otherKeys, String destKey) {
+    public <T> Long unionAndStore(SetOperations<String, T> setOperations, String key, List<String> otherKeys, String destKey) {
         return setOperations.unionAndStore(key, otherKeys, destKey);
     }
 
@@ -218,7 +184,7 @@ public class RedisUtilsForSet {
      * @param otherKey
      * @return
      */
-    public Set<String> difference(String key, String otherKey) {
+    public <T> Set<T> difference(SetOperations<String, T> setOperations, String key, String otherKey) {
         return setOperations.difference(key, otherKey);
     }
 
@@ -229,7 +195,7 @@ public class RedisUtilsForSet {
      * @param otherKeys
      * @return
      */
-    public Set<String> difference(String key, List<String> otherKeys) {
+    public <T> Set<T> difference(SetOperations<String, T> setOperations, String key, List<String> otherKeys) {
         return setOperations.difference(key, otherKeys);
     }
 
@@ -241,7 +207,7 @@ public class RedisUtilsForSet {
      * @param destKey
      * @return 返回目标集合的长度
      */
-    public Long differenceAndStore(String key, String otherKey, String destKey) {
+    public <T> Long differenceAndStore(SetOperations<String, T> setOperations, String key, String otherKey, String destKey) {
         return setOperations.differenceAndStore(key, otherKey, destKey);
     }
 
@@ -253,7 +219,7 @@ public class RedisUtilsForSet {
      * @param destKey
      * @return 返回目标集合的长度
      */
-    public Long differenceAndStore(String key, List<String> otherKeys, String destKey) {
+    public <T> Long differenceAndStore(SetOperations<String, T> setOperations, String key, List<String> otherKeys, String destKey) {
         return setOperations.differenceAndStore(key, otherKeys, destKey);
     }
 
@@ -263,7 +229,7 @@ public class RedisUtilsForSet {
      * @param key
      * @return
      */
-    public Set<String> members(String key) {
+    public <T> Set<T> members(SetOperations<String, T> setOperations, String key) {
         return setOperations.members(key);
     }
 
@@ -273,8 +239,8 @@ public class RedisUtilsForSet {
      * @param key
      * @return
      */
-    public String randomMember(String key) {
-        String val = setOperations.randomMember(key);
+    public <T> T randomMember(SetOperations<String, T> setOperations, String key) {
+        T val = setOperations.randomMember(key);
         return  val;
     }
 
@@ -285,7 +251,7 @@ public class RedisUtilsForSet {
      * @param count
      * @return
      */
-    public Set<String> distinctRandomMembers(String key, long count) {
+    public <T> Set<T> distinctRandomMembers(SetOperations<String, T> setOperations, String key, long count) {
         return setOperations.distinctRandomMembers(key, count);
     }
 
@@ -296,7 +262,7 @@ public class RedisUtilsForSet {
      * @param count
      * @return
      */
-    public List<String> randomMembers(String key, long count) {
+    public <T> List<T> randomMembers(SetOperations<String, T> setOperations, String key, long count) {
         return setOperations.randomMembers(key, count);
     }
 

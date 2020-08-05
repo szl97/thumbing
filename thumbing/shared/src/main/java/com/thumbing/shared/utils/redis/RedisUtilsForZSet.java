@@ -1,6 +1,7 @@
 package com.thumbing.shared.utils.redis;
 
 import lombok.Data;
+import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.connection.RedisZSetCommands;
 import org.springframework.data.redis.core.ZSetOperations;
@@ -10,42 +11,8 @@ import java.util.Set;
 
 @Data
 @Slf4j
+@UtilityClass
 public class RedisUtilsForZSet {
-
-    ZSetOperations<String, String> zSetOperations;
-
-    private static RedisUtilsForZSet INSTANCE = new RedisUtilsForZSet();
-
-    private static Object lock = new Object();
-
-    private RedisUtilsForZSet() {
-
-    }
-
-    /**
-     * 多线程下的单例模式
-     * 保证setOperations不会被初始化两次
-     *
-     * @param zSetOperations
-     * @return
-     */
-    public static RedisUtilsForZSet getInstance(ZSetOperations zSetOperations) {
-        if (INSTANCE.getZSetOperations() == null) {
-            synchronized (lock) {
-                if (INSTANCE.getZSetOperations() == null) {
-                    INSTANCE.setZSetOperations(zSetOperations);
-                }
-            }
-        }
-        return INSTANCE;
-    }
-
-    public static RedisUtilsForZSet getInstance() {
-        if (INSTANCE.getZSetOperations() == null) {
-            return null;
-        }
-        return INSTANCE;
-    }
 
     /**
      * 给有序集合添加一个指定分数的成员 如果成员存在则覆盖
@@ -55,7 +22,7 @@ public class RedisUtilsForZSet {
      * @param score
      * @return
      */
-    public Boolean add(String key, String value, double score) {
+    public <T> Boolean add(ZSetOperations<String, T> zSetOperations, String key, T value, double score) {
         return zSetOperations.add(key, value, score);
     }
 
@@ -71,7 +38,7 @@ public class RedisUtilsForZSet {
      * @Nullable Double getScore();
      * }
      */
-    public Long add(String key, Set<ZSetOperations.TypedTuple<String>> set) {
+    public <T> Long add(ZSetOperations<String, T> zSetOperations, String key, Set<ZSetOperations.TypedTuple<T>> set) {
         return zSetOperations.add(key, set);
     }
 
@@ -82,7 +49,7 @@ public class RedisUtilsForZSet {
      * @param value
      * @return 集合长度
      */
-    public Long remove(String key, String... value) {
+    public <T> Long remove(ZSetOperations<String, T> zSetOperations, String key, T... value) {
         return zSetOperations.remove(key, value);
     }
 
@@ -94,7 +61,7 @@ public class RedisUtilsForZSet {
      * @param score
      * @return 分数
      */
-    public Double incrementScore(String key, String value, double score) {
+    public <T> Double incrementScore(ZSetOperations<String, T> zSetOperations, String key, T value, double score) {
         return zSetOperations.incrementScore(key, value, score);
     }
 
@@ -105,7 +72,7 @@ public class RedisUtilsForZSet {
      * @param value
      * @return
      */
-    public Long rank(String key, String value) {
+    public <T> Long rank(ZSetOperations<String, T> zSetOperations, String key, T value) {
         return zSetOperations.rank(key, value);
     }
 
@@ -116,7 +83,7 @@ public class RedisUtilsForZSet {
      * @param value
      * @return
      */
-    public Long reserveRank(String key, String value) {
+    public <T> Long reserveRank(ZSetOperations<String, T> zSetOperations, String key, T value) {
         return zSetOperations.rank(key, value);
     }
 
@@ -128,7 +95,7 @@ public class RedisUtilsForZSet {
      * @param end
      * @return
      */
-    public Set<String> range(String key, long start, long end) {
+    public <T> Set<T> range(ZSetOperations<String, T> zSetOperations, String key, long start, long end) {
         return zSetOperations.range(key, start, end);
     }
 
@@ -138,9 +105,9 @@ public class RedisUtilsForZSet {
      * @param key
      * @param start
      * @param end
-     * @return
+     * @returnT
      */
-    public Set<ZSetOperations.TypedTuple<String>> rangeWithScores(String key, long start, long end) {
+    public <T> Set<ZSetOperations.TypedTuple<T>> rangeWithScores(ZSetOperations<String, T> zSetOperations, String key, long start, long end) {
         return zSetOperations.rangeWithScores(key, start, end);
     }
 
@@ -152,7 +119,7 @@ public class RedisUtilsForZSet {
      * @param max
      * @return
      */
-    public Set<String> rangeByScore(String key, double min, double max) {
+    public <T> Set<T> rangeByScore(ZSetOperations<String, T> zSetOperations, String key, double min, double max) {
         return zSetOperations.rangeByScore(key, min, max);
     }
 
@@ -164,7 +131,7 @@ public class RedisUtilsForZSet {
      * @param max
      * @return
      */
-    public Set<ZSetOperations.TypedTuple<String>> rangeByScoreWithScores(String key, double min, double max) {
+    public <T> Set<ZSetOperations.TypedTuple<T>> rangeByScoreWithScores(ZSetOperations<String, T> zSetOperations, String key, double min, double max) {
         return zSetOperations.rangeByScoreWithScores(key, min, max);
     }
 
@@ -176,7 +143,7 @@ public class RedisUtilsForZSet {
      * @param max
      * @return
      */
-    public Set<String> rangeByScore(String key, double min, double max, long offSet, long count) {
+    public <T> Set<T> rangeByScore(ZSetOperations<String, T> zSetOperations, String key, double min, double max, long offSet, long count) {
         return zSetOperations.rangeByScore(key, min, max, offSet, count);
     }
 
@@ -188,7 +155,7 @@ public class RedisUtilsForZSet {
      * @param max
      * @return
      */
-    public Set<ZSetOperations.TypedTuple<String>> rangeByScoreWithScores(String key, double min, double max, long offSet, long count) {
+    public <T> Set<ZSetOperations.TypedTuple<T>> rangeByScoreWithScores(ZSetOperations<String, T> zSetOperations, String key, double min, double max, long offSet, long count) {
         return zSetOperations.rangeByScoreWithScores(key, min, max, offSet, count);
     }
 
@@ -200,7 +167,7 @@ public class RedisUtilsForZSet {
      * @param end
      * @return
      */
-    public Set<String> reverseRange(String key, long start, long end) {
+    public <T> Set<T> reverseRange(ZSetOperations<String, T> zSetOperations, String key, long start, long end) {
         return zSetOperations.reverseRange(key, start, end);
     }
 
@@ -212,7 +179,7 @@ public class RedisUtilsForZSet {
      * @param end
      * @return
      */
-    public Set<ZSetOperations.TypedTuple<String>> reverseRangeWithScores(String key, long start, long end) {
+    public <T> Set<ZSetOperations.TypedTuple<T>> reverseRangeWithScores(ZSetOperations<String, T> zSetOperations, String key, long start, long end) {
         return zSetOperations.reverseRangeWithScores(key, start, end);
     }
 
@@ -224,7 +191,7 @@ public class RedisUtilsForZSet {
      * @param max
      * @return
      */
-    public Set<String> reverseRangeByScore(String key, double min, double max) {
+    public <T> Set<T> reverseRangeByScore(ZSetOperations<String, T> zSetOperations, String key, double min, double max) {
         return zSetOperations.reverseRangeByScore(key, min, max);
     }
 
@@ -236,7 +203,7 @@ public class RedisUtilsForZSet {
      * @param max
      * @return
      */
-    public Set<ZSetOperations.TypedTuple<String>> reverseRangeByScoreWithScores(String key, double min, double max) {
+    public <T> Set<ZSetOperations.TypedTuple<T>> reverseRangeByScoreWithScores(ZSetOperations<String, T> zSetOperations, String key, double min, double max) {
         return zSetOperations.reverseRangeByScoreWithScores(key, min, max);
     }
 
@@ -248,7 +215,7 @@ public class RedisUtilsForZSet {
      * @param max
      * @return
      */
-    public Set<String> reverseRangeByScore(String key, double min, double max, long offSet, long count) {
+    public <T> Set<T> reverseRangeByScore(ZSetOperations<String, T> zSetOperations, String key, double min, double max, long offSet, long count) {
         return zSetOperations.reverseRangeByScore(key, min, max, offSet, count);
     }
 
@@ -260,7 +227,7 @@ public class RedisUtilsForZSet {
      * @param max
      * @return
      */
-    public Set<ZSetOperations.TypedTuple<String>> reverseRangeByScoreWithScores(String key, double min, double max, long offSet, long count) {
+    public <T> Set<ZSetOperations.TypedTuple<T>> reverseRangeByScoreWithScores(ZSetOperations<String, T> zSetOperations, String key, double min, double max, long offSet, long count) {
         return zSetOperations.reverseRangeByScoreWithScores(key, min, max, offSet, count);
     }
 
@@ -272,7 +239,7 @@ public class RedisUtilsForZSet {
      * @param max
      * @return
      */
-    public Long count(String key, double min, double max) {
+    public <T> Long count(ZSetOperations<String, T> zSetOperations, String key, double min, double max) {
         return zSetOperations.count(key, min, max);
     }
 
@@ -282,7 +249,7 @@ public class RedisUtilsForZSet {
      * @param key
      * @return
      */
-    public Long size(String key) {
+    public <T> Long size(ZSetOperations<String, T> zSetOperations, String key) {
         return zSetOperations.zCard(key);
     }
 
@@ -293,7 +260,7 @@ public class RedisUtilsForZSet {
      * @param value
      * @return
      */
-    public Double score(String Key, String value) {
+    public <T> Double score(ZSetOperations<String, T> zSetOperations, String Key, String value) {
         return zSetOperations.score(Key, value);
     }
 
@@ -306,7 +273,7 @@ public class RedisUtilsForZSet {
      * @param end
      * @return
      */
-    public Long removeRange(String key, long start, long end) {
+    public <T> Long removeRange(ZSetOperations<String, T> zSetOperations, String key, long start, long end) {
         return zSetOperations.removeRange(key, start, end);
     }
 
@@ -318,7 +285,7 @@ public class RedisUtilsForZSet {
      * @param max
      * @return
      */
-    public Long removeRangeByScore(String key, double min, double max) {
+    public <T> Long removeRangeByScore(ZSetOperations<String, T> zSetOperations, String key, double min, double max) {
         return zSetOperations.removeRangeByScore(key, min, max);
     }
 
@@ -330,7 +297,7 @@ public class RedisUtilsForZSet {
      * @param destKey
      * @return 返回目标集合的长度
      */
-    public Long unionAndStore(String key, String otherKey, String destKey) {
+    public <T> Long unionAndStore(ZSetOperations<String, T> zSetOperations, String key, String otherKey, String destKey) {
         return zSetOperations.unionAndStore(key, otherKey, destKey);
     }
 
@@ -342,7 +309,7 @@ public class RedisUtilsForZSet {
      * @param destKey
      * @return 返回目标集合的长度
      */
-    public Long unionAndStore(String key, List<String> otherKeys, String destKey) {
+    public <T> Long unionAndStore(ZSetOperations<String, T> zSetOperations, String key, List<String> otherKeys, String destKey) {
         return zSetOperations.unionAndStore(key, otherKeys, destKey);
     }
 
@@ -354,7 +321,7 @@ public class RedisUtilsForZSet {
      * @param destKey
      * @return 返回目标集合的长度
      */
-    public Long intersectAndStore(String key, String otherKey, String destKey) {
+    public <T> Long intersectAndStore(ZSetOperations<String, T> zSetOperations, String key, String otherKey, String destKey) {
         return zSetOperations.intersectAndStore(key, otherKey, destKey);
     }
 
@@ -366,7 +333,7 @@ public class RedisUtilsForZSet {
      * @param destKey
      * @return 返回目标集合的长度
      */
-    public Long intersectAndStore(String key, List<String> otherKeys, String destKey) {
+    public <T> Long intersectAndStore(ZSetOperations<String, T> zSetOperations, String key, List<String> otherKeys, String destKey) {
         RedisZSetCommands.Range range;
         return zSetOperations.intersectAndStore(key, otherKeys, destKey);
     }

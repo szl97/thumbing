@@ -1,9 +1,11 @@
 package com.thumbing.auth.cache;
 
 import com.thumbing.shared.constants.CacheKeyConstants;
-import com.thumbing.shared.utils.redis.RedisUtilsForObject;
+import com.thumbing.shared.utils.redis.RedisUtils;
+import com.thumbing.shared.utils.redis.RedisUtilsForValue;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
 import java.util.concurrent.TimeUnit;
@@ -18,7 +20,7 @@ public class TokenCache {
     @Value("${authentication.expirationTime}")
     private long expireTime;
     @Autowired
-    private RedisUtilsForObject redisUtilsForObject;
+    private RedisTemplate<String, String> redisTemplate;
 
     /**
      * 存储或更新登录后的token
@@ -27,7 +29,7 @@ public class TokenCache {
      */
     public void store(String userName, String token){
         String key = TOKEN_KEY + userName;
-        redisUtilsForObject.getRedisUtilsForValue().setWithExpireTime(key, token, expireTime, TimeUnit.MINUTES);
+        RedisUtilsForValue.setWithExpireTime(redisTemplate.opsForValue(), key, token, expireTime, TimeUnit.MINUTES);
     }
 
     /**
@@ -37,7 +39,7 @@ public class TokenCache {
      */
     public String find(String userName){
         String key = TOKEN_KEY + userName;
-        return redisUtilsForObject.getRedisUtilsForValue().get(key).toString();
+        return RedisUtilsForValue.get(redisTemplate.opsForValue(), key);
     }
 
     /**
@@ -46,8 +48,8 @@ public class TokenCache {
      */
     public void remove(String userName){
         String key = TOKEN_KEY + userName;
-        if(redisUtilsForObject.hasKey(key)) {
-            redisUtilsForObject.remove(key);
+        if(RedisUtils.hasKey(redisTemplate,key)) {
+            RedisUtils.remove(redisTemplate,key);
         }
     }
 }

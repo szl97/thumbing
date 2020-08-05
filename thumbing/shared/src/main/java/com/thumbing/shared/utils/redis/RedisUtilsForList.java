@@ -1,6 +1,7 @@
 package com.thumbing.shared.utils.redis;
 
 import lombok.Data;
+import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.ListOperations;
 
@@ -13,42 +14,8 @@ import java.util.concurrent.TimeUnit;
  */
 @Slf4j
 @Data
+@UtilityClass
 public class RedisUtilsForList {
-
-    ListOperations<String, String> listOperations;
-
-    private static RedisUtilsForList INSTANCE = new RedisUtilsForList();
-
-    private static Object lock = new Object();
-
-    private RedisUtilsForList() {
-
-    }
-
-    /**
-     * 多线程下的单例模式
-     * 保证listOperations不会被初始化两次
-     *
-     * @param listOperations
-     * @return
-     */
-    public static RedisUtilsForList getInstance(ListOperations listOperations) {
-        if (INSTANCE.getListOperations() == null) {
-            synchronized (lock) {
-                if (INSTANCE.getListOperations() == null) {
-                    INSTANCE.setListOperations(listOperations);
-                }
-            }
-        }
-        return INSTANCE;
-    }
-
-    public static RedisUtilsForList getInstance() {
-        if (INSTANCE.getListOperations() == null) {
-            return null;
-        }
-        return INSTANCE;
-    }
 
     /**
      * 获取整个list
@@ -56,7 +23,7 @@ public class RedisUtilsForList {
      * @param key
      * @return
      */
-    public List<String> getAll(String key) {
+    public <T> List<T> getAll(ListOperations<String, T> listOperations, String key) {
         return listOperations.range(key, 0, -1);
     }
 
@@ -66,7 +33,7 @@ public class RedisUtilsForList {
      * @param key
      * @return
      */
-    public List<String> get(String key, long start, long end) {
+    public <T> List<T> get(ListOperations<String, T> listOperations, String key, long start, long end) {
         return listOperations.range(key, start, end);
     }
 
@@ -77,7 +44,7 @@ public class RedisUtilsForList {
      * @param start
      * @param end
      */
-    public void clearAndPersist(String key, long start, long end) {
+    public <T> void clearAndPersist(ListOperations<String, T> listOperations, String key, long start, long end) {
         listOperations.trim(key, start, end);
     }
 
@@ -87,7 +54,7 @@ public class RedisUtilsForList {
      * @param key
      * @return 列表插入后的长度
      */
-    public Long size(String key) {
+    public <T> Long size(ListOperations<String, T> listOperations, String key) {
         return listOperations.size(key);
     }
 
@@ -98,7 +65,7 @@ public class RedisUtilsForList {
      * @param value
      * @return 列表插入后的长度
      */
-    public Long leftPush(String key, String value) {
+    public <T> Long leftPush(ListOperations<String, T> listOperations, String key, T value) {
         return listOperations.leftPush(key, value);
     }
 
@@ -109,7 +76,7 @@ public class RedisUtilsForList {
      * @param value
      * @return 列表插入后的长度
      */
-    public Long leftPush(String key, String... value) {
+    public <T> Long leftPush(ListOperations<String, T> listOperations, String key, T... value) {
         return listOperations.leftPushAll(key, value);
     }
 
@@ -120,7 +87,7 @@ public class RedisUtilsForList {
      * @param value
      * @return 列表插入后的长度
      */
-    public Long leftPush(String key, List<String> value) {
+    public <T> Long leftPush(ListOperations<String, T> listOperations, String key, List<T> value) {
         return listOperations.leftPushAll(key, value);
     }
 
@@ -131,8 +98,8 @@ public class RedisUtilsForList {
      * @param value
      * @return
      */
-    public Boolean leftPushNx(String key, String value) {
-        Long origin = size(key);
+    public <T> Boolean leftPushNx(ListOperations<String, T> listOperations, String key, T value) {
+        Long origin = size(listOperations, key);
         return origin == listOperations.leftPushIfPresent(key, value) - 1;
     }
 
@@ -145,8 +112,8 @@ public class RedisUtilsForList {
      * @param value
      * @return
      */
-    public Boolean leftPush(String key, String next, String value) {
-        Long origin = size(key);
+    public <T> Boolean leftPush(ListOperations<String, T> listOperations, String key, T next, T value) {
+        Long origin = size(listOperations, key);
         return origin == listOperations.leftPush(key, next, value) - 1;
     }
 
@@ -157,7 +124,7 @@ public class RedisUtilsForList {
      * @param value
      * @return 列表插入后的长度
      */
-    public Long rightPush(String key, String value) {
+    public <T> Long rightPush(ListOperations<String, T> listOperations, String key, T value) {
         return listOperations.rightPush(key, value);
     }
 
@@ -168,7 +135,7 @@ public class RedisUtilsForList {
      * @param value
      * @return 列表插入后的长度
      */
-    public Long rightPush(String key, String... value) {
+    public <T> Long rightPush(ListOperations<String, T> listOperations, String key, T... value) {
         return listOperations.rightPushAll(key, value);
     }
 
@@ -179,7 +146,7 @@ public class RedisUtilsForList {
      * @param value
      * @return 列表插入后的长度
      */
-    public Long rightPush(String key, List<String> value) {
+    public <T> Long rightPush(ListOperations<String, T> listOperations, String key, List<T> value) {
         return listOperations.rightPushAll(key, value);
     }
 
@@ -190,8 +157,8 @@ public class RedisUtilsForList {
      * @param value
      * @return
      */
-    public Boolean rightPushNx(String key, String value) {
-        Long origin = size(key);
+    public <T> Boolean rightPushNx(ListOperations<String, T> listOperations, String key, T value) {
+        Long origin = size(listOperations, key);
         return origin == listOperations.rightPushIfPresent(key, value) - 1;
     }
 
@@ -204,8 +171,8 @@ public class RedisUtilsForList {
      * @param value
      * @return
      */
-    public Boolean rightPush(String key, String next, String value) {
-        Long origin = size(key);
+    public <T> Boolean rightPush(ListOperations<String, T> listOperations, String key, T next, T value) {
+        Long origin = size(listOperations, key);
         return origin == listOperations.rightPush(key, next, value) - 1;
     }
 
@@ -217,7 +184,7 @@ public class RedisUtilsForList {
      * @param index
      * @param value
      */
-    public void setListValue(String key, long index, String value) {
+    public <T> void setListValue(ListOperations<String, T> listOperations, String key, long index, T value) {
         listOperations.set(key, index, value);
     }
 
@@ -229,8 +196,8 @@ public class RedisUtilsForList {
      * @param value
      * @return
      */
-    public Long remove(String key, long count, String value) {
-        Long origin = size(key);
+    public <T> Long remove(ListOperations<String, T> listOperations, String key, long count, T value) {
+        Long origin = size(listOperations, key);
         Long newSize = listOperations.remove(key, count, value);
         return origin - newSize;
     }
@@ -242,8 +209,8 @@ public class RedisUtilsForList {
      * @param index
      * @return
      */
-    public String get(String key, long index) {
-        String val = listOperations.index(key, index);
+    public <T> T get(ListOperations<String, T> listOperations, String key, long index) {
+        T val = listOperations.index(key, index);
         return val;
     }
 
@@ -255,8 +222,8 @@ public class RedisUtilsForList {
      * @param <T>
      * @return
      */
-    public String leftPop(String key) {
-        String val = listOperations.leftPop(key);
+    public <T> T leftPop(ListOperations<String, T> listOperations, String key) {
+        T val = listOperations.leftPop(key);
         return  val;
     }
 
@@ -271,8 +238,8 @@ public class RedisUtilsForList {
      * @param <T>
      * @return
      */
-    public String leftPop(String key, long times, TimeUnit unit) {
-        String val = listOperations.leftPop(key, times, unit);
+    public <T> T leftPop(ListOperations<String, T> listOperations, String key, long times, TimeUnit unit) {
+        T val = listOperations.leftPop(key, times, unit);
         return val;
     }
 
@@ -281,8 +248,8 @@ public class RedisUtilsForList {
      * @param key
      * @return
      */
-    public String rightPop(String key) {
-        String val = listOperations.rightPop(key);
+    public <T> T rightPop(ListOperations<String, T> listOperations, String key) {
+        T val = listOperations.rightPop(key);
         return val;
     }
 
@@ -296,8 +263,8 @@ public class RedisUtilsForList {
      * @param unit
      * @return
      */
-    public String rightPop(String key, long times, TimeUnit unit) {
-        String val = listOperations.rightPop(key, times, unit);
+    public <T> T rightPop(ListOperations<String, T> listOperations,String key, long times, TimeUnit unit) {
+        T val = listOperations.rightPop(key, times, unit);
         return val;
     }
 
@@ -309,8 +276,8 @@ public class RedisUtilsForList {
      * @param destKey
      * @return
      */
-    public String rightPopAndLeftPush(String sourceKey, String destKey) {
-        String val = listOperations.rightPopAndLeftPush(sourceKey, destKey);
+    public <T> T rightPopAndLeftPush(ListOperations<String, T> listOperations, String sourceKey, String destKey) {
+        T val = listOperations.rightPopAndLeftPush(sourceKey, destKey);
         return  val;
     }
 
@@ -324,8 +291,8 @@ public class RedisUtilsForList {
      * @param destKey
      * @return
      */
-    public String rightPopAndLeftPush(String sourceKey, String destKey, long times, TimeUnit unit) {
-        String val = listOperations.rightPopAndLeftPush(sourceKey, destKey, times, unit);
+    public <T> T rightPopAndLeftPush(ListOperations<String, T> listOperations, String sourceKey, String destKey, long times, TimeUnit unit) {
+        T val = listOperations.rightPopAndLeftPush(sourceKey, destKey, times, unit);
         return  val;
     }
 }

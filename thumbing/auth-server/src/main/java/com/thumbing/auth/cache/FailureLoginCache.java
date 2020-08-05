@@ -1,8 +1,10 @@
 package com.thumbing.auth.cache;
 
 import com.thumbing.shared.constants.CacheKeyConstants;
-import com.thumbing.shared.utils.redis.RedisUtilsForObject;
+import com.thumbing.shared.utils.redis.RedisUtils;
+import com.thumbing.shared.utils.redis.RedisUtilsForValue;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 import java.util.concurrent.TimeUnit;
 
@@ -14,7 +16,7 @@ import java.util.concurrent.TimeUnit;
 public class FailureLoginCache {
     private final String FAILURE_LOGIN_KEY = CacheKeyConstants.FAILURE_LOGIN;
     @Autowired
-    private RedisUtilsForObject redisUtilsForObject;
+    private RedisTemplate<String, Integer> redisTemplate;
     private final long expireTime = 120;
     /**
      * 失败次数加一
@@ -22,9 +24,11 @@ public class FailureLoginCache {
      */
     public void increment(String userName){
         String key = FAILURE_LOGIN_KEY + userName;
-        Integer times = this.getFailureTimes(userName);
-        if(times < 5) {
-            redisUtilsForObject.getRedisUtilsForValue().setWithExpireTime(key, this.getFailureTimes(userName) + 1, expireTime, TimeUnit.MINUTES);
+        if(!this.exist(userName)){
+            RedisUtilsForValue.set(redisTemplate.opsForValue(), key, 1);
+        }
+        else {
+            RedisUtilsForValue.increment(redisTemplate.opsForValue(), key, 1l);
         }
     }
 
@@ -38,7 +42,7 @@ public class FailureLoginCache {
             return 0;
         }
         String key = FAILURE_LOGIN_KEY + userName;
-        return Integer.parseInt(redisUtilsForObject.getRedisUtilsForValue().get(key).toString());
+        return RedisUtilsForValue.get(redisTemplate.opsForValue(), key);
     }
 
     /**
@@ -48,12 +52,12 @@ public class FailureLoginCache {
     public void clear(String userName){
         if(this.exist(userName)) {
             String key = FAILURE_LOGIN_KEY + userName;
-            redisUtilsForObject.remove(key);
+            RedisUtils.remove(redisTemplate, key);
         }
     }
 
     public Boolean exist(String userName){
         String key = FAILURE_LOGIN_KEY + userName;
-        return redisUtilsForObject.hasKey(key);
+        return RedisUtils.hasKey(redisTemplate, key);
     }
 }

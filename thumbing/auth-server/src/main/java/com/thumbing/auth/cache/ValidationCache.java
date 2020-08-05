@@ -1,8 +1,10 @@
 package com.thumbing.auth.cache;
 
 import com.thumbing.shared.constants.CacheKeyConstants;
-import com.thumbing.shared.utils.redis.RedisUtilsForObject;
+import com.thumbing.shared.utils.redis.RedisUtils;
+import com.thumbing.shared.utils.redis.RedisUtilsForValue;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
 import java.util.concurrent.TimeUnit;
@@ -17,7 +19,7 @@ public class ValidationCache {
     private final String CHANGE_PASSWORD_KEY = CacheKeyConstants.VALIDATION_FOR_CHANGE_PASSWORD;
     private final long expireTime = 5;
     @Autowired
-    private RedisUtilsForObject redisUtilsForObject;
+    private RedisTemplate<String,String> redisTemplate;
 
     /**
      * 储存注册时的验证码
@@ -26,7 +28,7 @@ public class ValidationCache {
      */
     public void storeRegisterCode(String phoneNum, String code){
         String key = REGISTER_KEY + phoneNum;
-        redisUtilsForObject.getRedisUtilsForValue().setWithExpireTime(key, code, expireTime, TimeUnit.MINUTES);
+        RedisUtilsForValue.setWithExpireTime(redisTemplate.opsForValue(), key, code, expireTime, TimeUnit.MINUTES);
     }
 
     /**
@@ -36,7 +38,7 @@ public class ValidationCache {
      */
     public String findRegisterCode(String phoneNum){
         String key = REGISTER_KEY + phoneNum;
-        return redisUtilsForObject.getRedisUtilsForValue().get(key).toString();
+        return RedisUtilsForValue.get(redisTemplate.opsForValue(), key);
     }
 
     /**
@@ -45,7 +47,7 @@ public class ValidationCache {
      */
     public void removeRegisterCode(String phoneNum){
         String key = REGISTER_KEY + phoneNum;
-        redisUtilsForObject.remove(key);
+        RedisUtils.remove(redisTemplate, key);
     }
 
     /**
@@ -55,7 +57,7 @@ public class ValidationCache {
      */
     public void storeChangerCode(String userName, String code){
         String key = CHANGE_PASSWORD_KEY + userName;
-        redisUtilsForObject.getRedisUtilsForValue().setWithExpireTime(key, code, expireTime, TimeUnit.MINUTES);
+        RedisUtilsForValue.setWithExpireTime(redisTemplate.opsForValue(), key, code, expireTime, TimeUnit.MINUTES);
     }
 
     /**
@@ -65,7 +67,7 @@ public class ValidationCache {
      */
     public String findChangerCode(String userName){
         String key = CHANGE_PASSWORD_KEY + userName;
-        return redisUtilsForObject.getRedisUtilsForValue().get(key).toString();
+        return RedisUtilsForValue.get(redisTemplate.opsForValue(), key);
     }
 
     /**
@@ -74,8 +76,8 @@ public class ValidationCache {
      */
     public void removeChangerCode(String userName){
         String key = CHANGE_PASSWORD_KEY + userName;
-        if(redisUtilsForObject.hasKey(key)) {
-            redisUtilsForObject.remove(key);
+        if(RedisUtils.hasKey(redisTemplate, key)) {
+            RedisUtils.remove(redisTemplate, key);
         }
     }
 }

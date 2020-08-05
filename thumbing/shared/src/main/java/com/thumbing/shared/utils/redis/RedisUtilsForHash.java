@@ -1,8 +1,10 @@
 package com.thumbing.shared.utils.redis;
 
 import lombok.Data;
+import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.HashOperations;
+import org.springframework.data.redis.core.RedisTemplate;
 
 import java.util.List;
 import java.util.Map;
@@ -14,42 +16,8 @@ import java.util.Set;
  */
 @Slf4j
 @Data
+@UtilityClass
 public class RedisUtilsForHash {
-
-    HashOperations<String, String, String> hashOperations;
-
-    private static RedisUtilsForHash INSTANCE = new RedisUtilsForHash();
-
-    private static Object lock = new Object();
-
-    private RedisUtilsForHash() {
-
-    }
-
-    /**
-     * 多线程下的单例模式
-     * 保证hashOperations不会被初始化两次
-     *
-     * @param hashOperations
-     * @return
-     */
-    public static RedisUtilsForHash getInstance(HashOperations hashOperations) {
-        if (INSTANCE.getHashOperations() == null) {
-            synchronized (lock) {
-                if (INSTANCE.getHashOperations() == null) {
-                    INSTANCE.setHashOperations(hashOperations);
-                }
-            }
-        }
-        return INSTANCE;
-    }
-
-    public static RedisUtilsForHash getInstance() {
-        if (INSTANCE.getHashOperations() == null) {
-            return null;
-        }
-        return INSTANCE;
-    }
 
     /**
      * 根据 key 获取散列中对应hash key的value 如果key不存在则返回null
@@ -58,7 +26,7 @@ public class RedisUtilsForHash {
      * @param hashKey
      * @return
      */
-    public Object getObject(String key, String hashKey) {
+    public <T> T getObject(HashOperations<String, String, T> hashOperations, String key, String hashKey) {
         return hashOperations.get(key, hashKey);
     }
 
@@ -70,8 +38,8 @@ public class RedisUtilsForHash {
      * @param hashKey
      * @return
      */
-    public String get(String key, String hashKey) {
-        String val = hashOperations.get(key, hashKey);
+    public <T> T get(HashOperations<String, String, T> hashOperations, String key, String hashKey) {
+        T val = hashOperations.get(key, hashKey);
         return  val;
     }
 
@@ -83,8 +51,8 @@ public class RedisUtilsForHash {
      * @param hashKeys
      * @return
      */
-    public List<String> get(String key, List<String> hashKeys) {
-        List<String> val = hashOperations.multiGet(key, hashKeys);
+    public <T> List<T> get(HashOperations<String, String, T> hashOperations, String key, List<String> hashKeys) {
+        List<T> val = hashOperations.multiGet(key, hashKeys);
         return val;
     }
 
@@ -94,7 +62,7 @@ public class RedisUtilsForHash {
      * @param key
      * @return
      */
-    public Set<String> getAllKeys(String key) {
+    public <T> Set<String> getAllKeys(HashOperations<String, String, T> hashOperations, String key) {
         return hashOperations.keys(key);
     }
 
@@ -104,7 +72,7 @@ public class RedisUtilsForHash {
      * @param key
      * @return
      */
-    public List<String> getAllValues(String key) {
+    public <T> List<T> getAllValues(HashOperations<String, String, T> hashOperations, String key) {
         return hashOperations.values(key);
     }
 
@@ -114,7 +82,7 @@ public class RedisUtilsForHash {
      * @param key
      * @return
      */
-    public Map<String, String> getAllEntries(String key) {
+    public <T> Map<String, T> getAllEntries(HashOperations<String, String, T> hashOperations, String key) {
         return hashOperations.entries(key);
     }
 
@@ -125,7 +93,7 @@ public class RedisUtilsForHash {
      * @param key
      * @return
      */
-    public Long size(String key) {
+    public <T> Long size(HashOperations<String, String, T> hashOperations, String key) {
         return hashOperations.size(key);
     }
 
@@ -139,7 +107,7 @@ public class RedisUtilsForHash {
      * @param hashKey
      * @param value
      */
-    public void put(String key, String hashKey, String value) {
+    public <T> void put(HashOperations<String, String, T> hashOperations, String key, String hashKey, T value) {
         hashOperations.put(key, hashKey, value);
     }
 
@@ -149,7 +117,7 @@ public class RedisUtilsForHash {
      * @param key
      * @param map
      */
-    public void put(String key, Map<String, String> map) {
+    public <T> void put(HashOperations<String, String, T> hashOperations, String key, Map<String, T> map) {
         hashOperations.putAll(key, map);
     }
 
@@ -162,7 +130,7 @@ public class RedisUtilsForHash {
      * @param value
      * @return
      */
-    public Boolean setNx(String key, String hashKey, String value) {
+    public <T> Boolean setNx(HashOperations<String, String, T> hashOperations, String key, String hashKey, T value) {
         return hashOperations.putIfAbsent(key, hashKey, value);
     }
 
@@ -175,7 +143,7 @@ public class RedisUtilsForHash {
      * @param delta
      * @return
      */
-    public Double increment(String key, String hashKey, double delta) {
+    public <T> Double increment(HashOperations<String, String, T> hashOperations, String key, String hashKey, double delta) {
         return hashOperations.increment(key, hashKey, delta);
     }
 
@@ -187,7 +155,7 @@ public class RedisUtilsForHash {
      * @param delta
      * @return
      */
-    public Long increment(String key, String hashKey, long delta) {
+    public <T> Long increment(HashOperations<String, String, T> hashOperations, String key, String hashKey, long delta) {
         return hashOperations.increment(key, hashKey, delta);
     }
 
@@ -199,7 +167,7 @@ public class RedisUtilsForHash {
      * @param hashKey
      * @return
      */
-    public Long remove(String key, String... hashKey) {
+    public <T> Long remove(HashOperations<String, String, T> hashOperations, String key, String... hashKey) {
 
         return hashOperations.delete(key, hashKey);
     }
@@ -211,7 +179,7 @@ public class RedisUtilsForHash {
      * @param hashKey
      * @return
      */
-    public Boolean hasKey(String key, String hashKey) {
+    public <T> Boolean hasKey(HashOperations<String, String, T> hashOperations, String key, String hashKey) {
 
         return hashOperations.hasKey(key, hashKey);
     }

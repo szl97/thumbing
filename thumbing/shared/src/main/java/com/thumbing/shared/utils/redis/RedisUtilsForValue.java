@@ -1,6 +1,7 @@
 package com.thumbing.shared.utils.redis;
 
 import lombok.Data;
+import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.ValueOperations;
 
@@ -14,50 +15,15 @@ import java.util.concurrent.TimeUnit;
  */
 @Slf4j
 @Data
+@UtilityClass
 public class RedisUtilsForValue {
-
-    ValueOperations valueOperations;
-
-    private static RedisUtilsForValue INSTANCE = new RedisUtilsForValue();
-
-    private static Object lock = new Object();
-
-    private RedisUtilsForValue() {
-
-    }
-
-    /**
-     * 多线程下的单例模式
-     * 保证valueOperations不会被初始化两次
-     *
-     * @param valueOperations
-     * @return
-     */
-    public static RedisUtilsForValue getInstance(ValueOperations valueOperations) {
-        if (INSTANCE.getValueOperations() == null) {
-            synchronized (lock) {
-                if (INSTANCE.getValueOperations() == null) {
-                    INSTANCE.setValueOperations(valueOperations);
-                }
-            }
-        }
-        return INSTANCE;
-    }
-
-    public static RedisUtilsForValue getInstance() {
-        if (INSTANCE.getValueOperations() == null) {
-            return null;
-        }
-        return INSTANCE;
-    }
-
     /**
      * 根据 key 获取对应的value 如果key不存在则返回null
      *
      * @param key
      * @return
      */
-    public Object getObject(String key) {
+    public <T> T getObject(ValueOperations<String, T> valueOperations, String key) {
         return valueOperations.get(key);
     }
 
@@ -68,8 +34,8 @@ public class RedisUtilsForValue {
      * @param key
      * @return
      */
-    public Object get(String key) {
-        Object val = valueOperations.get(key);
+    public <T> T get(ValueOperations<String, T> valueOperations, String key) {
+        T val = valueOperations.get(key);
         return val;
     }
 
@@ -80,8 +46,8 @@ public class RedisUtilsForValue {
      * @param key
      * @return
      */
-    public Object getAndSet(String key, Object value) {
-        Object val = valueOperations.getAndSet(key, value);
+    public <T> T getAndSet(ValueOperations<String, T> valueOperations, String key, T value) {
+        T val = valueOperations.getAndSet(key, value);
         return  val;
     }
 
@@ -91,8 +57,8 @@ public class RedisUtilsForValue {
      * @param keys
      * @return
      */
-    public List<Object> get(List<String> keys) {
-        List<Object> val = valueOperations.multiGet(keys);
+    public <T> List<T> get(ValueOperations<String, T> valueOperations, List<String> keys) {
+        List<T> val = valueOperations.multiGet(keys);
         return val;
     }
 
@@ -106,7 +72,7 @@ public class RedisUtilsForValue {
      * @param end
      * @return
      */
-    public String get(String key, long start, long end) {
+    public String get(ValueOperations<String, String> valueOperations, String key, long start, long end) {
         String val = valueOperations.get(key, start, end);
         if (val == null) {
             return null;
@@ -120,7 +86,7 @@ public class RedisUtilsForValue {
      * @param key
      * @return
      */
-    public Long size(String key) {
+    public Long size(ValueOperations<String, String> valueOperations, String key) {
         return valueOperations.size(key);
     }
 
@@ -134,7 +100,7 @@ public class RedisUtilsForValue {
      * @param key
      * @param value
      */
-    public void set(String key, String value) {
+    public <T> void set(ValueOperations<String, T> valueOperations, String key, T value) {
         valueOperations.set(key, value);
     }
 
@@ -149,7 +115,7 @@ public class RedisUtilsForValue {
      * @param timeout
      * @param unit
      */
-    public void setWithExpireTime(String key, Object value, long timeout, TimeUnit unit) {
+    public <T> void setWithExpireTime(ValueOperations<String, T> valueOperations, String key, T value, long timeout, TimeUnit unit) {
         valueOperations.set(key, value, timeout, unit);
     }
 
@@ -159,7 +125,7 @@ public class RedisUtilsForValue {
      *
      * @param map
      */
-    public void set(Map<String, String> map) {
+    public <T> void set(ValueOperations<String, T> valueOperations, Map<String, T> map) {
 
         valueOperations.multiSet(map);
     }
@@ -172,7 +138,7 @@ public class RedisUtilsForValue {
      * @param value
      * @param offset 偏移量
      */
-    public void set(String key, Object value, long offset) {
+    public <T> void set(ValueOperations<String, T> valueOperations, String key, T value, long offset) {
         valueOperations.set(key, value, offset);
     }
 
@@ -184,7 +150,7 @@ public class RedisUtilsForValue {
      * @param value
      * @return
      */
-    public Boolean setNx(String key, Object value) {
+    public <T> Boolean setNx(ValueOperations<String, T> valueOperations, String key, T value) {
         return valueOperations.setIfAbsent(key, value);
     }
 
@@ -201,7 +167,7 @@ public class RedisUtilsForValue {
      * @param unit
      * @return
      */
-    public Boolean setNx(String key, Object value, long timeout, TimeUnit unit) {
+    public <T> Boolean setNx(ValueOperations<String, T> valueOperations, String key, T value, long timeout, TimeUnit unit) {
         return valueOperations.setIfAbsent(key, value, timeout, unit);
     }
 
@@ -212,7 +178,7 @@ public class RedisUtilsForValue {
      * @param key
      * @param value
      */
-    public Integer append(String key, String value) {
+    public Integer append(ValueOperations<String, String> valueOperations, String key, String value) {
         return valueOperations.append(key, value);
     }
 
@@ -223,7 +189,7 @@ public class RedisUtilsForValue {
      * @param delta
      * @return
      */
-    public Long increment(String key, long delta) {
+    public <T> Long increment(ValueOperations<String, T> valueOperations, String key, long delta) {
         return valueOperations.increment(key, delta);
     }
 
@@ -235,7 +201,7 @@ public class RedisUtilsForValue {
      * @param delta
      * @return
      */
-    public Double increment(String key, double delta) {
+    public Double increment(ValueOperations<String, Double> valueOperations, String key, double delta) {
         return valueOperations.increment(key, delta);
     }
 
@@ -247,7 +213,7 @@ public class RedisUtilsForValue {
      * @param value
      * @return
      */
-    public Boolean setBit(String key, long offset, boolean value) {
+    public Boolean setBit(ValueOperations valueOperations, String key, long offset, boolean value) {
         return valueOperations.setBit(key, offset, value);
     }
 
@@ -258,7 +224,7 @@ public class RedisUtilsForValue {
      * @param offset
      * @return
      */
-    public Boolean getBit(String key, long offset) {
+    public Boolean getBit(ValueOperations valueOperations, String key, long offset) {
         return valueOperations.getBit(key, offset);
     }
 }
