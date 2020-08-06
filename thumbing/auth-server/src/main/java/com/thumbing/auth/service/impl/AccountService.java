@@ -8,6 +8,7 @@ import com.thumbing.auth.dto.input.SignUpInput;
 import com.thumbing.auth.dto.input.CheckUniqueInput;
 import com.thumbing.auth.dto.output.AccountDto;
 import com.thumbing.auth.service.IAccountService;
+import com.thumbing.shared.annotation.UniqueLock;
 import com.thumbing.shared.entity.sql.system.Device;
 import com.thumbing.shared.entity.sql.system.User;
 import com.thumbing.shared.exception.BusinessException;
@@ -34,11 +35,13 @@ public class AccountService extends BaseSqlService<User, IUserRepository> implem
     private Mapper mapper;
 
     @Override
+    @UniqueLock(className = "com.thumbing.auth.dto.input.SignUpInput",
+            methods = {"getUserName", "getEmail", "getPhoneNum"})
     public AccountDto register(SignUpInput signUpInput) {
-        if(StringUtils.isAllBlank(signUpInput.getPhoneNUm(), signUpInput.getEmail())){
+        if(StringUtils.isAllBlank(signUpInput.getPhoneNum(), signUpInput.getEmail())){
             throw new BusinessException("需要手机号或邮箱");
         }
-        String key = StringUtils.isNotBlank(signUpInput.getPhoneNUm()) ? signUpInput.getPhoneNUm() : signUpInput.getEmail();
+        String key = StringUtils.isNotBlank(signUpInput.getPhoneNum()) ? signUpInput.getPhoneNum() : signUpInput.getEmail();
         String validationCode = validationCache.findRegisterCode(key);
         if(validationCode == null){
             throw new BusinessException("验证码已失效或验证码未发送");
