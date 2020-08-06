@@ -22,7 +22,7 @@ import java.util.Set;
  */
 @Entity
 @Table(name = "user_info", indexes = {
-        @Index(name = "name", columnList = "userName", unique = true),
+        @Index(name = "name", columnList = "userName"),
 })
 @Getter
 @Setter

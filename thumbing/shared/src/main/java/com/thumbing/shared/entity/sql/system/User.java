@@ -20,7 +20,7 @@ import java.util.Set;
  */
 @Entity
 @Table(name = "sys_user", indexes = {
-        @Index(name = "name", columnList = "userName", unique = true),
+        @Index(name = "name", columnList = "userName"),
         @Index(name = "phone", columnList = "phoneNum"),
         @Index(name = "email", columnList = "email")
 })
