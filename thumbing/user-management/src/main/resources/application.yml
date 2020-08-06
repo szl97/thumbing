@@ -1,0 +1,80 @@
+server:
+  port: 7074
+spring:
+  application:
+    name: auth-server
+  redis:
+    host: localhost
+    port: 6379
+    password:
+    lettuce:
+      pool:
+        max-active: 8
+        max-idle: 0
+        max-wait: -1ms
+  jackson:
+    serialization:
+      FAIL_ON_EMPTY_BEANS: false
+  #jpa setting
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    open-in-view: true
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    driver-class-name: com.mysql.jdbc.Driver
+    url: ${SPRING_DATASOURCE_URL:jdbc:mysql://192.168.89.1:3306/thumbing?serverTimezone=Asia/Shanghai}
+    username: ${SPRING_DATASOURCE_USERNAME:root}
+    password: ${SPRING_DATASOURCE_PASSWORD:123456}
+    druid:
+      max-active: 10
+      min-idle: 5
+      initial-size: 5
+      max-wait: 60000
+      time-between-eviction-runs-millis: 3000
+      min-evictable-idle-time-millis: 30000
+      validation-query: SELECT 1
+      test-on-borrow: false
+      test-on-return: false
+      pool-prepared-statements: true
+      max-pool-prepared-statement-per-connection-size: 20
+      filter:
+        slf4j:
+          statement-sql-pretty-format: true
+          result-set-log-enabled: false
+          statement-executable-sql-log-enable: false
+          enabled: true
+      connection-properties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=500
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:1901/eureka/
+
+use:
+  redis: true
+  security: true
+  feign: true
+  swagger: true
+
+security:
+  ignores: /error/**;/swagger-resources/**;/swagger-ui.html;/v2/api-docs;/webjars/**
+
+feign:
+  client:
+    config:
+      default:
+        connectTimeout: 5000
+        readTimeout: 100000
+        loggerLevel: full
+  hystrix:
+    enabled: false
+
+hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 5000

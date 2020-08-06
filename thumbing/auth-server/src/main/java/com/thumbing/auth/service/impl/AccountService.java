@@ -12,10 +12,12 @@ import com.thumbing.shared.annotation.UniqueLock;
 import com.thumbing.shared.entity.sql.system.Device;
 import com.thumbing.shared.entity.sql.system.User;
 import com.thumbing.shared.exception.BusinessException;
+import com.thumbing.shared.jpa.Specifications;
 import com.thumbing.shared.repository.sql.system.IUserRepository;
 import com.thumbing.shared.service.impl.BaseSqlService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -46,8 +48,30 @@ public class AccountService extends BaseSqlService<User, IUserRepository> implem
         if(validationCode == null){
             throw new BusinessException("验证码已失效或验证码未发送");
         }
-        if(validationCode != signUpInput.getValidation()){
+        if(!validationCode.equals(signUpInput.getValidation())){
             throw new BusinessException("验证码错误");
+        }
+        Specification<User> userSpecification = Specifications.where(false,
+                spec->{
+                    spec.eq(User.Fields.userName, signUpInput.getUserName());
+                    if(StringUtils.isNotBlank(signUpInput.getEmail())){
+                        spec.eq(User.Fields.email, signUpInput.getEmail());
+                    }
+                    if(StringUtils.isNotBlank(signUpInput.getPhoneNum())) {
+                        spec.eq(User.Fields.phoneNum, signUpInput.getPhoneNum());
+                    }
+                }
+        );
+        User checkUser = repository.findOne(userSpecification).orElse(null);
+        if(checkUser != null) {
+            if(checkUser.getUserName().equals(signUpInput.getUserName())) {
+                throw new BusinessException("用户名已经存在");
+            }else if(StringUtils.isNotBlank(signUpInput.getEmail())
+                    && checkUser.getEmail().equals(signUpInput.getEmail())){
+                throw new BusinessException("注册邮箱下已存在账号");
+            }else{
+                throw new BusinessException("注册手机下已存在账号");
+            }
         }
         User user = mapper.map(signUpInput, User.class);
         user.setPassword(passwordEncoder.encode(user.getPassword()));

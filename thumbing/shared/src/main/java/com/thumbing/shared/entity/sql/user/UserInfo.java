@@ -39,10 +39,6 @@ public class UserInfo extends SqlFullAuditedEntity {
      */
     private String userName;
     /**
-     * 昵称
-     */
-    private String nickName;
-    /**
      * 用户的个人信息
      */
     @OneToOne(targetEntity = Personal.class)

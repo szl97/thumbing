@@ -1,6 +1,6 @@
 package com.thumbing.auth.dto.output;
 
-import com.thumbing.shared.dto.output.EntityDto;
+import com.thumbing.shared.dto.EntityDto;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
@@ -14,6 +14,8 @@ import java.time.LocalDateTime;
 public class AccountDto extends EntityDto {
     @ApiModelProperty(value = "帐户名")
     private String userName;
+    @ApiModelProperty(value = "昵称")
+    private String nickName;
     @ApiModelProperty(value = "是否激活（即是否通过手机或邮箱认证）")
     private boolean active;
     @ApiModelProperty(value = "最后登录时间")

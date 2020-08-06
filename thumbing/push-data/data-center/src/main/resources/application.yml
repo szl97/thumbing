@@ -22,31 +22,6 @@ spring:
         max-idle: 0
         max-wait: -1ms
 
-#  redis:
-#    password:
-#    cluster:
-#      nodes: 192.168.89.1:6380
-#      max-redirects: 3
-#    lettuce:
-#      pool:
-#        max-idle: 16
-#        max-active: 32
-#        min-idle: 8
-#        max-wait: -1
-#    database: 0
-#  redis2:
-#    password:
-#    cluster:
-#      nodes: 192.168.89.1:6381
-#      max-redirects: 3
-#    lettuce:
-#      pool:
-#        max-idle: 16
-#        max-active: 32
-#        min-idle: 8
-#        max-wait: -1
-#    database: 0
-
   #阿里数据库连接池设置
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource
@@ -103,6 +78,7 @@ spring:
       host: 192.168.89.1
       port: 27017
       database: thumbing
+
 elasticsearch:
   host: 127.0.0.1, 127.0.0.1, 127.0.0.1
   port: 9201, 9202, 9203
@@ -145,7 +121,7 @@ xxl:
 push-data:
   data-center:
     port: 4001
-    messagePort: 6001
+    messagePort: 4011
     devicePort: 0
     name: center1
     initializedConnect: 16384

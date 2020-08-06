@@ -1,4 +1,4 @@
-package com.thumbing.shared.uniqueness;
+package com.thumbing.shared.lock.cache;
 
 import com.thumbing.shared.utils.redis.RedisUtils;
 import com.thumbing.shared.utils.redis.RedisUtilsForValue;
@@ -14,7 +14,7 @@ import java.util.concurrent.TimeUnit;
  * @date 2020-08-05 21:12
  */
 @Component
-public class UniqueLockCache {
+public class LockCache {
     @Autowired
     private RedisTemplate<String, String> redisTemplate;
 
@@ -24,5 +24,9 @@ public class UniqueLockCache {
 
     public void release(List<String> keys){
        RedisUtils.removeAll(redisTemplate, keys);
+    }
+
+    public void release(String key){
+        RedisUtils.remove(redisTemplate, key);
     }
 }

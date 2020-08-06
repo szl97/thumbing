@@ -31,9 +31,9 @@ import java.time.Duration;
 @Conditional(RedisCondition.class)
 @Configuration
 @EnableCaching
-public class RedisConfig extends CachingConfigurerSupport {
+public class RedisConfig {
 
-    @Bean(name = "redisTemplate")
+    @Bean
     @Conditional(RedisCondition.class)
     public RedisTemplate redisCacheTemplate(@Autowired RedisConnectionFactory redisConnectionFactory) {
         return getRedisTemplate(redisConnectionFactory);

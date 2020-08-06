@@ -16,9 +16,9 @@ spring:
     publisher-confirm-type: correlated
 push-data:
   node-server:
-    port: 9001
-    messagePort: 8001
-    devicePort: 3001
+    port: 6001
+    messagePort: 4021
+    devicePort: 4031
     name: server1
     initializedConnect: 16384
   zookeeper:

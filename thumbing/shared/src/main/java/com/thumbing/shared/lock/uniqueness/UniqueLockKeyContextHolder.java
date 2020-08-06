@@ -1,4 +1,4 @@
-package com.thumbing.shared.uniqueness;
+package com.thumbing.shared.lock.uniqueness;
 
 import lombok.experimental.UtilityClass;
 

@@ -25,7 +25,7 @@ public class FailureLoginCache {
     public void increment(String userName){
         String key = FAILURE_LOGIN_KEY + userName;
         if(!this.exist(userName)){
-            RedisUtilsForValue.set(redisTemplate.opsForValue(), key, 1);
+            RedisUtilsForValue.setWithExpireTime(redisTemplate.opsForValue(), key, 1, expireTime, TimeUnit.MINUTES);
         }
         else {
             RedisUtilsForValue.increment(redisTemplate.opsForValue(), key, 1l);

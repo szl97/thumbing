@@ -1,5 +1,6 @@
 package com.thumbing.auth.provider;
 
+import com.thumbing.auth.context.LoginUserContextHolder;
 import com.thumbing.auth.service.IAuthService;
 import com.thumbing.shared.auth.model.UserContext;
 import com.thumbing.shared.auth.permission.PermissionConstants;
@@ -33,6 +34,7 @@ public class DefaultAuthenticationProvider implements AuthenticationProvider {
         String username = (String) authentication.getPrincipal();
         String password = (String) authentication.getCredentials();
         User user = authService.checkAndGetUser(username, password);
+        LoginUserContextHolder.setLoginUser(user);
         UserContext context = new UserContext();
         //写入数据
         context.setId(user.getId());

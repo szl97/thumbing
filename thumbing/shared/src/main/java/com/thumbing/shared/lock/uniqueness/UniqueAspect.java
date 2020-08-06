@@ -1,8 +1,9 @@
-package com.thumbing.shared.uniqueness;
+package com.thumbing.shared.lock.uniqueness;
 
 import com.thumbing.shared.annotation.UniqueLock;
 import com.thumbing.shared.condition.RedisCondition;
 import com.thumbing.shared.exception.BusinessException;
+import com.thumbing.shared.lock.cache.LockCache;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.After;
@@ -28,14 +29,14 @@ import java.util.List;
 @Conditional(RedisCondition.class)
 public class UniqueAspect {
     @Autowired
-    private UniqueLockCache uniqueLockCache;
+    private LockCache lockCache;
 
     @Before("@annotation(uniqueLock)")
     public void beforeExecute(JoinPoint joinPoint, UniqueLock uniqueLock) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
         List<String> values = getValues(joinPoint, uniqueLock);
         for(String v : values){
-            if(!uniqueLockCache.lock(v, uniqueLock.seconds())){
-                uniqueLockCache.release(values);
+            if(!lockCache.lock(v, uniqueLock.seconds())){
+                lockCache.release(values);
                 throw new BusinessException("所输入的某个参数已被占用");
             }
         }
@@ -45,7 +46,7 @@ public class UniqueAspect {
     @After("@annotation(uniqueLock)")
     public void afterExecute(UniqueLock uniqueLock) {
         List<String> values = UniqueLockKeyContextHolder.getKeys();
-        uniqueLockCache.release(values);
+        lockCache.release(values);
         UniqueLockKeyContextHolder.clear();
     }
 

@@ -55,6 +55,7 @@
         <module>upload-file</module>
         <module>auth-server</module>
         <module>content-server</module>
+        <module>user-management</module>
     </modules>
     <dependencyManagement>
         <dependencies>

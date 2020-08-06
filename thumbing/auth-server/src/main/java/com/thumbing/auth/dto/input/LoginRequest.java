@@ -18,6 +18,8 @@ public class LoginRequest implements Serializable {
     @NotBlank(message = "密码不能为空")
     @ApiModelProperty(value = "密码")
     private String password;
-    @ApiModelProperty(value = "登录设备")
+    /**
+     * 登录设备
+     */
     private DeviceInput deviceInput;
 }

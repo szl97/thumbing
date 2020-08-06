@@ -2,6 +2,7 @@ package com.thumbing.auth.handlers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.thumbing.auth.context.LoginRequestContextHolder;
+import com.thumbing.auth.context.LoginUserContextHolder;
 import com.thumbing.auth.dto.input.LoginRequest;
 import com.thumbing.auth.service.IAuthService;
 import com.thumbing.shared.exception.AccountLockException;
@@ -60,5 +61,6 @@ public class DefaultAuthenticationFailureHandler implements AuthenticationFailur
         //TODO:细化错误返回
         mapper.writeValue(httpServletResponse.getWriter(),  BaseApiResult.errorServer("无效访问："+e.getMessage()));
         LoginRequestContextHolder.clear();
+        LoginUserContextHolder.clear();
     }
 }

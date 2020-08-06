@@ -3,6 +3,7 @@ package com.thumbing.auth.service.impl;
 import com.github.dozermapper.core.Mapper;
 import com.thumbing.auth.cache.FailureLoginCache;
 import com.thumbing.auth.cache.TokenCache;
+import com.thumbing.auth.context.LoginUserContextHolder;
 import com.thumbing.auth.dto.input.LoginRequest;
 import com.thumbing.auth.service.IAuthService;
 import com.thumbing.shared.auth.model.UserContext;
@@ -65,6 +66,7 @@ public class AuthService implements IAuthService {
     @Autowired
     private FailureLoginCache failureLoginCache;
 
+
     @Override
     public String getAuthorization(LoginRequest input) {
         UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(input.getUsername(), input.getPassword());
@@ -98,17 +100,22 @@ public class AuthService implements IAuthService {
     @Override
     public void succeedLogin(LoginRequest loginRequest) {
         failureLoginCache.clear(loginRequest.getUsername());
-        User user = repository.findByUserName(loginRequest.getUsername()).orElseThrow(()->new BusinessException("未知错误"));
-        if(!user.getLastLogin().toLocalDate().equals(LocalDate.now())){
-            user.setContinueDays(user.getContinueDays() + 1);
+        User user = LoginUserContextHolder.getLoginUser();
+        if(user != null) {
+            if(user.getLastLogin() == null){
+                user.setContinueDays(1);
+            }
+            else if (user.getLastLogin().toLocalDate().equals(LocalDate.now().minusDays(1))) {
+                user.setContinueDays(user.getContinueDays() + 1);
+            }
+            user.setLastLogin(LocalDateTime.now());
+            if (loginRequest.getDeviceInput() != null) {
+                Device device = mapper.map(loginRequest.getDeviceInput(), Device.class);
+                user.getDevices().add(device);
+                user.setCurrentDevice(device);
+            }
+            repository.save(user);
         }
-        user.setLastLogin(LocalDateTime.now());
-        if(loginRequest.getDeviceInput() != null) {
-            Device device = mapper.map(loginRequest.getDeviceInput(), Device.class);
-            user.getDevices().add(device);
-            user.setCurrentDevice(device);
-        }
-        repository.save(user);
     }
 
     @Override

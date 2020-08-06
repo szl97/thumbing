@@ -69,7 +69,7 @@ feign:
         readTimeout: 100000
         loggerLevel: full
   hystrix:
-    enabled: true
+    enabled: false
 
 hystrix:
   command:

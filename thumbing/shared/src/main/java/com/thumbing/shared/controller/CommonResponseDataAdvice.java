@@ -29,23 +29,23 @@ public class CommonResponseDataAdvice implements ResponseBodyAdvice<Object> {
 
     @SneakyThrows
     @Override
-    public Object beforeBodyWrite(Object o, MethodParameter methodParameter, MediaType mediaType, Class<? extends HttpMessageConverter<?>> aClass, ServerHttpRequest serverHttpRequest, ServerHttpResponse serverHttpResponse) {
+    public Object beforeBodyWrite(Object body, MethodParameter methodParameter, MediaType mediaType, Class<? extends HttpMessageConverter<?>> aClass, ServerHttpRequest serverHttpRequest, ServerHttpResponse serverHttpResponse) {
 
         // o is null -> return response
-        if (o == null) {
+        if (body == null) {
             return BaseApiResult.success();
         }
         // string 特殊处理
-        if (o instanceof String) {
-            return  objectMapper.writeValueAsString(BaseApiResult.success(o));
+        if (body instanceof String) {
+            return  objectMapper.writeValueAsString(BaseApiResult.success(body));
         }
-        return BaseApiResult.success(o);
+        return BaseApiResult.success(body);
     }
 
     private boolean filter(MethodParameter methodParameter) {
         Class<?> declaringClass = methodParameter.getDeclaringClass();
 
-        //跳过又自定义注解的返回
+        // 只处理标注了该注解的controller
         // 检查注解是否存在
         if (methodParameter.getDeclaringClass().isAnnotationPresent(EnableResponseAdvice.class)) {
             return true;

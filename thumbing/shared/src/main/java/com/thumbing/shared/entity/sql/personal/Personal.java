@@ -11,7 +11,7 @@ import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.Set;
 
 /**
@@ -27,14 +27,14 @@ import java.util.Set;
 @Where(clause = "is_delete=0")
 public class Personal extends SqlFullAuditedEntity {
     /**
-     * 身份信息所属的唯一用户的ID
+     * 身份信息所属的唯一用户的用户名
      */
-    private Long userId;
+    private String userName;
     /**
      * 身份信息所属的唯一用户
      */
     @OneToOne(targetEntity = UserInfo.class)
-    @JoinColumn(name = Fields.userId, referencedColumnName = BaseSqlEntity.Fields.id, insertable = false, updatable = false)
+    @JoinColumn(name = Fields.userName, referencedColumnName = UserInfo.Fields.userName, insertable = false, updatable = false)
     private UserInfo user;
     /**
      * 名字
@@ -47,7 +47,7 @@ public class Personal extends SqlFullAuditedEntity {
     /**
      * 出生日期
      */
-    private LocalDateTime birth_date;
+    private LocalDate birth_date;
     /**
      * 出生年
      */

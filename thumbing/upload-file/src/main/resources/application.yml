@@ -1,5 +1,5 @@
 server:
-  port: 8082
+  port: 7069
 
 spring:
   application:
@@ -42,7 +42,7 @@ feign:
         readTimeout: 100000     #连接成功，处理数据的时间限制10秒 100000   读取时间过短会抛异常java.net.SocketTimeoutException: Read timed out
         loggerLevel: full      #日志输出等级
   hystrix:
-    enabled: true
+    enabled: false
 
 hystrix:
   command:
