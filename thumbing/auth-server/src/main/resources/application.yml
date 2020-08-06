@@ -57,6 +57,7 @@ use:
   security: true
   feign: true
   swagger: true
+  customThreadPool: true
 
 security:
   ignores: /error/**;/swagger-resources/**;/swagger-ui.html;/v2/api-docs;/webjars/**
@@ -83,3 +84,11 @@ authentication:
   expirationTime: 3600 # Number of minutes
   issuer: thumbing
   signingKey: xm8EV6Hy5RMFK4EEACIDAwQus48djvcnjsdksfksjdfwiuersdkjhfskjdhfskjdf
+
+threadPool:
+  busy: false
+  maxWaitingTasksPerThread: 40
+  maxExtraThreads: 5
+  maxIdleSeconds: 60
+  threadName: UpdateUserWhenLogin
+  rejectedExecutionHandlerClassName: com.thumbing.auth.thread.RejectUpdateUserLoginHandler

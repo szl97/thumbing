@@ -33,3 +33,4 @@ use:
   security: false
   feign: false
   swagger: false
+  customThreadPool: false

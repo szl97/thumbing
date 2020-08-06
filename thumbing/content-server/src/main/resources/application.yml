@@ -45,6 +45,7 @@ use:
   security: true
   feign: true
   swagger: true
+  customThreadPool: false
 
 security:
   ignores: /error/**;/swagger-resources/**;/swagger-ui.html;/v2/api-docs;/webjars/**

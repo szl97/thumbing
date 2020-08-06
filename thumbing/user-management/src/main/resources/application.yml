@@ -57,6 +57,7 @@ use:
   security: true
   feign: true
   swagger: true
+  customThreadPool: false
 
 security:
   ignores: /error/**;/swagger-resources/**;/swagger-ui.html;/v2/api-docs;/webjars/**
@@ -78,3 +79,7 @@ hystrix:
         isolation:
           thread:
             timeoutInMilliseconds: 5000
+
+custom:
+  encrypt:
+    key: 8ym00JZR4pjWPBvuQP9zs2uVl0s9Nc2o

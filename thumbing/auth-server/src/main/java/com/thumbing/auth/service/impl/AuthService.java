@@ -18,6 +18,7 @@ import com.thumbing.shared.exception.UserLoginException;
 import com.thumbing.shared.jwt.JwtTokenFactory;
 import com.thumbing.shared.jwt.extractor.JwtHeaderTokenExtractor;
 import com.thumbing.shared.repository.sql.system.IUserRepository;
+import com.thumbing.shared.thread.CustomThreadPool;
 import com.thumbing.shared.utils.user.UserContextUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -65,6 +66,8 @@ public class AuthService implements IAuthService {
     private Mapper mapper;
     @Autowired
     private FailureLoginCache failureLoginCache;
+    @Autowired
+    private CustomThreadPool customThreadPool;
 
 
     @Override
@@ -102,19 +105,26 @@ public class AuthService implements IAuthService {
         failureLoginCache.clear(loginRequest.getUsername());
         User user = LoginUserContextHolder.getLoginUser();
         if(user != null) {
-            if(user.getLastLogin() == null){
-                user.setContinueDays(1);
-            }
-            else if (user.getLastLogin().toLocalDate().equals(LocalDate.now().minusDays(1))) {
-                user.setContinueDays(user.getContinueDays() + 1);
-            }
-            user.setLastLogin(LocalDateTime.now());
-            if (loginRequest.getDeviceInput() != null) {
-                Device device = mapper.map(loginRequest.getDeviceInput(), Device.class);
-                user.getDevices().add(device);
-                user.setCurrentDevice(device);
-            }
-            repository.save(user);
+            customThreadPool.submit(
+                    ()->{
+                        if(user.getLastLogin() == null){
+                            user.setContinueDays(1);
+                        }
+                        else if (user.getLastLogin().toLocalDate()
+                                .equals(LocalDate.now().minusDays(1))) {
+                            user.setContinueDays(user.getContinueDays() + 1);
+                        }
+                        user.setLastLogin(LocalDateTime.now());
+                        if (loginRequest.getDeviceInput() != null) {
+                            Device device = mapper.map(
+                                    loginRequest.getDeviceInput(),
+                                    Device.class);
+                            user.getDevices().add(device);
+                            user.setCurrentDevice(device);
+                        }
+                        repository.save(user);
+                    }
+            );
         }
     }
 
