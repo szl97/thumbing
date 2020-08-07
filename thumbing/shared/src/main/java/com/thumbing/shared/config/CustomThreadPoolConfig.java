@@ -19,10 +19,11 @@ import java.util.concurrent.RejectedExecutionHandler;
  */
 @Conditional(CustomThreadPoolCondition.class)
 @Configuration
-@ConfigurationProperties(prefix = "threadPool")
+@ConfigurationProperties(prefix = "thread.pool")
 @Data
 public class CustomThreadPoolConfig {
     private boolean busy;
+    private double maxUtilization;
     private int maxWaitingTasksPerThread;
     private int maxExtraThreads;
     private int maxIdleSeconds;
@@ -38,6 +39,7 @@ public class CustomThreadPoolConfig {
                     (RejectedExecutionHandler) c.getConstructor().newInstance();
             return new CustomThreadPool(
                     busy,
+                    maxUtilization,
                     maxWaitingTasksPerThread,
                     maxExtraThreads,
                     maxIdleSeconds,
@@ -47,6 +49,7 @@ public class CustomThreadPoolConfig {
         }else {
             return new CustomThreadPool(
                     busy,
+                    maxUtilization,
                     maxWaitingTasksPerThread,
                     maxExtraThreads,
                     maxIdleSeconds,

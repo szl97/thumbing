@@ -28,11 +28,11 @@ spring:
     username: ${SPRING_DATASOURCE_USERNAME:root}
     password: ${SPRING_DATASOURCE_PASSWORD:123456}
     druid:
-      max-active: 10
+      max-active: 100
       min-idle: 5
       initial-size: 5
       max-wait: 60000
-      time-between-eviction-runs-millis: 3000
+      time-between-eviction-runs-millis: 6000
       min-evictable-idle-time-millis: 30000
       validation-query: SELECT 1
       test-on-borrow: false
@@ -46,6 +46,7 @@ spring:
           statement-executable-sql-log-enable: false
           enabled: true
       connection-properties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=500
+      test-while-idle: true
 
 eureka:
   client:
@@ -85,10 +86,12 @@ authentication:
   issuer: thumbing
   signingKey: xm8EV6Hy5RMFK4EEACIDAwQus48djvcnjsdksfksjdfwiuersdkjhfskjdhfskjdf
 
-threadPool:
-  busy: false
-  maxWaitingTasksPerThread: 40
-  maxExtraThreads: 5
-  maxIdleSeconds: 60
-  threadName: UpdateUserWhenLogin
-  rejectedExecutionHandlerClassName: com.thumbing.auth.thread.RejectUpdateUserLoginHandler
+thread:
+  pool:
+    busy: false
+    maxUtilization: 0.5
+    maxWaitingTasksPerThread: 40
+    maxExtraThreads: 5
+    maxIdleSeconds: 60
+    threadName: UpdateUserWhenLogin
+    rejectedExecutionHandlerClassName: com.thumbing.auth.thread.RejectUpdateUserLoginHandler

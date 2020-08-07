@@ -31,7 +31,7 @@ spring:
     password: ${SPRING_DATASOURCE_PASSWORD:123456}
     druid:
       #最大值
-      max-active: 10
+      max-active: 100
       #最小值
       min-idle: 5
       #初始化大小
@@ -39,7 +39,7 @@ spring:
       #最大等待时间，配置获取连接等待超时，时间单位都是毫秒ms
       max-wait: 60000
       # 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒
-      time-between-eviction-runs-millis: 3000
+      time-between-eviction-runs-millis: 6000
       # 配置一个连接在池中最小生存的时间，单位是毫秒
       min-evictable-idle-time-millis: 30000
       validation-query: SELECT 1
@@ -59,6 +59,8 @@ spring:
           enabled: true
       # 通过connectProperties属性来打开mergeSql功能；慢SQL记录
       connection-properties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=500
+      test-while-idle: true
+
   rabbitmq:
     username: guest
     password: guest

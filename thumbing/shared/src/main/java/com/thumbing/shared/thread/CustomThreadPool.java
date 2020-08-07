@@ -17,6 +17,7 @@ public class CustomThreadPool {
     private ThreadPoolExecutor threadPoolExecutor;
 
     public CustomThreadPool(Boolean busy,
+                            double maxUtilization,
                             int maxWaitingTasksPerThread,
                             int maxExtraThreads,
                             int maxIdleSeconds,
@@ -24,6 +25,7 @@ public class CustomThreadPool {
                             @Nullable RejectedExecutionHandler rejectedExecutionHandler){
 
         threadPoolExecutor = newThreadPool(busy,
+                maxUtilization,
                 maxWaitingTasksPerThread,
                 maxExtraThreads,
                 maxIdleSeconds,
@@ -35,14 +37,15 @@ public class CustomThreadPool {
         threadPoolExecutor.submit(r);
     }
 
-    private ThreadPoolExecutor newThreadPool(Boolean busy,
+    private ThreadPoolExecutor newThreadPool(Boolean busy, double maxUtilization,
                                             int maxWaitingTasksPerThread,
                                             int maxExtraThreads,
                                             int maxIdleSeconds,
                                             String threadName,
                                             @Nullable RejectedExecutionHandler rejectedExecutionHandler){
         int cores = CoresUtils.getCores();
-        int corePoolSize = busy ? cores + 1 : cores * 2 + 1;
+        int corePoolSize = (int) ((busy ? cores + 1 : cores * 2 + 1) * maxUtilization);
+        corePoolSize = corePoolSize == 0 ? 1 : corePoolSize;
         int maxPoolSize = maxExtraThreads + corePoolSize;
         int keepAliveTime = maxIdleSeconds;
         TimeUnit timeUnit = TimeUnit.SECONDS;
