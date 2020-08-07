@@ -3,6 +3,7 @@ package com.thumbing.shared.entity.sql.user;
 import com.thumbing.shared.constants.EntityConstants;
 import com.thumbing.shared.entity.sql.BaseSqlEntity;
 import com.thumbing.shared.entity.sql.SqlFullAuditedEntity;
+import com.thumbing.shared.entity.sql.black.BlackList;
 import com.thumbing.shared.entity.sql.group.ChatGroup;
 import com.thumbing.shared.entity.sql.personal.Personal;
 import com.thumbing.shared.entity.sql.relation.Relation;
@@ -22,7 +23,8 @@ import java.util.Set;
  */
 @Entity
 @Table(name = "user_info", indexes = {
-        @Index(name = "name", columnList = "userName"),
+        @Index(name = "userId", columnList = "userId", unique = true),
+        @Index(name = "userName", columnList = "userName"),
 })
 @Getter
 @Setter
@@ -35,21 +37,30 @@ import java.util.Set;
 })
 public class UserInfo extends SqlFullAuditedEntity {
     /**
+     * 用户Id
+     */
+    private Long userId;
+    /**
      * 用户名
      */
     private String userName;
     /**
+     * 昵称
+     */
+    private String nickName;
+    /**
      * 用户的个人信息
      */
+    private Long personalId;
     @OneToOne(targetEntity = Personal.class)
-    @JoinColumn(name = "personal_id", referencedColumnName = BaseSqlEntity.Fields.id)
+    @JoinColumn(name = Fields.personalId, referencedColumnName = BaseSqlEntity.Fields.id, insertable = false, updatable = false, unique = true)
     private Personal personal;
     /**
      * 加入聊天室列表
      */
     @ManyToMany
     @JoinTable(name = "chat_group_user",
-            joinColumns = { @JoinColumn(name = "user_id") },
+            joinColumns = { @JoinColumn(name = "user_id", referencedColumnName = Fields.userId) },
             inverseJoinColumns = {@JoinColumn(name = "chat_group_id")})
     private Set<ChatGroup> chatGroups;
     /**
@@ -57,6 +68,7 @@ public class UserInfo extends SqlFullAuditedEntity {
      */
     @OneToMany(targetEntity = ChatGroup.class, mappedBy = ChatGroup.Fields.creator)
     private Set<ChatGroup> createChatGroups;
+
 
     @Override
     public boolean equals(Object object){

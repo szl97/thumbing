@@ -41,5 +41,11 @@ public class CacheKeyConstants {
      * userName
      */
     public static final String VALIDATION_FOR_CHANGE_PASSWORD = "VALIDATION:PASSWORD_CHANGE:";
+    /**
+     * String
+     * 缓存所有的job occupation 和 interest
+     * com.thumbing.usermanagement.dto.output.PersonalConfigurationDto
+     */
+    public static final String PERSONAL_CONFIGURATION = "PERSONAL:CONFIGURATION";
 
 }

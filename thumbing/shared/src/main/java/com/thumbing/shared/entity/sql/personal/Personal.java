@@ -9,6 +9,7 @@ import lombok.Setter;
 import lombok.experimental.FieldNameConstants;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
+import org.springframework.data.jpa.repository.EntityGraph;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -19,22 +20,28 @@ import java.util.Set;
  * @Date: 2020/7/16 14:41
  */
 @Entity
-@Table(name = "personal")
+@Table(name = "personal", indexes = {
+        @Index(columnList = "userId", unique = true)
+})
 @Getter
 @Setter
 @FieldNameConstants
 @SQLDelete(sql =  "update personal " + EntityConstants.DELETION)
 @Where(clause = "is_delete=0")
+@NamedEntityGraph(name = Personal.NamedEntityGraph_userInfo, attributeNodes = {
+        @NamedAttributeNode("user")
+})
 public class Personal extends SqlFullAuditedEntity {
+    public static final String NamedEntityGraph_userInfo = "Personal.userInfo";
     /**
-     * 身份信息所属的唯一用户的用户名
+     * 身份信息所属的唯一用户的Id
      */
-    private String userName;
+    private Long userId;
     /**
      * 身份信息所属的唯一用户
      */
     @OneToOne(targetEntity = UserInfo.class)
-    @JoinColumn(name = Fields.userName, referencedColumnName = UserInfo.Fields.userName, insertable = false, updatable = false)
+    @JoinColumn(name = Fields.userId, referencedColumnName = UserInfo.Fields.userId, insertable = false, updatable = false)
     private UserInfo user;
     /**
      * 名字
@@ -47,19 +54,19 @@ public class Personal extends SqlFullAuditedEntity {
     /**
      * 出生日期
      */
-    private LocalDate birth_date;
+    private LocalDate birthDate;
     /**
      * 出生年
      */
-    private short birth_year;
+    private short birthYear;
     /**
      * 出生月
      */
-    private short birth_month;
+    private short birthMonth;
     /**
      * 出生日
      */
-    private short birth_day;
+    private short birthDay;
     /**
      * 星座
      */
@@ -67,7 +74,7 @@ public class Personal extends SqlFullAuditedEntity {
     /**
      * 是否是学生
      */
-    private boolean is_student;
+    private boolean student;
     /**
      * 目前所在国家
      */

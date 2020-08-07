@@ -15,6 +15,8 @@ import java.util.Set;
 public class PersonalDto extends EntityDto {
     @ApiModelProperty(value = "用户的用户名")
     private String userName;
+    @ApiModelProperty(value = "昵称")
+    private String nickName;
     @ApiModelProperty(value = "真实名字")
     private String name;
     @ApiModelProperty(value = "性别")
@@ -24,7 +26,7 @@ public class PersonalDto extends EntityDto {
     @ApiModelProperty(value = "星座")
     private String constellation;
     @ApiModelProperty(value = "是否是学生")
-    private boolean is_student;
+    private boolean student;
     @ApiModelProperty(value = "目前所在国家")
     private String currentCountry;
     @ApiModelProperty(value = "故乡国家")

@@ -44,8 +44,9 @@ public class ChatGroup extends SqlFullAuditedEntity {
     /**
      * 创建人
      */
+    private Long createId;
     @ManyToOne(targetEntity = UserInfo.class)
-    @JoinColumn(name= "create_id", referencedColumnName = BaseSqlEntity.Fields.id)
+    @JoinColumn(name= Fields.createId, referencedColumnName = UserInfo.Fields.userId, insertable = false, updatable = false)
     private UserInfo creator;
     /**
      * 成员列表

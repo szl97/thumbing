@@ -38,10 +38,6 @@ public class User extends SqlFullAuditedEntity {
      */
     private String userName;
     /**
-     * 昵称
-     */
-    private String nickName;
-    /**
      * 密码
      */
     private String password;

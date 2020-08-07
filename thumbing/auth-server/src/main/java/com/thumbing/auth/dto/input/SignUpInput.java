@@ -18,8 +18,6 @@ public class SignUpInput implements Serializable {
     @NotBlank(message = "密码不可为空")
     @ApiModelProperty(value = "密码")
     private String password;
-    @ApiModelProperty(value = "昵称")
-    private String nickName;
     @ApiModelProperty(value = "电话")
     private String phoneNum;
     @ApiModelProperty(value = "邮箱地址")
