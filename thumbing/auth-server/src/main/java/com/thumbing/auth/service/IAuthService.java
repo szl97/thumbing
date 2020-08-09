@@ -10,12 +10,6 @@ import com.thumbing.shared.entity.sql.system.User;
 public interface IAuthService {
 
     /**
-     * 用户登录，获取token
-     * @param input
-     * @return
-     */
-    String getAuthorization(LoginRequest input);
-    /**
      * 校验接口是否有权限
      * @param applicationName
      * @param url

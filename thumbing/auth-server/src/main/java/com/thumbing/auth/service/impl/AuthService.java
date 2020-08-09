@@ -2,7 +2,6 @@ package com.thumbing.auth.service.impl;
 
 import com.github.dozermapper.core.Mapper;
 import com.thumbing.auth.cache.FailureLoginCache;
-import com.thumbing.auth.cache.TokenCache;
 import com.thumbing.auth.context.LoginUserContextHolder;
 import com.thumbing.auth.dto.input.LoginRequest;
 import com.thumbing.auth.service.IAuthService;
@@ -12,7 +11,6 @@ import com.thumbing.shared.auth.permission.SkipPathRequestMatcher;
 import com.thumbing.shared.entity.sql.system.Device;
 import com.thumbing.shared.entity.sql.system.User;
 import com.thumbing.shared.exception.AccountLockException;
-import com.thumbing.shared.exception.BusinessException;
 import com.thumbing.shared.exception.UserContextException;
 import com.thumbing.shared.exception.UserLoginException;
 import com.thumbing.shared.jwt.JwtTokenFactory;
@@ -22,10 +20,6 @@ import com.thumbing.shared.thread.CustomThreadPool;
 import com.thumbing.shared.utils.user.UserContextUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -46,8 +40,6 @@ import java.util.List;
 @Transactional
 public class AuthService implements IAuthService {
     private final Integer MAX_FAILURE_TIMES = 5;
-    @Autowired
-    private AuthenticationManager authenticationManager;
     @Autowired
     JwtTokenFactory jwtTokenFactory;
     @Autowired
@@ -71,20 +63,6 @@ public class AuthService implements IAuthService {
 
 
     @Override
-    public String getAuthorization(LoginRequest input) {
-        UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(input.getUsername(), input.getPassword());
-        Authentication authResult = authenticationManager.authenticate(token);
-        if (authResult.isAuthenticated()) {
-            UserContext userContext = (UserContext) authResult.getPrincipal();
-            succeedLogin(input);
-            return jwtTokenFactory.createJwtToken(userContext);
-        } else {
-            failLogin(input);
-            throw new BusinessException("帐户名或者密码错误");
-        }
-    }
-
-    @Override
     public boolean auth(String authorization, String applicationName, String url) {
         if(ignoreAuthentication(applicationName, url))  return true;
         return hasPermission(authorization, applicationName, url);
@@ -92,7 +70,7 @@ public class AuthService implements IAuthService {
 
     @Override
     public User checkAndGetUser(String userName, String password) {
-        if(failureLoginCache.getFailureTimes(userName) >= 5){
+        if(failureLoginCache.getFailureTimes(userName) >= MAX_FAILURE_TIMES){
             throw new AccountLockException("登录失败次数过多，账户已冻结");
         }
         User user = repository.findByUserName(userName).orElseThrow(()-> new UsernameNotFoundException("用户名不存在"));

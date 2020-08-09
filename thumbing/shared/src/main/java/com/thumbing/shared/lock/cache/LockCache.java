@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.Resource;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -15,7 +16,7 @@ import java.util.concurrent.TimeUnit;
  */
 @Component
 public class LockCache {
-    @Autowired
+    @Resource(name = "customRedisTemplate")
     private RedisTemplate<String, String> redisTemplate;
 
     public Boolean lock(String key, long seconds){
@@ -28,5 +29,9 @@ public class LockCache {
 
     public void release(String key){
         RedisUtils.remove(redisTemplate, key);
+    }
+
+    public void expire(String key, long seconds){
+        RedisUtils.expire(redisTemplate, key, seconds, TimeUnit.SECONDS);
     }
 }

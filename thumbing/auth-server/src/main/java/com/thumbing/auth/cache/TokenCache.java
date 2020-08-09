@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.Resource;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -19,7 +20,7 @@ public class TokenCache {
     private final String TOKEN_KEY = CacheKeyConstants.TOKEN;
     @Value("${authentication.expirationTime}")
     private long expireTime;
-    @Autowired
+    @Resource(name = "customRedisTemplate")
     private RedisTemplate<String, String> redisTemplate;
 
     /**

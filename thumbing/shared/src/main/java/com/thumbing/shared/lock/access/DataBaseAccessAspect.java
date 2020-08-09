@@ -33,9 +33,4 @@ public class DataBaseAccessAspect {
     public void afterExecute(AccessLock accessLock){
         lockCache.release(accessLock.value());
     }
-
-    @AfterThrowing("@annotation(accessLock)")
-    public void afterThrowException(AccessLock accessLock){
-        lockCache.release(accessLock.value());
-    }
 }

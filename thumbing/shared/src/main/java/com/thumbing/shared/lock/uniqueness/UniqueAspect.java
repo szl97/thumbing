@@ -6,9 +6,7 @@ import com.thumbing.shared.exception.BusinessException;
 import com.thumbing.shared.lock.cache.LockCache;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
-import org.aspectj.lang.annotation.After;
-import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.annotation.Before;
+import org.aspectj.lang.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Conditional;
 import org.springframework.stereotype.Component;
@@ -29,7 +27,35 @@ import java.util.List;
 @Conditional(RedisCondition.class)
 public class UniqueAspect {
     @Autowired
-    private LockCache lockCache;
+    private static LockCache lockCache;
+
+//    private static Thread thread;
+//
+//    private static volatile boolean closed;
+
+//    static{
+//        closed = false;
+//        thread = new Thread(
+//                ()->{
+//                    while (!closed){
+//                        try {
+//                            Thread.sleep(10000);
+//                            if(!closed){
+//                                //todo: 过期时间增加10s
+//                            }
+//                        } catch (InterruptedException e) {
+//                            e.printStackTrace();
+//                        }
+//                    }
+//                }
+//        );
+//        thread.setDaemon(true);
+//    }
+//
+//    private static void close(){
+//        closed = true;
+//        thread.interrupt();
+//    }
 
     @Before("@annotation(uniqueLock)")
     public void beforeExecute(JoinPoint joinPoint, UniqueLock uniqueLock) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
@@ -41,10 +67,12 @@ public class UniqueAspect {
             }
         }
         UniqueLockKeyContextHolder.setKeys(values);
+        //thread.start();
     }
 
     @After("@annotation(uniqueLock)")
     public void afterExecute(UniqueLock uniqueLock) {
+        //close();
         List<String> values = UniqueLockKeyContextHolder.getKeys();
         lockCache.release(values);
         UniqueLockKeyContextHolder.clear();
