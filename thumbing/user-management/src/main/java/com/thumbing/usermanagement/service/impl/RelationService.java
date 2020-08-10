@@ -6,17 +6,24 @@ import com.thumbing.shared.entity.sql.black.BlackList;
 import com.thumbing.shared.entity.sql.relation.Relation;
 import com.thumbing.shared.entity.sql.relation.RelationApplyInfo;
 import com.thumbing.shared.exception.BusinessException;
+import com.thumbing.shared.jpa.Specifications;
 import com.thumbing.shared.repository.sql.black.IBlackListRepository;
 import com.thumbing.shared.repository.sql.relation.IRelationApplyInfoRepository;
 import com.thumbing.shared.repository.sql.relation.IRelationRepository;
+import com.thumbing.shared.utils.dozermapper.DozerMapperWrapper;
+import com.thumbing.shared.utils.dozermapper.DozerUtils;
 import com.thumbing.usermanagement.dto.input.RelationApplyHandlerInput;
 import com.thumbing.usermanagement.dto.input.RelationApplyInput;
 import com.thumbing.usermanagement.dto.input.RelationRemoveInput;
+import com.thumbing.usermanagement.dto.output.RelationApplyDto;
 import com.thumbing.usermanagement.dto.output.RelationDto;
 import com.thumbing.usermanagement.service.IRelationService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 /**
  * @Author: Stan Sai
@@ -32,54 +39,93 @@ public class RelationService implements IRelationService {
     @Autowired
     private IBlackListRepository blackListRepository;
     @Autowired
-    Mapper mapper;
+    private Mapper mapper;
 
+    /**
+     * 申请好友：
+     * 1.判断对方是否存在于你的黑名单中
+     * 2.判断对方是否把你拉黑
+     * 3.判断是否是重复申请
+     * 4.判断是否已经是好友
+     * 以上四种情况，直接返回
+     * @param userContext
+     * @param input
+     * @return
+     */
     @Override
     public Boolean applyRelation(UserContext userContext, RelationApplyInput input) {
-        BlackList check0 = blackListRepository.findByUserIdAndTargetUserId(userContext.getId(), input.getTargetUserId()).orElse(null);
-        if(check0 != null) throw new BusinessException("对方存在于你的黑名单中");
-        BlackList check01 = blackListRepository.findByUserIdAndTargetUserId(input.getTargetUserId(), userContext.getId()).orElse(null);
-        if(check01 != null) return true;
+        //todo: 判断对方是否存在于你的黑名单中 + 判断对方是否把你拉黑
+        Specification<BlackList> specification1 = Specifications.where(spec->{
+            spec.eq(BlackList.Fields.userId, userContext.getId());
+            spec.eq(BlackList.Fields.targetUserId, input.getTargetUserId());
+        });
+        Specification<BlackList> specification2 = Specifications.where(spec->{
+            spec.eq(BlackList.Fields.targetUserId, userContext.getId());
+            spec.eq(BlackList.Fields.userId, input.getTargetUserId());
+        });
+        BlackList check0 = blackListRepository.findOne(specification1.and(specification2)).orElse(null);
+        if(check0 != null)  return true;
+        //todo: 判断是否是重复申请
         RelationApplyInfo check1 = relationApplyInfoRepository.findByUserIdAndTargetUserId(userContext.getId(), input.getTargetUserId()).orElse(null);
         if(check1 != null) return true;
+        //todo: 判断是否已经是好友 好友表的存储规则是Id1<Id2
         Long id1 = input.getTargetUserId() > userContext.getId() ? userContext.getId() : input.getTargetUserId();
         Long id2 = id1 == userContext.getId() ? input.getTargetUserId() : userContext.getId();
-        Relation check2 = relationRepository.findByUserIdOneOrUserIdTwo(id1, id2).orElse(null);
-        if(check2 != null) throw new BusinessException("操作错误，和对方已经是好友");
+        Relation check2 = relationRepository.findByUserIdOneAndUserIdTwo(id1, id2).orElse(null);
+        if(check2 != null) return true;
+
+        //todo: 以上条件都通过，保存好友申请到数据库
         RelationApplyInfo relationApplyInfo = new RelationApplyInfo();
         relationApplyInfo.setUserId(userContext.getId());
         relationApplyInfo.setTargetUserId(input.getTargetUserId());
         relationApplyInfo.setRemark(input.getRemark());
-        relationApplyInfoRepository.save(relationApplyInfo);
+        RelationApplyInfo info =  relationApplyInfoRepository.save(relationApplyInfo);
 
-        //todo:发送消息到Data Center通知targetUser
+        //todo:发送消息到Data Center通知targetUser, 需发送该好友请求的ID和请求添加者的userName
 
         return true;
     }
 
+    /**
+     * 判断是否是对应请求的处理人，如果不是返回异常
+     * 判断对方是否拉黑你
+     * 判断是否已经是好友，若是，直接返回
+     * @param userContext
+     * @param input
+     * @return
+     */
     @Override
-    public RelationDto handleRelationApply(UserContext userContext, RelationApplyHandlerInput input) {
+    public Boolean handleRelationApply(UserContext userContext, RelationApplyHandlerInput input) {
+        //todo: 判断请求是否存在。以及是否是对应的处理人
         RelationApplyInfo applyInfo = relationApplyInfoRepository.findById(input.getId()).orElseThrow(()->new BusinessException("好友申请已不存在"));
         if(applyInfo.getTargetUserId() != userContext.getId()) throw new BusinessException("操作错误");
+        //todo: 判断对方是否拉黑你
+        BlackList blackList = blackListRepository.findByUserIdAndTargetUserId(applyInfo.getUserId(), applyInfo.getTargetUserId()).orElse(null);
+        if(blackList != null) throw new BusinessException("你存在于对方黑名单中，添加好友失败");
+        //todo: 判断是否已经是好友关系
         Long id1 = applyInfo.getUserId() > userContext.getId() ? userContext.getId() : applyInfo.getUserId();
         Long id2 = id1 == userContext.getId() ? applyInfo.getUserId() : userContext.getId();
-        Relation check = relationRepository.findByUserIdOneOrUserIdTwo(id1, id2).orElse(null);
+        Relation check = relationRepository.findByUserIdOneAndUserIdTwo(id1, id2).orElse(null);
+        //todo: 已经是好友直接返回
         if(check != null){
             applyInfo.setApprove(true);
             relationApplyInfoRepository.save(applyInfo);
-            return null;
+            return true;
         }
+        //todo: 不通过的处理
         else if(!input.isApprove()){
             applyInfo.setReject(true);
             relationApplyInfoRepository.save(applyInfo);
-            return null;
+            return true;
         }
+        //todo: 通过请求的处理
         else{
 
             //todo:异步请求生成新的会话
 
             applyInfo.setApprove(true);
             relationApplyInfoRepository.save(applyInfo);
+            //todo: 保证好友关系表中 Id1<Id2
             Relation relation = new Relation();
             relation.setUserIdOne(id1);
             relation.setUserIdTwo(id2);
@@ -91,8 +137,8 @@ public class RelationService implements IRelationService {
                 relation.setNickNameOne(input.getNickName2());
                 relation.setNickNameTwo(input.getNickName1());
             }
-            relation = relationRepository.save(relation);
-            return mapper.map(relation, RelationDto.class);
+            relationRepository.save(relation);
+            return true;
         }
     }
 
@@ -103,5 +149,31 @@ public class RelationService implements IRelationService {
         if(relation.getUserIdOne() != userContext.getId() && relation.getUserIdTwo() != userContext.getId()) throw  new BusinessException("非法操作");
         relationRepository.delete(relation);
         return true;
+    }
+
+    @Override
+    public List<RelationDto> getAllRelation(UserContext userContext) {
+        List<Relation> relations = relationRepository.findAllByUserIdOneOrUserIdTwo(userContext.getId(), userContext.getId());
+        return DozerUtils.mapList(mapper, relations, RelationDto.class, (relation, relationDto) -> {
+            if(relation.getUserIdTwo() == userContext.getId()) {
+                relationDto.setUserId(relation.getUserIdOne());
+                relationDto.setUserName(relation.getNickNameOne());
+            }
+            else {
+                relationDto.setUserId(relation.getUserIdTwo());
+                relationDto.setUserName(relation.getNickNameTwo());
+            }
+        });
+    }
+
+    @Override
+    public List<RelationApplyDto> getAllRelationApply(UserContext userContext) {
+        List<RelationApplyInfo> relationApplyInfos = relationApplyInfoRepository.findAllByTargetUserId(userContext.getId());
+        return DozerUtils.mapList(mapper, relationApplyInfos, RelationApplyDto.class, (relationApply, relationApplyDto)->{
+            if(relationApply.getUserInfo() != null) {
+                relationApplyDto.setNickName(relationApply.getUserInfo().getUserName());
+                relationApplyDto.setNickName(relationApply.getUserInfo().getNickName());
+            }
+        });
     }
 }

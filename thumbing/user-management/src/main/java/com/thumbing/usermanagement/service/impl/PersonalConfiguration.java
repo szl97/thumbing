@@ -32,15 +32,15 @@ import java.util.concurrent.ForkJoinPool;
 @Transactional
 public class PersonalConfiguration implements IPersonalConfiguration {
     @Autowired
-    IJobRepository jobRepository;
+    private IJobRepository jobRepository;
     @Autowired
-    IOccupationRepository occupationRepository;
+    private IOccupationRepository occupationRepository;
     @Autowired
-    IInterestRepository interestRepository;
+    private IInterestRepository interestRepository;
     @Autowired
-    PersonalConfigurationCache personalConfigurationCache;
+    private PersonalConfigurationCache personalConfigurationCache;
     @Autowired
-    Mapper mapper;
+    private Mapper mapper;
 
     @Override
     public PersonalConfigurationDto get() {

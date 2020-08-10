@@ -22,7 +22,12 @@ import javax.persistence.*;
 @Setter
 @FieldNameConstants
 @Where(clause = "approve=false and reject=false")
+@NamedEntityGraph(name = RelationApplyInfo.NamedEntityGraph_userInfo, attributeNodes = {
+            @NamedAttributeNode("userInfo")
+   }
+)
 public class RelationApplyInfo extends SqlCreationEntity {
+    public static final String NamedEntityGraph_userInfo = "RelationApplyInfo.userInfo";
     /**
      * 申请发送方
      */

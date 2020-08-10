@@ -1,7 +1,6 @@
 package com.thumbing.shared.entity.sql.relation;
 
 import com.thumbing.shared.constants.EntityConstants;
-import com.thumbing.shared.entity.sql.BaseSqlEntity;
 import com.thumbing.shared.entity.sql.SqlFullAuditedEntity;
 import com.thumbing.shared.entity.sql.user.UserInfo;
 import lombok.Getter;
@@ -23,7 +22,13 @@ import javax.persistence.*;
 @FieldNameConstants
 @SQLDelete(sql =  "update relation " + EntityConstants.DELETION)
 @Where(clause = "is_delete=0")
+@NamedEntityGraph(name = Relation.NamedEntityGraph_userInfo, attributeNodes = {
+        @NamedAttributeNode("userOne"),
+        @NamedAttributeNode("userTwo")
+}
+)
 public class Relation extends SqlFullAuditedEntity {
+    public static final String NamedEntityGraph_userInfo = "Relation.userInfo";
     /**
      * 关系一方的用户ID, ID小的一方为User1
      */
@@ -43,7 +48,7 @@ public class Relation extends SqlFullAuditedEntity {
      */
     @ManyToOne(targetEntity = UserInfo.class)
     @JoinColumn(name = Fields.userIdTwo, referencedColumnName = UserInfo.Fields.userId, insertable = false, updatable = false)
-    private UserInfo UserTwo;
+    private UserInfo userTwo;
     /**
      * 状态 代表持续聊天的时间到达的关系等级
      * year month week day

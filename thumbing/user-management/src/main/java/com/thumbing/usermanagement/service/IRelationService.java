@@ -4,7 +4,10 @@ import com.thumbing.shared.auth.model.UserContext;
 import com.thumbing.usermanagement.dto.input.RelationApplyHandlerInput;
 import com.thumbing.usermanagement.dto.input.RelationApplyInput;
 import com.thumbing.usermanagement.dto.input.RelationRemoveInput;
+import com.thumbing.usermanagement.dto.output.RelationApplyDto;
 import com.thumbing.usermanagement.dto.output.RelationDto;
+
+import java.util.List;
 
 /**
  * @Author: Stan Sai
@@ -24,7 +27,7 @@ public interface IRelationService {
      * @param input
      * @return
      */
-    RelationDto handleRelationApply(UserContext userContext, RelationApplyHandlerInput input);
+    Boolean handleRelationApply(UserContext userContext, RelationApplyHandlerInput input);
     /**
      * 删除好友
      * @param userContext
@@ -32,4 +35,18 @@ public interface IRelationService {
      * @return
      */
     Boolean removeRelation(UserContext userContext, RelationRemoveInput input);
+
+    /**
+     * 获取好友列表
+     * @param userContext
+     * @return
+     */
+    List<RelationDto> getAllRelation(UserContext userContext);
+
+    /**
+     * 获取好友申请列表
+     * @param userContext
+     * @return
+     */
+    List<RelationApplyDto> getAllRelationApply(UserContext userContext);
 }

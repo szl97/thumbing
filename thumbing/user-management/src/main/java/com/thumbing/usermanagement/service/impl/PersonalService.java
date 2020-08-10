@@ -63,7 +63,7 @@ public class PersonalService extends BaseSqlService<Personal, IPersonalRepositor
     @Override
     public PersonalDto updatePersonal(UserContext userContext, PersonalEditInput input) {
         Personal personal = repository.findById(input.getId()).orElseThrow(() ->new BusinessException("个人信息不存在"));
-        if(personal.getUserId() != userContext.getId()) throw new BusinessException("非法操作");
+        if(personal.getUserId() != userContext.getId()) throw new BusinessException("操作错误");
         mapper.map(input, personal);
         personal.getUser().setNickName(input.getNickName());
         if(input.getInterests() != null){

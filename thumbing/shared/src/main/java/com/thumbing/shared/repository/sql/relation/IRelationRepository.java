@@ -2,7 +2,9 @@ package com.thumbing.shared.repository.sql.relation;
 
 import com.thumbing.shared.entity.sql.relation.Relation;
 import com.thumbing.shared.repository.sql.IBaseSqlRepository;
+import org.springframework.data.jpa.repository.EntityGraph;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -11,7 +13,9 @@ import java.util.Optional;
  */
 public interface IRelationRepository extends IBaseSqlRepository<Relation> {
 
-    Optional<Relation> findByUserIdOneOrUserIdTwo(Long idOne, Long idTwo);
+    List<Relation> findAllByUserIdOneOrUserIdTwo(Long idOne, Long idTwo);
 
     Optional<Relation> findByUserIdOneAndUserIdTwo(Long idOne, Long idTwo);
+
+
 }

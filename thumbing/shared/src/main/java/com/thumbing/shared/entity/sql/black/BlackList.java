@@ -20,7 +20,12 @@ import javax.persistence.*;
 @Getter
 @Setter
 @FieldNameConstants
+@NamedEntityGraph(name = BlackList.NamedEntityGraph_userInfo, attributeNodes = {
+        @NamedAttributeNode("targetUserInfo")
+}
+)
 public class BlackList extends SqlCreationEntity {
+    public static final String NamedEntityGraph_userInfo = "BlackList.userInfo";
     /**
      * 把对方加入黑名单的一方
      */
