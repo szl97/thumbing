@@ -46,6 +46,7 @@ public class BlackListService implements IBlackListService {
      */
     @Override
     public Boolean addToBlackList(UserContext context, BlackListAddInput input) {
+        if(input.getTargetUserId() == context.getId()) throw new BusinessException("操作错误");
         //todo:判断是否已经拉黑，若是，直接返回
         BlackList blackList = blackListRepository.findByUserIdAndTargetUserId(context.getId(), input.getTargetUserId()).orElse(null);
         if(blackList != null) return true;

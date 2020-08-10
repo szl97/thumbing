@@ -57,6 +57,7 @@ public class RelationService implements IRelationService {
      */
     @Override
     public Boolean applyRelation(UserContext userContext, RelationApplyInput input) {
+        if(input.getTargetUserId() == userContext.getId()) throw new BusinessException("操作错误");
         //todo: 判断对方是否存在于你的黑名单中 + 判断对方是否把你拉黑
         Specification<BlackList> specification1 = Specifications.where(spec->{
             spec.eq(BlackList.Fields.userId, userContext.getId());

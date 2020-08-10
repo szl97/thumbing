@@ -51,11 +51,10 @@ public class PushDataHandler implements IMessageHandler<PushData> {
                     }
                 }
         );
-        map.entrySet().forEach(
+        map.entrySet().parallelStream().forEach(
                 e -> {
                     Channel writeChannel = channelManager.getChannel(e.getKey());
                     if (writeChannel != null) {
-
                         try {
                             writeChannel.writeAndFlush(
                                     PushData.builder().pushType(message.getPushType())
