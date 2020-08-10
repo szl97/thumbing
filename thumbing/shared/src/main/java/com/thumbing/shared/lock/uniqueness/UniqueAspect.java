@@ -6,7 +6,9 @@ import com.thumbing.shared.exception.BusinessException;
 import com.thumbing.shared.lock.cache.LockCache;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
-import org.aspectj.lang.annotation.*;
+import org.aspectj.lang.annotation.After;
+import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Before;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Conditional;
 import org.springframework.stereotype.Component;
@@ -15,6 +17,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ConcurrentSkipListMap;
 
 /**
  * 对uniqueLock注解标注的方法进行动态代理
@@ -27,53 +30,69 @@ import java.util.List;
 @Conditional(RedisCondition.class)
 public class UniqueAspect {
     @Autowired
-    private static LockCache lockCache;
+    private LockCache lockCache;
 
-//    private static Thread thread;
-//
-//    private static volatile boolean closed;
+    private Thread thread;
 
-//    static{
-//        closed = false;
-//        thread = new Thread(
-//                ()->{
-//                    while (!closed){
-//                        try {
-//                            Thread.sleep(10000);
-//                            if(!closed){
-//                                //todo: 过期时间增加10s
-//                            }
-//                        } catch (InterruptedException e) {
-//                            e.printStackTrace();
-//                        }
-//                    }
-//                }
-//        );
-//        thread.setDaemon(true);
-//    }
-//
-//    private static void close(){
-//        closed = true;
-//        thread.interrupt();
-//    }
+    private ConcurrentSkipListMap<String, Thread> map;
+
+    public UniqueAspect(){
+        map = new ConcurrentSkipListMap();
+        thread = new Thread(
+                ()->{
+                    while (true){
+                        try {
+                            Thread.sleep(27000);
+                            //todo: 所有正在执行线程的key过期时间重新设置为30s
+                            map.entrySet().parallelStream().forEach(
+                                    e->{
+                                        if(e.getValue().isAlive()&&!e.getValue().isInterrupted()){
+                                            lockCache.expire(e.getKey(), 30);
+                                        }else {
+                                            map.remove(e.getKey());
+                                        }
+                                    }
+                            );
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+        );
+        thread.setDaemon(true);
+        thread.start();
+    }
+
+    private void start(List<String> keys){
+        for(String key : keys) {
+            map.put(key, Thread.currentThread());
+        }
+    }
+
+    private void finish(List<String> keys){
+        for(String key : keys) {
+            map.remove(key);
+        }
+    }
 
     @Before("@annotation(uniqueLock)")
     public void beforeExecute(JoinPoint joinPoint, UniqueLock uniqueLock) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
         List<String> values = getValues(joinPoint, uniqueLock);
+        long expire = uniqueLock.seconds() < 30 ? 30 : uniqueLock.seconds();
         for(String v : values){
-            if(!lockCache.lock(v, uniqueLock.seconds())){
+            if(!lockCache.lock(v, expire)){
                 lockCache.release(values);
                 throw new BusinessException("所输入的某个参数已被占用");
             }
         }
         UniqueLockKeyContextHolder.setKeys(values);
-        //thread.start();
+        start(values);
     }
 
     @After("@annotation(uniqueLock)")
     public void afterExecute(UniqueLock uniqueLock) {
-        //close();
         List<String> values = UniqueLockKeyContextHolder.getKeys();
+        finish(values);
         lockCache.release(values);
         UniqueLockKeyContextHolder.clear();
     }
