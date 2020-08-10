@@ -1,5 +1,6 @@
 package com.thumbing.pushdata.common.message;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.thumbing.shared.utils.context.SpringContextUtils;
 import lombok.AllArgsConstructor;
@@ -24,7 +25,7 @@ public abstract class NodeMessage<T> extends DefinedMessage<T> {
      * @return
      * @throws Exception
      */
-    protected String toEncode() throws Exception {
+    protected String toEncode() throws JsonProcessingException {
         return objectMapper.writeValueAsString(getThis());
     }
 
@@ -34,8 +35,7 @@ public abstract class NodeMessage<T> extends DefinedMessage<T> {
      *
      * @return
      */
-    public String encode() throws Exception {
-        try {
+    public String encode() throws JsonProcessingException {
 
             Message message = Message
                     .builder()
@@ -43,9 +43,6 @@ public abstract class NodeMessage<T> extends DefinedMessage<T> {
                     .message(toEncode())
                     .build();
             return objectMapper.writeValueAsString(message);
-        } catch (Exception e) {
-            throw e;
-        }
     }
 
 
@@ -56,43 +53,39 @@ public abstract class NodeMessage<T> extends DefinedMessage<T> {
      * @return
      * @throws
      */
-    public static NodeMessage decode(String json) throws Exception {
-        try {
+    public static NodeMessage decode(String json) throws JsonProcessingException {
 
-            Message msg = objectMapper.readValue(json, Message.class);
 
-            Class cls = null;
+        Message msg = objectMapper.readValue(json, Message.class);
 
-            switch (msg.type) {
-                case C:
-                    cls = Confirm.class;
-                    break;
-                case PI:
-                    cls = Ping.class;
-                    break;
-                case PO:
-                    cls = Pong.class;
-                    break;
-                case CS:
-                    cls = ConnectSet.class;
-                    break;
-                case PR:
-                    cls = PushResp.class;
-                    break;
-                case CD:
-                    cls = ChatData.class;
-                    break;
-                case PD:
-                    cls = ChatData.class;
-                    break;
-                default:
-                    throw new Exception();
-            }
-            NodeMessage message = (NodeMessage) objectMapper.readValue(msg.message, cls);
-            return message;
-        } catch (Exception e) {
-            throw e;
+        Class cls = null;
+
+        switch (msg.type) {
+            case C:
+                cls = Confirm.class;
+                break;
+            case PI:
+                cls = Ping.class;
+                break;
+            case PO:
+                cls = Pong.class;
+                break;
+            case CS:
+                cls = ConnectSet.class;
+                break;
+            case PR:
+                cls = PushResp.class;
+                break;
+            case CD:
+                cls = ChatData.class;
+                break;
+            case PD:
+                cls = ChatData.class;
+                break;
         }
+        NodeMessage message = (NodeMessage) objectMapper.readValue(msg.message, cls);
+        return message;
+
     }
 
     //真正的传递消息的类
@@ -102,8 +95,6 @@ public abstract class NodeMessage<T> extends DefinedMessage<T> {
     @AllArgsConstructor
     private static class Message {
         private Type type;
-
         private String message;
-
     }
 }

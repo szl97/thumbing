@@ -28,7 +28,7 @@ public class InActiveHandlerForSyncClient implements IInActiveHandler {
     }
 
     @Override
-    public void call(ChannelHandlerContext ctx, Object message) throws Exception {
+    public void call(ChannelHandlerContext ctx, Object message){
         Channel channel = ctx.channel();
         channelManager.removeChannel(channel);
         log.debug("Data center to node server inactive,channel:{}", channel);

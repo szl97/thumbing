@@ -26,7 +26,7 @@ public class Confirm extends NodeMessage<Confirm> {
     }
 
     @Override
-    protected Confirm getThis() throws Exception {
+    protected Confirm getThis() {
         return this;
     }
 }

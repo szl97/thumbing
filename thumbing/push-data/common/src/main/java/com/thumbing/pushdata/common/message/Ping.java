@@ -19,7 +19,7 @@ public class Ping extends NodeMessage<Ping> {
     }
 
     @Override
-    protected Ping getThis() throws Exception {
+    protected Ping getThis() {
         return this;
     }
 }

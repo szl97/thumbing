@@ -11,7 +11,7 @@ import javax.annotation.PreDestroy;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentSkipListMap;
 
 /**
  * 管理客户端和node-server之间的消息通道，用于客户端的消息推送
@@ -23,7 +23,7 @@ import java.util.concurrent.ConcurrentHashMap;
 @Component
 @Data
 public class DeviceDataChannelManager implements IChannelManager<Long> {
-    private Map<Long, Channel> channelPool = new ConcurrentHashMap<>();
+    private Map<Long, Channel> channelPool = new ConcurrentSkipListMap<>();
 
     @PreDestroy
     public void destory() {
@@ -31,12 +31,12 @@ public class DeviceDataChannelManager implements IChannelManager<Long> {
     }
 
     @Override
-    public void bindAttributes(Long deviceId, Channel channel, List<AttributeEnum> attributeKeys) {
-        channelPool.put(deviceId, channel);
+    public void bindAttributes(Long userId, Channel channel, List<AttributeEnum> attributeKeys) {
+        channelPool.put(userId, channel);
 
         attributeKeys.forEach(a -> {
             if (a == AttributeEnum.CHANNEL_ATTR_DEVICE) {
-                channel.attr(a.getAttributeKey()).set(deviceId);
+                channel.attr(a.getAttributeKey()).set(userId);
             }
             if (a == AttributeEnum.CHANNEL_ATTR_HANDSHAKE) {
                 channel.attr(a.getAttributeKey()).set(true);
@@ -72,14 +72,6 @@ public class DeviceDataChannelManager implements IChannelManager<Long> {
         return channelPool.get(id);
     }
 
-//    public List<Channel> getAllChannels(){
-//        List<Channel> list = new ArrayList<>();
-//        channelPool.entrySet().forEach(e-> {
-//                    list.add(e.getValue());
-//                }
-//        );
-//        return list;
-//    }
 
     public List<Long> getAllDevices() {
         List<Long> list = new ArrayList<>();

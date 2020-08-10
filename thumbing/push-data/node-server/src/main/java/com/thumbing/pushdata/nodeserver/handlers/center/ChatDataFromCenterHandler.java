@@ -1,5 +1,6 @@
 package com.thumbing.pushdata.nodeserver.handlers.center;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.thumbing.pushdata.common.message.ChatData;
 import com.thumbing.pushdata.common.message.DefinedMessage;
 import com.thumbing.pushdata.nodeserver.handlers.ChatDataHandler;
@@ -11,17 +12,13 @@ import org.springframework.stereotype.Component;
 
 
 /**
- * 这里也没用，复制DataCenter的先放到这里吧~ 因为node server到data center都是主动发送的
- */
-
-/**
  * @author Stan Sai
  * @date 2020-06-23
  */
 @Slf4j
 @Component
 @Data
-public class ChatDataToCenterHandler implements ICenterDataHandler<ChatData> {
+public class ChatDataFromCenterHandler implements ICenterDataHandler<ChatData> {
 
     @Autowired
     private ChatDataHandler chatDataHandler;
@@ -32,7 +29,7 @@ public class ChatDataToCenterHandler implements ICenterDataHandler<ChatData> {
     }
 
     @Override
-    public void call(ChannelHandlerContext ctx, ChatData message) throws Exception {
+    public void call(ChannelHandlerContext ctx, ChatData message) throws JsonProcessingException {
         chatDataHandler.call(ctx, message);
     }
 }

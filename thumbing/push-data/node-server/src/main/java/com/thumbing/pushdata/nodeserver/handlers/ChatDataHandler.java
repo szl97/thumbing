@@ -1,5 +1,6 @@
 package com.thumbing.pushdata.nodeserver.handlers;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.thumbing.pushdata.common.handlers.IMessageHandler;
 import com.thumbing.pushdata.common.message.ChatData;
 import com.thumbing.pushdata.common.message.DefinedMessage;
@@ -42,15 +43,14 @@ public class ChatDataHandler implements IMessageHandler<ChatData> {
     }
 
     @Override
-    public void call(ChannelHandlerContext ctx, ChatData message) throws Exception {
+    public void call(ChannelHandlerContext ctx, ChatData message) throws JsonProcessingException {
         List<Long> others = new ArrayList<>();
-        message.getDeviceIds().forEach(id -> {
-
+        message.getToUsers().forEach(id -> {
             Channel channel = deviceChannelManager.getChannel(id);
             if (channel != null) {
                 try {
                     channel.writeAndFlush(message.encode());
-                } catch (Exception e) {
+                } catch (JsonProcessingException e) {
                     e.printStackTrace();
                 }
             } else {
@@ -64,8 +64,10 @@ public class ChatDataHandler implements IMessageHandler<ChatData> {
                 .name(nodeServerConfig.getName())
                 .data(message.getData())
                 .fromUser(message.getFromUser())
-                .deviceIds(others)
+                .toUsers(others)
+                .sessionId(message.getSessionId())
+                .build().encode()
         );
-        log.debug("node server send push data");
+        log.info("node server send chat data");
     }
 }

@@ -1,5 +1,6 @@
 package com.thumbing.pushdata.common.handlers;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.thumbing.pushdata.common.message.DefinedMessage;
 import com.thumbing.pushdata.common.message.Ping;
 
@@ -24,7 +25,7 @@ public class PingHandler implements IMessageHandler<Ping> {
     }
 
     @Override
-    public void call(ChannelHandlerContext ctx, Ping message) throws Exception {
+    public void call(ChannelHandlerContext ctx, Ping message) throws JsonProcessingException {
         Channel channel = ctx.channel();
         channel.writeAndFlush(Pong.builder().build().encode());
     }

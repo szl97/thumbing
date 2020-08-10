@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentSkipListMap;
 
 
 /**
@@ -25,11 +26,10 @@ import java.util.concurrent.ConcurrentHashMap;
 @Data
 public class SyncClientChannelManager implements IChannelManager<String> {
 
-    private Map<String, Channel> channelPool = new ConcurrentHashMap<>();
-
+    private Map<String, Channel> channelPool = new ConcurrentSkipListMap<>();
 
     @PreDestroy
-    public void destory() {
+    public void destroy() {
         channelPool.clear();
     }
 

@@ -1,5 +1,6 @@
 package com.thumbing.pushdata.datacenter.handlers.both;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.thumbing.pushdata.common.message.DefinedMessage;
 import com.thumbing.pushdata.common.message.Ping;
 import com.thumbing.pushdata.common.handlers.PingHandler;
@@ -31,7 +32,7 @@ public class PingBothHandler implements IMonitorsHandler<Ping>, IDeviceDataHandl
     }
 
     @Override
-    public void call(ChannelHandlerContext ctx, Ping message) throws Exception {
+    public void call(ChannelHandlerContext ctx, Ping message) throws JsonProcessingException {
         pingHandler.call(ctx, message);
         log.debug("Data center receive heart beat request,channel:{}",ctx.channel());
     }

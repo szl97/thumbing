@@ -47,7 +47,7 @@ public class SyncConnectClientBootStrap extends BaseClientBootStrap<SyncClientCh
                     ConnectSet.builder()
                             .name(getAppConfig().getName())
                             .operation(OperationEnum.ADD)
-                            .deviceIds(devices)
+                            .userIds(devices)
                             .build()
                             .encode()
             );

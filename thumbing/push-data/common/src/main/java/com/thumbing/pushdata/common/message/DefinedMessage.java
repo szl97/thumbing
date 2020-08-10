@@ -103,6 +103,6 @@ public abstract class DefinedMessage<T> implements Serializable {
     protected abstract Type type();
 
 
-    protected abstract T getThis() throws Exception;
+    protected abstract T getThis();
 
 }

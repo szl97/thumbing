@@ -19,7 +19,7 @@ public class Fail extends NodeMessage {
     }
 
     @Override
-    protected Object getThis() throws Exception {
+    protected Object getThis() {
         return this;
     }
 }

@@ -17,7 +17,7 @@ import java.util.List;
 @NoArgsConstructor
 public class PushResp extends NodeMessage<PushResp> {
 
-    private List<Long> deviceIds;
+    private List<Long> userIds;
 
     private String nodeIpWithPort;
 

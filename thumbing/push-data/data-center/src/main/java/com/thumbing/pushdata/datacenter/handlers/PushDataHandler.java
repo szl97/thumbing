@@ -1,10 +1,11 @@
 package com.thumbing.pushdata.datacenter.handlers;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.thumbing.pushdata.common.channel.IChannelManager;
-import com.thumbing.pushdata.common.message.ChatData;
-import com.thumbing.pushdata.common.message.DefinedMessage;
-import com.thumbing.pushdata.datacenter.device.DeviceManager;
 import com.thumbing.pushdata.common.handlers.IMessageHandler;
+import com.thumbing.pushdata.common.message.DefinedMessage;
+import com.thumbing.pushdata.common.message.PushData;
+import com.thumbing.pushdata.datacenter.device.DeviceManager;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import lombok.Data;
@@ -16,15 +17,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-
 /**
- * @author Stan Sai
- * @date 2020-06-21
+ * @Author: Stan Sai
+ * @Date: 2020/8/10 18:26
  */
 @Slf4j
 @Component
 @Data
-public class ChatDataHandler implements IMessageHandler<ChatData> {
+public class PushDataHandler implements IMessageHandler<PushData> {
 
     @Autowired
     IChannelManager channelManager;
@@ -33,15 +33,14 @@ public class ChatDataHandler implements IMessageHandler<ChatData> {
     DeviceManager deviceManager;
 
     @Override
-    public boolean support(DefinedMessage message) {
-        return message instanceof ChatData;
+    public boolean support(DefinedMessage<PushData> message) {
+        return message instanceof PushData;
     }
 
     @Override
-    public void call(ChannelHandlerContext ctx, ChatData message) throws Exception {
-        Channel channel = ctx.channel();
+    public void call(ChannelHandlerContext ctx, PushData message) {
         HashMap<String, List<Long>> map = new HashMap<>();
-        message.getDeviceIds().forEach(
+        message.getToUserIds().forEach(
                 a -> {
                     String name = deviceManager.getNodeServer(a);
                     if (name != null) {
@@ -50,30 +49,31 @@ public class ChatDataHandler implements IMessageHandler<ChatData> {
                         }
                         map.get(name).add(a);
                     }
-                    //to do 如果要发送到的client还没有建立连接，那么发送到消息队列
                 }
         );
         map.entrySet().forEach(
                 e -> {
                     Channel writeChannel = channelManager.getChannel(e.getKey());
                     if (writeChannel != null) {
+
                         try {
                             writeChannel.writeAndFlush(
-                                    ChatData.builder()
-                                            .name(e.getKey())
+                                    PushData.builder().pushType(message.getPushType())
                                             .data(message.getData())
-                                            .deviceIds(e.getValue())
-                                            .fromUser(message.getFromUser())
+                                            .toUserIds(e.getValue())
+                                            .fromUserId(message.getFromUserId())
+                                            .fromUserName(message.getFromUserName())
+                                            .fromUserNickName(message.getFromUserNickName())
                                             .build().encode()
                             );
-                        } catch (Exception ex) {
+                        } catch (JsonProcessingException ex) {
                             ex.printStackTrace();
                         }
+
                     }
-                    //to do 如果要发送到的client还没有建立连接，那么发送到消息队列
                 }
         );
-        //channel.writeAndFlush(Confirm.builder().build().encode());
-        log.debug("Data center receive push data request,channel:{}", channel);
+        log.info("Data center receive push data request");
     }
+
 }

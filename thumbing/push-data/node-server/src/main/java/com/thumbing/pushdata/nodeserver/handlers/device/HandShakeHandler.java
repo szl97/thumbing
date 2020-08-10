@@ -1,5 +1,6 @@
 package com.thumbing.pushdata.nodeserver.handlers.device;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.thumbing.pushdata.common.constants.AttributeEnum;
 import com.thumbing.pushdata.common.constants.OperationEnum;
 import com.thumbing.pushdata.common.message.ConnectSet;
@@ -47,22 +48,23 @@ public class HandShakeHandler implements IDeviceDataHandler<HandShake> {
         List<AttributeEnum> attributeEnums = new ArrayList<>();
         attributeEnums.add(AttributeEnum.CHANNEL_ATTR_DEVICE);
         attributeEnums.add(AttributeEnum.CHANNEL_ATTR_HANDSHAKE);
-        channelManager.bindAttributes(message.getDeviceId(), channel, attributeEnums);
+        channelManager.bindAttributes(message.getUserId(), channel, attributeEnums);
         log.debug("Device connect with node server,channel:{}", channel);
         List<Channel> channels = syncClientChannelManager.getAllChannels();
         List<Long> devices = new ArrayList<>();
-        devices.add(message.getDeviceId());
+        devices.add(message.getUserId());
         channels.forEach(
                 c-> {
                     try {
                         c.writeAndFlush(ConnectSet.builder().name(nodeServerConfig.getName())
                                 .operation(OperationEnum.ADD)
-                                .deviceIds(devices)
+                                .userIds(devices)
                                 .build()
                                 .encode());
-                    } catch (Exception e) {
+                    } catch (JsonProcessingException e) {
                         e.printStackTrace();
                     }
+
                 }
         );
         log.debug("node server send sync client request");

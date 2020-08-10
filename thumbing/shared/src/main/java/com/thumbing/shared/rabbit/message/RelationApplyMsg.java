@@ -1,4 +1,4 @@
-package com.thumbing.usermanagement.sender.dto;
+package com.thumbing.shared.rabbit.message;
 
 import lombok.Data;
 

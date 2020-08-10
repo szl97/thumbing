@@ -1,7 +1,7 @@
 package com.thumbing.usermanagement.sender;
 
 import com.thumbing.shared.config.RabbitConfig;
-import com.thumbing.usermanagement.sender.dto.RelationApplyMsg;
+import com.thumbing.shared.rabbit.message.RelationApplyMsg;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

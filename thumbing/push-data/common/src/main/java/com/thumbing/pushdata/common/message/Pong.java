@@ -19,7 +19,7 @@ public class Pong extends NodeMessage<Pong> {
     }
 
     @Override
-    protected Pong getThis() throws Exception {
+    protected Pong getThis() {
         return this;
     }
 }

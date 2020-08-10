@@ -16,7 +16,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class HandShake extends NodeMessage<HandShake> {
 
-    private Long deviceId;
+    private Long userId;
 
     @Override
     protected DefinedMessage.Type type() {
@@ -24,7 +24,7 @@ public class HandShake extends NodeMessage<HandShake> {
     }
 
     @Override
-    protected HandShake getThis() throws Exception {
+    protected HandShake getThis() {
         return this;
     }
 }

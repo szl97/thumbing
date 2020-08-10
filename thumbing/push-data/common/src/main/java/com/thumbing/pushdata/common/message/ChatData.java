@@ -22,11 +22,11 @@ public class ChatData extends NodeMessage<ChatData> {
 
     private List<Long> toUsers;
 
-    private List<Long> deviceIds;
-
     private String name;
 
     private String data;
+
+    private Long sessionId;
 
     @Override
     protected DefinedMessage.Type type() {
@@ -34,7 +34,7 @@ public class ChatData extends NodeMessage<ChatData> {
     }
 
     @Override
-    protected ChatData getThis() throws Exception {
+    protected ChatData getThis() {
         return this;
     }
 }

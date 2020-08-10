@@ -1,5 +1,6 @@
 package com.thumbing.pushdata.nodeserver.handlers.device;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.thumbing.pushdata.common.message.ChatData;
 import com.thumbing.pushdata.common.message.DefinedMessage;
 import com.thumbing.pushdata.nodeserver.handlers.ChatDataHandler;
@@ -27,7 +28,7 @@ public class ChatDataFromDeviceHandler implements IDeviceDataHandler<ChatData> {
     }
 
     @Override
-    public void call(ChannelHandlerContext ctx, ChatData message) throws Exception {
+    public void call(ChannelHandlerContext ctx, ChatData message) throws JsonProcessingException {
         chatDataHandler.call(ctx, message);
     }
 }

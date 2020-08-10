@@ -19,7 +19,7 @@ import java.util.List;
 @NoArgsConstructor
 public class ConnectSet extends NodeMessage<ConnectSet> {
 
-    private List<Long> deviceIds;
+    private List<Long> userIds;
 
     private String name;
 
@@ -31,7 +31,7 @@ public class ConnectSet extends NodeMessage<ConnectSet> {
     }
 
     @Override
-    protected ConnectSet getThis() throws Exception {
+    protected ConnectSet getThis() {
         return this;
     }
 }

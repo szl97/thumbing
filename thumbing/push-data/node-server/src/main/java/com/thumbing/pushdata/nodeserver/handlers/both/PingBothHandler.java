@@ -2,6 +2,7 @@ package com.thumbing.pushdata.nodeserver.handlers.both;
 
 
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.thumbing.pushdata.common.handlers.PingHandler;
 import com.thumbing.pushdata.common.message.DefinedMessage;
 import com.thumbing.pushdata.common.message.Ping;
@@ -32,7 +33,7 @@ public class PingBothHandler implements ISyncClientHandler<Ping>, ICenterDataHan
     }
 
     @Override
-    public void call(ChannelHandlerContext ctx, Ping message) throws Exception {
+    public void call(ChannelHandlerContext ctx, Ping message) throws JsonProcessingException {
         pingHandler.call(ctx, message);
         log.debug("Node server receive heart beat request,channel:{}",ctx.channel());
     }
