@@ -17,6 +17,8 @@ import com.thumbing.usermanagement.dto.input.RelationApplyInput;
 import com.thumbing.usermanagement.dto.input.RelationRemoveInput;
 import com.thumbing.usermanagement.dto.output.RelationApplyDto;
 import com.thumbing.usermanagement.dto.output.RelationDto;
+import com.thumbing.usermanagement.sender.RelationApplySender;
+import com.thumbing.usermanagement.sender.dto.RelationApplyMsg;
 import com.thumbing.usermanagement.service.IRelationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
@@ -40,6 +42,8 @@ public class RelationService implements IRelationService {
     private IBlackListRepository blackListRepository;
     @Autowired
     private Mapper mapper;
+    @Autowired
+    private RelationApplySender sender;
 
     /**
      * 申请好友：
@@ -79,9 +83,15 @@ public class RelationService implements IRelationService {
         relationApplyInfo.setUserId(userContext.getId());
         relationApplyInfo.setTargetUserId(input.getTargetUserId());
         relationApplyInfo.setRemark(input.getRemark());
-        RelationApplyInfo info =  relationApplyInfoRepository.save(relationApplyInfo);
+        relationApplyInfoRepository.save(relationApplyInfo);
 
         //todo:发送消息到Data Center通知targetUser, 需发送该好友请求的ID和请求添加者的userName
+        RelationApplyMsg msg = new RelationApplyMsg();
+        msg.setToUserId(input.getTargetUserId());
+        msg.setFromUserId(userContext.getId());
+        msg.setFromUserName(userContext.getName());
+        msg.setRemark(input.getRemark());
+        sender.send(msg);
 
         return true;
     }

@@ -33,14 +33,14 @@ public class RelationController extends ThumbingBaseController {
     @ApiOperation("获取好友列表")
     @RequestMapping(method = RequestMethod.GET)
     @Authorize(PermissionConstants.REGISTER)
-    List<RelationDto> getAllRelation(){
+    public List<RelationDto> getAllRelation(){
         return relationService.getAllRelation(getCurrentUser());
     }
 
     @ApiOperation("获取所有好友申请")
     @RequestMapping(value = "/applyInfo", method = RequestMethod.GET)
     @Authorize(PermissionConstants.REGISTER)
-    List<RelationApplyDto> getAllRelationApply(){
+    public List<RelationApplyDto> getAllRelationApply(){
         return relationService.getAllRelationApply(getCurrentUser());
     }
 
@@ -61,7 +61,7 @@ public class RelationController extends ThumbingBaseController {
     @ApiOperation("删除好友")
     @RequestMapping(method = RequestMethod.DELETE)
     @Authorize(PermissionConstants.REGISTER)
-    Boolean removeRelation(RelationRemoveInput input){
+    public Boolean removeRelation(RelationRemoveInput input){
         return relationService.removeRelation(getCurrentUser(), input);
     }
 }

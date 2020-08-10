@@ -31,21 +31,21 @@ public class BlackListController extends ThumbingBaseController {
     @ApiOperation("获取黑名单列表")
     @RequestMapping(method = RequestMethod.GET)
     @Authorize(PermissionConstants.REGISTER)
-    List<BlackListDto> getAllBlackList(){
+    public List<BlackListDto> getAllBlackList(){
         return blackListService.getAllBlackList(getCurrentUser());
     }
 
     @ApiOperation("添加到黑名单列表")
     @RequestMapping(method = RequestMethod.POST)
     @Authorize(PermissionConstants.REGISTER)
-    Boolean addToBlackList(@RequestBody BlackListAddInput input){
+    public Boolean addToBlackList(@RequestBody BlackListAddInput input){
         return blackListService.addToBlackList(getCurrentUser(), input);
     }
 
     @ApiOperation("从黑名单列表移除")
     @RequestMapping(method = RequestMethod.DELETE)
     @Authorize(PermissionConstants.REGISTER)
-    Boolean removeInBlackList(@RequestBody BlackListRemoveInput input){
+    public Boolean removeInBlackList(@RequestBody BlackListRemoveInput input){
         return blackListService.removeInBlackList(getCurrentUser(), input);
     }
 }

@@ -3,6 +3,13 @@ server:
 spring:
   application:
     name: user-management
+  rabbitmq:
+    addresses: 192.168.89.1:5672
+    username: guest
+    password: guest
+    virtual-host: /
+    publisher-returns: true
+    publisher-confirm-type: correlated
   redis:
     host: localhost
     port: 6379
@@ -59,6 +66,7 @@ use:
   feign: true
   swagger: true
   customThreadPool: false
+  rabbitmq: true
 
 security:
   ignores: /error/**;/swagger-resources/**;/swagger-ui.html;/v2/api-docs;/webjars/**

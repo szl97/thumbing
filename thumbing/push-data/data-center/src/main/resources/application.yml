@@ -140,6 +140,7 @@ use:
   feign: true
   swagger: true
   customThreadPool: false
+  rabbitmq: true
 
 security:
   ignores: /error/**;/swagger-resources/**;/swagger-ui.html;/v2/api-docs;/webjars/**

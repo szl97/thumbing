@@ -4,9 +4,11 @@ import com.thumbing.shared.constants.CacheKeyConstants;
 import com.thumbing.shared.utils.redis.RedisUtils;
 import com.thumbing.shared.utils.redis.RedisUtilsForValue;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.Resource;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -18,7 +20,7 @@ public class ValidationCache {
     private final String REGISTER_KEY = CacheKeyConstants.VALIDATION_FOR_REGISTER;
     private final String CHANGE_PASSWORD_KEY = CacheKeyConstants.VALIDATION_FOR_CHANGE_PASSWORD;
     private final long expireTime = 5;
-    @Autowired
+    @Resource(name = "customRedisTemplate")
     private RedisTemplate<String,String> redisTemplate;
 
     /**

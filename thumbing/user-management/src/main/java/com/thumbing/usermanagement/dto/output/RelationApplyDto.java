@@ -22,4 +22,6 @@ public class RelationApplyDto extends EntityDto {
     private String userName;
     @ApiModelProperty(value = "昵称")
     private String nickName;
+    @ApiModelProperty(value = "备注")
+    private String remark;
 }

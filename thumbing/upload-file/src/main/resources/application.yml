@@ -32,7 +32,8 @@ use:
   feign: true
   swagger: true
   customThreadPool: false
-
+  rabbitmq: false
+  
 security:
   ignores: /error/**;/swagger-resources/**;/swagger-ui.html;/v2/api-docs;/webjars/**
 feign:

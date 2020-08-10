@@ -34,3 +34,4 @@ use:
   feign: false
   swagger: false
   customThreadPool: false
+  rabbitmq: true
