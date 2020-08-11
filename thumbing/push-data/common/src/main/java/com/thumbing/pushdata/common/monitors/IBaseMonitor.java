@@ -10,7 +10,7 @@ import java.util.Map;
 public interface IBaseMonitor<T extends BaseAppInfo> {
     void init();
 
-    void destory();
+    void destroy();
 
     Map<String, T> pool();
 }

@@ -12,7 +12,6 @@ import java.util.Set;
  * @Author: Stan Sai
  * @Date: 2020/7/18 12:12
  */
-//users{Set<(id+name)>}, last_message, last_time, is_read
 @Document(collection = "chat_session")
 @Data
 public class ChatSession extends MongoCreationEntity {
@@ -29,7 +28,7 @@ public class ChatSession extends MongoCreationEntity {
      */
     private LocalDateTime lastTime;
     /**
-     * 是否已读
+     * 是否是群组消息
      */
-    private boolean read;
+    private boolean group;
 }

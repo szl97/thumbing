@@ -67,7 +67,7 @@ public abstract class BaseRegister<T extends BaseZookeeperConfig, K extends Base
 
     }
 
-    public void destory() {
+    public void destroy() {
         deRegister();
     }
 

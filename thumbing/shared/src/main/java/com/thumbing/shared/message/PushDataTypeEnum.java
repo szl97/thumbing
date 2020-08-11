@@ -1,4 +1,4 @@
-package com.thumbing.pushdata.common.constants;
+package com.thumbing.shared.message;
 
 /**
  * @Author: Stan Sai
@@ -6,7 +6,11 @@ package com.thumbing.pushdata.common.constants;
  */
 public enum PushDataTypeEnum {
     RA("relationApply"),
-    CP("commentPush");
+    AC("articleComment"),
+    AT("articleThumbing"),
+    MC("momentComment"),
+    MT("momentThumbing"),
+    RT("roastThumbing");
     String type;
     PushDataTypeEnum(String type){
         this.type = type;

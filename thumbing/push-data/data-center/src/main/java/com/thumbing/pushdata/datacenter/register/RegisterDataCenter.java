@@ -47,10 +47,9 @@ public class RegisterDataCenter extends BaseRegister<ZookeeperConfig, DataCenter
     }
 
     @PreDestroy
-    public void destory() {
-        super.destory();
+    public void destroy() {
+        super.destroy();
     }
-
 
     @Override
     protected String getRootValue() {

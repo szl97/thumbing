@@ -89,9 +89,9 @@ public class NodeZkMonitor extends BaseMonitor<ZookeeperConfig, DataCenterInfo> 
 
     @PreDestroy
     @Override
-    public void destory() {
+    public void destroy() {
         pool.clear();
-        zkUtils.destory();
+        zkUtils.destroy();
     }
 
     /**

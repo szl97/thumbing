@@ -36,8 +36,8 @@ public class RegisterNodeServer extends BaseRegister<ZookeeperConfig, NodeServer
     }
 
     @PreDestroy
-    public void destory() {
-        super.destory();
+    public void destroy() {
+        super.destroy();
     }
 
     @Override

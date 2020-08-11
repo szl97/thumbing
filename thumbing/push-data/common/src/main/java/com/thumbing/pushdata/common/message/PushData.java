@@ -1,21 +1,15 @@
 package com.thumbing.pushdata.common.message;
 
-import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.DeserializationContext;
-import com.fasterxml.jackson.databind.JsonDeserializer;
-import com.fasterxml.jackson.databind.JsonSerializer;
-import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.thumbing.pushdata.common.constants.PushDataTypeEnum;
+import com.thumbing.shared.message.PushDataTypeEnum;
+import com.thumbing.shared.utils.serializer.PushTypeDeserializer;
+import com.thumbing.shared.utils.serializer.PushTypeSerializer;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.io.IOException;
 import java.util.List;
 
 /**
@@ -33,8 +27,8 @@ public class PushData extends NodeMessage<PushData> {
     private String fromUserName;
     private String fromUserNickName;
     private String data;
-    @JsonSerialize(using = pushTypeSerializer.class)
-    @JsonDeserialize(using = pushTypeDeserializer.class)
+    @JsonSerialize(using = PushTypeSerializer.class)
+    @JsonDeserialize(using = PushTypeDeserializer.class)
     private PushDataTypeEnum pushType;
 
     @Override
@@ -47,23 +41,4 @@ public class PushData extends NodeMessage<PushData> {
         return this;
     }
 
-
-    private static class pushTypeSerializer extends JsonSerializer<PushDataTypeEnum> {
-
-        @Override
-        public void serialize(PushDataTypeEnum value, JsonGenerator gen, SerializerProvider serializers) throws IOException {
-            gen.writeString(value.getType());
-        }
-    }
-
-    private static class pushTypeDeserializer extends JsonDeserializer<PushDataTypeEnum> {
-
-        @Override
-        public PushDataTypeEnum deserialize(JsonParser p, DeserializationContext ctxt) throws IOException, JsonProcessingException {
-            String t = p.getText();
-            if(t.equals(PushDataTypeEnum.RA.getType())) return PushDataTypeEnum.RA;
-            if(t.equals(PushDataTypeEnum.CP.getType())) return PushDataTypeEnum.CP;
-            return null;
-        }
-    }
 }

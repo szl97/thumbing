@@ -18,6 +18,10 @@ import java.io.Serializable;
 public class NickUser implements Serializable {
     private Long userId;
     private String nickName;
+    /**
+     * 用于判断chat session中的user是否显示这个session
+     */
+    private Boolean show;
     @Override
     public String toString(){
         return "userId:"+userId+", nickName:"+nickName;

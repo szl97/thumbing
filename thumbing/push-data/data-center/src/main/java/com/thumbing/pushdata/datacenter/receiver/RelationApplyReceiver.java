@@ -1,6 +1,6 @@
 package com.thumbing.pushdata.datacenter.receiver;
 
-import com.thumbing.pushdata.common.constants.PushDataTypeEnum;
+import com.thumbing.shared.message.PushDataTypeEnum;
 import com.thumbing.pushdata.common.message.PushData;
 import com.thumbing.pushdata.datacenter.handlers.PushDataHandler;
 import com.thumbing.shared.config.RabbitConfig;

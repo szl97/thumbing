@@ -85,9 +85,9 @@ public class CenterZkMonitor extends BaseMonitor<ZookeeperConfig, NodeServerInfo
 
     @PreDestroy
     @Override
-    public void destory() {
+    public void destroy() {
         pool.clear();
-        zkUtils.destory();
+        zkUtils.destroy();
     }
 
     /**

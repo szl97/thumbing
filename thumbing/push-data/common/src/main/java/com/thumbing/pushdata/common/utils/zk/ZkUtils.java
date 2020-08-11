@@ -103,7 +103,7 @@ public class ZkUtils {
     /**
      * 销毁所有
      */
-    public void destory() {
+    public void destroy() {
         pathChildrenCaches.stream().forEach(cache -> CloseableUtils.closeQuietly(cache));
         pathChildrenCaches.clear();
         pathChildrenCaches = null;

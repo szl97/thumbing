@@ -56,6 +56,7 @@
         <module>auth-server</module>
         <module>content-server</module>
         <module>user-management</module>
+        <module>record-server</module>
     </modules>
     <dependencyManagement>
         <dependencies>

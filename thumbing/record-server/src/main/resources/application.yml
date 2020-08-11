@@ -1,8 +1,8 @@
 server:
-  port: 7066
+  port: 7092
 spring:
   application:
-    name: content-server
+    name: record-server
   redis:
     host: localhost
     port: 6379
@@ -15,11 +15,25 @@ spring:
   jackson:
     serialization:
       FAIL_ON_EMPTY_BEANS: false
-  data:
-    mongodb:
-      host: 192.168.89.1
-      port: 27017
-      database: thumbing
+  rabbitmq:
+    username: guest
+    password: guest
+    addresses: 192.168.89.1:5672
+    virtual-host: /
+    listener:
+      simple:
+        concurrency: 5
+        acknowledge-mode: manual
+        max-concurrency: 10
+        prefetch: 1
+      direct:
+        acknowledge-mode: manual
+        prefetch: 1
+    data:
+      mongodb:
+        host: 192.168.89.1
+        port: 27017
+        database: thumbing
 
 eureka:
   client:
@@ -32,7 +46,7 @@ use:
   feign: true
   swagger: true
   customThreadPool: false
-  rabbitmq: false
+  rabbitmq: true
 
 security:
   ignores: /error/**;/swagger-resources/**;/swagger-ui.html;/v2/api-docs;/webjars/**
@@ -54,3 +68,4 @@ hystrix:
         isolation:
           thread:
             timeoutInMilliseconds: 5000
+
