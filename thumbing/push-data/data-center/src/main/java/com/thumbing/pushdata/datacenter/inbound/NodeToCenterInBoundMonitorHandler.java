@@ -1,7 +1,7 @@
 package com.thumbing.pushdata.datacenter.inbound;
 
 
-import com.thumbing.pushdata.common.handlers.EmptyInActiceHandler;
+import com.thumbing.pushdata.common.handlers.EmptyInActiveHandler;
 import com.thumbing.pushdata.common.inbund.MessageInBoundHandler;
 import com.thumbing.pushdata.datacenter.handlers.monitors.IMonitorsHandler;
 import io.netty.channel.ChannelHandler;
@@ -18,6 +18,6 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @ChannelHandler.Sharable
 @Component
-public class NodeToCenterInBoundMonitorHandler extends MessageInBoundHandler<IMonitorsHandler, EmptyInActiceHandler> {
+public class NodeToCenterInBoundMonitorHandler extends MessageInBoundHandler<IMonitorsHandler, EmptyInActiveHandler> {
 
 }

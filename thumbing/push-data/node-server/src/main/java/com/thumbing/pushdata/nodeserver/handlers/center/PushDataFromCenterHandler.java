@@ -23,7 +23,7 @@ public class PushDataFromCenterHandler implements ICenterDataHandler<PushData> {
     DeviceDataChannelManager deviceChannelManager;
 
     @Override
-    public boolean support(DefinedMessage<PushData> message) {
+    public boolean support(DefinedMessage message) {
         return message instanceof PushData;
     }
 

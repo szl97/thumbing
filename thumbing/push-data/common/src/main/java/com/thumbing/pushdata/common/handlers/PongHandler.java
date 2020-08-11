@@ -14,16 +14,16 @@ import org.springframework.stereotype.Component;
  * @date 2020-06-21
  */
 @Slf4j
-@Component
 @Data
-public class PongHandler implements IMessageHandler<Pong> {
+public abstract class PongHandler implements IMessageHandler<Pong> {
     @Override
-    public boolean support(DefinedMessage<Pong> message) {
+    public boolean support(DefinedMessage message) {
         return message instanceof Pong;
     }
 
     @Override
     public void call(ChannelHandlerContext ctx, Pong message) {
         Channel channel = ctx.channel();
+        log.info("Receive heart beat response,channel:{}", ctx.channel());
     }
 }

@@ -7,22 +7,22 @@ import lombok.NoArgsConstructor;
 
 import java.util.List;
 
+
 /**
  * @author Stan Sai
- * @date 2020-08-11 20:54
+ * @date 2020-06-21
  */
 @Builder
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ChatData extends NodeMessage<ChatData> {
-    private Long fromUser;
+public class GroupData extends NodeMessage<GroupData> {
 
-    private String fromUserName;
+    private Long fromUser;
 
     private String fromUserNickName;
 
-    private Long toUser;
+    private List<Long> toUsers;
 
     private String name;
 
@@ -31,13 +31,14 @@ public class ChatData extends NodeMessage<ChatData> {
     private Long sessionId;
 
     private boolean last;
+
     @Override
-    protected Type type() {
-        return Type.CD;
+    protected DefinedMessage.Type type() {
+        return DefinedMessage.Type.GD;
     }
 
     @Override
-    protected ChatData getThis() {
+    protected GroupData getThis() {
         return this;
     }
 }

@@ -1,5 +1,6 @@
 package com.thumbing.pushdata.common.handlers;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.thumbing.pushdata.common.message.DefinedMessage;
 import io.netty.channel.ChannelHandlerContext;
 
@@ -15,7 +16,7 @@ public interface IMessageHandler<T> {
      * @param message 节点消息
      * @return 是否各个NodeMessage 子类的类型
      */
-    boolean support(DefinedMessage<T> message);
+    boolean support(DefinedMessage message);
 
 
     /**
@@ -23,5 +24,5 @@ public interface IMessageHandler<T> {
      *
      * @param message 节点消息
      */
-    void call(ChannelHandlerContext ctx, T message) throws Exception;
+    void call(ChannelHandlerContext ctx, T message) throws JsonProcessingException;
 }

@@ -21,9 +21,8 @@ import java.util.List;
  * @date 2020-06-22
  */
 @Slf4j
-@Component
 @Data
-public class ConfirmHandler implements IMessageHandler<Confirm> {
+public abstract class ConfirmHandler implements IMessageHandler<Confirm> {
 
     @Autowired
     IChannelManager channelManager;
@@ -39,6 +38,6 @@ public class ConfirmHandler implements IMessageHandler<Confirm> {
         List<AttributeEnum> attributeEnums = new ArrayList<>();
         attributeEnums.add(AttributeEnum.CHANNEL_ATTR_DATACENTER);
         channelManager.bindAttributes(message.getName(), channel, attributeEnums);
-        log.debug("Data center receive confirm,channel:{}", channel);
+        log.info("Data center receive confirm,channel:{}", channel);
     }
 }

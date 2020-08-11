@@ -79,8 +79,11 @@ public abstract class NodeMessage<T> extends DefinedMessage<T> {
             case CD:
                 cls = ChatData.class;
                 break;
+            case GD:
+                cls = GroupData.class;
+                break;
             case PD:
-                cls = ChatData.class;
+                cls = PushData.class;
                 break;
         }
         NodeMessage message = (NodeMessage) objectMapper.readValue(msg.message, cls);

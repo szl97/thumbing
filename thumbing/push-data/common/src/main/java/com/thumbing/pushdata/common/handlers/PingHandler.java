@@ -16,11 +16,10 @@ import org.springframework.stereotype.Component;
  * @date 2020-06-21
  */
 @Slf4j
-@Component
 @Data
-public class PingHandler implements IMessageHandler<Ping> {
+public abstract class PingHandler implements IMessageHandler<Ping> {
     @Override
-    public boolean support(DefinedMessage<Ping> message) {
+    public boolean support(DefinedMessage message) {
         return message instanceof Ping;
     }
 
@@ -28,5 +27,6 @@ public class PingHandler implements IMessageHandler<Ping> {
     public void call(ChannelHandlerContext ctx, Ping message) throws JsonProcessingException {
         Channel channel = ctx.channel();
         channel.writeAndFlush(Pong.builder().build().encode());
+        log.info("Receive heart beat request,channel:{}",ctx.channel());
     }
 }

@@ -26,8 +26,9 @@ import java.io.Serializable;
 @Data
 @NoArgsConstructor
 public abstract class DefinedMessage<T> implements Serializable {
-    private static class TypeSerializer extends JsonSerializer<Type> {
 
+
+    private static class TypeSerializer extends JsonSerializer<Type> {
         @Override
         public void serialize(Type value, JsonGenerator gen, SerializerProvider serializers) throws IOException {
             gen.writeString(value.type);
@@ -46,6 +47,7 @@ public abstract class DefinedMessage<T> implements Serializable {
             if (t.equals(Type.PR.type)) return Type.PR;
             if (t.equals(Type.PD.type)) return Type.PD;
             if (t.equals(Type.CD.type)) return Type.CD;
+            if (t.equals(Type.GD.type)) return Type.GD;
             if (t.equals(Type.CS.type)) return Type.CS;
             if (t.equals(Type.HS.type)) return Type.HS;
             if (t.equals(Type.F.type)) return Type.F;
@@ -78,6 +80,7 @@ public abstract class DefinedMessage<T> implements Serializable {
         P("push_req"),          // PUSH_REQ
         PR("push_resp"),        // PUSH_RESP
         CD("chat_data"),        // CHAT_DATA
+        GD("group_data"),        // GROUP_DATA
         CS("connection_set"),   // CONNECTION_SET
         PD("push_data"),        // PUSH_DATA
         HS("hand_shake"),       // HandShake

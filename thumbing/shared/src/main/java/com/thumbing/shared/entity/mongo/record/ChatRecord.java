@@ -18,15 +18,11 @@ public class ChatRecord extends MongoCreationEntity {
      */
     private long chatSessionId;
     /**
-     * 是否是群聊消息
-     */
-    private boolean group;
-    /**
      * 发送方Id
      */
     private long fromId;
     /**
-     * 如果是群聊就是群Id，否则就是用户Id
+     * 用户Id
      */
     private long toId;
     /**
@@ -38,8 +34,8 @@ public class ChatRecord extends MongoCreationEntity {
      */
     private boolean cancel;
     /**
-     * 已读者集合
+     * 接收方是否已读
      */
-    private Set<Long> readUserIds;
+    private boolean read;
 
 }

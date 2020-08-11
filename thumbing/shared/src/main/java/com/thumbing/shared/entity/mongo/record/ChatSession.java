@@ -16,9 +16,14 @@ import java.util.Set;
 @Data
 public class ChatSession extends MongoCreationEntity {
     /**
-     * 用户id
+     * 用户
      */
     private Set<NickUser> users;
+    /**
+     * 确保userId1<userId2
+     */
+    private Long userId1;
+    private Long userId2;
     /**
      * 最后一条消息的内容
      */
