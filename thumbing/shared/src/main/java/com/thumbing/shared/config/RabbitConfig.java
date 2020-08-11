@@ -26,12 +26,14 @@ public class RabbitConfig {
     public final static String articleQueueName = "articleQueue";
     public final static String roastQueueName = "roastQueue";
     public final static String relationApplyQueueName = "relationApplyQueue";
+    public final static String relationApplyRecordQueueName = "relationApplyRecordQueueName";
 
     public final static String chatRouteKey = "chat";
     public final static String momentRouteKey = "moment";
     public final static String articleRouteKey = "article";
     public final static String roastRouteKey = "roast";
     public final static String relationApplyRouteKey = "relationApply";
+
 
     @Bean(name = pushDataExchange)
     public TopicExchange pushDataExchange() {
@@ -60,6 +62,9 @@ public class RabbitConfig {
 
     @Bean(name = relationApplyQueueName)
     public Queue relationApplyQueue(){return new Queue(relationApplyQueueName, true, false, false);}
+
+    @Bean(name = relationApplyRecordQueueName)
+    public Queue relationApplyRecordQueue(){return new Queue(relationApplyRecordQueueName, true, false, false);}
 
     @Bean
     public Binding pushDataExchangeBindChatQueue(
@@ -94,5 +99,12 @@ public class RabbitConfig {
             @Qualifier("pushDataExchange") TopicExchange pushDataExchange,
             @Qualifier(relationApplyQueueName) Queue relationApplyQueue){
         return BindingBuilder.bind(relationApplyQueue).to(pushDataExchange).with(relationApplyRouteKey);
+    }
+
+    @Bean
+    public Binding pushDataExchangeBindrelationApplyRecordQueue(
+            @Qualifier("pushDataExchange") TopicExchange pushDataExchange,
+            @Qualifier(relationApplyRecordQueueName) Queue relationApplyRecordQueue){
+        return BindingBuilder.bind(relationApplyRecordQueue).to(pushDataExchange).with(relationApplyRouteKey);
     }
 }

@@ -10,7 +10,6 @@ import org.springframework.stereotype.Component;
 import javax.annotation.PreDestroy;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.ConcurrentSkipListMap;
 
 /**
@@ -23,7 +22,7 @@ import java.util.concurrent.ConcurrentSkipListMap;
 @Component
 @Data
 public class DeviceDataChannelManager implements IChannelManager<Long> {
-    private Map<Long, Channel> channelPool = new ConcurrentSkipListMap<>();
+    private ConcurrentSkipListMap<Long, Channel> channelPool = new ConcurrentSkipListMap<>();
 
     @PreDestroy
     public void destory() {
@@ -64,6 +63,13 @@ public class DeviceDataChannelManager implements IChannelManager<Long> {
         if (channelPool.containsKey(id)) {
             channelPool.remove(id);
         }
+    }
+
+    @Override
+    public List<Channel> getAll(){
+        return channelPool.entrySet().parallelStream().map(e->e.getValue()).collect(
+                ArrayList::new, ArrayList::add, ArrayList::addAll
+        );
     }
 
 

@@ -32,8 +32,4 @@ public class ChatSession extends MongoCreationEntity {
      * 最后一条消息的时间
      */
     private LocalDateTime lastTime;
-    /**
-     * 是否是群组消息
-     */
-    private boolean group;
 }

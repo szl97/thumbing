@@ -4,7 +4,7 @@ import com.thumbing.shared.message.PushDataTypeEnum;
 import com.thumbing.pushdata.common.message.PushData;
 import com.thumbing.pushdata.datacenter.handlers.PushDataHandler;
 import com.thumbing.shared.config.RabbitConfig;
-import com.thumbing.shared.rabbit.message.RelationApplyMsg;
+import com.thumbing.shared.message.RelationApplyMsg;
 import org.springframework.amqp.rabbit.annotation.RabbitHandler;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;

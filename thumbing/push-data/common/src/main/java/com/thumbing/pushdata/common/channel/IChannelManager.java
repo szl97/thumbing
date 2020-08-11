@@ -4,6 +4,7 @@ import com.thumbing.pushdata.common.constants.AttributeEnum;
 import io.netty.channel.Channel;
 
 import java.util.List;
+import java.util.concurrent.ConcurrentSkipListMap;
 
 /**
  * @author Stan Sai
@@ -20,4 +21,6 @@ public interface IChannelManager<T> {
     void removeChannel(Channel channel);
 
     void removeChannel(T id);
+
+    List<Channel> getAll();
 }

@@ -1,8 +1,9 @@
-package com.thumbing.shared.rabbit.message;
+package com.thumbing.shared.message;
 
 import lombok.Data;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 
 /**
  * @Author: Stan Sai
@@ -14,4 +15,5 @@ public class RelationApplyMsg implements Serializable {
     private Long fromUserId;
     private String fromUserName;
     private String remark;
+    private LocalDateTime time;
 }

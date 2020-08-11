@@ -65,6 +65,7 @@ public abstract class GroupDataHandler implements IMessageHandler<GroupData> {
                     .fromUserNickName(message.getFromUserNickName())
                     .toUsers(others)
                     .sessionId(message.getSessionId())
+                    .time(message.getTime())
                     .last(false)
                     .build().encode()
             );

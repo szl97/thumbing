@@ -8,9 +8,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PreDestroy;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentSkipListMap;
 
 
@@ -26,7 +25,7 @@ import java.util.concurrent.ConcurrentSkipListMap;
 @Data
 public class NodeToCenterChannelManager implements IChannelManager<String> {
 
-    private Map<String, Channel> channelPool = new ConcurrentSkipListMap<>();
+    private ConcurrentSkipListMap<String, Channel> channelPool = new ConcurrentSkipListMap<>();
 
     @PreDestroy
     public void destory() {
@@ -70,5 +69,12 @@ public class NodeToCenterChannelManager implements IChannelManager<String> {
     @Override
     public Channel getChannel(String name) {
         return channelPool.get(name);
+    }
+
+    @Override
+    public List<Channel> getAll(){
+        return channelPool.entrySet().parallelStream().map(e->e.getValue()).collect(
+                ArrayList::new, ArrayList::add, ArrayList::addAll
+        );
     }
 }

@@ -24,7 +24,7 @@ import java.util.concurrent.ConcurrentHashMap;
 @Slf4j
 @Component
 @Data
-public class GroupDataToNodeHandler implements IDeviceDataHandler<GroupData> {
+public class GroupDataFromNodeHandler implements IDeviceDataHandler<GroupData> {
 
     @Autowired
     IChannelManager channelManager;
@@ -65,6 +65,7 @@ public class GroupDataToNodeHandler implements IDeviceDataHandler<GroupData> {
                                             .toUsers(e.getValue())
                                             .fromUser(message.getFromUser())
                                             .sessionId(message.getSessionId())
+                                            .time(message.getTime())
                                             .last(false)
                                             .build().encode()
                             );

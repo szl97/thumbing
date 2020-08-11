@@ -63,6 +63,7 @@ public class PushDataHandler implements IMessageHandler<PushData> {
                                             .fromUserId(message.getFromUserId())
                                             .fromUserName(message.getFromUserName())
                                             .fromUserNickName(message.getFromUserNickName())
+                                            .time(message.getTime())
                                             .build().encode()
                             );
                         } catch (JsonProcessingException ex) {

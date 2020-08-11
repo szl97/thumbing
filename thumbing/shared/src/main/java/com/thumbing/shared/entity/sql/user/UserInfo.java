@@ -3,10 +3,7 @@ package com.thumbing.shared.entity.sql.user;
 import com.thumbing.shared.constants.EntityConstants;
 import com.thumbing.shared.entity.sql.BaseSqlEntity;
 import com.thumbing.shared.entity.sql.SqlFullAuditedEntity;
-import com.thumbing.shared.entity.sql.black.BlackList;
-import com.thumbing.shared.entity.sql.group.ChatGroup;
 import com.thumbing.shared.entity.sql.personal.Personal;
-import com.thumbing.shared.entity.sql.relation.Relation;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.FieldNameConstants;
@@ -14,8 +11,6 @@ import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
-import java.util.List;
-import java.util.Set;
 
 /**
  * @Author: Stan Sai
@@ -55,19 +50,6 @@ public class UserInfo extends SqlFullAuditedEntity {
     @OneToOne(targetEntity = Personal.class)
     @JoinColumn(name = Fields.personalId, referencedColumnName = BaseSqlEntity.Fields.id, insertable = false, updatable = false, unique = true)
     private Personal personal;
-    /**
-     * 加入聊天室列表
-     */
-    @ManyToMany
-    @JoinTable(name = "chat_group_user",
-            joinColumns = { @JoinColumn(name = "user_id", referencedColumnName = Fields.userId) },
-            inverseJoinColumns = {@JoinColumn(name = "chat_group_id")})
-    private Set<ChatGroup> chatGroups;
-    /**
-     * 创建的聊天室列表
-     */
-    @OneToMany(targetEntity = ChatGroup.class, mappedBy = ChatGroup.Fields.creator)
-    private Set<ChatGroup> createChatGroups;
 
 
     @Override

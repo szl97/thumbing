@@ -1,6 +1,6 @@
 package com.thumbing.shared.repository.sql.group;
 
-import com.thumbing.shared.entity.sql.group.ChatGroup;
+import com.thumbing.shared.entity.mongo.group.ChatGroup;
 import com.thumbing.shared.repository.sql.IBaseSqlRepository;
 
 /**

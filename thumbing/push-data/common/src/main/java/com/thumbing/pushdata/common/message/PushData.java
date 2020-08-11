@@ -10,6 +10,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -27,6 +28,7 @@ public class PushData extends NodeMessage<PushData> {
     private String fromUserName;
     private String fromUserNickName;
     private String data;
+    private LocalDateTime time;
     @JsonSerialize(using = PushTypeSerializer.class)
     @JsonDeserialize(using = PushTypeDeserializer.class)
     private PushDataTypeEnum pushType;

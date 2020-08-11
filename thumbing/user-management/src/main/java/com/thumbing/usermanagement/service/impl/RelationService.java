@@ -17,13 +17,14 @@ import com.thumbing.usermanagement.dto.input.RelationRemoveInput;
 import com.thumbing.usermanagement.dto.output.RelationApplyDto;
 import com.thumbing.usermanagement.dto.output.RelationDto;
 import com.thumbing.usermanagement.sender.RelationApplySender;
-import com.thumbing.shared.rabbit.message.RelationApplyMsg;
+import com.thumbing.shared.message.RelationApplyMsg;
 import com.thumbing.usermanagement.service.IRelationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -91,6 +92,7 @@ public class RelationService implements IRelationService {
         msg.setFromUserId(userContext.getId());
         msg.setFromUserName(userContext.getName());
         msg.setRemark(input.getRemark());
+        msg.setTime(LocalDateTime.now());
         sender.send(msg);
 
         return true;
