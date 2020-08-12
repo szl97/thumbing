@@ -14,10 +14,6 @@ import java.util.Set;
 @Data
 public class ChatRecord extends MongoCreationEntity {
     /**
-     * 对应的用户会话的id
-     */
-    private long chatSessionId;
-    /**
      * 发送方Id
      */
     private long fromId;
@@ -37,5 +33,8 @@ public class ChatRecord extends MongoCreationEntity {
      * 接收方是否已读
      */
     private boolean read;
+
+    private Long userId1;
+    private Long userId2;
 
 }

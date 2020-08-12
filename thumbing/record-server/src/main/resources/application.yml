@@ -73,3 +73,13 @@ authentication:
   expirationTime: 3600 # Number of minutes
   issuer: thumbing
   signingKey: xm8EV6Hy5RMFK4EEACIDAwQus48djvcnjsdksfksjdfwiuersdkjhfskjdhfskjdf
+
+thread:
+  pool:
+    busy: false
+    maxUtilization: 1
+    maxWaitingTasksPerThread: 40
+    maxExtraThreads: 5
+    maxIdleSeconds: 60
+    threadName: recordServerWhenLogin
+    rejectedExecutionHandlerClassName: com.thumbing.shared.thread.RejectHandler

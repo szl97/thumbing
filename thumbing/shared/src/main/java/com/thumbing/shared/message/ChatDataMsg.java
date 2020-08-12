@@ -18,11 +18,13 @@ public class ChatDataMsg {
 
     private Long toUser;
 
-    private String name;
+    private String toUserName;
+
+    private String toUserNickName;
 
     private String data;
 
-    private Long sessionId;
+    private String sessionId;
 
     private LocalDateTime time;
 }

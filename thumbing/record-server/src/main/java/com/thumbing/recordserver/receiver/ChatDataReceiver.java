@@ -1,9 +1,12 @@
 package com.thumbing.recordserver.receiver;
 
+import com.thumbing.recordserver.handler.ChatDataHandler;
 import com.thumbing.shared.config.RabbitConfig;
 import com.thumbing.shared.message.ChatDataMsg;
+import com.thumbing.shared.thread.CustomThreadPool;
 import org.springframework.amqp.rabbit.annotation.RabbitHandler;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
@@ -14,8 +17,22 @@ import org.springframework.stereotype.Component;
 @RabbitListener(queues= RabbitConfig.chatQueueName)
 public class ChatDataReceiver {
 
+    @Autowired
+    ChatDataHandler chatDataHandler;
+    @Autowired
+    CustomThreadPool threadPool;
+
     @RabbitHandler
     public void process(ChatDataMsg msg){
-
+        threadPool.submit(
+                ()->{
+                    chatDataHandler.handleSession(msg);
+                }
+        );
+        threadPool.submit(
+                ()->{
+                    chatDataHandler.handleRecord(msg);
+                }
+        );
     }
 }

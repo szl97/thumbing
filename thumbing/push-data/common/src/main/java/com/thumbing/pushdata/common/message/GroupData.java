@@ -29,7 +29,7 @@ public class GroupData extends NodeMessage<GroupData> {
 
     private String data;
 
-    private Long sessionId;
+    private String sessionId;
 
     private LocalDateTime time;
 

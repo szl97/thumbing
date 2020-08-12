@@ -25,11 +25,15 @@ public class ChatData extends NodeMessage<ChatData> {
 
     private Long toUser;
 
+    private String toUserName;
+
+    private String toUserNickName;
+
     private String name;
 
     private String data;
 
-    private Long sessionId;
+    private String sessionId;
 
     private LocalDateTime time;
 
