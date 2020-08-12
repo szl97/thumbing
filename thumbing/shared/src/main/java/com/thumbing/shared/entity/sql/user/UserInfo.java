@@ -26,11 +26,11 @@ import javax.persistence.*;
 @FieldNameConstants
 @SQLDelete(sql =  "update user_info " + EntityConstants.DELETION)
 @Where(clause = "is_delete=0")
-@NamedEntityGraph(name = "withPersonalAndChatGroups",attributeNodes = {
-        @NamedAttributeNode("personal"),
-        @NamedAttributeNode("chatGroups")
+@NamedEntityGraph(name = UserInfo.personalNamedGraph, attributeNodes = {
+        @NamedAttributeNode("personal")
 })
 public class UserInfo extends SqlFullAuditedEntity {
+    public static final String personalNamedGraph = "personalNamedGraph";
     /**
      * 用户Id
      */

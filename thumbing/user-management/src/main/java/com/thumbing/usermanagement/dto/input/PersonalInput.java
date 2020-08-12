@@ -3,6 +3,7 @@ package com.thumbing.usermanagement.dto.input;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
+import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.List;
@@ -14,6 +15,7 @@ import java.util.Set;
  */
 @Data
 public class PersonalInput implements Serializable {
+    @NotBlank(message = "昵称不可为空")
     @ApiModelProperty(value = "昵称")
     private String nickName;
     @ApiModelProperty(value = "真实名字")

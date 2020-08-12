@@ -17,10 +17,8 @@ public class LoginUserContextHolder {
     }
 
     public void setLoginUser(User user) {
-
         THREAD_LOCAL_LOGIN_USER.set(user);
     }
-
 
     public void clear() {
         THREAD_LOCAL_LOGIN_USER.remove();

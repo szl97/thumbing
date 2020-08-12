@@ -7,6 +7,7 @@ import com.thumbing.shared.auth.permission.PermissionConstants;
 import com.thumbing.shared.controller.ThumbingBaseController;
 import com.thumbing.usermanagement.dto.input.PersonalEditInput;
 import com.thumbing.usermanagement.dto.input.PersonalInput;
+import com.thumbing.usermanagement.dto.input.UserInfoInput;
 import com.thumbing.usermanagement.dto.output.PersonalDto;
 import com.thumbing.usermanagement.service.IPersonalService;
 import io.swagger.annotations.ApiOperation;
@@ -27,6 +28,13 @@ public class PersonalController extends ThumbingBaseController {
     @Autowired
     IPersonalService personalService;
 
+    @ApiOperation("创建用户信息")
+    @RequestMapping(value = "/userInfo", method = RequestMethod.PUT)
+    @Authorize(PermissionConstants.REGISTER)
+    public Boolean createPersonal(@RequestBody UserInfoInput userInfoInput){
+        return personalService.createUserInfo(getCurrentUser(), userInfoInput);
+    }
+
     @ApiOperation("获取个人资料")
     @RequestMapping(method = RequestMethod.GET)
     @Authorize(PermissionConstants.REGISTER)
@@ -37,7 +45,7 @@ public class PersonalController extends ThumbingBaseController {
     @ApiOperation("创建个人资料")
     @RequestMapping(method = RequestMethod.PUT)
     @Authorize(PermissionConstants.REGISTER)
-    public PersonalDto createPersonal(@RequestBody PersonalInput personalInput){
+    public Boolean createPersonal(@RequestBody PersonalInput personalInput){
         return personalService.createPersonal(getCurrentUser(), personalInput);
     }
 

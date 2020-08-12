@@ -1,8 +1,10 @@
 package com.thumbing.usermanagement.service;
 
 import com.thumbing.shared.auth.model.UserContext;
+import com.thumbing.shared.entity.sql.user.UserInfo;
 import com.thumbing.usermanagement.dto.input.PersonalEditInput;
 import com.thumbing.usermanagement.dto.input.PersonalInput;
+import com.thumbing.usermanagement.dto.input.UserInfoInput;
 import com.thumbing.usermanagement.dto.output.PersonalDto;
 
 /**
@@ -11,12 +13,19 @@ import com.thumbing.usermanagement.dto.output.PersonalDto;
  */
 public interface IPersonalService {
     /**
+     * 创建用户信息
+     * @param userContext
+     * @param input
+     * @return
+     */
+    Boolean createUserInfo(UserContext userContext, UserInfoInput input);
+    /**
      * 创建个人资料
      * @param personalInput
      * @param userContext
      * @return
      */
-    PersonalDto createPersonal(UserContext userContext, PersonalInput personalInput);
+    Boolean createPersonal(UserContext userContext, PersonalInput personalInput);
 
     /**
      * 修改个人资料

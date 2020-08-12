@@ -81,6 +81,7 @@ public class AccountService extends BaseSqlService<User, IUserRepository> implem
         }
         user.setActive(true);
         user.setAccess(true);
+        user.setFirst(true);
         if(StringUtils.isBlank(user.getEmail())){
             user.setEmail("000");
         }else if(StringUtils.isBlank(user.getPhoneNum())){

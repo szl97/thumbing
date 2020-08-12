@@ -66,6 +66,10 @@ public class User extends SqlFullAuditedEntity {
      */
     private String email;
     /**
+     * 是否未登录过
+     */
+    private boolean first;
+    /**
      * 用户登录过的所有设备
      */
     @ManyToMany

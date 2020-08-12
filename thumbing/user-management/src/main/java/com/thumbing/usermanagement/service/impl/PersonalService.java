@@ -4,13 +4,17 @@ import com.github.dozermapper.core.Mapper;
 import com.thumbing.shared.auth.model.UserContext;
 import com.thumbing.shared.entity.sql.personal.Interest;
 import com.thumbing.shared.entity.sql.personal.Personal;
+import com.thumbing.shared.entity.sql.system.User;
 import com.thumbing.shared.entity.sql.user.UserInfo;
 import com.thumbing.shared.exception.BusinessException;
 import com.thumbing.shared.repository.sql.personal.IPersonalRepository;
+import com.thumbing.shared.repository.sql.system.IUserRepository;
+import com.thumbing.shared.repository.sql.user.IUserInfoRepository;
 import com.thumbing.shared.service.impl.BaseSqlService;
 import com.thumbing.shared.utils.dozermapper.DozerUtils;
 import com.thumbing.usermanagement.dto.input.PersonalEditInput;
 import com.thumbing.usermanagement.dto.input.PersonalInput;
+import com.thumbing.usermanagement.dto.input.UserInfoInput;
 import com.thumbing.usermanagement.dto.output.PersonalDto;
 import com.thumbing.usermanagement.service.IPersonalService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,15 +34,36 @@ import java.util.stream.Collectors;
 @Transactional
 public class PersonalService extends BaseSqlService<Personal, IPersonalRepository> implements IPersonalService {
     @Autowired
+    IUserInfoRepository userInfoRepository;
+    @Autowired
     private Mapper mapper;
+
     @Override
-    public PersonalDto createPersonal(UserContext userContext, PersonalInput personalInput) {
-        Personal personal = mapper.map(personalInput, Personal.class);
-        UserInfo userInfo = new UserInfo();
+    public Boolean createUserInfo(UserContext userContext, UserInfoInput input){
+        UserInfo userInfo = userInfoRepository.findByUserId(userContext.getId()).orElse(null);
+        if(userInfo != null) return false;
+        userInfo = new UserInfo();
         userInfo.setUserId(userContext.getId());
         userInfo.setUserName(userContext.getName());
-        userInfo.setNickName(personalInput.getNickName());
-        personal.setUser(userInfo);
+        userInfo.setNickName(input.getNickName());
+        userInfoRepository.save(userInfo);
+        return true;
+    }
+
+    @Override
+    public Boolean createPersonal(UserContext userContext, PersonalInput personalInput) {
+        UserInfo userInfo = userInfoRepository.findByUserId(userContext.getId()).orElse(null);
+        if(userInfo == null){
+            userInfo = new UserInfo();
+            userInfo.setUserId(userContext.getId());
+            userInfo.setUserName(userContext.getName());
+            userInfo.setNickName(personalInput.getNickName());
+            userInfo = userInfoRepository.save(userInfo);
+        }
+        Personal personal = userInfo.getPersonal();
+        if(personal != null) return false;
+        personal = mapper.map(personalInput, Personal.class);
+        personal.setUserId(userContext.getId());
         if(personal.getBirthDate() != null) {
             LocalDate date = personal.getBirthDate();
             personal.setBirthYear((short) date.getYear());
@@ -57,7 +82,11 @@ public class PersonalService extends BaseSqlService<Personal, IPersonalRepositor
             personal.setOccupationId(personalInput.getOccupation().getId());
         }
         personal =  repository.save(personal);
-        return mapper.map(personal, PersonalDto.class);
+        if(userInfo.getPersonalId()==null) {
+            userInfo.setPersonalId(personal.getId());
+            userInfoRepository.save(userInfo);
+        }
+        return true;
     }
 
     @Override
@@ -85,6 +114,13 @@ public class PersonalService extends BaseSqlService<Personal, IPersonalRepositor
     public PersonalDto fetchPersonal(UserContext userContext) {
         Personal personal = repository.findByUserId(userContext.getId()).orElse(null);
         if(personal == null){
+//            personal = new Personal();
+//            UserInfo userInfo = new UserInfo();
+//            userInfo.setUserId(userContext.getId());
+//            userInfo.setUserName(userContext.getName());
+//            userInfo.setNickName(userContext.getName());
+//            personal.setUser(userInfo);
+//            repository.save(personal);
             return null;
         }
         return mapper.map(personal, PersonalDto.class);

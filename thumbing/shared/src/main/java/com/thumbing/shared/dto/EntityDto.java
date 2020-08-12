@@ -2,6 +2,7 @@ package com.thumbing.shared.dto;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.sun.istack.NotNull;
 import com.thumbing.shared.utils.serializer.StringToLongDeserializer;
 import com.thumbing.shared.utils.serializer.LongToStringSerializer;
 import lombok.Data;
@@ -16,5 +17,6 @@ import java.io.Serializable;
 public class EntityDto implements Serializable {
     @JsonSerialize(using = LongToStringSerializer.class)
     @JsonDeserialize(using = StringToLongDeserializer.class)
+    @NotNull
     private Long id;
 }

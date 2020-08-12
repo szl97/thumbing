@@ -53,3 +53,8 @@ hystrix:
         isolation:
           thread:
             timeoutInMilliseconds: 5000  #服务连接成功，但是时间过长，降级方法调用时间   60000   5000
+
+authentication:
+  expirationTime: 3600 # Number of minutes
+  issuer: thumbing
+  signingKey: xm8EV6Hy5RMFK4EEACIDAwQus48djvcnjsdksfksjdfwiuersdkjhfskjdhfskjdf

@@ -27,7 +27,6 @@ import java.util.List;
 @Configuration
 public class FeignConfig {
 
-
     @Bean
     public Decoder feignDecoder() {
         return new ResponseEntityDecoder(new SpringDecoder(feignHttpMessageConverter()));

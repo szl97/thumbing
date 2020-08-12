@@ -92,3 +92,8 @@ hystrix:
 custom:
   encrypt:
     key: 8ym00JZR4pjWPBvuQP9zs2uVl0s9Nc2o
+
+authentication:
+  expirationTime: 3600 # Number of minutes
+  issuer: thumbing
+  signingKey: xm8EV6Hy5RMFK4EEACIDAwQus48djvcnjsdksfksjdfwiuersdkjhfskjdhfskjdf

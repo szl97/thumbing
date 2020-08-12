@@ -4,6 +4,7 @@ import com.thumbing.shared.dto.EntityDto;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
+import javax.validation.constraints.NotBlank;
 import java.util.List;
 import java.util.Set;
 
@@ -13,6 +14,7 @@ import java.util.Set;
  */
 @Data
 public class PersonalEditInput extends EntityDto {
+    @NotBlank(message = "昵称不可为空")
     @ApiModelProperty(value = "昵称")
     private String nickName;
     @ApiModelProperty(value = "星座")

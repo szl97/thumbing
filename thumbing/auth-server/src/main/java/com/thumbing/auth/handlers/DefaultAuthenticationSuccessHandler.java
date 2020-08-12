@@ -5,6 +5,7 @@ import com.thumbing.auth.context.LoginRequestContextHolder;
 import com.thumbing.auth.context.LoginUserContextHolder;
 import com.thumbing.auth.dto.input.LoginRequest;
 import com.thumbing.auth.service.IAuthService;
+import com.thumbing.shared.auth.authentication.AuthorizationContextHolder;
 import com.thumbing.shared.auth.model.UserContext;
 import com.thumbing.shared.jwt.JwtTokenFactory;
 import com.thumbing.shared.response.BaseApiResult;
@@ -28,6 +29,7 @@ import java.nio.charset.StandardCharsets;
  */
 @Component
 public class DefaultAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
+    private static String HEADER_PREFIX = "Bearer ";
     @Autowired
     private ObjectMapper mapper;
     @Autowired
@@ -39,6 +41,7 @@ public class DefaultAuthenticationSuccessHandler implements AuthenticationSucces
     public void onAuthenticationSuccess(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Authentication authentication) throws IOException, ServletException {
         UserContext userContext = (UserContext) authentication.getPrincipal();
         String accessToken = jwtTokenFactory.createJwtToken(userContext);
+        AuthorizationContextHolder.setAuthorization(HEADER_PREFIX + accessToken);
         httpServletResponse.setContentType(MediaType.APPLICATION_JSON_VALUE);
         httpServletResponse.setCharacterEncoding(StandardCharsets.UTF_8.toString());
         LoginRequest loginRequest = LoginRequestContextHolder.getLoginRequest();

@@ -69,3 +69,7 @@ hystrix:
           thread:
             timeoutInMilliseconds: 5000
 
+authentication:
+  expirationTime: 3600 # Number of minutes
+  issuer: thumbing
+  signingKey: xm8EV6Hy5RMFK4EEACIDAwQus48djvcnjsdksfksjdfwiuersdkjhfskjdhfskjdf
