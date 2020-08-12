@@ -1,4 +1,4 @@
-###框架设计思路：
+### 框架设计思路
 
 -只有gateway端口堆外暴露，所有api request经过gateway转发,gateway中设定了路由规则，并进行登录认证和安全认证，gateway由Spring Cloud GateWay实现
 
@@ -34,7 +34,7 @@
 
 
 
-###开发环境配置：
+### 开发环境配置
 docker: mysql:5.7, mongo:latest(4.2), redis:6.0.5 ,rabbitmq:management
 zookeepr 1~3
 elasticserach 7 + elasticserach head + ik分词器插件
@@ -46,7 +46,7 @@ redis管理工具：another redis desktop management
 
 
 
-###学习技能和知识：
+### 学习技能和知识
 1.netty：https://github.com/netty/netty https://netty.io/wiki/user-guide-for-4.x.html
 
 2.zookeeper: https://zookeeper.apache.org/ https://www.jianshu.com/p/f5cbe7b6ef73
