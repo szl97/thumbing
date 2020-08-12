@@ -14,7 +14,7 @@ import java.io.Serializable;
 public class LoginRequest implements Serializable {
     @ApiModelProperty(value = "帐户名")
     @NotBlank(message = "帐户名不能为空")
-    private String username;
+    private String userName;
     @NotBlank(message = "密码不能为空")
     @ApiModelProperty(value = "密码")
     private String password;

@@ -49,10 +49,10 @@ public class JWTAuthenticationFilter extends AbstractAuthenticationProcessingFil
         try {
             LoginRequest loginRequest = objectMapper.readValue(request.getReader(), LoginRequest.class);
             LoginRequestContextHolder.setLoginRequest(loginRequest);
-            if (StringUtils.isBlank(loginRequest.getUsername()) || StringUtils.isBlank(loginRequest.getPassword())) {
+            if (StringUtils.isBlank(loginRequest.getUserName()) || StringUtils.isBlank(loginRequest.getPassword())) {
                 throw new BadCredentialsException("帐户名或密码不能为空");
             }
-            token = new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword());
+            token = new UsernamePasswordAuthenticationToken(loginRequest.getUserName(), loginRequest.getPassword());
         } catch (MismatchedInputException ex) {
             throw new BadCredentialsException("认证失败");
         }

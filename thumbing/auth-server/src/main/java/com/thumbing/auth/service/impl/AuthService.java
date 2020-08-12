@@ -80,7 +80,7 @@ public class AuthService implements IAuthService {
 
     @Override
     public void succeedLogin(LoginRequest loginRequest) {
-        failureLoginCache.clear(loginRequest.getUsername());
+        failureLoginCache.clear(loginRequest.getUserName());
         User user = LoginUserContextHolder.getLoginUser();
         if(user != null) {
             customThreadPool.submit(
@@ -108,7 +108,7 @@ public class AuthService implements IAuthService {
 
     @Override
     public void failLogin(LoginRequest loginRequest) {
-        failureLoginCache.increment(loginRequest.getUsername());
+        failureLoginCache.increment(loginRequest.getUserName());
     }
 
     /**
