@@ -3,8 +3,7 @@ package com.thumbing.pushdata.common.message;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.thumbing.shared.message.PushDataTypeEnum;
-import com.thumbing.shared.utils.serializer.PushTypeDeserializer;
-import com.thumbing.shared.utils.serializer.PushTypeSerializer;
+import com.thumbing.shared.utils.serializer.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -23,7 +22,11 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class PushData extends NodeMessage<PushData> {
+    @JsonSerialize(using = LongToStringListSerializer.class)
+    @JsonDeserialize(using = StringToLongListDeserializer.class)
     private List<Long> toUserIds;
+    @JsonSerialize(using = LongToStringSerializer.class)
+    @JsonDeserialize(using = StringToLongDeserializer.class)
     private Long fromUserId;
     private String fromUserName;
     private String fromUserNickName;

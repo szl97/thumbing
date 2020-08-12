@@ -1,6 +1,10 @@
 package com.thumbing.pushdata.common.message;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.thumbing.pushdata.common.constants.OperationEnum;
+import com.thumbing.shared.utils.serializer.LongToStringListSerializer;
+import com.thumbing.shared.utils.serializer.StringToLongListDeserializer;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -18,7 +22,6 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ConnectSet extends NodeMessage<ConnectSet> {
-
     private List<Long> userIds;
 
     private String name;

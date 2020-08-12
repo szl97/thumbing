@@ -2,6 +2,7 @@ package com.thumbing.shared.message;
 
 import lombok.Data;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 /**
@@ -9,7 +10,7 @@ import java.time.LocalDateTime;
  * @date 2020-08-11 22:25
  */
 @Data
-public class ChatDataMsg {
+public class ChatDataMsg implements Serializable {
     private Long fromUser;
 
     private String fromUserName;

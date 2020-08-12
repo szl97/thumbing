@@ -1,5 +1,11 @@
 package com.thumbing.pushdata.common.message;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.thumbing.shared.utils.serializer.LongToStringListSerializer;
+import com.thumbing.shared.utils.serializer.LongToStringSerializer;
+import com.thumbing.shared.utils.serializer.StringToLongDeserializer;
+import com.thumbing.shared.utils.serializer.StringToLongListDeserializer;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -18,11 +24,13 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class GroupData extends NodeMessage<GroupData> {
-
+    @JsonSerialize(using = LongToStringSerializer.class)
+    @JsonDeserialize(using = StringToLongDeserializer.class)
     private Long fromUser;
 
     private String fromUserNickName;
-
+    @JsonSerialize(using = LongToStringListSerializer.class)
+    @JsonDeserialize(using = StringToLongListDeserializer.class)
     private List<Long> toUsers;
 
     private String name;

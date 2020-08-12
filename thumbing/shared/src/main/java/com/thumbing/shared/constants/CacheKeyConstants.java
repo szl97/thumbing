@@ -47,5 +47,11 @@ public class CacheKeyConstants {
      * com.thumbing.usermanagement.dto.output.PersonalConfigurationDto
      */
     public static final String PERSONAL_CONFIGURATION = "PERSONAL:CONFIGURATION";
+    /**
+     * list
+     * 每个会话中保存50条消息
+     * id1:id2
+     */
+    public static final String CHAT_RECORD = "CHAT:RECORD";
 
 }

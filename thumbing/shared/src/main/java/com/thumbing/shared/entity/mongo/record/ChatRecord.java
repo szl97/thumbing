@@ -16,11 +16,11 @@ public class ChatRecord extends MongoCreationEntity {
     /**
      * 发送方Id
      */
-    private long fromId;
+    private Long fromId;
     /**
      * 用户Id
      */
-    private long toId;
+    private Long toId;
     /**
      * 消息内容
      */
@@ -36,5 +36,4 @@ public class ChatRecord extends MongoCreationEntity {
 
     private Long userId1;
     private Long userId2;
-
 }

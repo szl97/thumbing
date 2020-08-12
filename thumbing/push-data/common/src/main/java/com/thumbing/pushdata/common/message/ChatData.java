@@ -1,5 +1,9 @@
 package com.thumbing.pushdata.common.message;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.thumbing.shared.utils.serializer.LongToStringSerializer;
+import com.thumbing.shared.utils.serializer.StringToLongDeserializer;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -17,12 +21,15 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ChatData extends NodeMessage<ChatData> {
+    @JsonSerialize(using = LongToStringSerializer.class)
+    @JsonDeserialize(using = StringToLongDeserializer.class)
     private Long fromUser;
 
     private String fromUserName;
 
     private String fromUserNickName;
-
+    @JsonSerialize(using = LongToStringSerializer.class)
+    @JsonDeserialize(using = StringToLongDeserializer.class)
     private Long toUser;
 
     private String toUserName;
