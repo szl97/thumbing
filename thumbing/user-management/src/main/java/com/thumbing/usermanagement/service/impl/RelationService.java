@@ -58,7 +58,7 @@ public class RelationService implements IRelationService {
      */
     @Override
     public Boolean applyRelation(UserContext userContext, RelationApplyInput input) {
-        if(input.getTargetUserId() == userContext.getId()) throw new BusinessException("操作错误");
+        if(input.getTargetUserId().equals(userContext.getId())) throw new BusinessException("操作错误");
         //todo: 判断对方是否存在于你的黑名单中 + 判断对方是否把你拉黑
         Specification<BlackList> specification1 = Specifications.where(spec->{
             spec.eq(BlackList.Fields.userId, userContext.getId());
@@ -110,7 +110,7 @@ public class RelationService implements IRelationService {
     public Boolean handleRelationApply(UserContext userContext, RelationApplyHandlerInput input) {
         //todo: 判断请求是否存在。以及是否是对应的处理人
         RelationApplyInfo applyInfo = relationApplyInfoRepository.findById(input.getId()).orElseThrow(()->new BusinessException("好友申请已不存在"));
-        if(applyInfo.getTargetUserId() != userContext.getId()) throw new BusinessException("操作错误");
+        if(!applyInfo.getTargetUserId().equals(userContext.getId())) throw new BusinessException("操作错误");
         //todo: 判断对方是否拉黑你
         BlackList blackList = blackListRepository.findByUserIdAndTargetUserId(applyInfo.getUserId(), applyInfo.getTargetUserId()).orElse(null);
         if(blackList != null) throw new BusinessException("你存在于对方黑名单中，添加好友失败");
@@ -141,7 +141,7 @@ public class RelationService implements IRelationService {
             Relation relation = new Relation();
             relation.setUserIdOne(id1);
             relation.setUserIdTwo(id2);
-            if(id1 == userContext.getId()){
+            if(id1.equals(userContext.getId())){
                 relation.setNickNameOne(input.getNickName1());
                 relation.setNickNameTwo(input.getNickName2());
             }
@@ -158,7 +158,7 @@ public class RelationService implements IRelationService {
     public Boolean removeRelation(UserContext userContext, RelationRemoveInput input) {
         Relation relation = relationRepository.findById(input.getId()).orElse(null);
         if(relation == null) return true;
-        if(relation.getUserIdOne() != userContext.getId() && relation.getUserIdTwo() != userContext.getId()) throw  new BusinessException("非法操作");
+        if(!relation.getUserIdOne().equals(userContext.getId()) && relation.getUserIdTwo().equals(userContext.getId())) throw  new BusinessException("非法操作");
         relationRepository.delete(relation);
         return true;
     }
@@ -167,7 +167,7 @@ public class RelationService implements IRelationService {
     public List<RelationDto> getAllRelation(UserContext userContext) {
         List<Relation> relations = relationRepository.findAllByUserIdOneOrUserIdTwo(userContext.getId(), userContext.getId());
         return DozerUtils.mapList(mapper, relations, RelationDto.class, (relation, relationDto) -> {
-            if(relation.getUserIdTwo() == userContext.getId()) {
+            if(relation.getUserIdTwo().equals(userContext.getId())) {
                 relationDto.setUserId(relation.getUserIdOne());
                 relationDto.setUserName(relation.getNickNameOne());
             }
