@@ -7,6 +7,8 @@ import com.thumbing.shared.utils.serializer.LongToStringSerializer;
 import com.thumbing.shared.utils.serializer.StringToLongDeserializer;
 import lombok.Data;
 
+import java.time.LocalDateTime;
+
 /**
  * @Author: Stan Sai
  * @Date: 2020/8/12 17:02
@@ -37,7 +39,22 @@ public class ChatRecordDto extends DocumentDto {
      * 接收方是否已读
      */
     private boolean read;
-
+    @JsonSerialize(using = LongToStringSerializer.class)
+    @JsonDeserialize(using = StringToLongDeserializer.class)
     private Long userId1;
+    @JsonSerialize(using = LongToStringSerializer.class)
+    @JsonDeserialize(using = StringToLongDeserializer.class)
     private Long userId2;
+    private LocalDateTime time;
+
+    @Override
+    public boolean equals(Object obj){
+        if(obj instanceof ChatRecordDto){
+            ChatRecordDto recordDto = (ChatRecordDto) obj;
+            return userId1.equals(recordDto.getUserId1())
+                    && userId2.equals(recordDto.getUserId2())
+                    && time.equals(recordDto.getTime());
+        }
+        return false;
+    }
 }

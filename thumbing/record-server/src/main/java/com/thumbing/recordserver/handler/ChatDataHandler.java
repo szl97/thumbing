@@ -28,6 +28,7 @@ public class ChatDataHandler {
     SessionPersistence persistence;
 
     public void handleSession(ChatDataMsg msg) {
+        //todo:加入缓存
         ChatSession session = null;
         if (msg.getSessionId() != null) {
             session = chatSessionRepository.findById(msg.getSessionId()).orElse(null);
@@ -56,6 +57,7 @@ public class ChatDataHandler {
     }
 
     public void handleRecord(ChatDataMsg msg){
+        //todo:加入缓存
         ChatRecord record = new ChatRecord();
         record.setContent(msg.getData());
         record.setFromId(msg.getFromUser());
