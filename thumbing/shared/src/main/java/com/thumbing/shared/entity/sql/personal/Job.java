@@ -27,6 +27,6 @@ public class Job extends BaseSqlEntity {
         if(object == null) return false;
         if(!(object instanceof Job)) return false;
         Job a = (Job)object;
-        return  a.getId() == getId();
+        return  a.getId().equals(getId());
     }
 }

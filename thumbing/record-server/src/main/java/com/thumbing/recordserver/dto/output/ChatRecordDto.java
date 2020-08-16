@@ -31,14 +31,6 @@ public class ChatRecordDto extends DocumentDto {
      * 消息内容
      */
     private String content;
-    /**
-     * 是否撤回
-     */
-    private boolean cancel;
-    /**
-     * 接收方是否已读
-     */
-    private boolean read;
     @JsonSerialize(using = LongToStringSerializer.class)
     @JsonDeserialize(using = StringToLongDeserializer.class)
     private Long userId1;

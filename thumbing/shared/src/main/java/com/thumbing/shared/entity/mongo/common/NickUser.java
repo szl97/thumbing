@@ -31,6 +31,6 @@ public class NickUser implements Serializable {
         if(object == null) return false;
         if(!(object instanceof NickUser)) return false;
         NickUser nickUser = (NickUser)object;
-        return nickUser.userId == nickUser.userId;
+        return nickUser.getUserId().equals(userId);
     }
 }

@@ -9,6 +9,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @Author: Stan Sai
@@ -23,6 +24,7 @@ public class ChatRecordCache {
 
     public void setRecord(ChatRecordDto dto){
         RedisUtilsForList.rightPush(redisTemplate.opsForList(), KEY+dto.getUserId1()+":"+dto.getUserId2(), dto);
+        RedisUtils.expire(redisTemplate, KEY+dto.getUserId1()+":"+dto.getUserId2(), expireMinutes, TimeUnit.MINUTES);
         Long len = size(dto.getUserId1(), dto.getUserId2());
         if(len > 100) {
             RedisUtilsForList.clearAndPersist(redisTemplate.opsForList(), KEY+dto.getUserId1()+":"+dto.getUserId2(), len - 100, len);

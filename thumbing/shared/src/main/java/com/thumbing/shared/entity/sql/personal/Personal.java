@@ -111,6 +111,6 @@ public class Personal extends SqlFullAuditedEntity {
         if(object == null) return false;
         if(!(object instanceof Personal)) return false;
         Personal a = (Personal)object;
-        return  a.getId() == getId();
+        return  a.getId().equals(getId());
     }
 }

@@ -26,7 +26,7 @@ public class SessionRecordDto extends DocumentDto {
      */
     private String lastMessage;
     /**
-     * 接收方是否已读
+     * 接收方未读数
      */
     private int noReadNum;
     private LocalDateTime time;

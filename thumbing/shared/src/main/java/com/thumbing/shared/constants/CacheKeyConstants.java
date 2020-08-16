@@ -48,10 +48,15 @@ public class CacheKeyConstants {
      */
     public static final String PERSONAL_CONFIGURATION = "PERSONAL:CONFIGURATION";
     /**
-     * list
-     * 每个会话中保存50条消息
+     * list 保存100条消息
      * id1:id2
      */
-    public static final String CHAT_RECORD = "CHAT:RECORD";
+    public static final String CHAT_RECORD = "CHAT:RECORD:";
+    /**
+     * hash
+     * id
+     * targetId
+     */
+    public static final String SESSION_RECORD = "SESSION:RECORD:";
 
 }

@@ -30,6 +30,6 @@ public class Interest extends BaseSqlEntity {
         if(object == null) return false;
         if(!(object instanceof Interest)) return false;
         Interest a = (Interest) object;
-        return  a.getId() == getId();
+        return a.getId().equals(getId());
     }
 }

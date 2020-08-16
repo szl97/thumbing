@@ -77,6 +77,6 @@ public class Relation extends SqlFullAuditedEntity {
         if(object == null) return false;
         if(!(object instanceof Relation)) return false;
         Relation a = (Relation)object;
-        return  a.getId() == getId();
+        return  a.getId().equals(getId());
     }
 }
