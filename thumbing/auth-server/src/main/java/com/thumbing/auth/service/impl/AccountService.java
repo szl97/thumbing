@@ -102,7 +102,7 @@ public class AccountService extends BaseSqlService<User, IUserRepository> implem
             if(validationCode == null){
                 throw new BusinessException("验证码已失效或验证码未发送");
             }
-            if(validationCode != changePasswordRequest.getValidation()){
+            if(!validationCode.equals(changePasswordRequest.getValidation())){
                 throw new BusinessException("验证码错误");
             }
             user = repository.findByUserName(changePasswordRequest.getUserName()).orElseThrow(()->new BusinessException("未知错误"));
