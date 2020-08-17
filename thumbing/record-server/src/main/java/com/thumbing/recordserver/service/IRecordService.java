@@ -1,7 +1,7 @@
 package com.thumbing.recordserver.service;
 
 import com.thumbing.recordserver.dto.input.ChatRecordInput;
-import com.thumbing.recordserver.dto.input.ReadRecordInput;
+import com.thumbing.recordserver.dto.input.ReadChatRecord;
 import com.thumbing.recordserver.dto.input.RemoveChatRecordInput;
 import com.thumbing.recordserver.dto.output.ChatRecordDto;
 import com.thumbing.recordserver.dto.output.SessionRecordDto;
@@ -32,7 +32,7 @@ public interface IRecordService {
      * 已读消息
      * @return
      */
-    Boolean readChatMessage(ReadRecordInput input, UserContext context);
+    Boolean readChatMessage(ReadChatRecord input, UserContext context);
     /**
      * 撤回消息
      * @param removeChatRecordInput

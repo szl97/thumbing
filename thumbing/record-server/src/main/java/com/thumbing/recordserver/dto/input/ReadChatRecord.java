@@ -13,7 +13,7 @@ import java.io.Serializable;
  * @Date: 2020/8/17 11:28
  */
 @Data
-public class ReadRecordInput implements Serializable {
+public class ReadChatRecord implements Serializable {
     @JsonSerialize(using = LongToStringSerializer.class)
     @JsonDeserialize(using = StringToLongDeserializer.class)
     private Long targetUserId;
