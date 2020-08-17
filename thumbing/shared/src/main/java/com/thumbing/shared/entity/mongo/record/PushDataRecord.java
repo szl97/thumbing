@@ -17,6 +17,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Document(collection = "push_data_record")
 @Data
 public class PushDataRecord extends MongoCreationEntity {
+    private Long dataId;
     private Long toUserId;
     private Long fromUserId;
     private String fromUserName;
@@ -26,4 +27,5 @@ public class PushDataRecord extends MongoCreationEntity {
     @JsonDeserialize(using = PushTypeDeserializer.class)
     private PushDataTypeEnum pushType;
     private boolean allUser;
+    private boolean read;
 }

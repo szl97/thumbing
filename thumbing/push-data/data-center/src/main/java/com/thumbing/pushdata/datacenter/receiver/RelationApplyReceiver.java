@@ -33,6 +33,7 @@ public class RelationApplyReceiver {
                     List<Long> toIds = new ArrayList<>();
                     toIds.add(msg.getToUserId());
                     pushDataHandler.call(null, PushData.builder()
+                            .dataId(msg.getDataId())
                             .pushType(PushDataTypeEnum.RA)
                             .data(msg.getRemark())
                             .fromUserId(msg.getFromUserId())

@@ -15,9 +15,6 @@ import java.time.LocalDateTime;
  */
 @Data
 public class SessionRecordDto extends DocumentDto {
-    /**
-     * Id
-     */
     @JsonSerialize(using = LongToStringSerializer.class)
     @JsonDeserialize(using = StringToLongDeserializer.class)
     private Long targetUserId;
@@ -29,5 +26,12 @@ public class SessionRecordDto extends DocumentDto {
      * 接收方未读数
      */
     private int noReadNum;
+    /**
+     * 最后一条消息的发送时间
+     */
     private LocalDateTime time;
+    /**
+     * 最后阅读时间
+     */
+    private LocalDateTime lastReadTime;
 }

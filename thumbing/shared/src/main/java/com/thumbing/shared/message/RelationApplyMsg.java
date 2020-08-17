@@ -11,6 +11,7 @@ import java.time.LocalDateTime;
  */
 @Data
 public class RelationApplyMsg implements Serializable {
+    private Long dataId;
     private Long toUserId;
     private Long fromUserId;
     private String fromUserName;

@@ -22,6 +22,9 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class PushData extends NodeMessage<PushData> {
+    @JsonSerialize(using = LongToStringSerializer.class)
+    @JsonDeserialize(using = StringToLongDeserializer.class)
+    private Long dataId;
     @JsonSerialize(using = LongToStringListSerializer.class)
     @JsonDeserialize(using = StringToLongListDeserializer.class)
     private List<Long> toUserIds;

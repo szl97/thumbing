@@ -84,10 +84,11 @@ public class RelationService implements IRelationService {
         relationApplyInfo.setUserId(userContext.getId());
         relationApplyInfo.setTargetUserId(input.getTargetUserId());
         relationApplyInfo.setRemark(input.getRemark());
-        relationApplyInfoRepository.save(relationApplyInfo);
+        relationApplyInfo = relationApplyInfoRepository.save(relationApplyInfo);
 
         //todo:发送消息到Data Center通知targetUser, 需发送该好友请求的ID和请求添加者的userName
         RelationApplyMsg msg = new RelationApplyMsg();
+        msg.setDataId(relationApplyInfo.getId());
         msg.setToUserId(input.getTargetUserId());
         msg.setFromUserId(userContext.getId());
         msg.setFromUserName(userContext.getName());

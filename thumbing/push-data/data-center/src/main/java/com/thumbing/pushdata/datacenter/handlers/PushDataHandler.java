@@ -58,6 +58,7 @@ public class PushDataHandler implements IMessageHandler<PushData> {
                         try {
                             writeChannel.writeAndFlush(
                                     PushData.builder().pushType(message.getPushType())
+                                            .dataId(message.getDataId())
                                             .data(message.getData())
                                             .toUserIds(e.getValue())
                                             .fromUserId(message.getFromUserId())

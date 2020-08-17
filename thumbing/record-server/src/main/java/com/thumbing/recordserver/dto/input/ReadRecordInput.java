@@ -10,14 +10,11 @@ import java.io.Serializable;
 
 /**
  * @Author: Stan Sai
- * @Date: 2020/8/12 17:02
+ * @Date: 2020/8/17 11:28
  */
 @Data
-public class ChatRecordInput implements Serializable {
+public class ReadRecordInput implements Serializable {
     @JsonSerialize(using = LongToStringSerializer.class)
     @JsonDeserialize(using = StringToLongDeserializer.class)
-    private Long targetUser;
-    @JsonSerialize(using = LongToStringSerializer.class)
-    @JsonDeserialize(using = StringToLongDeserializer.class)
-    private Long position;
+    private Long targetUserId;
 }

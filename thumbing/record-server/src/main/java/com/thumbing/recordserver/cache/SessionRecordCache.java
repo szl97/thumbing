@@ -9,6 +9,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author Stan Sai
@@ -20,8 +21,11 @@ public class SessionRecordCache {
     @Autowired
     private RedisTemplate<String, SessionRecordDto> redisTemplate;
 
+    private final long expireDays = 30;
+
     public void set(Long userId, SessionRecordDto dto){
         RedisUtilsForHash.put(redisTemplate.opsForHash(),KEY+userId, dto.getTargetUserId().toString(), dto);
+        RedisUtils.expire(redisTemplate, KEY+userId, expireDays, TimeUnit.DAYS);
     }
 
     public SessionRecordDto getOne(Long userId, Long targetId){

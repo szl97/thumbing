@@ -36,12 +36,15 @@ public class PushDataFromCenterHandler implements ICenterDataHandler<PushData> {
 
                         try {
                             channel.writeAndFlush(
-                                    PushData.builder().pushType(message.getPushType())
-                                    .data(message.getData())
-                                    .fromUserId(message.getFromUserId())
-                                    .fromUserName(message.getFromUserName())
-                                    .fromUserNickName(message.getFromUserNickName())
-                                    .build().encode()
+                                    PushData.builder()
+                                            .pushType(message.getPushType())
+                                            .dataId(message.getDataId())
+                                            .data(message.getData())
+                                            .fromUserId(message.getFromUserId())
+                                            .fromUserName(message.getFromUserName())
+                                            .fromUserNickName(message.getFromUserNickName())
+                                            .build()
+                                            .encode()
                             );
                         } catch (JsonProcessingException e) {
                             e.printStackTrace();
