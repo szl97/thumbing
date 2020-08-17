@@ -4,6 +4,7 @@ import com.thumbing.recordserver.cache.ChatRecordCache;
 import com.thumbing.recordserver.cache.SessionRecordCache;
 import com.thumbing.recordserver.dto.output.ChatRecordDto;
 import com.thumbing.recordserver.dto.output.SessionRecordDto;
+import com.thumbing.recordserver.persistence.RecordPersistence;
 import com.thumbing.shared.entity.mongo.record.ChatRecord;
 import com.thumbing.shared.message.ChatDataMsg;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,4 +1,4 @@
-package com.thumbing.recordserver.handler;
+package com.thumbing.recordserver.persistence;
 
 import com.thumbing.shared.annotation.AccessLock;
 import com.thumbing.shared.entity.mongo.record.PushDataRecord;
@@ -26,11 +26,16 @@ public class PushDataPersistence {
             record = pushDataRecordRepository.findById(pushDataRecord.getId()).orElse(null);
         }
         if (record != null) {
-
             if (pushDataRecord.isRead()) {
                 pushDataRecord.setRead(true);
+                return pushDataRecordRepository.save(pushDataRecord);
+            }
+            else {
+                return record;
             }
         }
-        return pushDataRecordRepository.save(pushDataRecord);
+        else {
+            return pushDataRecordRepository.save(pushDataRecord);
+        }
     }
 }

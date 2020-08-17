@@ -1,6 +1,7 @@
 package com.thumbing.recordserver.handler;
 
 import com.github.dozermapper.core.Mapper;
+import com.thumbing.recordserver.persistence.PushDataPersistence;
 import com.thumbing.shared.entity.mongo.record.PushDataRecord;
 import com.thumbing.shared.message.PushDataTypeEnum;
 import com.thumbing.shared.message.RelationApplyMsg;

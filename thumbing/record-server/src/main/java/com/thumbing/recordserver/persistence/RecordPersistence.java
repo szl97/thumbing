@@ -1,4 +1,4 @@
-package com.thumbing.recordserver.handler;
+package com.thumbing.recordserver.persistence;
 
 import com.thumbing.shared.annotation.AccessLock;
 import com.thumbing.shared.entity.mongo.record.ChatRecord;
@@ -26,14 +26,21 @@ public class RecordPersistence {
             record = chatRepository.findById(chatRecord.getId()).orElse(null);
         }
         if (record != null) {
-
-            if (chatRecord.isRead()) {
-                chatRecord.setRead(true);
+            if(chatRecord.isCancel() || chatRecord.isRead()) {
+                if (chatRecord.isRead()) {
+                    chatRecord.setRead(true);
+                }
+                if (chatRecord.isCancel()) {
+                    chatRecord.setCancel(true);
+                }
+                return chatRepository.save(chatRecord);
             }
-            if (chatRecord.isCancel()) {
-                chatRecord.setCancel(true);
+            else {
+                return record;
             }
         }
-        return chatRepository.save(chatRecord);
+        else {
+            return chatRepository.save(chatRecord);
+        }
     }
 }
