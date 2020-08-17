@@ -23,6 +23,9 @@ import java.util.List;
 public class ChatData extends NodeMessage<ChatData> {
     @JsonSerialize(using = LongToStringSerializer.class)
     @JsonDeserialize(using = StringToLongDeserializer.class)
+    private Long dataId;
+    @JsonSerialize(using = LongToStringSerializer.class)
+    @JsonDeserialize(using = StringToLongDeserializer.class)
     private Long fromUser;
 
     private String fromUserName;
@@ -39,8 +42,6 @@ public class ChatData extends NodeMessage<ChatData> {
     private String name;
 
     private String data;
-
-    private String sessionId;
 
     private LocalDateTime time;
 

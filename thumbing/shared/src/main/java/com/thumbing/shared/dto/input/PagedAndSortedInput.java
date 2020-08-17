@@ -11,12 +11,14 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
+import java.io.Serializable;
+
 /**
  * @author Stan Sai
  * @date 2020-08-02 17:24
  */
 @Data
-public class PagedAndSortedInput {
+public class PagedAndSortedInput implements Serializable {
     /**
      * 排序字段名
      */

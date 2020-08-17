@@ -6,6 +6,7 @@ import com.thumbing.pushdata.common.message.ChatData;
 import com.thumbing.pushdata.nodeserver.handlers.ChatDataHandler;
 import com.thumbing.pushdata.nodeserver.sender.ChatDataSender;
 import com.thumbing.shared.message.ChatDataMsg;
+import com.thumbing.shared.utils.generateid.SnowFlake;
 import io.netty.channel.ChannelHandlerContext;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
@@ -32,6 +33,7 @@ public class ChatDataFromDeviceHandler extends ChatDataHandler implements IDevic
 
         //todo: 单聊消息收到后先发送到消息队列，异步写入数据库
         //todo...
+        message.setDataId(SnowFlake.getInstance().nextId());
         sender.send(mapper.map(message, ChatDataMsg.class));
         super.call(ctx, message);
     }

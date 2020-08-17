@@ -39,10 +39,6 @@ public class ArticleController extends ThumbingBaseController {
         article.setTitle("test");
         article.setContent("asdaasdaads");
         Set<NickUser> set = new HashSet<>();
-        set.add(new NickUser(1l,"asadas"));
-        set.add(new NickUser(2l,"asasasdaas"));
-        set.add(new NickUser(3l,"asasaswwf3"));
-        set.add(new NickUser(4l,"asasasxxxq"));
         article.setNickUsers(set);
         Article s = articleService.save(article);
         return dozermapper.map(s, DocumentDto.class);

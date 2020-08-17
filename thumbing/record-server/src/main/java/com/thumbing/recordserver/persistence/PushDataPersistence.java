@@ -23,7 +23,7 @@ public class PushDataPersistence {
     public PushDataRecord saveInDb(PushDataRecord pushDataRecord) {
         PushDataRecord record = null;
         if (pushDataRecord.getId() != null) {
-            record = pushDataRecordRepository.findById(pushDataRecord.getId()).orElse(null);
+            record = pushDataRecordRepository.findByDataIdAndPushType(pushDataRecord.getDataId(), pushDataRecord.getPushType()).orElse(null);
         }
         if (record != null) {
             if (pushDataRecord.isRead()) {

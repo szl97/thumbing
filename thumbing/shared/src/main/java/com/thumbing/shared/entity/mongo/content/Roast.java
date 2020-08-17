@@ -3,6 +3,7 @@ package com.thumbing.shared.entity.mongo.content;
 import com.thumbing.shared.constants.EntityConstants;
 import com.thumbing.shared.entity.mongo.MongoFullAuditedEntity;
 import lombok.Data;
+import lombok.experimental.FieldNameConstants;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -17,7 +18,7 @@ import java.util.Set;
 @Data
 @SQLDelete(sql =  "update roast " + EntityConstants.NO_VERSION_DELETION)
 @Where(clause = "is_delete=0")
-//user_id, content, total_days, is_fishing, thumb_user_ids
+@FieldNameConstants
 public class Roast extends MongoFullAuditedEntity {
     /**
      * 用户id

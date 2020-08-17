@@ -6,6 +6,7 @@ import com.thumbing.shared.entity.mongo.content.inner.InnerComment;
 import com.thumbing.shared.entity.mongo.common.NickUser;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.experimental.FieldNameConstants;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -22,6 +23,7 @@ import java.util.Set;
  */
 @Document(collection = "article")
 @Data
+@FieldNameConstants
 //user_id, title, tags_ids, content, thumb_user_ids, innerComments,next_nick_name, graph_ids, browse_user_ids
 public class Article extends MongoFullAuditedEntity {
     /**

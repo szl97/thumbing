@@ -45,7 +45,7 @@ use:
   security: true
   feign: true
   swagger: true
-  customThreadPool: false
+  customThreadPool: true
   rabbitmq: true
 
 security:

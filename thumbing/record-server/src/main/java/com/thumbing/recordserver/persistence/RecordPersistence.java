@@ -18,12 +18,12 @@ public class RecordPersistence {
     @AccessLock(value = "com.thumbing.shared.entity.mongo.record.ChatRecord",
             className = "com.thumbing.shared.entity.mongo.record.ChatRecord",
             fields = {
-                    "getUserId1", "getUserId2", "getCreateTime"
+                    "getDataId"
             })
     public ChatRecord saveInDb(ChatRecord chatRecord) {
         ChatRecord record = null;
         if (chatRecord.getId() != null) {
-            record = chatRepository.findById(chatRecord.getId()).orElse(null);
+            record = chatRepository.findByDataId(chatRecord.getDataId()).orElse(null);
         }
         if (record != null) {
             if(chatRecord.isCancel() || chatRecord.isRead()) {

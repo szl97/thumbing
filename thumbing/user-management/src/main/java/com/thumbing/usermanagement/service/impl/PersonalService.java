@@ -1,5 +1,6 @@
 package com.thumbing.usermanagement.service.impl;
 
+import cn.hutool.core.util.ArrayUtil;
 import com.github.dozermapper.core.Mapper;
 import com.thumbing.shared.auth.model.UserContext;
 import com.thumbing.shared.entity.sql.personal.Interest;
@@ -70,15 +71,15 @@ public class PersonalService extends BaseSqlService<Personal, IPersonalRepositor
             personal.setBirthMonth((short) date.getMonth().getValue());
             personal.setBirthDay((short) date.getDayOfMonth());
         }
-        if(personalInput.getInterests() != null){
+        if(ArrayUtil.isNotEmpty(personalInput.getInterests())){
            List<Interest> list =  DozerUtils.mapList(mapper, personalInput.getInterests(), Interest.class);
            Set<Interest> set = list.stream().collect(Collectors.toSet());
            personal.setInterests(set);
         }
-        if(personalInput.getJob() != null){
+        if(ArrayUtil.isNotEmpty(personalInput.getJob())){
             personal.setJobId(personalInput.getJob().getId());
         }
-        if(personalInput.getOccupation() != null){
+        if(ArrayUtil.isNotEmpty(personalInput.getOccupation())){
             personal.setOccupationId(personalInput.getOccupation().getId());
         }
         personal =  repository.save(personal);
@@ -95,15 +96,15 @@ public class PersonalService extends BaseSqlService<Personal, IPersonalRepositor
         if(!personal.getUserId().equals(userContext.getId())) throw new BusinessException("操作错误");
         mapper.map(input, personal);
         personal.getUser().setNickName(input.getNickName());
-        if(input.getInterests() != null){
+        if(ArrayUtil.isNotEmpty(input.getInterests())){
             List<Interest> list =  DozerUtils.mapList(mapper,input.getInterests(), Interest.class);
             Set<Interest> set = list.stream().collect(Collectors.toSet());
             personal.setInterests(set);
         }
-        if(input.getJob() != null){
+        if(ArrayUtil.isNotEmpty(input.getJob())){
             personal.setJobId(input.getJob().getId());
         }
-        if(input.getOccupation() != null){
+        if(ArrayUtil.isNotEmpty(input.getOccupation())){
             personal.setOccupationId(input.getOccupation().getId());
         }
         personal =  repository.save(personal);
@@ -114,13 +115,6 @@ public class PersonalService extends BaseSqlService<Personal, IPersonalRepositor
     public PersonalDto fetchPersonal(UserContext userContext) {
         Personal personal = repository.findByUserId(userContext.getId()).orElse(null);
         if(personal == null){
-//            personal = new Personal();
-//            UserInfo userInfo = new UserInfo();
-//            userInfo.setUserId(userContext.getId());
-//            userInfo.setUserName(userContext.getName());
-//            userInfo.setNickName(userContext.getName());
-//            personal.setUser(userInfo);
-//            repository.save(personal);
             return null;
         }
         return mapper.map(personal, PersonalDto.class);

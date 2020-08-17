@@ -2,11 +2,10 @@ package com.thumbing.recordserver.service;
 
 import com.thumbing.recordserver.dto.input.ChatRecordInput;
 import com.thumbing.recordserver.dto.input.ReadChatRecord;
-import com.thumbing.recordserver.dto.input.RemoveChatRecordInput;
 import com.thumbing.recordserver.dto.output.ChatRecordDto;
 import com.thumbing.recordserver.dto.output.SessionRecordDto;
 import com.thumbing.shared.auth.model.UserContext;
-import org.springframework.data.domain.Page;
+import com.thumbing.shared.dto.output.PageResultDto;
 
 import java.util.List;
 
@@ -21,7 +20,7 @@ public interface IRecordService {
      * @param context
      * @return
      */
-    Page<ChatRecordDto> fetchRecords(ChatRecordInput input, UserContext context);
+    PageResultDto<ChatRecordDto> fetchRecords(ChatRecordInput input, UserContext context);
     /**
      * 获取会话列表
      * @param context
@@ -33,11 +32,4 @@ public interface IRecordService {
      * @return
      */
     Boolean readChatMessage(ReadChatRecord input, UserContext context);
-    /**
-     * 撤回消息
-     * @param removeChatRecordInput
-     * @param context
-     * @return
-     */
-    Boolean cancelMessage(RemoveChatRecordInput removeChatRecordInput, UserContext context);
 }

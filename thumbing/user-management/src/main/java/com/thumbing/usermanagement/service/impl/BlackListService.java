@@ -1,5 +1,6 @@
 package com.thumbing.usermanagement.service.impl;
 
+import cn.hutool.core.util.ArrayUtil;
 import com.github.dozermapper.core.Mapper;
 import com.thumbing.shared.auth.model.UserContext;
 import com.thumbing.shared.entity.sql.black.BlackList;
@@ -14,6 +15,7 @@ import com.thumbing.usermanagement.dto.input.BlackListAddInput;
 import com.thumbing.usermanagement.dto.input.BlackListRemoveInput;
 import com.thumbing.usermanagement.dto.output.BlackListDto;
 import com.thumbing.usermanagement.service.IBlackListService;
+import org.apache.commons.lang.ArrayUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -77,6 +79,7 @@ public class BlackListService implements IBlackListService {
     @Override
     public List<BlackListDto> getAllBlackList(UserContext context) {
         List<BlackList> blackLists = blackListRepository.findAllByUserId(context.getId());
+        if(ArrayUtil.isEmpty(blackLists)) return null;
         return DozerUtils.mapList(mapper, blackLists, BlackListDto.class, (blackList, blackListDto)->{
             blackListDto.setUserId(blackList.getTargetUserId());
             if(blackList.getTargetUserInfo() != null){

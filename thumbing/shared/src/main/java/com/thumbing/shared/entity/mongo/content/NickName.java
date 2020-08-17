@@ -4,6 +4,7 @@ import com.thumbing.shared.entity.mongo.BaseMongoEntity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.FieldNameConstants;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 /**
@@ -12,6 +13,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
  */
 @Document(collection = "nick_name")
 @Data
+@FieldNameConstants
 public class NickName extends BaseMongoEntity {
     private String name;
     private int index;

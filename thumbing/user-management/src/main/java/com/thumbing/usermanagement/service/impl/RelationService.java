@@ -1,5 +1,6 @@
 package com.thumbing.usermanagement.service.impl;
 
+import cn.hutool.core.util.ArrayUtil;
 import com.github.dozermapper.core.Mapper;
 import com.thumbing.shared.auth.model.UserContext;
 import com.thumbing.shared.entity.sql.black.BlackList;
@@ -7,6 +8,7 @@ import com.thumbing.shared.entity.sql.relation.Relation;
 import com.thumbing.shared.entity.sql.relation.RelationApplyInfo;
 import com.thumbing.shared.exception.BusinessException;
 import com.thumbing.shared.jpa.Specifications;
+import com.thumbing.shared.message.RelationApplyMsg;
 import com.thumbing.shared.repository.sql.black.IBlackListRepository;
 import com.thumbing.shared.repository.sql.relation.IRelationApplyInfoRepository;
 import com.thumbing.shared.repository.sql.relation.IRelationRepository;
@@ -17,7 +19,6 @@ import com.thumbing.usermanagement.dto.input.RelationRemoveInput;
 import com.thumbing.usermanagement.dto.output.RelationApplyDto;
 import com.thumbing.usermanagement.dto.output.RelationDto;
 import com.thumbing.usermanagement.sender.RelationApplySender;
-import com.thumbing.shared.message.RelationApplyMsg;
 import com.thumbing.usermanagement.service.IRelationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
@@ -75,7 +76,7 @@ public class RelationService implements IRelationService {
         if(check1 != null) return true;
         //todo: 判断是否已经是好友 好友表的存储规则是Id1<Id2
         Long id1 = input.getTargetUserId() > userContext.getId() ? userContext.getId() : input.getTargetUserId();
-        Long id2 = id1 == userContext.getId() ? input.getTargetUserId() : userContext.getId();
+        Long id2 = id1.equals(userContext.getId()) ? input.getTargetUserId() : userContext.getId();
         Relation check2 = relationRepository.findByUserIdOneAndUserIdTwo(id1, id2).orElse(null);
         if(check2 != null) return true;
 
@@ -117,7 +118,7 @@ public class RelationService implements IRelationService {
         if(blackList != null) throw new BusinessException("你存在于对方黑名单中，添加好友失败");
         //todo: 判断是否已经是好友关系
         Long id1 = applyInfo.getUserId() > userContext.getId() ? userContext.getId() : applyInfo.getUserId();
-        Long id2 = id1 == userContext.getId() ? applyInfo.getUserId() : userContext.getId();
+        Long id2 = id1.equals(userContext.getId()) ? applyInfo.getUserId() : userContext.getId();
         Relation check = relationRepository.findByUserIdOneAndUserIdTwo(id1, id2).orElse(null);
         //todo: 已经是好友直接返回
         if(check != null){
@@ -167,6 +168,7 @@ public class RelationService implements IRelationService {
     @Override
     public List<RelationDto> getAllRelation(UserContext userContext) {
         List<Relation> relations = relationRepository.findAllByUserIdOneOrUserIdTwo(userContext.getId(), userContext.getId());
+        if(ArrayUtil.isEmpty(relations)) return null;
         return DozerUtils.mapList(mapper, relations, RelationDto.class, (relation, relationDto) -> {
             if(relation.getUserIdTwo().equals(userContext.getId())) {
                 relationDto.setUserId(relation.getUserIdOne());
@@ -182,6 +184,7 @@ public class RelationService implements IRelationService {
     @Override
     public List<RelationApplyDto> getAllRelationApply(UserContext userContext) {
         List<RelationApplyInfo> relationApplyInfos = relationApplyInfoRepository.findAllByTargetUserId(userContext.getId());
+        if(ArrayUtil.isEmpty(relationApplyInfos)) return null;
         return DozerUtils.mapList(mapper, relationApplyInfos, RelationApplyDto.class, (relationApply, relationApplyDto)->{
             if(relationApply.getUserInfo() != null) {
                 relationApplyDto.setNickName(relationApply.getUserInfo().getUserName());

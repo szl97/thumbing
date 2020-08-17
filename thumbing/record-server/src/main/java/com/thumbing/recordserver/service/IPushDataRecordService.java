@@ -2,6 +2,7 @@ package com.thumbing.recordserver.service;
 
 import com.thumbing.recordserver.dto.input.ReadPushDataRecord;
 import com.thumbing.shared.auth.model.UserContext;
+import com.thumbing.shared.dto.output.PageResultDto;
 import com.thumbing.shared.entity.mongo.record.PushDataRecord;
 import org.springframework.data.domain.Page;
 
@@ -15,7 +16,7 @@ public interface IPushDataRecordService {
      * @param context
      * @return
      */
-    Page<PushDataRecord> fetchAllPushDataRecords(UserContext context);
+    PageResultDto<PushDataRecord> fetchAllPushDataRecords(UserContext context);
 
     /**
      * 推送消息已读

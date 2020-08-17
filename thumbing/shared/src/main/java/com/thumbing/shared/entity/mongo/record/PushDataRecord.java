@@ -7,6 +7,7 @@ import com.thumbing.shared.message.PushDataTypeEnum;
 import com.thumbing.shared.utils.serializer.PushTypeDeserializer;
 import com.thumbing.shared.utils.serializer.PushTypeSerializer;
 import lombok.Data;
+import lombok.experimental.FieldNameConstants;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 
@@ -16,8 +17,9 @@ import org.springframework.data.mongodb.core.mapping.Document;
  */
 @Document(collection = "push_data_record")
 @Data
+@FieldNameConstants
 public class PushDataRecord extends MongoCreationEntity {
-    private Long dataId;
+    private String dataId;
     private Long toUserId;
     private Long fromUserId;
     private String fromUserName;
