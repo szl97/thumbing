@@ -14,7 +14,7 @@ import java.util.List;
  */
 @Data
 public class ReadChatRecord implements Serializable {
-    List<ChatMsgDto> msg;
+    List<ChatMsgInputDto> msg;
     @ApiModelProperty(value = "最后阅读时间")
     @NotNull(message = "最后阅读时间不可为空")
     LocalDateTime lastReadTime;

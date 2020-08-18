@@ -20,7 +20,7 @@ import java.util.concurrent.ConcurrentSkipListMap;
 public class DataBaseAccessAspect {
 
     @Autowired
-    LockCache lockCache;
+    private LockCache lockCache;
 
     private Thread thread;
 

@@ -20,7 +20,7 @@ import org.springframework.stereotype.Component;
 public class InActiveHandlerForDataFlow implements IInActiveHandler {
 
     @Autowired
-    DataFlowChannelManager channelManager;
+    private DataFlowChannelManager channelManager;
 
     @Override
     public boolean support(DefinedMessage message) {

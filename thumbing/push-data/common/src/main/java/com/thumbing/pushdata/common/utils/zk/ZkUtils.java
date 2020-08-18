@@ -40,15 +40,14 @@ import java.util.stream.Collectors;
 public class ZkUtils {
     private CuratorFramework zkClient = null;
 
-    ExecutorService pool =
+    private ExecutorService pool =
             new ThreadPoolExecutor(
                     4,
                     10,
                     0L,
                     TimeUnit.MILLISECONDS,
-                    new LinkedBlockingQueue<Runnable>(1024)
+                    new ArrayBlockingQueue<Runnable>(1024)
             );
-//            Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors() * 2);
 
     private List<PathChildrenCache> pathChildrenCaches = new CopyOnWriteArrayList<>();
 

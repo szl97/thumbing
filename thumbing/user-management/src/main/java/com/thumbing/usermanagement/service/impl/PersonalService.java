@@ -35,7 +35,7 @@ import java.util.stream.Collectors;
 @Transactional
 public class PersonalService extends BaseSqlService<Personal, IPersonalRepository> implements IPersonalService {
     @Autowired
-    IUserInfoRepository userInfoRepository;
+    private IUserInfoRepository userInfoRepository;
     @Autowired
     private Mapper mapper;
 

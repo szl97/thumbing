@@ -25,7 +25,7 @@ import java.util.List;
 public abstract class ConfirmHandler implements IMessageHandler<Confirm> {
 
     @Autowired
-    IChannelManager channelManager;
+    private IChannelManager channelManager;
 
     @Override
     public boolean support(DefinedMessage message) {

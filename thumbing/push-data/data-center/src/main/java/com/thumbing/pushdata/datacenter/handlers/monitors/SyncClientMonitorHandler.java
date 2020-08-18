@@ -26,7 +26,7 @@ import java.util.List;
 public class SyncClientMonitorHandler implements IMonitorsHandler<ConnectSet> {
 
     @Autowired
-    DeviceManager deviceManager;
+    private DeviceManager deviceManager;
 
     @Override
     public boolean support(DefinedMessage message) {

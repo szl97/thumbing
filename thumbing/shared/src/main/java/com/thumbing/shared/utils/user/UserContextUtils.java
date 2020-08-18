@@ -18,12 +18,10 @@ import javax.servlet.http.HttpServletRequest;
 @Slf4j
 public class UserContextUtils {
     private final String AUTHORIZATION_HEADER = "Authorization";
-
     @Autowired
-    JwtHeaderTokenExtractor jwtHeaderTokenExtractor;
+    private JwtHeaderTokenExtractor jwtHeaderTokenExtractor;
     @Autowired
-    JwtTokenFactory jwtTokenFactory;
-
+    private JwtTokenFactory jwtTokenFactory;
     public UserContext getUserContext(HttpServletRequest request){
         String authorization = request.getHeader(AUTHORIZATION_HEADER);
         return getUserContext(authorization);

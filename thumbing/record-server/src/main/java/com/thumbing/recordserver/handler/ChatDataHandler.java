@@ -18,11 +18,11 @@ import java.util.concurrent.CompletableFuture;
 @Component
 public class ChatDataHandler {
     @Autowired
-    RecordPersistence recordPersistence;
+    private RecordPersistence recordPersistence;
     @Autowired
-    ChatRecordCache chatRecordCache;
+    private ChatRecordCache chatRecordCache;
     @Autowired
-    SessionPersistence sessionPersistence;
+    private SessionPersistence sessionPersistence;
 
     public void handleSession(ChatDataMsg msg) {
         //todo:写入缓存

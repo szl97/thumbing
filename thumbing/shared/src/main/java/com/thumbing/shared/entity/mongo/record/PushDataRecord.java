@@ -10,6 +10,8 @@ import lombok.Data;
 import lombok.experimental.FieldNameConstants;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.time.LocalDateTime;
+
 
 /**
  * @Author: Stan Sai
@@ -19,15 +21,42 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Data
 @FieldNameConstants
 public class PushDataRecord extends MongoCreationEntity {
+    /**
+     * 消息ID
+     */
     private String dataId;
+    /**
+     * 接受方iD
+     */
     private Long toUserId;
+    /**
+     * 发送方Id
+     */
     private Long fromUserId;
+    /**
+     * 发送方用户名
+     */
     private String fromUserName;
+    /**
+     * 发送方昵称
+     */
     private String fromUserNickName;
+    /**
+     * 推送内容
+     */
     private String data;
+    /**
+     * 推送类型
+     */
     @JsonSerialize(using = PushTypeSerializer.class)
     @JsonDeserialize(using = PushTypeDeserializer.class)
     private PushDataTypeEnum pushType;
-    private boolean allUser;
+    /**
+     * 是否已读
+     */
     private boolean read;
+    /**
+     * 已读时间
+     */
+    private LocalDateTime readTime;
 }

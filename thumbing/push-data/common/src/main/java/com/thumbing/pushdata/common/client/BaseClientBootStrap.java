@@ -38,7 +38,7 @@ public abstract class BaseClientBootStrap<T extends IChannelManager, K extends B
     private T channelManager;
 
     @Autowired
-    M messageInBoundHandler;
+    private M messageInBoundHandler;
 
     public Bootstrap init(String ip, int port) {
         Bootstrap bootstrap = new Bootstrap();

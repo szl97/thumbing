@@ -43,15 +43,15 @@ import java.util.List;
 public class AuthService implements IAuthService {
     private final Integer MAX_FAILURE_TIMES = 5;
     @Autowired
-    JwtTokenFactory jwtTokenFactory;
+    private JwtTokenFactory jwtTokenFactory;
     @Autowired
-    JwtHeaderTokenExtractor jwtHeaderTokenExtractor;
+    private JwtHeaderTokenExtractor jwtHeaderTokenExtractor;
     @Autowired
-    UserContextUtils userContextUtils;
+    private UserContextUtils userContextUtils;
     @Autowired
-    SkipPathRequestMatcher skipPathRequestMatcher;
+    private SkipPathRequestMatcher skipPathRequestMatcher;
     @Autowired
-    PermissionCache permissionCache;
+    private PermissionCache permissionCache;
     @Autowired
     private PasswordEncoder passwordEncoder;
     @Autowired

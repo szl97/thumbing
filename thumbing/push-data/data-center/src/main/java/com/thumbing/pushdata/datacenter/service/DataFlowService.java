@@ -17,10 +17,10 @@ import org.springframework.stereotype.Service;
 public class DataFlowService implements IDataFlowService {
 
     @Autowired
-    DeviceManager deviceManager;
+    private DeviceManager deviceManager;
 
     @Autowired
-    CenterZkMonitor centerZkMonitor;
+    private CenterZkMonitor centerZkMonitor;
 
     @Override
     public String balancedLoadServer() {

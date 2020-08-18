@@ -28,16 +28,13 @@ import java.util.List;
 @Data
 public class SyncConnectClientBootStrap extends BaseClientBootStrap<SyncClientChannelManager, NodeServerConfig, NodeToCenterInBoundSyncHandler> {
 
-
     @Autowired
     private DeviceDataChannelManager deviceDataChannelManager;
-
 
     @Override
     protected int getServerPort(DataCenterInfo info) {
         return info.getPort();
     }
-
 
     @Override
     protected void success(Channel channel) throws Exception {

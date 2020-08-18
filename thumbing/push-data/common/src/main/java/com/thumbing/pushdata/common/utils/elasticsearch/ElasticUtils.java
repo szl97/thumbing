@@ -47,7 +47,7 @@ public class ElasticUtils {
 
     private static ElasticUtils INSTANCE = new ElasticUtils();
 
-    RestHighLevelClient client;
+    private RestHighLevelClient client;
 
     private static Object lock = new Object();
 

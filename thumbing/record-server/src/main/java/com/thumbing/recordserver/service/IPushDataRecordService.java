@@ -1,10 +1,10 @@
 package com.thumbing.recordserver.service;
 
 import com.thumbing.recordserver.dto.input.ReadPushDataRecord;
+import com.thumbing.recordserver.dto.output.PushDataDto;
 import com.thumbing.shared.auth.model.UserContext;
-import com.thumbing.shared.dto.output.PageResultDto;
-import com.thumbing.shared.entity.mongo.record.PushDataRecord;
-import org.springframework.data.domain.Page;
+
+import java.util.List;
 
 /**
  * @Author: Stan Sai
@@ -16,7 +16,7 @@ public interface IPushDataRecordService {
      * @param context
      * @return
      */
-    PageResultDto<PushDataRecord> fetchAllPushDataRecords(UserContext context);
+    List<PushDataDto> fetchAllPushDataRecords(UserContext context);
 
     /**
      * 推送消息已读

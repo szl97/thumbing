@@ -26,7 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(value = "/personal")
 public class PersonalController extends ThumbingBaseController {
     @Autowired
-    IPersonalService personalService;
+    private IPersonalService personalService;
 
     @ApiOperation("创建用户信息")
     @RequestMapping(value = "/userInfo", method = RequestMethod.PUT)

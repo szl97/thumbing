@@ -20,7 +20,7 @@ import org.springframework.stereotype.Component;
 public class InActiveHandler implements IInActiveHandler {
 
     @Autowired
-    IChannelManager channelManager;
+    private IChannelManager channelManager;
 
     @Override
     public boolean support(DefinedMessage message) {

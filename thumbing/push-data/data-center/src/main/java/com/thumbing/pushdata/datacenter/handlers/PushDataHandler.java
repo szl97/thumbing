@@ -27,10 +27,10 @@ import java.util.List;
 public class PushDataHandler implements IMessageHandler<PushData> {
 
     @Autowired
-    IChannelManager channelManager;
+    private IChannelManager channelManager;
 
     @Autowired
-    DeviceManager deviceManager;
+    private DeviceManager deviceManager;
 
     @Override
     public boolean support(DefinedMessage message) {

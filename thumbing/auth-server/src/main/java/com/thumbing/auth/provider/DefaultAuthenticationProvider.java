@@ -25,7 +25,7 @@ import java.util.List;
 @Component
 public class DefaultAuthenticationProvider implements AuthenticationProvider {
     @Autowired
-    IAuthService authService;
+    private IAuthService authService;
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {

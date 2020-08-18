@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(value = "/personalConfiguration")
 public class PersonalConfigurationController extends ThumbingBaseController {
     @Autowired
-    IPersonalConfiguration personalConfiguration;
+    private IPersonalConfiguration personalConfiguration;
 
     @ApiOperation("获取个人信息的系统配置选项")
     @RequestMapping(method = RequestMethod.GET)

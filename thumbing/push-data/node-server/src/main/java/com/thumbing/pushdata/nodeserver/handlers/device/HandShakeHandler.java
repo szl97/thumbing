@@ -32,10 +32,10 @@ public class HandShakeHandler implements IDeviceDataHandler<HandShake> {
     private DeviceDataChannelManager channelManager;
 
     @Autowired
-    SyncClientChannelManager syncClientChannelManager;
+    private SyncClientChannelManager syncClientChannelManager;
 
     @Autowired
-    NodeServerConfig nodeServerConfig;
+    private NodeServerConfig nodeServerConfig;
 
     @Override
     public boolean support(DefinedMessage message) {

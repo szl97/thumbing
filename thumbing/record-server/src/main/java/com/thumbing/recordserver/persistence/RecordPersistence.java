@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class RecordPersistence {
     @Autowired
-    IChatRecordRepository chatRepository;
+    private IChatRecordRepository chatRepository;
 
     @AccessLock(value = "com.thumbing.shared.entity.mongo.record.ChatRecord",
             className = "com.thumbing.shared.entity.mongo.record.ChatRecord",
@@ -29,6 +29,7 @@ public class RecordPersistence {
             if(chatRecord.isCancel() || chatRecord.isRead()) {
                 if (chatRecord.isRead()) {
                     chatRecord.setRead(true);
+                    chatRecord.setReadTime(record.getReadTime());
                 }
                 if (chatRecord.isCancel()) {
                     chatRecord.setCancel(true);

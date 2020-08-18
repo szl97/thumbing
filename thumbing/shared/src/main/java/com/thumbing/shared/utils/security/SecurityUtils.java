@@ -16,7 +16,7 @@ import org.springframework.util.StringUtils;
 @Component
 public class SecurityUtils {
     @Autowired
-    UserContextUtils userContextUtils;
+    private UserContextUtils userContextUtils;
     private final static Logger logger = LoggerFactory.getLogger(SecurityUtils.class);
 
     public UserContext getCurrentUser() {

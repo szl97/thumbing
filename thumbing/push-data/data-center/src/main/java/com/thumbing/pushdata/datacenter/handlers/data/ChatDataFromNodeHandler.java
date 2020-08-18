@@ -24,10 +24,10 @@ import java.util.List;
 public class ChatDataFromNodeHandler implements IDeviceDataHandler<ChatData> {
 
     @Autowired
-    IChannelManager channelManager;
+    private IChannelManager channelManager;
 
     @Autowired
-    DeviceManager deviceManager;
+    private DeviceManager deviceManager;
 
     @Override
     public boolean support(DefinedMessage message) {

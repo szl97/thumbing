@@ -28,16 +28,16 @@ import java.util.List;
 public class InActiveHandlerForDevice implements IInActiveHandler {
 
     @Autowired
-    DeviceDataChannelManager channelManager;
+    private DeviceDataChannelManager channelManager;
 
     @Autowired
-    SyncClientChannelManager syncClientChannelManager;
+    private SyncClientChannelManager syncClientChannelManager;
 
     @Autowired
-    DeviceDataChannelManager deviceDataChannelManager;
+    private DeviceDataChannelManager deviceDataChannelManager;
 
     @Autowired
-    NodeServerConfig nodeServerConfig;
+    private NodeServerConfig nodeServerConfig;
 
     @Override
     public boolean support(DefinedMessage message) {

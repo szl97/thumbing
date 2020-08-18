@@ -16,7 +16,6 @@ import java.time.LocalDateTime;
  */
 @Data
 public class ChatDataMsg implements Serializable {
-
     /**
      * 消息Id
      */

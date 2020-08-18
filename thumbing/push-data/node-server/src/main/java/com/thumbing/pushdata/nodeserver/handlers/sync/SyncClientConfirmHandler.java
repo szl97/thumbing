@@ -22,7 +22,7 @@ import org.springframework.stereotype.Component;
 public class SyncClientConfirmHandler implements ISyncClientHandler<Confirm> {
 
     @Autowired
-    DataFlowChannelManager channelManager;
+    private DataFlowChannelManager channelManager;
 
     @Override
     public boolean support(DefinedMessage message) {

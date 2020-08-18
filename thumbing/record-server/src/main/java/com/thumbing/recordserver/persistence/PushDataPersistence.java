@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class PushDataPersistence {
     @Autowired
-    IPushDataRecordRepository pushDataRecordRepository;
+    private IPushDataRecordRepository pushDataRecordRepository;
 
     @AccessLock(value = "com.thumbing.shared.entity.mongo.record.PushDataRecord",
             className = "com.thumbing.shared.entity.mongo.record.PushDataRecord",

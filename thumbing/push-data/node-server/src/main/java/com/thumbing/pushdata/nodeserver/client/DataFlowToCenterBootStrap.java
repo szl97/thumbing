@@ -27,7 +27,7 @@ import org.springframework.stereotype.Component;
 public class DataFlowToCenterBootStrap extends BaseClientBootStrap<DataFlowChannelManager, NodeServerConfig, NodeToCenterInBoundDataFlowHandler> {
 
     @Autowired
-    DeviceServerBootStrap deviceServerBootStrap;
+    private DeviceServerBootStrap deviceServerBootStrap;
 
 
     @Override

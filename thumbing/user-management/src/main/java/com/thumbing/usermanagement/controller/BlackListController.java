@@ -26,7 +26,7 @@ import java.util.List;
 @RequestMapping(value = "/blackList")
 public class BlackListController extends ThumbingBaseController {
     @Autowired
-    IBlackListService blackListService;
+    private IBlackListService blackListService;
 
     @ApiOperation("获取黑名单列表")
     @RequestMapping(method = RequestMethod.GET)

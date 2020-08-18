@@ -1,7 +1,7 @@
 package com.thumbing.recordserver.persistence;
 
 import com.thumbing.recordserver.cache.SessionRecordCache;
-import com.thumbing.recordserver.dto.input.ChatMsgDto;
+import com.thumbing.recordserver.dto.input.ChatMsgInputDto;
 import com.thumbing.recordserver.dto.input.ReadChatRecord;
 import com.thumbing.recordserver.dto.output.SessionRecordDto;
 import com.thumbing.shared.annotation.AccessLock;
@@ -18,7 +18,7 @@ import java.time.LocalDateTime;
 @Component
 public class SessionPersistence {
     @Autowired
-    SessionRecordCache sessionRecordCache;
+    private SessionRecordCache sessionRecordCache;
 
     @AccessLock(value = "com.thumbing.shared.message.ChatDataMsg",
             className = "com.thumbing.shared.message.ChatDataMsg",
@@ -81,7 +81,7 @@ public class SessionPersistence {
             fields = {
                     "getToUser","getFromUser"
             })
-    public void saveAllInCache(ChatMsgDto msg, ReadChatRecord input){
+    public void saveAllInCache(ChatMsgInputDto msg, ReadChatRecord input){
         SessionRecordDto dto =sessionRecordCache.getOne(msg.getToUser(), msg.getFromUser());
         if(dto == null) {
             dto = new SessionRecordDto();

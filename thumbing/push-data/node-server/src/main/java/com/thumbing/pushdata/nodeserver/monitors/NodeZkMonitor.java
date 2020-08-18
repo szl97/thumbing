@@ -45,10 +45,10 @@ public class NodeZkMonitor extends BaseMonitor<ZookeeperConfig, DataCenterInfo> 
     private ZkUtils zkUtils = new ZkUtils();
 
     @Autowired
-    SyncConnectClientBootStrap syncConnectClientBootStrap;
+    private SyncConnectClientBootStrap syncConnectClientBootStrap;
 
     @Autowired
-    DataFlowToCenterBootStrap dataFlowToCenterBootStrap;
+    private DataFlowToCenterBootStrap dataFlowToCenterBootStrap;
 
     @Autowired
     private ZookeeperConfig zookeeperConfig;

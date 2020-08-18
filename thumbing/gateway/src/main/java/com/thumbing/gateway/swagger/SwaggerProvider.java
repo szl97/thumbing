@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
 public class SwaggerProvider implements SwaggerResourcesProvider {
     private static final String API_URI = "/v2/api-docs";
     @Autowired
-    GatewayProperties gatewayProperties;
+    private GatewayProperties gatewayProperties;
 
     @Override
     public List<SwaggerResource> get() {

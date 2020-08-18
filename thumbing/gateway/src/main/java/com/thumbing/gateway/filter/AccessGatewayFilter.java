@@ -31,10 +31,10 @@ import static org.springframework.cloud.gateway.support.ServerWebExchangeUtils.G
 @Slf4j
 public class AccessGatewayFilter implements GlobalFilter, Ordered {
     @Autowired
-    IAuthServiceClient authService;
+    private IAuthServiceClient authService;
 
     @Autowired
-    ObjectMapper objectMapper;
+    private ObjectMapper objectMapper;
 
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {

@@ -27,10 +27,10 @@ import java.util.concurrent.ConcurrentHashMap;
 public class GroupDataFromNodeHandler implements IDeviceDataHandler<GroupData> {
 
     @Autowired
-    IChannelManager channelManager;
+    private IChannelManager channelManager;
 
     @Autowired
-    DeviceManager deviceManager;
+    private DeviceManager deviceManager;
 
     @Override
     public boolean support(DefinedMessage message) {

@@ -24,9 +24,9 @@ import org.springframework.stereotype.Component;
 public class ChatDataFromDeviceHandler extends ChatDataHandler implements IDeviceDataHandler<ChatData> {
 
     @Autowired
-    ChatDataSender sender;
+    private ChatDataSender sender;
     @Autowired
-    Mapper mapper;
+    private Mapper mapper;
 
     @Override
     public void call(ChannelHandlerContext ctx, ChatData message) throws JsonProcessingException {

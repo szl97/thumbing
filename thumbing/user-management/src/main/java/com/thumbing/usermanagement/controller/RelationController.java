@@ -28,7 +28,7 @@ import java.util.List;
 @RequestMapping(value = "/relation")
 public class RelationController extends ThumbingBaseController {
     @Autowired
-    IRelationService relationService;
+    private IRelationService relationService;
 
     @ApiOperation("获取好友列表")
     @RequestMapping(method = RequestMethod.GET)

@@ -15,14 +15,13 @@ import org.springframework.stereotype.Component;
 @Component
 public class PushDataHandler {
     @Autowired
-    PushDataPersistence pushDataPersistence;
+    private PushDataPersistence pushDataPersistence;
     @Autowired
-    Mapper mapper;
+    private Mapper mapper;
 
     public void handle(RelationApplyMsg msg){
         PushDataRecord dataRecord = mapper.map(msg, PushDataRecord.class);
         dataRecord.setDataId(msg.getDataId().toString());
-        dataRecord.setAllUser(false);
         dataRecord.setRead(false);
         dataRecord.setData(msg.getRemark());
         dataRecord.setPushType(PushDataTypeEnum.RA);

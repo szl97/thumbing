@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
  * @Date: 2020/8/18 8:51
  */
 @Data
-public class ChatMsgDto implements Serializable {
+public class ChatMsgInputDto implements Serializable {
     @JsonSerialize(using = LongToStringSerializer.class)
     @JsonDeserialize(using = StringToLongDeserializer.class)
     @ApiModelProperty(value = "消息Id")
