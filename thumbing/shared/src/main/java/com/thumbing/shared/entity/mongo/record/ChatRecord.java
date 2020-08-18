@@ -3,6 +3,7 @@ package com.thumbing.shared.entity.mongo.record;
 import com.thumbing.shared.entity.mongo.MongoCreationEntity;
 import lombok.Data;
 import lombok.experimental.FieldNameConstants;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDateTime;
@@ -19,10 +20,12 @@ public class ChatRecord extends MongoCreationEntity {
     /**
      * 发送方Id
      */
+    @Indexed
     private Long fromId;
     /**
      * 用户Id
      */
+    @Indexed
     private Long toId;
     private String fromUserName;
     private String toUserName;
@@ -44,6 +47,8 @@ public class ChatRecord extends MongoCreationEntity {
      * 已读时间
      */
     private LocalDateTime readTime;
+    @Indexed
     private Long userId1;
+    @Indexed
     private Long userId2;
 }

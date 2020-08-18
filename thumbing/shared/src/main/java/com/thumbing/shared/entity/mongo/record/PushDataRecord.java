@@ -8,6 +8,7 @@ import com.thumbing.shared.utils.serializer.PushTypeDeserializer;
 import com.thumbing.shared.utils.serializer.PushTypeSerializer;
 import lombok.Data;
 import lombok.experimental.FieldNameConstants;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDateTime;
@@ -24,10 +25,12 @@ public class PushDataRecord extends MongoCreationEntity {
     /**
      * 消息ID
      */
+    @Indexed
     private String dataId;
     /**
      * 接受方iD
      */
+    @Indexed
     private Long toUserId;
     /**
      * 发送方Id
