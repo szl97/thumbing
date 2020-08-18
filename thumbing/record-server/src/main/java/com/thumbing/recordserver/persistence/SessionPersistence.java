@@ -1,6 +1,7 @@
 package com.thumbing.recordserver.persistence;
 
 import com.thumbing.recordserver.cache.SessionRecordCache;
+import com.thumbing.recordserver.dto.input.ChatMsgDto;
 import com.thumbing.recordserver.dto.input.ReadChatRecord;
 import com.thumbing.recordserver.dto.output.SessionRecordDto;
 import com.thumbing.shared.annotation.AccessLock;
@@ -80,7 +81,7 @@ public class SessionPersistence {
             fields = {
                     "getToUser","getFromUser"
             })
-    public void saveAllInCache(ChatDataMsg msg, ReadChatRecord input){
+    public void saveAllInCache(ChatMsgDto msg, ReadChatRecord input){
         SessionRecordDto dto =sessionRecordCache.getOne(msg.getToUser(), msg.getFromUser());
         if(dto == null) {
             dto = new SessionRecordDto();

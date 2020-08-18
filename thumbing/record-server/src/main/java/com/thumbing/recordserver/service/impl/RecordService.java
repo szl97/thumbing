@@ -4,6 +4,7 @@ import cn.hutool.core.util.ArrayUtil;
 import com.github.dozermapper.core.Mapper;
 import com.thumbing.recordserver.cache.ChatRecordCache;
 import com.thumbing.recordserver.cache.SessionRecordCache;
+import com.thumbing.recordserver.dto.input.ChatMsgDto;
 import com.thumbing.recordserver.dto.input.ChatRecordInput;
 import com.thumbing.recordserver.dto.input.ReadChatRecord;
 import com.thumbing.recordserver.dto.output.ChatRecordDto;
@@ -15,7 +16,6 @@ import com.thumbing.shared.auth.model.UserContext;
 import com.thumbing.shared.dto.output.PageResultDto;
 import com.thumbing.shared.entity.mongo.MongoCreationEntity;
 import com.thumbing.shared.entity.mongo.record.ChatRecord;
-import com.thumbing.shared.message.ChatDataMsg;
 import com.thumbing.shared.repository.mongo.record.IChatRecordRepository;
 import com.thumbing.shared.service.impl.BaseMongoService;
 import com.thumbing.shared.utils.dozermapper.DozerUtils;
@@ -137,7 +137,7 @@ public class RecordService extends BaseMongoService<ChatRecord, IChatRecordRepos
             return false;
         }
         //todo:处理会话缓存
-        ChatDataMsg msg = input.getMsg().get(input.getMsg().size() - 1);
+        ChatMsgDto msg = input.getMsg().get(input.getMsg().size() - 1);
         sessionPersistence.saveAllInCache(msg,input);
 
         //todo:更改Mongo
@@ -147,7 +147,7 @@ public class RecordService extends BaseMongoService<ChatRecord, IChatRecordRepos
         return true;
     }
 
-    private ChatRecord convert(ChatDataMsg msg, boolean isRead, boolean isCancel){
+    private ChatRecord convert(ChatMsgDto msg, boolean isRead, boolean isCancel){
         ChatRecord record = new ChatRecord();
         record.setDataId(msg.getDataId());
         record.setContent(msg.getData());

@@ -1,6 +1,5 @@
 package com.thumbing.recordserver.dto.input;
 
-import com.thumbing.shared.message.ChatDataMsg;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
@@ -15,7 +14,7 @@ import java.util.List;
  */
 @Data
 public class ReadChatRecord implements Serializable {
-    List<ChatDataMsg> msg;
+    List<ChatMsgDto> msg;
     @ApiModelProperty(value = "最后阅读时间")
     @NotNull(message = "最后阅读时间不可为空")
     LocalDateTime lastReadTime;
