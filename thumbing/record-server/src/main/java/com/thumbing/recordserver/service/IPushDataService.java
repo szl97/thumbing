@@ -10,7 +10,7 @@ import java.util.List;
  * @Author: Stan Sai
  * @Date: 2020/8/17 11:40
  */
-public interface IPushDataRecordService {
+public interface IPushDataService {
     /**
      * 获取所有推送消息
      * @param context

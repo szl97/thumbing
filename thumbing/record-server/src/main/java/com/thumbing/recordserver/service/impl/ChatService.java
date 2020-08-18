@@ -11,7 +11,7 @@ import com.thumbing.recordserver.dto.output.ChatRecordDto;
 import com.thumbing.recordserver.dto.output.SessionRecordDto;
 import com.thumbing.recordserver.persistence.RecordPersistence;
 import com.thumbing.recordserver.persistence.SessionPersistence;
-import com.thumbing.recordserver.service.IRecordService;
+import com.thumbing.recordserver.service.IChatService;
 import com.thumbing.shared.auth.model.UserContext;
 import com.thumbing.shared.dto.output.PageResultDto;
 import com.thumbing.shared.entity.mongo.MongoCreationEntity;
@@ -37,7 +37,7 @@ import java.util.List;
  */
 @Service
 @Transactional
-public class RecordService extends BaseMongoService<ChatRecord, IChatRecordRepository> implements IRecordService {
+public class ChatService extends BaseMongoService<ChatRecord, IChatRecordRepository> implements IChatService {
     @Autowired
     private RecordPersistence recordPersistence;
     @Autowired

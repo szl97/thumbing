@@ -57,6 +57,12 @@ spring:
             - Path=/api/user/**
           filters:
             - StripPrefix=2
+        - id: record
+          uri: lb://record-server
+          predicates:
+            - Path=/api/record/**
+          filters:
+            - StripPrefix=2
 eureka:
   client:
     service-url:

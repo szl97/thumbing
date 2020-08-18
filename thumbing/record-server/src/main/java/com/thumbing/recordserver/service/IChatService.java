@@ -13,7 +13,7 @@ import java.util.List;
  * @Author: Stan Sai
  * @Date: 2020/8/17 8:38
  */
-public interface IRecordService {
+public interface IChatService {
     /**
      * 获取指定user之间的聊天记录
      * @param input

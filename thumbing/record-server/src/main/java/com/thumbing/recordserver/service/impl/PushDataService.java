@@ -5,7 +5,7 @@ import com.github.dozermapper.core.Mapper;
 import com.thumbing.recordserver.dto.input.ReadPushDataRecord;
 import com.thumbing.recordserver.dto.output.PushDataDto;
 import com.thumbing.recordserver.persistence.PushDataPersistence;
-import com.thumbing.recordserver.service.IPushDataRecordService;
+import com.thumbing.recordserver.service.IPushDataService;
 import com.thumbing.shared.auth.model.UserContext;
 import com.thumbing.shared.entity.mongo.MongoCreationEntity;
 import com.thumbing.shared.entity.mongo.record.PushDataRecord;
@@ -23,7 +23,7 @@ import java.util.List;
  * @Date: 2020/8/18 9:06
  */
 @Service
-public class PushDataRecordService extends BaseMongoService<PushDataRecord, IPushDataRecordRepository> implements IPushDataRecordService {
+public class PushDataService extends BaseMongoService<PushDataRecord, IPushDataRecordRepository> implements IPushDataService {
     @Autowired
     private PushDataPersistence persistence;
     @Autowired
