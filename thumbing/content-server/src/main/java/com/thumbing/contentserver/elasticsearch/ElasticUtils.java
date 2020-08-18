@@ -1,7 +1,6 @@
 package com.thumbing.contentserver.elasticsearch;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-
 import com.thumbing.shared.utils.context.SpringContextUtils;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
@@ -11,7 +10,6 @@ import org.elasticsearch.action.bulk.BulkRequest;
 import org.elasticsearch.action.bulk.BulkResponse;
 import org.elasticsearch.action.index.IndexRequest;
 import org.elasticsearch.action.index.IndexResponse;
-import org.elasticsearch.action.search.MultiSearchRequest;
 import org.elasticsearch.action.search.SearchRequest;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.action.support.master.AcknowledgedResponse;
@@ -242,8 +240,6 @@ public class ElasticUtils {
         highlightBuilder.field(highlightTitle);
         HighlightBuilder.Field highlightContent = new HighlightBuilder.Field("content");
         highlightBuilder.field(highlightContent);
-        HighlightBuilder.Field highlightAbstracts = new HighlightBuilder.Field("abstracts");
-        highlightBuilder.field(highlightAbstracts);
         HighlightBuilder.Field highlightTags = new HighlightBuilder.Field("tags");
         highlightBuilder.field(highlightTags);
         //设置高亮的格式为字体红色

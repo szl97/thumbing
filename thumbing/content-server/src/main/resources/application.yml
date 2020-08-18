@@ -75,7 +75,7 @@ elasticsearch:
       -title
       -tags
       -content
-      -abstracts
       -date
       -userId
       -nickName
+      -contentId

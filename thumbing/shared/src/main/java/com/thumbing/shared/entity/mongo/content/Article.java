@@ -1,19 +1,12 @@
 package com.thumbing.shared.entity.mongo.content;
 
-import com.thumbing.shared.constants.EntityConstants;
 import com.thumbing.shared.entity.mongo.MongoFullAuditedEntity;
-import com.thumbing.shared.entity.mongo.content.inner.InnerComment;
 import com.thumbing.shared.entity.mongo.common.NickUser;
-import lombok.AllArgsConstructor;
+import com.thumbing.shared.entity.mongo.content.inner.InnerComment;
 import lombok.Data;
 import lombok.experimental.FieldNameConstants;
-import org.hibernate.annotations.SQLDelete;
-import org.hibernate.annotations.Where;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import javax.persistence.PrePersist;
-import javax.persistence.PreUpdate;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 
@@ -24,7 +17,6 @@ import java.util.Set;
 @Document(collection = "article")
 @Data
 @FieldNameConstants
-//user_id, title, tags_ids, content, thumb_user_ids, innerComments,next_nick_name, graph_ids, browse_user_ids
 public class Article extends MongoFullAuditedEntity {
     /**
      * 用户id
@@ -39,9 +31,13 @@ public class Article extends MongoFullAuditedEntity {
      */
     private Set<Long> tagIds;
     /**
-     * 内容
+     * 内容Id
      */
-    private String content;
+    private String contentId;
+    /**
+     * 前200字
+     */
+    private String abstracts;
     /**
      * 点赞用户
      */
