@@ -1,6 +1,6 @@
-package com.thumbing.pushdata.datacenter.config;
+package com.thumbing.contentserver.elasticsearch;
 
-import com.thumbing.pushdata.common.utils.elasticsearch.ElasticUtils;
+import com.thumbing.contentserver.elasticsearch.ElasticUtils;
 import lombok.Data;
 import org.apache.http.HttpHost;
 import org.elasticsearch.client.RestClient;
@@ -17,7 +17,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
-import java.util.List;
 
 /**
  * @author Stan Sai

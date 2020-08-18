@@ -1,4 +1,4 @@
-package com.thumbing.pushdata.common.utils.zk.listener;
+package com.thumbing.pushdata.common.zookeeper.listener;
 
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.state.ConnectionState;

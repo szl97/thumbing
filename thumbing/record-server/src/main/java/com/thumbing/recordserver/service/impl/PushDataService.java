@@ -15,6 +15,7 @@ import com.thumbing.shared.utils.dozermapper.DozerUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -23,6 +24,7 @@ import java.util.List;
  * @Date: 2020/8/18 9:06
  */
 @Service
+@Transactional
 public class PushDataService extends BaseMongoService<PushDataRecord, IPushDataRecordRepository> implements IPushDataService {
     @Autowired
     private PushDataPersistence persistence;

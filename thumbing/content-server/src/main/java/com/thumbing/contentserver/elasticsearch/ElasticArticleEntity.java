@@ -1,4 +1,4 @@
-package com.thumbing.pushdata.datacenter.elasticsearch;
+package com.thumbing.contentserver.elasticsearch;
 
 import lombok.Data;
 
@@ -12,6 +12,6 @@ public class ElasticArticleEntity extends ElasticBaseEntity {
         super();
         this.setName(Name.ARTICLE);
     }
-
     private String title;
+    private String abstracts;
 }

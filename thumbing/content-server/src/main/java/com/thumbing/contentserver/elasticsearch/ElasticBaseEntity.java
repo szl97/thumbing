@@ -1,4 +1,4 @@
-package com.thumbing.pushdata.datacenter.elasticsearch;
+package com.thumbing.contentserver.elasticsearch;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonParser;
@@ -25,6 +25,7 @@ public class ElasticBaseEntity {
     private Name name;
     private String tags;
     private LocalDateTime dateTime;
+    private String nickName;
 
     @JsonSerialize(using = NameSerializer.class)
     @JsonDeserialize(using = NameDeserializer.class)

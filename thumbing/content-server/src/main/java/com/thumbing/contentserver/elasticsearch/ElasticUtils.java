@@ -1,4 +1,4 @@
-package com.thumbing.pushdata.common.utils.elasticsearch;
+package com.thumbing.contentserver.elasticsearch;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -28,12 +28,16 @@ import org.elasticsearch.index.query.*;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.SearchHits;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
+import org.elasticsearch.search.fetch.subphase.highlight.HighlightBuilder;
+import org.elasticsearch.search.fetch.subphase.highlight.HighlightField;
 
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author Stan Sai
@@ -208,19 +212,20 @@ public class ElasticUtils {
                                   @Nullable List<Long> blackList,
                                   @Nullable String type,
                                   @Nullable LocalDateTime dateTime) {
-
-        MultiSearchRequest multiSearchRequest = new MultiSearchRequest();
         SearchRequest searchRequest = new SearchRequest(indices);
         SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
         BoolQueryBuilder boolBuilder = QueryBuilders.boolQuery();
+        //name代表查询的类别是文章还是帖子，所以必须是相同
         if (StringUtils.isNotBlank(type)) {
             TermQueryBuilder termQueryBuilder = QueryBuilders.termQuery("name", type);
             boolBuilder.must(termQueryBuilder);
         }
+        //黑名单中的用户查不到
         if (blackList != null) {
             TermQueryBuilder termQueryBuilder = QueryBuilders.termQuery("userId", blackList.toArray());
             boolBuilder.mustNot(termQueryBuilder);
         }
+        //日期太早的不去查
         if (dateTime != null) {
             RangeQueryBuilder rangeQueryBuilder = QueryBuilders
                     .rangeQuery("date")
@@ -231,11 +236,28 @@ public class ElasticUtils {
                 .multiMatchQuery(keyword, fieldNames)
                 .operator(Operator.AND);
         boolBuilder.must(multiMatchQuery);
+        //设置高亮 tags title content abstracts要设置高亮
+        HighlightBuilder highlightBuilder = new HighlightBuilder();
+        HighlightBuilder.Field highlightTitle = new HighlightBuilder.Field("title");
+        highlightBuilder.field(highlightTitle);
+        HighlightBuilder.Field highlightContent = new HighlightBuilder.Field("content");
+        highlightBuilder.field(highlightContent);
+        HighlightBuilder.Field highlightAbstracts = new HighlightBuilder.Field("abstracts");
+        highlightBuilder.field(highlightAbstracts);
+        HighlightBuilder.Field highlightTags = new HighlightBuilder.Field("tags");
+        highlightBuilder.field(highlightTags);
+        //设置高亮的格式为字体红色
+        highlightBuilder
+                .preTags("<span style=color:red>")
+                .postTags("</span>");
+        //高亮
+        searchSourceBuilder.highlighter(highlightBuilder);
+        //查询语句
         searchSourceBuilder.query(multiMatchQuery);
+        //分页
         searchSourceBuilder.from((pageNum - 1) * pageSize);
         searchSourceBuilder.size(pageSize);
         searchRequest.source(searchSourceBuilder);
-        multiSearchRequest.add(searchRequest);
         List<T> resultList = new ArrayList<>();
         try {
             SearchResponse searchResponse = client
@@ -243,8 +265,21 @@ public class ElasticUtils {
             SearchHits hits = searchResponse.getHits();
             SearchHit[] searchHits = hits.getHits();
             for (SearchHit hit : searchHits) {
+                Map<String, HighlightField> highlightFields = hit.getHighlightFields();
                 String source = hit.getSourceAsString();
-                resultList.add(objectMapper.readValue(source, clazz));
+                T item = objectMapper.readValue(source, clazz);
+                Field[] fields = clazz.getDeclaredFields();
+                for (Field field : fields) {
+                    field.setAccessible(true);
+                    if (highlightFields.containsKey(field.getName())) {
+                        try {
+                            field.set(item, highlightFields.get(field.getName()).fragments()[0].toString());
+                        } catch (IllegalAccessException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+                resultList.add(item);
             }
         } catch (IOException e) {
             e.printStackTrace();

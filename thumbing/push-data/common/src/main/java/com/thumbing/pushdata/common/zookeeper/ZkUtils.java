@@ -1,8 +1,8 @@
-package com.thumbing.pushdata.common.utils.zk;
+package com.thumbing.pushdata.common.zookeeper;
 
 import com.google.common.base.Charsets;
 import com.google.common.base.Objects;
-import com.thumbing.pushdata.common.utils.zk.listener.ZkStateListener;
+import com.thumbing.pushdata.common.zookeeper.listener.ZkStateListener;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
