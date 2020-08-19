@@ -14,4 +14,5 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @FieldNameConstants
 public class ArticleContent extends MongoFullAuditedEntity {
     private String content;
+    private String articleId;
 }

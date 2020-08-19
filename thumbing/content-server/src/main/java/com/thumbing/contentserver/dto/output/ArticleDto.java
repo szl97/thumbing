@@ -25,11 +25,7 @@ public class ArticleDto extends DocumentDto {
      */
     private Set<Long> tagIds;
     /**
-     * 内容Id
-     */
-    private String dataId;
-    /**
-     * 前200字
+     * 前100字
      */
     private String abstracts;
     /**
