@@ -4,7 +4,6 @@ import com.thumbing.shared.dto.output.DocumentDto;
 import com.thumbing.shared.entity.mongo.content.enums.ContentType;
 import lombok.Data;
 
-import java.util.List;
 import java.util.Set;
 
 /**
@@ -45,8 +44,4 @@ public class CommentDto extends DocumentDto {
      * 点赞数
      */
     private int thumbingNum;
-    /**
-     * 子评论
-     */
-    List<ChildComment> childComments;
 }

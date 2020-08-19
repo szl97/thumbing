@@ -24,6 +24,26 @@ public interface IArticleRepository extends IBaseMongoRepository<Article> {
     void updateCommentsNumById(@Param("id") String id, @Param("commentsNum") int commentsNum);
 
     @Modifying
+    @Query(value = "update article set nick_name_sequence = :nickNameSequence where id = :id")
+    void updateNickUserSequenceById(@Param("id") String id, @Param("nickNameSequence") int nickNameSequence);
+
+    @Modifying
+    @Query(value = "update article set nick_name_sequence = :nickNameSequence, thumbing_num = :thumbingNum where id = :id")
+    void updateNickUserSequenceAndThumbingNumById(@Param("id") String id, @Param("nickNameSequence") int nickNameSequence, @Param("thumbingNum") int thumbingNum);
+
+    @Modifying
     @Query(value = "update article set comments_num = :commentsNum, thumbing_num = :thumbingNum where id = :id")
     void updateCommentsNumAndThumbingNumById(@Param("id") String id, @Param("commentsNum") int commentsNum, @Param("thumbingNum") int thumbingNum);
+
+    @Modifying
+    @Query(value = "update article set nick_name_sequence = :nickNameSequence, comments_num = :commentsNum where id = :id")
+    void updateNickUserSequenceAndCommentsNumById(@Param("id") String id, @Param("nickNameSequence") int nickNameSequence, @Param("commentsNum") int commentsNum);
+
+    @Modifying
+    @Query(value = "update article set nick_name_sequence = :nickNameSequence, comments_num = :commentsNum, thumbing_num = :thumbingNum where id = :id")
+    void updateNickUserSequenceAndCommentsNumAndThumbingNumById
+            (@Param("id") String id,
+             @Param("nickNameSequence") int nickNameSequence,
+             @Param("commentsNum") int commentsNum,
+             @Param("thumbingNum") int thumbingNum);
 }
