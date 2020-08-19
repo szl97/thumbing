@@ -16,5 +16,5 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @FieldNameConstants
 public class NickName extends BaseMongoEntity {
     private String name;
-    private int index;
+    private int sequence;
 }

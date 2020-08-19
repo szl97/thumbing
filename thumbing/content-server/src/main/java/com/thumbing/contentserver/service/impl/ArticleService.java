@@ -1,6 +1,5 @@
 package com.thumbing.contentserver.service.impl;
 
-import com.thumbing.contentserver.service.IArticleService;
 import com.thumbing.shared.entity.mongo.content.Article;
 import com.thumbing.shared.repository.mongo.content.IArticleRepository;
 import com.thumbing.shared.service.impl.BaseMongoService;
@@ -13,5 +12,5 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Service
 @Transactional
-public class ArticleService extends BaseMongoService<Article, IArticleRepository> implements IArticleService {
+public class ArticleService extends BaseMongoService<Article, IArticleRepository> {
 }

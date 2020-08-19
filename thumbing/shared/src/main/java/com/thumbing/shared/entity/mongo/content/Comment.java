@@ -1,13 +1,11 @@
 package com.thumbing.shared.entity.mongo.content;
 
 import com.thumbing.shared.entity.mongo.MongoCreationEntity;
-import com.thumbing.shared.entity.mongo.content.enums.ContentType;
-import com.thumbing.shared.entity.mongo.content.innner.ChildComment;
+import com.thumbing.shared.entity.mongo.MongoFullAuditedEntity;
 import lombok.Data;
 import lombok.experimental.FieldNameConstants;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.util.List;
 import java.util.Set;
 
 /**
@@ -17,7 +15,7 @@ import java.util.Set;
 @Document(collection = "comments")
 @Data
 @FieldNameConstants
-public class Comment extends MongoCreationEntity {
+public class Comment extends MongoFullAuditedEntity {
     /**
      * 评论Id
      */
@@ -27,21 +25,25 @@ public class Comment extends MongoCreationEntity {
      */
     private String contentId;
     /**
-     * 内容类型
-     */
-    private ContentType type;
-    /**
      * 父评论Id
      */
-    private String parentCommentId;
+    private Long parentCommentId;
     /**
      * 发送方Id
      */
     private Long fromUserId;
     /**
+     * 接收方Id
+     */
+    private Long toUserId;
+    /**
      * 发表方昵称
      */
     private String fromNickName;
+    /**
+     * 接收方昵称
+     */
+    private String toNickName;
     /**
      * 评论内容
      */
@@ -54,8 +56,4 @@ public class Comment extends MongoCreationEntity {
      * 点赞数
      */
     private int thumbingNum;
-    /**
-     * 子评论
-     */
-    List<ChildComment> childComments;
 }

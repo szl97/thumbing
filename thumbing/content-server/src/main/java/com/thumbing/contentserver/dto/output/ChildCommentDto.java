@@ -1,17 +1,16 @@
-package com.thumbing.shared.entity.mongo.content.innner;
+package com.thumbing.contentserver.dto.output;
 
-import com.thumbing.shared.entity.mongo.content.enums.ContentType;
 import lombok.Data;
 
 import java.io.Serializable;
 import java.util.Set;
 
 /**
- * @author Stan Sai
- * @date 2020-08-19 13:15
+ * @Author: Stan Sai
+ * @Date: 2020/8/19 15:31
  */
 @Data
-public class ChildComment implements Serializable {
+public class ChildCommentDto implements Serializable {
     /**
      * 评论Id
      */

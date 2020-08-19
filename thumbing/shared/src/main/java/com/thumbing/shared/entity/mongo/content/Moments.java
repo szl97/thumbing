@@ -1,7 +1,6 @@
 package com.thumbing.shared.entity.mongo.content;
 
 import com.thumbing.shared.entity.mongo.MongoFullAuditedEntity;
-import com.thumbing.shared.entity.mongo.common.NickUser;
 import lombok.Data;
 import lombok.experimental.FieldNameConstants;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -44,7 +43,7 @@ public class Moments extends MongoFullAuditedEntity {
     /**
      * 下一个评论用户显示的昵称
      */
-    private String nextNickName;
+    private int nickNameSequence;
     /**
      * 动态中的图片在OSS中的标识
      */

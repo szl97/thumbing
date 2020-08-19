@@ -51,7 +51,7 @@ public class Article extends MongoFullAuditedEntity {
     /**
      * 下一个评论用户显示的昵称
      */
-    private String nextNickName;
+    private int nickNameSequence;
     /**
      * 文章中的图片在OSS中的标识
      */

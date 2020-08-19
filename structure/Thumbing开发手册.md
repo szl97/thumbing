@@ -100,11 +100,11 @@ node-server直接通过和data-center的socket连接告知data-center需要推�
 
 #### 发表内容
 
-发表文章和帖子需设置标签，标签可以自定义，最多5个。文章和帖子的前100字作为abstract。首页列表显示的是abstract。
+发表文章和帖子需设置标签，标签可以自定义，最多5个。文章和帖子的前100字作为abstract。首页列表显示的是abstracts。
 
 #### 搜索内容
 
-文章和帖子可以搜索，搜索主要匹配的是文章的标题和标签，以及帖子的标签和内容
+文章和帖子可以搜索，搜索主要匹配的是文章的标题、标签、abstracts，以及帖子的标签和内容
 
 #### 发表评论
 
@@ -132,9 +132,106 @@ node-server直接通过和data-center的socket连接告知data-center需要推�
 
 hash类型存储每个内容和评论。时间排序的存储使用list存储id。热度排序使用Zset存储id。
 
-#### 评论表的设计
+#### 评论的存储
 
 评论作为一个单独的表，记录所属内容的，和所属的评论id，为两层嵌套形式，所有子评论都是第一级评论的下一层。
+
+#### 评论的处理
+
+```
+/**
+ * 文章下匿名评论的昵称 key+article的主键
+ * hash
+ * 存储NICK NAME的Sequence 的 key: nick_name_sequence
+ * 存储THUMBING_NUM 的 key: thumbing_num
+ * 存储COMMENTS_NUM 的 key: comments_num
+ * 存储详情的key: details （不包括内容和abstracts）
+ * 存储内容的abstracts: abstracts 存储abstracts列表显示
+ * 存储内容的key: content 存储内容打开详情页后显示
+ * 过期时间30天，每次修改更新过期时间
+ */
+public static final String INFO_ARTICLE = "INFO:ARTICLE:";
+/**
+ * 记录发生改变的文章的ID
+ * 分别是点赞数，评论数和内容
+ * 其中内容改变需要要修改content和abstract
+ * 文章发生对应的改变后加入对应的list
+ * 定时任务每分钟将发生的变化写入Mongo中
+ * 并从redis中删除元素
+ * 因此先把所有元素pop到一个对应的list中，然后根据这个list修改数据库
+ */
+public static final String ARTICLE_CHANGED_THUMBING_NUM = "ARTICLE:CHANGED:THUMBING_NUM";
+public static final String ARTICLE_CHANGED_COMMENTS_NUM = "ARTICLE:CHANGED:THUMBING:COMMENTS_NUM";
+public static final String ARTICLE_CHANGED_CONTENT = "ARTICLE:CHANGED:CONTENT";
+/**
+ * 帖子下匿名评论的昵称 key+moments的主键
+ * hash
+ * 存储NICK NAME的Sequence 的 key: nick_name_sequence
+ * 存储THUMBING_NUM 的 key: thumbing_num
+ * 存储COMMENTS_NUM 的 key: comments_num
+ * 存储详情的key: details 列表显示（不包括内容）
+ * 存储内容的key: content 存储内容打开详情页后显示
+ * 过期时间30天，每次修改更新过期时间
+ */
+public static final String INFO_MOMENTS = "INFO:MOMENTS:";
+/**
+ * 记录发生改变的帖子的ID
+ * 分别是点赞数，评论数和内容
+ * 帖子发生对应的改变后加入对应的list
+ * 定时任务每分钟将发生的变化写入Mongo中
+ * 并从redis中删除元素
+ * 因此先把所有元素pop到一个对应的list中，然后根据这个list修改数据库
+ */
+public static final String MOMENTS_CHANGED_THUMBING_NUM = "MOMENTS:CHANGED:THUMBING_NUM";
+public static final String MOMENTS_CHANGED_COMMENTS_NUM = "MOMENTS:CHANGED:THUMBING:COMMENTS_NUM";
+public static final String MOMENTS_CHANGED_CONTENT = "MOMENTS:CHANGED:CONTENT";
+/**
+ * 文章下的评论列表 key+article的主键
+ * 只存储父评论的ID
+ * list
+ * 过期时间30天，每次修改更新过期时间
+ */
+public static final String COMMENTS_ARTICLES = "COMMENTS:CHANGED:";
+/**
+ * 帖子下的评论列表 key+moments的主键
+ * 只存储父评论的ID
+ * list
+ * 过期时间30天，每次修改更新过期时间
+ */
+public static final String COMMENTS_MOMENTS = "COMMENTS:MOMENTS";
+/**
+ * 存储评论下的子评论Id
+ * key+父评论的CommentsId
+ * list
+ * 过期时间30天，每次修改更新过期时间
+ */
+public static final String CHILD_COMMENTS = "CHILD:COMMENTS:";
+/**
+ * 存储被删除的评论的CommentsId
+ * 删除后CommentsId加入list
+ * 定时任务每分钟将删除的评论写入Mongo中
+ * 并从redis中删除元素
+ * 因此先把所有元素pop到一个list中，然后根据这个list修改数据库
+ * list
+ */
+public static final String COMMENTS_CHANGED = "COMMENTS:CHANGED";
+/**
+ * 存储点赞数发生变化的评论的CommentsId
+ * 点赞数发生变化CommentsId后加入list
+ * 定时任务每分钟将点赞数变化写入Mongo中
+ * 并从redis中删除元素
+ * 因此先把所有元素pop到一个list中，然后根据这个list修改数据库
+ * list
+ */
+public static final String COMMENTS_THUMBING_CHANGED = "COMMENTS:THUMBING:CHANGED";
+/**
+ * 评论的详情 key+CommentsId
+ * hash
+ * key: [details,thumbing_num]
+ * 过期时间30天，每次修改更新过期时间，并且加入到对应的CHANGED list中
+ */
+public static final String COMMENTS_DETAILS = "COMMENTS:DETAILS:";
+```
 
 #### 点赞和评论的发送
 
@@ -178,23 +275,15 @@ mySql数据库。user_info中建立关联关系。
 
 进入聊天界面，获取和对应好友的聊天记录。
 
-### 数据库设计
+### Redis存储聊天记录
 
-使用mongodb存储聊天记录和会话列表。
-
-#### 会话记录
-
-好友间发送消息，会判断是否存在会话记录，存在则修改，不存在则增加。一方删除会话，会更改会话记录中这一方是否显示的字段。
-
-### Redis存储的聊天记录
-
-redis存储每个会话的最近200条聊天记录。
+redis存储每两个用户之间的最近200条聊天记录。
 
 ### 处理聊天消息的过程
 
 #### 单聊聊天
 
-node server收到聊天消息，生成唯一的消息序列号，通过与data center的交互找到连接的同时，发送消息到消息队列，接受者进行数据库写入操作。如果用户已读消息，则请求已读消息API，如果此时消息还未被写入，则直接写入。因此这个操作需要分布式锁。目的是为了防止两次相同的写入。
+node server收到聊天消息，生成唯一的消息序列号，通过与data center的交互找到连接的同时，发送消息到消息队列，接受者进行数据库写入操作。如果用户已读消息，则请求已读消息API，如果此时消息还未被写入，则直接写入。因此这个操作需要分布式锁。目的是为了防止两次相同的写入。为了防止聊天过程中写入过于频繁，客户端可以积累一定数量的聊天记录后或在用户退出聊天窗口时触发服务端的已读请求。 
 
 #### 群聊消息
 

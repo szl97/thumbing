@@ -20,11 +20,11 @@ public class ChatRecordCache {
     private final static String KEY = CacheKeyConstants.CHAT_RECORD;
     @Autowired
     private RedisTemplate<String, ChatRecordDto> redisTemplate;
-    private final long expireMinutes = 500;
+    private final long expireDays = 30;
 
     public void setRecord(ChatRecordDto dto){
         RedisUtilsForList.rightPush(redisTemplate.opsForList(), KEY+dto.getUserId1()+":"+dto.getUserId2(), dto);
-        RedisUtils.expire(redisTemplate, KEY+dto.getUserId1()+":"+dto.getUserId2(), expireMinutes, TimeUnit.MINUTES);
+        RedisUtils.expire(redisTemplate, KEY+dto.getUserId1()+":"+dto.getUserId2(), expireDays, TimeUnit.DAYS);
         Long len = size(dto.getUserId1(), dto.getUserId2());
         if(len > 100) {
             RedisUtilsForList.clearAndPersist(redisTemplate.opsForList(), KEY+dto.getUserId1()+":"+dto.getUserId2(), len - 100, len);
