@@ -31,7 +31,7 @@ public class Article extends MongoFullAuditedEntity {
     /**
      * 内容Id
      */
-    private String contentId;
+    private String dataId;
     /**
      * 前200字
      */
