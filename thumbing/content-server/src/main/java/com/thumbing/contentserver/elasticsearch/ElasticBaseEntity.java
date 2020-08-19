@@ -1,6 +1,6 @@
 package com.thumbing.contentserver.elasticsearch;
 
-import com.thumbing.contentserver.dto.enums.ContentType;
+import com.thumbing.shared.entity.mongo.content.enums.ContentType;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 

@@ -1,8 +1,6 @@
 package com.thumbing.shared.entity.mongo.content;
 
 import com.thumbing.shared.entity.mongo.MongoFullAuditedEntity;
-import com.thumbing.shared.entity.mongo.common.NickUser;
-import com.thumbing.shared.entity.mongo.content.inner.InnerComment;
 import lombok.Data;
 import lombok.experimental.FieldNameConstants;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -43,13 +41,13 @@ public class Article extends MongoFullAuditedEntity {
      */
     private Set<Long> thumbUserIds;
     /**
-     * 文章下的评论
+     * 点赞数
      */
-    private List<InnerComment> innerComments;
+    private int thumbingNum;
     /**
-     * 参与评论的所有用户
+     * 评论数
      */
-    private Set<NickUser> nickUsers;
+    private int commentsNum;
     /**
      * 下一个评论用户显示的昵称
      */
@@ -62,5 +60,4 @@ public class Article extends MongoFullAuditedEntity {
      * 浏览过的用户id
      */
     private Set<Long> browseUserIds;
-
 }

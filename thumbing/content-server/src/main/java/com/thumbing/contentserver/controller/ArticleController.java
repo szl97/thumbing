@@ -37,7 +37,6 @@ public class ArticleController extends ThumbingBaseController {
     public DocumentDto publishArticle(){
         Article article = new Article();
         article.setTitle("test");
-        article.setContent("asdaasdaads");
         Set<NickUser> set = new HashSet<>();
         article.setNickUsers(set);
         Article s = articleService.save(article);
