@@ -37,6 +37,14 @@ public class Moments extends MongoFullAuditedEntity {
      */
     private String content;
     /**
+     * 点赞数
+     */
+    private Integer thumbingNum;
+    /**
+     * 评论数
+     */
+    private Integer commentsNum;
+    /**
      * 点赞用户
      */
     private Set<Long> thumbUserIds;

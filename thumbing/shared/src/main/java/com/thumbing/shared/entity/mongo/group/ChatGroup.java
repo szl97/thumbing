@@ -2,13 +2,11 @@ package com.thumbing.shared.entity.mongo.group;
 
 import com.thumbing.shared.entity.mongo.BaseMongoEntity;
 import com.thumbing.shared.entity.mongo.MongoCreationEntity;
-import com.thumbing.shared.entity.mongo.common.NickUser;
-import com.thumbing.shared.entity.sql.user.UserInfo;
+import com.thumbing.shared.entity.mongo.group.inner.NickUser;
 import lombok.Data;
 import lombok.experimental.FieldNameConstants;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 

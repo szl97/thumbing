@@ -21,7 +21,7 @@ public class SessionRecordCache {
     @Autowired
     private RedisTemplate<String, SessionRecordDto> redisTemplate;
 
-    private final long expireDays = 30;
+    private final short expireDays = 30;
 
     public void set(Long userId, SessionRecordDto dto){
         RedisUtilsForHash.put(redisTemplate.opsForHash(),KEY+userId, dto.getTargetUserId().toString(), dto);

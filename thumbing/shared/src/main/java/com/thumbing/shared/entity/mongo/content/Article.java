@@ -39,11 +39,11 @@ public class Article extends MongoFullAuditedEntity {
     /**
      * 点赞数
      */
-    private int thumbingNum;
+    private Integer thumbingNum;
     /**
      * 评论数
      */
-    private int commentsNum;
+    private Integer commentsNum;
     /**
      * 下一个评论用户显示的昵称
      */

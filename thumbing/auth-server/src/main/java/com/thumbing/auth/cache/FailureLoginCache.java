@@ -6,6 +6,8 @@ import com.thumbing.shared.utils.redis.RedisUtilsForValue;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
+
+import javax.annotation.Resource;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -17,7 +19,7 @@ public class FailureLoginCache {
     private final String FAILURE_LOGIN_KEY = CacheKeyConstants.FAILURE_LOGIN;
     @Autowired
     private RedisTemplate<String, Integer> redisTemplate;
-    private final long expireTime = 120;
+    private final short expireTime = 120;
     /**
      * 失败次数加一
      * @param userName

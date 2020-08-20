@@ -6,7 +6,6 @@ import com.thumbing.shared.annotation.AllowAnonymous;
 import com.thumbing.shared.annotation.EnableResponseAdvice;
 import com.thumbing.shared.controller.ThumbingBaseController;
 import com.thumbing.shared.dto.output.DocumentDto;
-import com.thumbing.shared.entity.mongo.common.NickUser;
 import com.thumbing.shared.entity.mongo.content.Article;
 import com.thumbing.shared.exception.BusinessException;
 import io.swagger.annotations.ApiOperation;
@@ -14,9 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.HashSet;
-import java.util.Set;
 
 /**
  * @Author: Stan Sai

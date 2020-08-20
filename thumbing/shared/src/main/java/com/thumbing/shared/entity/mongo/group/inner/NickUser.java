@@ -1,4 +1,4 @@
-package com.thumbing.shared.entity.mongo.common;
+package com.thumbing.shared.entity.mongo.group.inner;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

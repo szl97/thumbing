@@ -19,7 +19,7 @@ import java.util.concurrent.TimeUnit;
 public class ValidationCache {
     private final String REGISTER_KEY = CacheKeyConstants.VALIDATION_FOR_REGISTER;
     private final String CHANGE_PASSWORD_KEY = CacheKeyConstants.VALIDATION_FOR_CHANGE_PASSWORD;
-    private final long expireTime = 5;
+    private final short expireTime = 5;
     @Resource(name = "customRedisTemplate")
     private RedisTemplate<String,String> redisTemplate;
 

@@ -20,20 +20,7 @@ import java.util.Set;
 public class RedisUtilsForHash {
 
     /**
-     * 根据 key 获取散列中对应hash key的value 如果key不存在则返回null
-     *
-     * @param key
-     * @param hashKey
-     * @return
-     */
-    public <T> T getObject(HashOperations<String, String, T> hashOperations, String key, String hashKey) {
-        return hashOperations.get(key, hashKey);
-    }
-
-
-    /**
      * 根据 key 获取散列中对应hash key的指定类型的value 如果key不存在则返回null
-     *
      * @param key
      * @param hashKey
      * @return
@@ -43,10 +30,8 @@ public class RedisUtilsForHash {
         return  val;
     }
 
-
     /**
      * 根据 key 按hash key集合的顺序获取value 如果key不存在则返回null
-     *
      * @param key
      * @param hashKeys
      * @return
@@ -58,7 +43,6 @@ public class RedisUtilsForHash {
 
     /**
      * 获取散列中所有的hash key集合
-     *
      * @param key
      * @return
      */
@@ -78,7 +62,6 @@ public class RedisUtilsForHash {
 
     /**
      * 获取散列中所有的键值对
-     *
      * @param key
      * @return
      */
@@ -89,7 +72,6 @@ public class RedisUtilsForHash {
 
     /**
      * 获取hash的大小
-     *
      * @param key
      * @return
      */
@@ -97,12 +79,8 @@ public class RedisUtilsForHash {
         return hashOperations.size(key);
     }
 
-    ;
-
-
     /**
      * 为散列添加或者覆盖一个 key-value键值对
-     *
      * @param key
      * @param hashKey
      * @param value
@@ -113,7 +91,6 @@ public class RedisUtilsForHash {
 
     /**
      * 为散列添加多个key-value键值对
-     *
      * @param key
      * @param map
      */
@@ -121,11 +98,9 @@ public class RedisUtilsForHash {
         hashOperations.putAll(key, map);
     }
 
-
     /**
      * 为散列添加一个key-value键值对。如果存在则不添加不覆盖。返回false
      * 设置成功返回true 失败返回false
-     *
      * @param key
      * @param value
      * @return
@@ -134,10 +109,8 @@ public class RedisUtilsForHash {
         return hashOperations.putIfAbsent(key, hashKey, value);
     }
 
-
     /**
      * 为key 的值加上 double delta. 原来的值必须是能转换成Integer类型的。否则会抛出异常
-     *
      * @param key
      * @param hashKey
      * @param delta
@@ -148,8 +121,7 @@ public class RedisUtilsForHash {
     }
 
     /**
-     * 为散了中某个值加上 long delta. 原来的值必须是能转换成Integer类型的。否则会抛出异常
-     *
+     * 为散列中某个值加上 long delta. 原来的值必须是能转换成Integer类型的。否则会抛出异常
      * @param key
      * @param hashKey
      * @param delta
@@ -159,10 +131,8 @@ public class RedisUtilsForHash {
         return hashOperations.increment(key, hashKey, delta);
     }
 
-
     /**
      * 删除某个key
-     *
      * @param key
      * @param hashKey
      * @return
@@ -174,7 +144,6 @@ public class RedisUtilsForHash {
 
     /**
      * 删除某个key
-     *
      * @param key
      * @param hashKey
      * @return

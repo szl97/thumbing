@@ -35,11 +35,11 @@ public class ArticleDto extends DocumentDto {
     /**
      * 点赞数
      */
-    private int thumbingNum;
+    private Integer thumbingNum;
     /**
      * 评论数
      */
-    private int commentsNum;
+    private Integer commentsNum;
     /**
      * 文章中的图片在OSS中的标识
      */

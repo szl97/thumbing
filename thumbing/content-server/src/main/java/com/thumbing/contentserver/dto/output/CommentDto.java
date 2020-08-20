@@ -43,5 +43,5 @@ public class CommentDto extends DocumentDto {
     /**
      * 点赞数
      */
-    private int thumbingNum;
+    private Integer thumbingNum;
 }

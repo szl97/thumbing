@@ -19,7 +19,6 @@ import java.util.Set;
 public class RedisUtilsForSet {
     /**
      * 给集合key添加多个值，集合不存在创建后再添加
-     *
      * @param key
      * @param value
      * @return
@@ -30,7 +29,6 @@ public class RedisUtilsForSet {
 
     /**
      * 移除集合中多个value值
-     *
      * @param key
      * @param value
      * @return
@@ -41,7 +39,6 @@ public class RedisUtilsForSet {
 
     /**
      * 集合中随机删除一个值并返回
-     *
      * @param key
      * @return
      */
@@ -52,7 +49,6 @@ public class RedisUtilsForSet {
 
     /**
      * 把源集合中的一个元素移动到目标集合。成功返回true.
-     *
      * @param sourceKey
      * @param value
      * @param destKey
@@ -64,7 +60,6 @@ public class RedisUtilsForSet {
 
     /**
      * 返回集合的大小
-     *
      * @param key
      * @return
      */
@@ -75,7 +70,6 @@ public class RedisUtilsForSet {
 
     /**
      * 检查集合中是否存在某个元素
-     *
      * @param key
      * @param value
      * @return
@@ -87,7 +81,6 @@ public class RedisUtilsForSet {
 
     /**
      * 求两个集合的交集
-     *
      * @param key
      * @param otherKey
      * @return
@@ -98,7 +91,6 @@ public class RedisUtilsForSet {
 
     /**
      * 求多个集合的交集
-     *
      * @param key
      * @param otherKeys
      * @return
@@ -109,7 +101,6 @@ public class RedisUtilsForSet {
 
     /**
      * 取两个集合的交集并且存到目标集合中
-     *
      * @param key
      * @param otherKey
      * @param destKey
@@ -121,7 +112,6 @@ public class RedisUtilsForSet {
 
     /**
      * 取多个集合的交集并且存到目标集合中
-     *
      * @param key
      * @param otherKeys
      * @param destKey
@@ -133,7 +123,6 @@ public class RedisUtilsForSet {
 
     /**
      * 求两个集合的并集
-     *
      * @param key
      * @param otherKey
      * @return
@@ -144,7 +133,6 @@ public class RedisUtilsForSet {
 
     /**
      * 求多个集合的并集
-     *
      * @param key
      * @param otherKeys
      * @return
@@ -155,7 +143,6 @@ public class RedisUtilsForSet {
 
     /**
      * 取两个集合的并集并且存到目标集合中
-     *
      * @param key
      * @param otherKey
      * @param destKey
@@ -167,7 +154,6 @@ public class RedisUtilsForSet {
 
     /**
      * 取多个集合的并集并且存到目标集合中
-     *
      * @param key
      * @param otherKeys
      * @param destKey
@@ -179,7 +165,6 @@ public class RedisUtilsForSet {
 
     /**
      * 求两个集合的差集
-     *
      * @param key
      * @param otherKey
      * @return
@@ -190,7 +175,6 @@ public class RedisUtilsForSet {
 
     /**
      * 求多个集合的差集
-     *
      * @param key
      * @param otherKeys
      * @return
@@ -201,7 +185,6 @@ public class RedisUtilsForSet {
 
     /**
      * 取两个集合的差集并且存到目标集合中
-     *
      * @param key
      * @param otherKey
      * @param destKey
@@ -213,7 +196,6 @@ public class RedisUtilsForSet {
 
     /**
      * 取多个集合的差集并且存到目标集合中
-     *
      * @param key
      * @param otherKeys
      * @param destKey
@@ -225,7 +207,6 @@ public class RedisUtilsForSet {
 
     /**
      * 获取集合中的所有元素
-     *
      * @param key
      * @return
      */
@@ -235,7 +216,6 @@ public class RedisUtilsForSet {
 
     /**
      * 随机获取集合中的一个元素
-     *
      * @param key
      * @return
      */
@@ -246,7 +226,6 @@ public class RedisUtilsForSet {
 
     /**
      * 随机返回集合中指定个数的不同元素
-     *
      * @param key
      * @param count
      * @return
@@ -257,7 +236,6 @@ public class RedisUtilsForSet {
 
     /**
      * 随机返回集合中指定个数的元素，随机元素可能相同
-     *
      * @param key
      * @param count
      * @return

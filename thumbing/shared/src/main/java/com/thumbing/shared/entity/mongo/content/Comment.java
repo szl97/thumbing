@@ -55,5 +55,5 @@ public class Comment extends MongoFullAuditedEntity {
     /**
      * 点赞数
      */
-    private int thumbingNum;
+    private Integer thumbingNum;
 }
