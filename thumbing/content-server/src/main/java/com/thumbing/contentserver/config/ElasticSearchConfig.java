@@ -1,4 +1,4 @@
-package com.thumbing.contentserver.elasticsearch;
+package com.thumbing.contentserver.config;
 
 import com.thumbing.contentserver.elasticsearch.ElasticUtils;
 import lombok.Data;

@@ -87,21 +87,6 @@ eureka:
     service-url:
       defaultZone: http://localhost:1901/eureka/
 
-xxl:
-  job:
-    admin:
-      addresses: http://127.0.0.1:7070/xxl-job-admin
-    accessToken:
-    executor:
-      appname: data-executor
-      #注册地址[选填]，优先使用该配置作为注册地址，为空时使用内嵌服务 ”IP:PORT“ 作为注册地址
-      address:
-      #执行器IP[选填]，为空则自动获取
-      ip:
-      port: 9999
-      logpath: /data/applogs/xxl-job/jobhandler
-      logretentiondays: 30
-
 push-data:
   data-center:
     port: 4001
