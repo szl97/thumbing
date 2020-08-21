@@ -6,6 +6,8 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.mongodb.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.Set;
+
 /**
  * @Author: Stan Sai
  * @Date: 2020/7/19 11:21
@@ -46,4 +48,13 @@ public interface IArticleRepository extends IBaseMongoRepository<Article> {
              @Param("nickNameSequence") int nickNameSequence,
              @Param("commentsNum") int commentsNum,
              @Param("thumbingNum") int thumbingNum);
+
+    @Modifying
+    @Query(value = "update article set nick_name_sequence = :nickNameSequence, comments_num = :commentsNum, thumbing_num = :thumbingNum, thumb_user_ids = :thumbUserIds where id = :id")
+    void updateNickUserSequenceAndCommentsNumAndThumbingNumAndThumbUserIdsById
+            (@Param("id") String id,
+             @Param("nickNameSequence") int nickNameSequence,
+             @Param("commentsNum") int commentsNum,
+             @Param("thumbingNum") int thumbingNum,
+             @Param("thumbUserIds") Set<Long> thumbUserIds);
 }

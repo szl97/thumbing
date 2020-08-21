@@ -99,7 +99,7 @@ public class CacheKeyConstants {
     /**
      * 记录发生改变的文章的ID
      * Set
-     * 分别是点赞数，评论数和内容
+     * 分别是点赞数，评论数、内容
      * 其中内容改变需要要修改content和abstract
      * 文章发生对应的改变后加入对应的Set
      * 定时任务每分钟将发生的变化写入Mongo中
@@ -134,7 +134,7 @@ public class CacheKeyConstants {
     public static final String MOMENTS_THUMBING_USER_SET = "MOMENTS:THUMBING:USER_Id:SET:";
     /**
      * 记录发生改变的帖子的ID(string)
-     * 分别是点赞数，评论数和内容
+     * 分别是点赞数，评论数、内容
      * Set
      * 帖子发生对应的改变后加入对应的Set
      * 定时任务每分钟将发生的变化写入Mongo中
@@ -144,7 +144,7 @@ public class CacheKeyConstants {
     public static final String MOMENTS_CHANGED_THUMBING_NUM = "MOMENTS:CHANGED:THUMBING_NUM";
     public static final String MOMENTS_CHANGED_COMMENTS_NUM = "MOMENTS:CHANGED:THUMBING:COMMENTS_NUM";
     public static final String MOMENTS_CHANGED_CONTENT = "MOMENTS:CHANGED:CONTENT";
-    /**
+     /**
      * 代表使用的changed set的序号
      */
     public static final String MOMENTS_CHANGED_THUMBING_SEQ = "MOMENTS:CHANGED:THUMBING:SEQ";
@@ -172,6 +172,16 @@ public class CacheKeyConstants {
      */
     public static final String CHILD_COMMENTS = "CHILD:COMMENTS:";
     /**
+     * 存储新增的评论的CommentsId(Long)
+     * Set
+     * 删除后CommentsId加入Set
+     * 定时任务每分钟将删除的评论写入Mongo中
+     * 并从redis中删除元素
+     * 因此先把所有元素pop到一个list中，然后根据这个list修改数据库
+     * list
+     */
+    public static final String COMMENTS_NEW = "COMMENTS:NEW";
+    /**
      * 存储被删除的评论的CommentsId(Long)
      * Set
      * 删除后CommentsId加入Set
@@ -194,6 +204,7 @@ public class CacheKeyConstants {
     /**
      * 代表使用的changed set的序号
      */
+    public static final String COMMENTS_NEW_SEQ = "COMMENTS:NEW:SEQ";
     public static final String COMMENTS_DELETED_SEQ = "COMMENTS:DELETED:SEQ";
     public static final String COMMENTS_CHANGED_THUMBING_SEQ = "COMMENTS:CHANGED:THUMBING:SEQ";
     /**

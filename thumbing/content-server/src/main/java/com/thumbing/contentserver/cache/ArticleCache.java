@@ -29,6 +29,7 @@ public class ArticleCache {
     @Resource(name = "customRedisTemplate")
     private RedisTemplate<String,String> stringRedisTemplate;
     private final short expireDay = 30;
+    private final int maxLength = 10000;
     //key
     //list
     private final String articleList = CacheKeyConstants.ARTICLE_LIST;
@@ -117,6 +118,11 @@ public class ArticleCache {
         return seq == null ? null : Integer.parseInt(seq.toString()) - 1;
     }
 
+    /**
+     * 获取文章的评论数和点赞数
+     * @param id
+     * @return
+     */
     public List<Integer> getCommentsNumAndThumbsNum(String id){
         List<String> keys = new ArrayList<>();
         keys.add(commentsChangedSeq);
@@ -139,7 +145,16 @@ public class ArticleCache {
      * @return
      */
     public Boolean existThumbingUser(String id){
-        return RedisUtils.hasKey(stringRedisTemplate, thumbingUserIds+id);
+        return RedisUtils.hasKey(longRedisTemplate, thumbingUserIds+id);
+    }
+
+    /**
+     * 获取点赞用户集合
+     * @param id
+     * @return
+     */
+    public Set<Long> getThumbUserIds(String id){
+        return RedisUtilsForSet.members(longRedisTemplate.opsForSet(), thumbingUserIds+id);
     }
 
     /**
@@ -154,10 +169,23 @@ public class ArticleCache {
     }
 
     /**
+     * 添加文章
+     * @param article
+     * @param content
+     */
+    public void addArticle(Article article, String content){
+        storeArticle(article, content);
+        Long size = RedisUtilsForList.rightPush(stringRedisTemplate.opsForList(), articleList, article.getId());
+        if(size > maxLength){
+            RedisUtilsForList.clearAndPersist(stringRedisTemplate.opsForList(), articleList, size-maxLength, size);
+        }
+    }
+
+    /**
      * 将article存入redis
      * @param article
      */
-    public void setArticle(Article article, String content){
+    public void storeArticle(Article article, String content){
         String key = infoArticle+article.getId();
         String abstracts = article.getAbstracts();
         Map<String,String> stringMap = new HashMap<>();
@@ -254,6 +282,12 @@ public class ArticleCache {
         }
     }
 
+    /**
+     * 获取当前的匿名昵称序号
+     */
+    public int getCurrentNickNameSeq(String id){
+        return RedisUtilsForHash.get(integerRedisTemplate.opsForHash(), infoArticle+id, nickNameHashKey);
+    }
 
     /**
      * 获取前一阶段所有内容发生改变的文章

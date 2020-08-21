@@ -20,5 +20,5 @@ public class MongoFullAuditedEntity extends MongoEditionEntity {
     private static final long serialVersionUID = -8674477960395112975L;
 
     @Column(name = EntityConstants.IS_DELETE)
-    private int is_delete;
+    private int isDelete;
 }

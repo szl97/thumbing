@@ -1,8 +1,8 @@
 package com.thumbing.contentserver.dto.output;
 
+import com.thumbing.shared.dto.output.DocumentDto;
 import lombok.Data;
 
-import java.io.Serializable;
 import java.util.Set;
 
 /**
@@ -10,7 +10,7 @@ import java.util.Set;
  * @Date: 2020/8/19 15:31
  */
 @Data
-public class ChildCommentDto implements Serializable {
+public class ChildCommentDto extends DocumentDto {
     /**
      * 评论Id
      */

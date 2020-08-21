@@ -50,7 +50,9 @@ public class ArticleChangeXxlJob {
                         if (ArrayUtil.isNotEmpty(integers) && integers.size() > 1) {
                             int commentsNum = integers.get(0) == null ? 0 : integers.get(0);
                             int thumbsNum = integers.get(1) == null ? 0 : integers.get(1);
-                            articleRepository.updateCommentsNumAndThumbingNumById(id, commentsNum, thumbsNum);
+                            int seq = articleCache.getCurrentNickNameSeq(id);
+                            Set<Long> users = articleCache.getThumbUserIds(id);
+                            articleRepository.updateNickUserSequenceAndCommentsNumAndThumbingNumAndThumbUserIdsById(id, seq, commentsNum, thumbsNum, users);
                         }
                     }
             );
