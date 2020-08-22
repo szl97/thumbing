@@ -1,6 +1,5 @@
 package com.thumbing.auth.context;
 
-import com.thumbing.auth.dto.input.LoginRequest;
 import com.thumbing.shared.entity.sql.system.User;
 import lombok.experimental.UtilityClass;
 

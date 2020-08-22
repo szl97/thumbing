@@ -1,5 +1,6 @@
 package com.thumbing.shared.entity.sql.personal;
 
+import com.thumbing.shared.annotation.QueryIgnore;
 import com.thumbing.shared.entity.sql.BaseSqlEntity;
 import lombok.Getter;
 import lombok.Setter;

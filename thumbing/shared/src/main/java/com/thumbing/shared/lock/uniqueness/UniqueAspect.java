@@ -79,9 +79,14 @@ public class UniqueAspect {
     public void beforeExecute(JoinPoint joinPoint, UniqueLock uniqueLock) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
         List<String> values = getValues(joinPoint, uniqueLock);
         long expire = uniqueLock.seconds() < 30 ? 30 : uniqueLock.seconds();
-        for(String v : values){
+        for(int i = 0; i < values.size(); i++){
+            String v = values.get(i);
             if(!lockCache.lock(v, expire)){
-                lockCache.release(values);
+                if(i > 0) {
+                    for(int j = i - 1; j >= 0; j--) {
+                        lockCache.release(values.get(j));
+                    }
+                }
                 throw new BusinessException("所输入的某个参数已被占用");
             }
         }
