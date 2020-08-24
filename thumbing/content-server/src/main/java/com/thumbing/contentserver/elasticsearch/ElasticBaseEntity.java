@@ -13,13 +13,11 @@ import java.time.LocalDateTime;
 @Data
 @NoArgsConstructor
 public class ElasticBaseEntity {
-    private final String index = "doc";
-    private Long id;
+    private String id;
     private Long userId;
     private ContentType name;
     private String title;
     private String content;
-    private String contentId;
     private String tags;
     private LocalDateTime dateTime;
     private String nickName;

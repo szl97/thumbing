@@ -25,6 +25,7 @@ import java.io.IOException;
 @Data
 @Configuration
 public class ElasticSearchConfig {
+    public final static String indexName = "doc";
     @Value("${elasticsearch.host}")
     private String host;
     @Value("${elasticsearch.port}")
@@ -97,8 +98,6 @@ public class ElasticSearchConfig {
                                         {
                                             if (s.equals("date")) {
                                                 builder.field("type", "datetime");
-                                            } else if (s.equals("userId") || s.equals("id")) {
-                                                builder.field("type", "long");
                                             } else {
                                                 builder.field("type", "text");
                                                 builder.field("analyzer", "ik_max_word");
@@ -112,7 +111,7 @@ public class ElasticSearchConfig {
                             builder.endObject();
 
                             //初始化索引
-                            Boolean isSuccess = esUtils.initIndex(index.getName(), index.getShardNum(), index.getReplicasNum(), builder);
+                            Boolean isSuccess = esUtils.initIndex(indexName, index.getShardNum(), index.getReplicasNum(), builder);
 
                         } catch (IOException e) {
                             e.printStackTrace();
