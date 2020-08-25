@@ -1,7 +1,6 @@
 package com.thumbing.contentserver.cache;
 
 import cn.hutool.core.util.ArrayUtil;
-import com.thumbing.contentserver.dto.input.ArticleIdInput;
 import com.thumbing.shared.constants.CacheKeyConstants;
 import com.thumbing.shared.entity.mongo.content.Article;
 import com.thumbing.shared.utils.redis.*;
