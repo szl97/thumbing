@@ -56,7 +56,6 @@ public class CommentService extends BaseMongoService<Comment, ICommentRepository
     @Override
     public Boolean publishComment(CommentInput input, UserContext context) {
         Comment comment = mapper.map(input, Comment.class);
-        comment.setFromUserId(context.getId());
         if (comment.getFromNickName() == null) {
             if (input.getContentType() == ContentType.ARTICLE) {
                 ArticleIdInput idInput = new ArticleIdInput();
@@ -71,15 +70,16 @@ public class CommentService extends BaseMongoService<Comment, ICommentRepository
                     userNickName = getNickName(seq);
                 }
                 comment.setFromNickName(userNickName);
-                comment.setCreateTime(LocalDateTime.now());
-                comment.setCommentId(SnowFlake.getInstance().nextId());
-                commentCache.addComments(comment);
             } else {
                 //todo: moments
 
             }
         }
-        return null;
+        comment.setFromUserId(context.getId());
+        comment.setCreateTime(LocalDateTime.now());
+        comment.setCommentId(SnowFlake.getInstance().nextId());
+        commentCache.addComments(comment);
+        return true;
     }
 
     @Override
