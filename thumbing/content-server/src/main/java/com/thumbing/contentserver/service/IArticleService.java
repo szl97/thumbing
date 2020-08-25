@@ -11,15 +11,51 @@ import com.thumbing.shared.dto.output.PageResultDto;
  * @Date: 2020/8/3 17:17
  */
 public interface IArticleService {
+    /**
+     * 获取文章列表
+     * @param input
+     * @param context
+     * @return
+     */
     PageResultDto<ArticleDto> fetchArticles(FetchArticleInput input, UserContext context);
 
+    /**
+     * 发表文章
+     * @param input
+     * @param context
+     * @return
+     * @throws JsonProcessingException
+     */
     Boolean publishArticle(PublishArticleInput input, UserContext context) throws JsonProcessingException;
 
+    /**
+     * 获取文章内容
+     * @param input
+     * @return
+     */
     String getArticleContent(ArticleIdInput input);
 
+    /**
+     * 删除文章
+     * @param input
+     * @param context
+     * @return
+     */
     Boolean deleteArticle(ArticleIdInput input, UserContext context);
 
+    /**
+     * 点赞
+     * @param input
+     * @param context
+     * @return
+     */
     Boolean thumbArticle(ThumbArticleInput input, UserContext context);
 
+    /**
+     * 修改文章
+     * @param input
+     * @param context
+     * @return
+     */
     Boolean updateArticle(UpdateArticleInput input, UserContext context);
 }

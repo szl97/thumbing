@@ -119,6 +119,16 @@ public class ArticleCache {
     }
 
     /**
+     * 获取评论数
+     * @param id
+     * @return
+     */
+    public int getArticleCommentsNum(String id){
+        Integer i = RedisUtilsForHash.get(integerRedisTemplate.opsForHash(), infoArticle+id, commentsNumHashKey);
+        return i == null ? 0 : i;
+    }
+
+    /**
      * 获取文章的下一个匿名昵称
      * @param id
      * @return

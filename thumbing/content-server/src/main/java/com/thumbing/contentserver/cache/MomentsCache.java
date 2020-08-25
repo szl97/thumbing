@@ -330,6 +330,17 @@ public class MomentsCache {
         }
     }
 
+
+    /**
+     * 获取评论数
+     * @param id
+     * @return
+     */
+    public int getMomentsCommentsNum(String id){
+        Integer i = RedisUtilsForHash.get(integerRedisTemplate.opsForHash(), infoMoments+id, commentsNumHashKey);
+        return i == null ? 0 : i;
+    }
+
     /**
      * 获取当前的匿名昵称序号
      */
