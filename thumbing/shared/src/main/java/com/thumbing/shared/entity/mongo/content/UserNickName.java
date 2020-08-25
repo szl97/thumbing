@@ -1,6 +1,7 @@
 package com.thumbing.shared.entity.mongo.content;
 
 import com.thumbing.shared.entity.mongo.BaseMongoEntity;
+import com.thumbing.shared.entity.mongo.content.enums.ContentType;
 import lombok.Data;
 import lombok.experimental.FieldNameConstants;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -15,4 +16,6 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class UserNickName extends BaseMongoEntity {
     private Long userId;
     private String nickName;
+    private String contentId;
+    private ContentType contentType;
 }

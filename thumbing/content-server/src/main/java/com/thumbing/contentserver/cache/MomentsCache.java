@@ -2,6 +2,7 @@ package com.thumbing.contentserver.cache;
 
 import cn.hutool.core.util.ArrayUtil;
 import com.thumbing.shared.constants.CacheKeyConstants;
+import com.thumbing.shared.entity.mongo.content.Article;
 import com.thumbing.shared.entity.mongo.content.Moments;
 import com.thumbing.shared.utils.redis.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +30,7 @@ public class MomentsCache {
     @Resource(name = "customRedisTemplate")
     private RedisTemplate<String,String> stringRedisTemplate;
     private final short expireDay = 30;
-    private final int maxLength = 30000;
+    public final static int maxLength = 30000;
     //key
     //list
     private final String momentsList = CacheKeyConstants.MOMENTS_LIST;
@@ -128,12 +129,39 @@ public class MomentsCache {
     }
 
     /**
+     * 检查帖子列表是否存在
+     * @return
+     */
+    public Boolean existMomentsList(){
+        return RedisUtils.hasKey(stringRedisTemplate, momentsList);
+    }
+
+
+    /**
      * 检查帖子信息是否存在
      * @param id
      * @return
      */
     public Boolean existMomentsInfo(String id){
         return RedisUtils.hasKey(longRedisTemplate, infoMoments+id);
+    }
+
+    /**
+     * 检查帖子内容是否存在
+     * @param id
+     * @return
+     */
+    public Boolean existArticleContent(String id){
+        return RedisUtilsForHash.hasKey(stringRedisTemplate.opsForHash(), infoMoments+id, contentHashKey);
+    }
+
+    /**
+     * 帖子点赞数是否存在
+     * @param id
+     * @return
+     */
+    public Boolean existArticleThumbsNum(String id){
+        return RedisUtilsForHash.hasKey(integerRedisTemplate.opsForHash(), infoMoments+id, thumbingNumHashKey);
     }
 
     /**
@@ -168,11 +196,22 @@ public class MomentsCache {
     /**
      * 添加帖子
      * @param moments
-     * @param content
      */
-    public void addMoments(Moments moments, String content){
-        storeMoments(moments, content);
+    public void addMoments(Moments moments){
+        storeMoments(moments);
         Long size = RedisUtilsForList.rightPush(stringRedisTemplate.opsForList(), momentsList, moments.getId());
+        if(size > maxLength){
+            RedisUtilsForList.clearAndPersist(stringRedisTemplate.opsForList(), momentsList, size-maxLength, size);
+        }
+    }
+
+    /**
+     * 添加帖子 从左到右
+     * @param moments
+     */
+    public void addMomentsWhenInitialize(Moments moments){
+        storeMoments(moments);
+        Long size = RedisUtilsForList.leftPush(stringRedisTemplate.opsForList(), momentsList, moments.getId());
         if(size > maxLength){
             RedisUtilsForList.clearAndPersist(stringRedisTemplate.opsForList(), momentsList, size-maxLength, size);
         }
@@ -182,10 +221,10 @@ public class MomentsCache {
      * 将帖子存入redis
      * @param moments
      */
-    public void storeMoments(Moments moments, String content){
+    public void storeMoments(Moments moments){
         String key = infoMoments+moments.getId();
         Map<String,String> stringMap = new HashMap<>();
-        stringMap.put(contentHashKey, content);
+        stringMap.put(contentHashKey, moments.getContent());
         RedisUtilsForHash.put(stringRedisTemplate.opsForHash(), key, stringMap);
         Integer thumbs = moments.getThumbingNum();
         Integer comments = moments.getCommentsNum();
@@ -202,6 +241,22 @@ public class MomentsCache {
         }
         RedisUtilsForHash.put(momentsRedisTemplate.opsForHash(), key, detailsHashKey, moments);
         setMomentsExpireTime(moments.getId());
+    }
+
+    /**
+     * 内容存储
+     * @param id
+     * @param content
+     */
+    public void storeContent(String id, String content){
+        String abstracts = content.substring(0,100);
+        Map<String,String> stringMap = new HashMap<>();
+        stringMap.put(contentHashKey, content);
+        RedisUtilsForHash.put(stringRedisTemplate.opsForHash(), infoMoments+id, stringMap);
+    }
+
+    public void removeArticle(String id){
+        RedisUtils.remove(stringRedisTemplate, infoMoments+id);
     }
 
     /**

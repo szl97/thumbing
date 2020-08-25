@@ -58,23 +58,23 @@ public class ChatService extends BaseMongoService<ChatRecord, IChatRecordReposit
      */
     @Override
     public PageResultDto<ChatRecordDto> fetchRecords(ChatRecordInput input, UserContext context) {
-        Long userId1 = input.getTargetUser() < context.getId() ? input.getTargetUser() : context.getId();
-        Long userId2 = userId1.equals(input.getTargetUser()) ? context.getId() : input.getTargetUser();
+        Long userId1 = Math.min(input.getTargetUser(), context.getId());
+        Long userId2 = Math.max(input.getTargetUser(), context.getId());
         if(input.getPosition() > 0){
-            int end = input.getPosition() - 1;
-            int start = input.getPosition() - input.getPageSize();
-            start = start < 0 ? 0 :start;
+            int len = chatRecordCache.size(userId1, userId2).intValue();
+            int end = Math.min(len, input.getPosition());
+            int start = Math.max(end - input.getPageSize(), 0);
             List<ChatRecordDto> recordDtoList = chatRecordCache.getRecord(userId1, userId2, start, end);
             if(ArrayUtil.isNotEmpty(recordDtoList)){
-                return new PageResultDto<>(0, recordDtoList, start);
+                return new PageResultDto<>(0, recordDtoList, start - 1);
             }
         }
 
         Pageable pageable = input.getPageable();
         Sort sort = Sort.by(MongoCreationEntity.Fields.createTime);
-        Page<ChatRecord> recordPage = repository.findByUserId1AndUserId2AndCreateTimeIsAfter(userId1,userId2,input.getEarlyTime(),
+        Page<ChatRecord> recordPage = repository.findAllByUserId1AndUserId2AndCreateTimeIsAfter(userId1,userId2,input.getEarlyTime(),
                 PageRequest.of(pageable.getPageNumber(),pageable.getPageSize(), sort));
-        PageResultDto<ChatRecordDto> resultDto = DozerUtils.mapToPagedResultDto(mapper, recordPage, ChatRecordDto.class, (s,t)->{
+        PageResultDto<ChatRecordDto> resultDto = DozerUtils.mapToPagedResultDtoSync(mapper, recordPage, ChatRecordDto.class, (s,t)->{
             t.setTime(s.getCreateTime());
         });
         resultDto.setPosition(-1);
@@ -94,7 +94,7 @@ public class ChatService extends BaseMongoService<ChatRecord, IChatRecordReposit
             return sessionRecordDtoList;
         }
         Sort sort = Sort.by(Sort.Direction.DESC, MongoCreationEntity.Fields.createTime, ChatRecord.Fields.fromId);
-        List<ChatRecord> chatRecordList = repository.findByToIdAndRead(context.getId(),false, sort);
+        List<ChatRecord> chatRecordList = repository.findAllByToIdAndRead(context.getId(),false, sort);
         if(ArrayUtil.isEmpty(chatRecordList)) return null;
         sessionRecordDtoList = new ArrayList<>();
         Long id = null;

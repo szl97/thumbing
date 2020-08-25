@@ -1,9 +1,11 @@
 package com.thumbing.contentserver.cache;
 
 import cn.hutool.core.util.ArrayUtil;
+import com.thumbing.contentserver.dto.input.ArticleIdInput;
 import com.thumbing.shared.constants.CacheKeyConstants;
 import com.thumbing.shared.entity.mongo.content.Article;
 import com.thumbing.shared.utils.redis.*;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
@@ -29,7 +31,7 @@ public class ArticleCache {
     @Resource(name = "customRedisTemplate")
     private RedisTemplate<String,String> stringRedisTemplate;
     private final short expireDay = 30;
-    private final int maxLength = 10000;
+    public final static int maxLength = 10000;
     //key
     //list
     private final String articleList = CacheKeyConstants.ARTICLE_LIST;
@@ -109,6 +111,15 @@ public class ArticleCache {
     }
 
     /**
+     * 获取文章的固定信息
+     * @param id
+     * @return
+     */
+    public Article getArticleNoChangedInfo(String id){
+        return RedisUtilsForHash.get(articleRedisTemplate.opsForHash(), infoArticle+id, detailsHashKey);
+    }
+
+    /**
      * 获取文章的下一个匿名昵称
      * @param id
      * @return
@@ -131,12 +142,38 @@ public class ArticleCache {
     }
 
     /**
+     * 检查文章列表是否存在
+     * @return
+     */
+    public Boolean existArticleList(){
+        return RedisUtils.hasKey(stringRedisTemplate, articleList);
+    }
+
+    /**
      * 检查文章信息是否存在
      * @param id
      * @return
      */
     public Boolean existArticleInfo(String id){
         return RedisUtils.hasKey(longRedisTemplate, infoArticle+id);
+    }
+
+    /**
+     * 检查文章内容是否存在
+     * @param id
+     * @return
+     */
+    public Boolean existArticleContent(String id){
+        return RedisUtilsForHash.hasKey(stringRedisTemplate.opsForHash(), infoArticle+id, contentHashKey);
+    }
+
+    /**
+     * 文章点赞数是否存在
+     * @param id
+     * @return
+     */
+    public Boolean existArticleThumbsNum(String id){
+        return RedisUtilsForHash.hasKey(integerRedisTemplate.opsForHash(), infoArticle+id, thumbingNumHashKey);
     }
 
     /**
@@ -182,6 +219,38 @@ public class ArticleCache {
     }
 
     /**
+     * 添加文章 从左到右
+     * @param article
+     */
+    public void addArticleWhenInitialize(Article article){
+        storeArticle(article);
+        Long size = RedisUtilsForList.leftPush(stringRedisTemplate.opsForList(), articleList, article.getId());
+        if(size > maxLength){
+            RedisUtilsForList.clearAndPersist(stringRedisTemplate.opsForList(), articleList, size-maxLength, size);
+        }
+    }
+
+    /**
+     * 在list的指定位置存储文章
+     * @param article
+     * @param position
+     */
+    public void storeArticleInList(Article article, int position){
+        storeArticle(article);
+        if(!existArticleInfo(article.getId())) {
+            RedisUtilsForList.setListValue(stringRedisTemplate.opsForList(), articleList, position, article.getId());
+        }
+    }
+
+    /**
+     * 将article存入redis
+     * @param article
+     */
+    public void storeArticle(Article article){
+        storeArticle(article, "");
+    }
+
+    /**
      * 将article存入redis
      * @param article
      */
@@ -189,7 +258,9 @@ public class ArticleCache {
         String key = infoArticle+article.getId();
         String abstracts = article.getAbstracts();
         Map<String,String> stringMap = new HashMap<>();
-        stringMap.put(contentHashKey, content);
+        if(StringUtils.isNotBlank(content)) {
+            stringMap.put(contentHashKey, content);
+        }
         stringMap.put(abstractsHashKey, abstracts);
         RedisUtilsForHash.put(stringRedisTemplate.opsForHash(), key, stringMap);
         Integer thumbs = article.getThumbingNum();
@@ -232,6 +303,23 @@ public class ArticleCache {
         RedisUtilsForHash.increment(integerRedisTemplate.opsForHash(), infoArticle+id, commentsNumHashKey, 1);
         RedisUtilsForSet.add(stringRedisTemplate.opsForSet(), commentsChanged+RedisUtilsForValue.get(integerRedisTemplate.opsForValue(), commentsChangedSeq), id);
         setArticleExpireTime(id);
+    }
+
+    /**
+     * 内容存储
+     * @param id
+     * @param content
+     */
+    public void storeContent(String id, String content){
+        String abstracts = content.substring(0,100);
+        Map<String,String> stringMap = new HashMap<>();
+        stringMap.put(contentHashKey, content);
+        stringMap.put(abstractsHashKey, abstracts);
+        RedisUtilsForHash.put(stringRedisTemplate.opsForHash(), infoArticle+id, stringMap);
+    }
+
+    public void removeArticle(String id){
+        RedisUtils.remove(stringRedisTemplate, infoArticle+id);
     }
 
     /**

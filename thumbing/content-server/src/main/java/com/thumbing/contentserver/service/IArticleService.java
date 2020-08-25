@@ -17,9 +17,9 @@ public interface IArticleService {
 
     String getArticleContent(ArticleIdInput input);
 
-    Boolean deleteArticle(ArticleIdInput input);
+    Boolean deleteArticle(ArticleIdInput input, UserContext context);
 
-    Boolean thumbArticle(ThumbArticleInput input);
+    Boolean thumbArticle(ThumbArticleInput input, UserContext context);
 
-    Boolean updateArticle(UpdateArticleInput input);
+    Boolean updateArticle(UpdateArticleInput input, UserContext context);
 }

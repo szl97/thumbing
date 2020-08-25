@@ -15,7 +15,6 @@ import com.thumbing.usermanagement.dto.input.BlackListAddInput;
 import com.thumbing.usermanagement.dto.input.BlackListRemoveInput;
 import com.thumbing.usermanagement.dto.output.BlackListDto;
 import com.thumbing.usermanagement.service.IBlackListService;
-import org.apache.commons.lang.ArrayUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -53,8 +52,8 @@ public class BlackListService implements IBlackListService {
         BlackList blackList = blackListRepository.findByUserIdAndTargetUserId(context.getId(), input.getTargetUserId()).orElse(null);
         if(blackList != null) return true;
         //todo:判断是否是好友，若是，先删除
-        Long id1 = input.getTargetUserId() > context.getId() ? context.getId() : input.getTargetUserId();
-        Long id2 = id1 == context.getId() ? input.getTargetUserId() : context.getId();
+        Long id1 = Math.min(context.getId(), input.getTargetUserId());
+        Long id2 = Math.max(context.getId(), input.getTargetUserId());
         Relation relation = relationRepository.findByUserIdOneAndUserIdTwo(id1, id2).orElse(null);
         if(relation != null) relationRepository.delete(relation);
         //todo:判断是否有好友申请，若是，先删除

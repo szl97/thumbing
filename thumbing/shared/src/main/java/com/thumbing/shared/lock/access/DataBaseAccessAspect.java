@@ -10,7 +10,11 @@ import org.aspectj.lang.annotation.Aspect;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.concurrent.ConcurrentSkipListMap;
+import java.util.stream.Collectors;
 
 /**
  * @Author: Stan Sai
@@ -57,6 +61,12 @@ public class DataBaseAccessAspect {
         map.put(key, Thread.currentThread());
     }
 
+    private void finish(String[] keys) {
+        for(String key : keys) {
+            map.remove(key);
+        }
+    }
+
     private void finish(String key) {
         map.remove(key);
     }
@@ -64,36 +74,48 @@ public class DataBaseAccessAspect {
     @Around("@annotation(accessLock)")
     public Object AroundExecute(ProceedingJoinPoint joinPoint, AccessLock accessLock) throws Throwable {
         long expire = accessLock.seconds() < 10 ? 10 : accessLock.seconds();
-        StringBuilder key = new StringBuilder(accessLock.value());
-        if(accessLock.fields().length > 0 && StringUtils.isNotBlank(accessLock.className())){
-            String className = accessLock.className();
-            Object[] objects = joinPoint.getArgs();
-            for(Object o : objects){
-                Class c = o.getClass();
-                if(c.getName().equals(className)){
-                    for(int i = 0; i < accessLock.fields().length; i++){
-                        Method method = c.getMethod(accessLock.fields()[i]);
-                        Object fieldObj =  method.invoke(o);
-                        if(fieldObj != null){
-                            key.append(":"+fieldObj.toString());
+        List<String> keys = new ArrayList<>();
+        for(String v : accessLock.value()) {
+            StringBuilder key = new StringBuilder(v);
+            if (accessLock.fields().length > 0 && StringUtils.isNotBlank(accessLock.className())) {
+                String className = accessLock.className();
+                Object[] objects = joinPoint.getArgs();
+                for (Object o : objects) {
+                    Class c = o.getClass();
+                    if (c.getName().equals(className)) {
+                        for (int i = 0; i < accessLock.fields().length; i++) {
+                            Method method = c.getMethod(accessLock.fields()[i]);
+                            Object fieldObj = method.invoke(o);
+                            if (fieldObj != null) {
+                                key.append(":" + fieldObj.toString());
+                            }
                         }
+                        break;
                     }
-                    break;
                 }
             }
+            keys.add(key.toString());
         }
-        if(lockCache.lock(key.toString(), expire)) {
-            start(key.toString());
-            return joinPoint.proceed();
+        for(int i = 0; i < keys.size(); i++) {
+            String key = keys.get(i);
+            if (lockCache.lock(key, expire)) {
+                start(key);
+            } else {
+                if(i > 0) {
+                    for(int j = i - 1; j >= 0; j--) {
+                        lockCache.release(keys.get(j));
+                        finish(keys.get(j));
+                    }
+                }
+                return null;
+            }
         }
-        else {
-            return null;
-        }
+        return joinPoint.proceed();
     }
 
     @After("@annotation(accessLock)")
     public void afterExecute(AccessLock accessLock){
         finish(accessLock.value());
-        lockCache.release(accessLock.value());
+        lockCache.release(Arrays.stream(accessLock.value()).collect(Collectors.toList()));
     }
 }

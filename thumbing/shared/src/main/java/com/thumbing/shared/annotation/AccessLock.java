@@ -10,7 +10,7 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(value = ElementType.METHOD)
 public @interface AccessLock {
-    String value();
+    String[] value();
     String className() default "";
     String[] fields() default {};
     long seconds() default 10l;

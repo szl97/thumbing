@@ -117,8 +117,8 @@ public class RelationService implements IRelationService {
         BlackList blackList = blackListRepository.findByUserIdAndTargetUserId(applyInfo.getUserId(), applyInfo.getTargetUserId()).orElse(null);
         if(blackList != null) throw new BusinessException("你存在于对方黑名单中，添加好友失败");
         //todo: 判断是否已经是好友关系
-        Long id1 = applyInfo.getUserId() > userContext.getId() ? userContext.getId() : applyInfo.getUserId();
-        Long id2 = id1.equals(userContext.getId()) ? applyInfo.getUserId() : userContext.getId();
+        Long id1 = Math.min(userContext.getId(), applyInfo.getUserId());
+        Long id2 = Math.max(userContext.getId(), applyInfo.getUserId());
         Relation check = relationRepository.findByUserIdOneAndUserIdTwo(id1, id2).orElse(null);
         //todo: 已经是好友直接返回
         if(check != null){
@@ -169,7 +169,7 @@ public class RelationService implements IRelationService {
     public List<RelationDto> getAllRelation(UserContext userContext) {
         List<Relation> relations = relationRepository.findAllByUserIdOneOrUserIdTwo(userContext.getId(), userContext.getId());
         if(ArrayUtil.isEmpty(relations)) return null;
-        return DozerUtils.mapList(mapper, relations, RelationDto.class, (relation, relationDto) -> {
+        return DozerUtils.mapListSync(mapper, relations, RelationDto.class, (relation, relationDto) -> {
             if(relation.getUserIdTwo().equals(userContext.getId())) {
                 relationDto.setUserId(relation.getUserIdOne());
                 relationDto.setUserName(relation.getNickNameOne());
@@ -185,7 +185,7 @@ public class RelationService implements IRelationService {
     public List<RelationApplyDto> getAllRelationApply(UserContext userContext) {
         List<RelationApplyInfo> relationApplyInfos = relationApplyInfoRepository.findAllByTargetUserId(userContext.getId());
         if(ArrayUtil.isEmpty(relationApplyInfos)) return null;
-        return DozerUtils.mapList(mapper, relationApplyInfos, RelationApplyDto.class, (relationApply, relationApplyDto)->{
+        return DozerUtils.mapListSync(mapper, relationApplyInfos, RelationApplyDto.class, (relationApply, relationApplyDto)->{
             if(relationApply.getUserInfo() != null) {
                 relationApplyDto.setNickName(relationApply.getUserInfo().getUserName());
                 relationApplyDto.setNickName(relationApply.getUserInfo().getNickName());

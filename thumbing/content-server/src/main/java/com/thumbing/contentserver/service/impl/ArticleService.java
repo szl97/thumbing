@@ -9,20 +9,30 @@ import com.thumbing.contentserver.dto.input.*;
 import com.thumbing.contentserver.dto.output.ArticleDto;
 import com.thumbing.contentserver.elasticsearch.ElasticBaseEntity;
 import com.thumbing.contentserver.elasticsearch.ElasticUtils;
+import com.thumbing.contentserver.lockoperation.ArticleLockOperation;
 import com.thumbing.contentserver.service.IArticleService;
 import com.thumbing.shared.auth.model.UserContext;
 import com.thumbing.shared.dto.output.PageResultDto;
+import com.thumbing.shared.entity.mongo.MongoCreationEntity;
 import com.thumbing.shared.entity.mongo.content.Article;
 import com.thumbing.shared.entity.mongo.content.ArticleContent;
 import com.thumbing.shared.entity.mongo.content.enums.ContentType;
+import com.thumbing.shared.exception.BusinessException;
 import com.thumbing.shared.repository.mongo.content.IArticleContentRepository;
 import com.thumbing.shared.repository.mongo.content.IArticleRepository;
 import com.thumbing.shared.service.impl.BaseMongoService;
+import com.thumbing.shared.utils.dozermapper.DozerUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
 
 /**
  * @Author: Stan Sai
@@ -38,12 +48,25 @@ public class ArticleService extends BaseMongoService<Article, IArticleRepository
     @Autowired
     private ArticleCache articleCache;
     @Autowired
+    private ArticleLockOperation lockOperation;
+    @Autowired
     private Mapper mapper;
     @Autowired
     private ObjectMapper objectMapper;
 
     @Override
     public PageResultDto<ArticleDto> fetchArticles(FetchArticleInput input, UserContext context) {
+        if (articleCache.existArticleList() && input.getPosition() > 0) {
+            int length = articleCache.sizeOfArticleList().intValue();
+            if (length > 0) {
+                int to = Math.min(length, input.getPosition());
+                int from = Math.max(to - input.getPageSize(), 0);
+                List<Article> articles = articleCache.getArticles(from, to);
+                Collections.reverse(articles);
+                List<ArticleDto> dtoList = DozerUtils.mapList(mapper, articles, ArticleDto.class);
+                return new PageResultDto<>(ArticleCache.maxLength, dtoList, from - 1);
+            }
+        }
         return null;
     }
 
@@ -51,6 +74,7 @@ public class ArticleService extends BaseMongoService<Article, IArticleRepository
     public Boolean publishArticle(PublishArticleInput input, UserContext context) throws JsonProcessingException {
         Article article = mapper.map(input, Article.class);
         article.setAbstracts(input.getContent().substring(0,100));
+        article.setNickNameSequence(0);
         article.setUserId(context.getId());
         article.setCreateTime(LocalDateTime.now());
         article = repository.save(article);
@@ -71,21 +95,57 @@ public class ArticleService extends BaseMongoService<Article, IArticleRepository
 
     @Override
     public String getArticleContent(ArticleIdInput input) {
-        return null;
+        if (articleCache.existArticleContent(input.getId())) {
+            return articleCache.getContent(input.getId());
+        } else {
+            String result = lockOperation.getArticleContent(input);
+            if (result == null) return getArticleContent(input);
+            return result;
+        }
     }
 
     @Override
-    public Boolean deleteArticle(ArticleIdInput input) {
-        return null;
+    public Boolean deleteArticle(ArticleIdInput input, UserContext context) {
+        Article article = null;
+        if(articleCache.existArticleInfo(input.getId())){
+            article = articleCache.getArticleNoChangedInfo(input.getId());
+        }
+        else {
+            article = repository.findByIdAndIsDelete(input.getId(), 0).orElseThrow(()->new BusinessException("文章不存在"));
+        }
+        if(!article.getUserId().equals(context.getId())) throw new BusinessException("当前用户无法删除");
+        if(!lockOperation.deleteArticle(input)) return deleteArticle(input, context);
+        return true;
     }
 
     @Override
-    public Boolean thumbArticle(ThumbArticleInput input) {
-        return null;
+    public Boolean thumbArticle(ThumbArticleInput input, UserContext context) {
+        confirmArticleThumbsInRedis(input);
+        articleCache.changeThumbs(input.getId(), input.isAdd(), context.getId());
+        return true;
     }
 
     @Override
-    public Boolean updateArticle(UpdateArticleInput input) {
-        return null;
+    public Boolean updateArticle(UpdateArticleInput input, UserContext context) {
+        Article article = confirmArticleInRedis(input);
+        if(!article.getUserId().equals(context.getId())) throw new BusinessException("当前用户无法修改");
+        articleCache.changeContent(input.getId(), input.getContent());
+        return true;
+    }
+
+    private void confirmArticleThumbsInRedis(ArticleIdInput input) {
+        if (!(articleCache.existThumbingUser(input.getId()) && articleCache.existArticleThumbsNum(input.getId()))) {
+            if(lockOperation.getArticle(input) == null) getArticleContent(input);
+        }
+    }
+
+    private Article confirmArticleInRedis(ArticleIdInput input) {
+        if (articleCache.existArticleInfo(input.getId())) {
+            return articleCache.getArticleNoChangedInfo(input.getId());
+        } else {
+            Article article = lockOperation.getArticle(input);
+            if (article == null) getArticleContent(input);
+            return article;
+        }
     }
 }

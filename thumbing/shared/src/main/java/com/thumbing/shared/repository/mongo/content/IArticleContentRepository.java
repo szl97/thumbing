@@ -6,6 +6,8 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.mongodb.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.Optional;
+
 /**
  * @Author: Stan Sai
  * @Date: 2020/8/18 17:38
@@ -14,4 +16,6 @@ public interface IArticleContentRepository extends IBaseMongoRepository<ArticleC
     @Modifying
     @Query(value = "update article_content set content = :content where article_id = :articleId")
     void updateContentByArticleId(@Param("articleId") String articleId, @Param("content") String content);
+
+    Optional<ArticleContent> findByArticleId(String id);
 }

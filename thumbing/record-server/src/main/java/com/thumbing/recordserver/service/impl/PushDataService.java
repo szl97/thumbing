@@ -35,7 +35,7 @@ public class PushDataService extends BaseMongoService<PushDataRecord, IPushDataR
     public List<PushDataDto> fetchAllPushDataRecords(UserContext context) {
         List<PushDataRecord> records = repository.findAllByToUserIdAndRead(context.getId(), false, Sort.by(MongoCreationEntity.Fields.createTime));
         if(ArrayUtil.isEmpty(records)) return null;
-        return DozerUtils.mapList(mapper, records, PushDataDto.class, (s,t)->{
+        return DozerUtils.mapListSync(mapper, records, PushDataDto.class, (s,t)->{
             t.setTime(s.getCreateTime());
         });
     }

@@ -18,7 +18,7 @@ public interface IChatRecordRepository extends IBaseMongoRepository<ChatRecord> 
 
     Optional<ChatRecord> findByDataId(Long id);
 
-    Page<ChatRecord> findByUserId1AndUserId2AndCreateTimeIsAfter(Long id1, Long id2, LocalDateTime time, Pageable pageable);
+    Page<ChatRecord> findAllByUserId1AndUserId2AndCreateTimeIsAfter(Long id1, Long id2, LocalDateTime time, Pageable pageable);
 
-    List<ChatRecord> findByToIdAndRead(Long id1, boolean read, Sort sort);
+    List<ChatRecord> findAllByToIdAndRead(Long id1, boolean read, Sort sort);
 }
