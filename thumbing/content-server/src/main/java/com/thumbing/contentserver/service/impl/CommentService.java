@@ -164,6 +164,13 @@ public class CommentService extends BaseMongoService<Comment, ICommentRepository
         return true;
     }
 
+    @Override
+    public Boolean thumbComment(ThumbCommentInput input, UserContext context) {
+        confirmCommentsThumbsInRedis(input);
+        commentCache.thumbsChanged(input.getId(), context.getId(), input.isAdd());
+        return true;
+    }
+
     private Boolean existArticle(ArticleIdInput idInput){
         if(articleCache.existArticleInfo(idInput.getId())){
             return true;
@@ -263,5 +270,11 @@ public class CommentService extends BaseMongoService<Comment, ICommentRepository
         }
         lockOperation.getComments(input);
         return storeCommentsInRedis(input);
+    }
+
+    private void confirmCommentsThumbsInRedis(CommentIdInput input) {
+        if (!(commentCache.existThumbingUser(input.getId()) && commentCache.existCommentThumbsNum(input.getId()))) {
+            if(lockOperation.getCommentDetails(input) == null) confirmCommentsThumbsInRedis(input);
+        }
     }
 }

@@ -5,10 +5,10 @@ import lombok.Data;
 
 /**
  * @Author: Stan Sai
- * @Date: 2020/8/26 14:27
+ * @Date: 2020/8/26 16:28
  */
 @Data
-public class ThumbMomentsInput extends MomentsIdInput {
+public class ThumbCommentInput extends CommentIdInput {
     @ApiModelProperty(value = "点赞或取消点赞")
     private boolean add;
 }

@@ -213,12 +213,21 @@ public class CommentCache {
     }
 
     /**
-     * 检查文章的点赞用户是否存在
+     * 检查评论的点赞用户是否存在
      * @param id
      * @return
      */
     public Boolean existThumbingUser(Long id){
         return RedisUtils.hasKey(longRedisTemplate, thumbingUserIds+id);
+    }
+
+    /**
+     * 检查评论的点赞用户是否存在
+     * @param id
+     * @return
+     */
+    public Boolean existCommentThumbsNum(Long id){
+        return RedisUtilsForHash.hasKey(integerRedisTemplate.opsForHash(), commentsDetails+id, thumbingNumHashKey);
     }
 
     /**

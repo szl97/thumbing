@@ -1,10 +1,12 @@
 package com.thumbing.contentserver.lockoperation;
 
 import com.thumbing.contentserver.cache.CommentCache;
+import com.thumbing.contentserver.dto.input.CommentIdInput;
 import com.thumbing.contentserver.dto.input.FetchCommentInput;
 import com.thumbing.shared.annotation.AccessLock;
 import com.thumbing.shared.entity.mongo.MongoCreationEntity;
 import com.thumbing.shared.entity.mongo.content.Comment;
+import com.thumbing.shared.exception.BusinessException;
 import com.thumbing.shared.repository.mongo.content.ICommentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
@@ -38,5 +40,14 @@ public class CommentLockOperation {
                 }
         );
         return true;
+    }
+
+    @AccessLock(value = "com.thumbing.shared.entity.mongo.content.Comment",
+            className = "com.thumbing.contentserver.dto.input.CommentIdInput",
+            fields = {"getId"})
+    public Comment getCommentDetails(CommentIdInput input){
+        Comment comment = commentRepository.findByCommentId(input.getId()).orElseThrow(()->new BusinessException("评论不存在"));
+        commentCache.storeComments(comment);
+        return comment;
     }
 }

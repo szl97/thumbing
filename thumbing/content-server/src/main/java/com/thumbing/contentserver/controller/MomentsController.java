@@ -2,7 +2,8 @@ package com.thumbing.contentserver.controller;
 
 import com.thumbing.contentserver.dto.input.*;
 import com.thumbing.contentserver.dto.output.ArticleDto;
-import com.thumbing.contentserver.service.IArticleService;
+import com.thumbing.contentserver.dto.output.MomentsDto;
+import com.thumbing.contentserver.service.IMomentsService;
 import com.thumbing.shared.annotation.Authorize;
 import com.thumbing.shared.annotation.EnableResponseAdvice;
 import com.thumbing.shared.auth.permission.PermissionConstants;
@@ -18,61 +19,54 @@ import javax.validation.Valid;
 
 /**
  * @Author: Stan Sai
- * @Date: 2020/8/3 18:09
+ * @Date: 2020/8/26 16:21
  */
 @EnableResponseAdvice
 @RestController
-@RequestMapping(value = "/article")
-public class ArticleController extends ThumbingBaseController {
+@RequestMapping(value = "/moments")
+public class MomentsController extends ThumbingBaseController {
     @Autowired
-    private IArticleService articleService;
+    private IMomentsService momentsService;
 
-    @ApiOperation("发表文章")
+    @ApiOperation("发表帖子")
     @Authorize(PermissionConstants.ACCESS)
     @RequestMapping(value = "publish", method = RequestMethod.PUT)
-    public Boolean publishArticle(@Valid PublishArticleInput input){
-        return articleService.publishArticle(input, getCurrentUser());
+    public Boolean publishMoments(@Valid PublishMomentsInput input){
+        return momentsService.publishMoments(input, getCurrentUser());
     }
 
-    @ApiOperation("获取文章内容")
-    @Authorize(PermissionConstants.REGISTER)
-    @RequestMapping(value = "getContent", method = RequestMethod.GET)
-    public String getArticleContent(ArticleIdInput input){
-        return articleService.getArticleContent(input);
-    }
-
-    @ApiOperation("获取文章详情")
+    @ApiOperation("获取帖子详情")
     @Authorize(PermissionConstants.REGISTER)
     @RequestMapping(value = "getDetails", method = RequestMethod.GET)
-    public ArticleDto getArticle(ArticleIdInput input){
-        return articleService.getArticle(input);
+    public MomentsDto getMoments(MomentsIdInput input){
+        return momentsService.getMoments(input);
     }
 
-    @ApiOperation("获取文章列表")
+    @ApiOperation("获取帖子列表")
     @Authorize(PermissionConstants.REGISTER)
     @RequestMapping(value = "fetch", method = RequestMethod.GET)
-    public PageResultDto<ArticleDto> fetchArticles(FetchArticleInput input){
-        return articleService.fetchArticles(input, getCurrentUser());
+    public PageResultDto<MomentsDto> fetchArticles(FetchMomentsInput input){
+        return momentsService.fetchMoments(input, getCurrentUser());
     }
 
-    @ApiOperation("删除文章")
+    @ApiOperation("删除帖子")
     @Authorize(PermissionConstants.ACCESS)
     @RequestMapping(value = "delete", method = RequestMethod.DELETE)
-    public Boolean deleteArticle(ArticleIdInput input) {
-        return articleService.deleteArticle(input, getCurrentUser());
+    public Boolean deleteMoments(MomentsIdInput input) {
+        return momentsService.deleteMoments(input, getCurrentUser());
     }
 
     @ApiOperation("点赞")
     @Authorize(PermissionConstants.REGISTER)
     @RequestMapping(value = "thumb", method = RequestMethod.POST)
-    public Boolean thumbArticle(@Valid ThumbArticleInput input){
-        return articleService.thumbArticle(input, getCurrentUser());
+    public Boolean thumbArticle(@Valid ThumbMomentsInput input){
+        return momentsService.thumbMoments(input, getCurrentUser());
     }
 
     @ApiOperation("修改内容")
     @Authorize(PermissionConstants.ACCESS)
     @RequestMapping(value = "update", method = RequestMethod.POST)
-    public Boolean updateArticle(@Valid UpdateArticleInput input){
-        return articleService.updateArticle(input, getCurrentUser());
+    public Boolean updateArticle(@Valid UpdateMomentsInput input){
+        return momentsService.updateMoments(input, getCurrentUser());
     }
 }

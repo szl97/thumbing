@@ -1,8 +1,6 @@
 package com.thumbing.contentserver.service;
 
-import com.thumbing.contentserver.dto.input.CommentIdInput;
-import com.thumbing.contentserver.dto.input.CommentInput;
-import com.thumbing.contentserver.dto.input.FetchCommentInput;
+import com.thumbing.contentserver.dto.input.*;
 import com.thumbing.contentserver.dto.output.CommentDto;
 import com.thumbing.shared.auth.model.UserContext;
 
@@ -36,4 +34,12 @@ public interface ICommentService {
      * @return
      */
     Boolean deleteComment(CommentIdInput input, UserContext context);
+
+    /**
+     * 点赞
+     * @param input
+     * @param context
+     * @return
+     */
+    Boolean thumbComment(ThumbCommentInput input, UserContext context);
 }

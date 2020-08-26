@@ -20,6 +20,8 @@ import com.thumbing.shared.service.impl.BaseMongoService;
 import com.thumbing.shared.utils.dozermapper.DozerUtils;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.Collections;
@@ -29,6 +31,8 @@ import java.util.List;
  * @Author: Stan Sai
  * @Date: 2020/8/26 14:21
  */
+@Service
+@Transactional
 public class MomentsService extends BaseMongoService<Moments, IMomentsRepository> implements IMomentsService {
     @Autowired
     private ElasticUtils elasticUtils;
@@ -66,7 +70,7 @@ public class MomentsService extends BaseMongoService<Moments, IMomentsRepository
 
     @SneakyThrows
     @Override
-    public Boolean publishMoments(PublishArticleInput input, UserContext context) {
+    public Boolean publishMoments(PublishMomentsInput input, UserContext context) {
         Moments moments = mapper.map(input, Moments.class);
         moments.setNickNameSequence(0);
         moments.setUserId(context.getId());

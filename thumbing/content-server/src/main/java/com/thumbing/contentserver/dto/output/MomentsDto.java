@@ -1,9 +1,15 @@
 package com.thumbing.contentserver.dto.output;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.thumbing.shared.dto.output.DocumentDto;
+import com.thumbing.shared.utils.serializer.LongToStringSerializer;
+import com.thumbing.shared.utils.serializer.LongToStringSetSerializer;
+import com.thumbing.shared.utils.serializer.StringToLongDeserializer;
+import com.thumbing.shared.utils.serializer.StringToLongSetDeserializer;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
-import java.util.List;
 import java.util.Set;
 
 /**
@@ -12,40 +18,22 @@ import java.util.Set;
  */
 @Data
 public class MomentsDto extends DocumentDto {
-    /**
-     * 用户id
-     */
-    private long userId;
-    /**
-     * 标题
-     */
+    @JsonSerialize(using = LongToStringSerializer.class)
+    @JsonDeserialize(using = StringToLongDeserializer.class)
+    @ApiModelProperty(value = "用户Id")
+    private Long userId;
+    @ApiModelProperty(value = "标题")
     private String title;
-    /**
-     * 标签
-     */
-    private Set<Long> tagIds;
-    /**
-     * 内容
-     */
+    @ApiModelProperty(value = "标签")
+    private Set<String> tagIds;
+    @ApiModelProperty(value = "内容")
     private String content;
-    /**
-     * 点赞数
-     */
+    @ApiModelProperty(value = "点赞数")
     private Integer thumbingNum;
-    /**
-     * 评论数
-     */
+    @ApiModelProperty(value = "评论数")
     private Integer commentsNum;
-    /**
-     * 点赞用户
-     */
+    @JsonSerialize(using = LongToStringSetSerializer.class)
+    @JsonDeserialize(using = StringToLongSetDeserializer.class)
+    @ApiModelProperty(value = "点赞用户")
     private Set<Long> thumbUserIds;
-    /**
-     * 下一个评论用户显示的昵称
-     */
-    private int nickNameSequence;
-    /**
-     * 动态中的图片在OSS中的标识
-     */
-    private List<String> graphIds;
 }

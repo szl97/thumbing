@@ -1,6 +1,5 @@
 package com.thumbing.contentserver.service.impl;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.dozermapper.core.Mapper;
 import com.thumbing.contentserver.cache.ArticleCache;
@@ -13,7 +12,6 @@ import com.thumbing.contentserver.lockoperation.ArticleLockOperation;
 import com.thumbing.contentserver.service.IArticleService;
 import com.thumbing.shared.auth.model.UserContext;
 import com.thumbing.shared.dto.output.PageResultDto;
-import com.thumbing.shared.entity.mongo.MongoCreationEntity;
 import com.thumbing.shared.entity.mongo.content.Article;
 import com.thumbing.shared.entity.mongo.content.ArticleContent;
 import com.thumbing.shared.entity.mongo.content.enums.ContentType;
@@ -24,17 +22,12 @@ import com.thumbing.shared.service.impl.BaseMongoService;
 import com.thumbing.shared.utils.dozermapper.DozerUtils;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
-import java.util.Set;
 
 /**
  * @Author: Stan Sai

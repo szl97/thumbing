@@ -1,5 +1,6 @@
 package com.thumbing.contentserver.dto.input;
 
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 /**
@@ -8,5 +9,6 @@ import lombok.Data;
  */
 @Data
 public class ThumbArticleInput extends ArticleIdInput {
+    @ApiModelProperty(value = "点赞或取消点赞")
     private boolean add;
 }

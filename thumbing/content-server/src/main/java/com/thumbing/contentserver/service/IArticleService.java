@@ -28,7 +28,7 @@ public interface IArticleService {
      * @return
      * @throws JsonProcessingException
      */
-    Boolean publishArticle(PublishArticleInput input, UserContext context) throws JsonProcessingException;
+    Boolean publishArticle(PublishArticleInput input, UserContext context);
 
     /**
      * 获取文章内容
@@ -50,7 +50,7 @@ public interface IArticleService {
      * @param context
      * @return
      */
-    Boolean deleteArticle(ArticleIdInput input, UserContext context) throws IOException;
+    Boolean deleteArticle(ArticleIdInput input, UserContext context);
 
     /**
      * 点赞

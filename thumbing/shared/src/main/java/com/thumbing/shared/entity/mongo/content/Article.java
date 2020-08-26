@@ -27,7 +27,7 @@ public class Article extends MongoFullAuditedEntity {
     /**
      * 标签
      */
-    private Set<Long> tagIds;
+    private Set<String> tagIds;
     /**
      * 前100字
      */

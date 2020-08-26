@@ -9,6 +9,7 @@ import org.springframework.data.mongodb.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 /**
@@ -25,4 +26,6 @@ public interface ICommentRepository extends IBaseMongoRepository<Comment> {
     void updateThumbingNumAndThumbUserIdsByCommentId(@Param("commentId") Long commentId, @Param("thumbingNum") int thumbingNum, @Param("thumbUserIds") Set<Long> thumbUserIds);
 
     List<Comment> findAllByContentIdAndContentType(String contentId, ContentType contentType, Sort sort);
+
+    Optional<Comment> findByCommentId(Long commentId);
 }

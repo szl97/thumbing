@@ -1,9 +1,14 @@
 package com.thumbing.contentserver.dto.input;
 
-import com.thumbing.shared.entity.mongo.content.enums.ContentType;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.thumbing.shared.utils.serializer.LongToStringSerializer;
+import com.thumbing.shared.utils.serializer.StringToLongDeserializer;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
-import java.io.Serializable;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 /**
  * @author Stan Sai
@@ -11,24 +16,21 @@ import java.io.Serializable;
  */
 @Data
 public class CommentInput extends FetchCommentInput {
-    /**
-     * 父评论Id
-     */
+    @ApiModelProperty(value = "父评论Id")
+    @JsonSerialize(using = LongToStringSerializer.class)
+    @JsonDeserialize(using = StringToLongDeserializer.class)
     private Long parentCommentId;
-    /**
-     * 接收方Id
-     */
+    @ApiModelProperty(value = "接收方Id")
+    @NotNull(message = "接收方Id不可为空")
+    @JsonSerialize(using = LongToStringSerializer.class)
+    @JsonDeserialize(using = StringToLongDeserializer.class)
     private Long toUserId;
-    /**
-     * 发表方昵称
-     */
+    @ApiModelProperty(value = "发表方昵称")
     private String fromNickName;
-    /**
-     * 接收方昵称
-     */
+    @ApiModelProperty(value = "接收方昵称")
     private String toNickName;
-    /**
-     * 评论内容
-     */
+    @ApiModelProperty(value = "评论内容")
+    @NotNull(message = "评论内容不可为空")
+    @Size(max = 200)
     private String content;
 }

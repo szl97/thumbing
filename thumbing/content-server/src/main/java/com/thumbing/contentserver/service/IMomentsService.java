@@ -33,7 +33,7 @@ public interface IMomentsService {
      * @return
      * @throws JsonProcessingException
      */
-    Boolean publishMoments(PublishArticleInput input, UserContext context);
+    Boolean publishMoments(PublishMomentsInput input, UserContext context);
 
     /**
      * 删除帖子
