@@ -10,11 +10,13 @@ import com.thumbing.contentserver.dto.output.ChildCommentDto;
 import com.thumbing.contentserver.dto.output.CommentDto;
 import com.thumbing.contentserver.lockoperation.ArticleLockOperation;
 import com.thumbing.contentserver.lockoperation.CommentLockOperation;
+import com.thumbing.contentserver.lockoperation.MomentsLockOperation;
 import com.thumbing.contentserver.lockoperation.NickNameLockOperation;
 import com.thumbing.contentserver.service.ICommentService;
 import com.thumbing.shared.auth.model.UserContext;
 import com.thumbing.shared.entity.mongo.content.Article;
 import com.thumbing.shared.entity.mongo.content.Comment;
+import com.thumbing.shared.entity.mongo.content.Moments;
 import com.thumbing.shared.entity.mongo.content.enums.ContentType;
 import com.thumbing.shared.repository.mongo.content.ICommentRepository;
 import com.thumbing.shared.service.impl.BaseMongoService;
@@ -50,6 +52,8 @@ public class CommentService extends BaseMongoService<Comment, ICommentRepository
     @Autowired
     private ArticleLockOperation articleLockOperation;
     @Autowired
+    private MomentsLockOperation momentsLockOperation;
+    @Autowired
     private Mapper mapper;
 
     @Override
@@ -72,7 +76,20 @@ public class CommentService extends BaseMongoService<Comment, ICommentRepository
             }
         }else {
             //todo: moments
-
+            MomentsIdInput idInput = new MomentsIdInput();
+            idInput.setId(input.getContentId());
+            existMoments(idInput);
+            if (comment.getFromNickName() == null) {
+                int currentSeq = getMomentsCurrentSeq(idInput);
+                String userNickName;
+                if (currentSeq > 0) {
+                    userNickName = getMomentsUserNickName(idInput, context.getId());
+                } else {
+                    int seq = momentsCache.getNickNameSeq(input.getContentId());
+                    userNickName = getNickName(seq);
+                }
+                comment.setFromNickName(userNickName);
+            }
         }
 
         int commentsNum = input.getContentType() == ContentType.ARTICLE ? articleCache.getArticleCommentsNum(input.getContentId()) : momentsCache.getMomentsCommentsNum(input.getContentId());
@@ -93,7 +110,9 @@ public class CommentService extends BaseMongoService<Comment, ICommentRepository
             commentNum = getArticleCommentsNum(idInput);
         }
         else {
-
+            MomentsIdInput idInput = new MomentsIdInput();
+            idInput.setId(input.getContentId());
+            commentNum = getMomentsCommentsNum(idInput);
         }
         if(commentNum > 0) {
             storeCommentsInRedis(input);
@@ -153,6 +172,14 @@ public class CommentService extends BaseMongoService<Comment, ICommentRepository
         return true;
     }
 
+    private Boolean existMoments(MomentsIdInput idInput){
+        if(momentsCache.existMomentsInfo(idInput.getId())){
+            return true;
+        }
+        if(momentsLockOperation.getMoments(idInput) == null) existMoments(idInput);
+        return true;
+    }
+
     private String getNickName(int seq){
         if(nickNameCache.nickNameListExist()){
             return nickNameCache.getNickName(seq);
@@ -170,6 +197,15 @@ public class CommentService extends BaseMongoService<Comment, ICommentRepository
         return article.getNickNameSequence();
     }
 
+    private int getMomentsCurrentSeq(MomentsIdInput idInput){
+        if(momentsCache.existMomentsInfo(idInput.getId())){
+            return momentsCache.getCurrentNickNameSeq(idInput.getId());
+        }
+        Moments moments = momentsLockOperation.getMoments(idInput);
+        if (moments == null) return getMomentsCommentsNum(idInput);
+        return moments.getNickNameSequence();
+    }
+
     private int getArticleCommentsNum(ArticleIdInput idInput) {
         if (articleCache.existArticleInfo(idInput.getId())) {
             return articleCache.getArticleCommentsNum(idInput.getId());
@@ -177,6 +213,15 @@ public class CommentService extends BaseMongoService<Comment, ICommentRepository
         Article article = articleLockOperation.getArticle(idInput);
         if (article == null) return getArticleCommentsNum(idInput);
         return article.getCommentsNum() == null ? 0 : article.getCommentsNum();
+    }
+
+    private int getMomentsCommentsNum(MomentsIdInput idInput) {
+        if (momentsCache.existMomentsInfo(idInput.getId())) {
+            return articleCache.getArticleCommentsNum(idInput.getId());
+        }
+        Moments moments = momentsLockOperation.getMoments(idInput);
+        if (moments == null) return getMomentsCommentsNum(idInput);
+        return moments.getCommentsNum() == null ? 0 : moments.getCommentsNum();
     }
 
     private String getArticleUserNickName(ArticleIdInput idInput, Long userId){
@@ -190,6 +235,19 @@ public class CommentService extends BaseMongoService<Comment, ICommentRepository
         }
         nickNameLockOperation.storeArticleNickName(idInput);
         return getArticleUserNickName(idInput, userId);
+    }
+
+    private String getMomentsUserNickName(MomentsIdInput idInput, Long userId){
+        if(nickNameCache.userNickNameMomentsExist(idInput.getId())){
+            String userNickName = nickNameCache.getUserNickNameMoments(idInput.getId(), userId);
+            if(StringUtils.isBlank(userNickName)) {
+                int seq = momentsCache.getNickNameSeq(idInput.getId());
+                userNickName = getNickName(seq);
+            }
+            return userNickName;
+        }
+        nickNameLockOperation.storeMomentsNickName(idInput);
+        return getMomentsUserNickName(idInput, userId);
     }
 
     private Boolean storeCommentsInRedis(FetchCommentInput input){

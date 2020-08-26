@@ -3,6 +3,7 @@ package com.thumbing.contentserver.lockoperation;
 import cn.hutool.core.util.ArrayUtil;
 import com.thumbing.contentserver.cache.NickNameCache;
 import com.thumbing.contentserver.dto.input.ArticleIdInput;
+import com.thumbing.contentserver.dto.input.MomentsIdInput;
 import com.thumbing.shared.annotation.AccessLock;
 import com.thumbing.shared.entity.mongo.content.NickName;
 import com.thumbing.shared.entity.mongo.content.UserNickName;
@@ -51,6 +52,20 @@ public class NickNameLockOperation {
         userNickNames.parallelStream().forEach(
                 userNickName -> {
                     cache.setUserNickNameArticle(userNickName.getContentId(), userNickName.getUserId(), userNickName.getNickName());
+                }
+        );
+        return true;
+    }
+
+    @AccessLock(value="com.thumbing.shared.entity.mongo.content.UserNickName",
+            className = "com.thumbing.contentserver.dto.input.MomentsIdInput",
+            fields = {
+                    "getId"})
+    public Boolean storeMomentsNickName(MomentsIdInput idInput){
+        List<UserNickName> userNickNames = userNickNameRepository.findAllByContentIdAndContentType(idInput.getId(), ContentType.MOMENTS);
+        userNickNames.parallelStream().forEach(
+                userNickName -> {
+                    cache.setUserNickNameMoments(userNickName.getContentId(), userNickName.getUserId(), userNickName.getNickName());
                 }
         );
         return true;
