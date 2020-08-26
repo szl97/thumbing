@@ -2,7 +2,6 @@ package com.thumbing.contentserver.cache;
 
 import cn.hutool.core.util.ArrayUtil;
 import com.thumbing.shared.constants.CacheKeyConstants;
-import com.thumbing.shared.entity.mongo.content.Article;
 import com.thumbing.shared.entity.mongo.content.Moments;
 import com.thumbing.shared.utils.redis.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -162,7 +161,7 @@ public class MomentsCache {
      * @param id
      * @return
      */
-    public Boolean existArticleThumbsNum(String id){
+    public Boolean existMomentsThumbsNum(String id){
         return RedisUtilsForHash.hasKey(integerRedisTemplate.opsForHash(), infoMoments+id, thumbingNumHashKey);
     }
 
@@ -330,6 +329,15 @@ public class MomentsCache {
         } else {
             return null;
         }
+    }
+
+    /**
+     * 获取帖子的固定信息
+     * @param id
+     * @return
+     */
+    public Moments getMomentsNoChangedInfo(String id){
+        return RedisUtilsForHash.get(momentsRedisTemplate.opsForHash(), infoMoments+id, detailsHashKey);
     }
 
 

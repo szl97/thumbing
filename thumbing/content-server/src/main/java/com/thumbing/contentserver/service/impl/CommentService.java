@@ -103,7 +103,7 @@ public class CommentService extends BaseMongoService<Comment, ICommentRepository
 
     @Override
     public List<CommentDto> fetchComments(FetchCommentInput input, UserContext context) {
-        int commentNum = 0;
+        int commentNum;
         if(input.getContentType()==ContentType.ARTICLE){
             ArticleIdInput idInput = new ArticleIdInput();
             idInput.setId(input.getContentId());

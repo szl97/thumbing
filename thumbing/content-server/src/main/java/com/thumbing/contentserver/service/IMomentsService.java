@@ -2,7 +2,7 @@ package com.thumbing.contentserver.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.thumbing.contentserver.dto.input.*;
-import com.thumbing.contentserver.dto.output.ArticleDto;
+import com.thumbing.contentserver.dto.output.MomentsDto;
 import com.thumbing.shared.auth.model.UserContext;
 import com.thumbing.shared.dto.output.PageResultDto;
 
@@ -17,14 +17,14 @@ public interface IMomentsService {
      * @param context
      * @return
      */
-    PageResultDto<ArticleDto> fetchArticles(FetchArticleInput input, UserContext context);
+    PageResultDto<MomentsDto> fetchMoments(FetchMomentsInput input, UserContext context);
 
     /**
      * 获取帖子
      * @param input
      * @return
      */
-    ArticleDto getMoments(MomentsIdInput input);
+    MomentsDto getMoments(MomentsIdInput input);
 
     /**
      * 发表帖子
@@ -33,7 +33,7 @@ public interface IMomentsService {
      * @return
      * @throws JsonProcessingException
      */
-    Boolean publishArticle(PublishArticleInput input, UserContext context) throws JsonProcessingException;
+    Boolean publishMoments(PublishArticleInput input, UserContext context);
 
     /**
      * 删除帖子
@@ -41,7 +41,7 @@ public interface IMomentsService {
      * @param context
      * @return
      */
-    Boolean deleteArticle(ArticleIdInput input, UserContext context);
+    Boolean deleteMoments(MomentsIdInput input, UserContext context);
 
     /**
      * 点赞
@@ -49,7 +49,7 @@ public interface IMomentsService {
      * @param context
      * @return
      */
-    Boolean thumbArticle(ThumbArticleInput input, UserContext context);
+    Boolean thumbMoments(ThumbMomentsInput input, UserContext context);
 
     /**
      * 修改帖子
@@ -57,5 +57,5 @@ public interface IMomentsService {
      * @param context
      * @return
      */
-    Boolean updateArticle(UpdateArticleInput input, UserContext context);
+    Boolean updateMoments(UpdateMomentsInput input, UserContext context);
 }

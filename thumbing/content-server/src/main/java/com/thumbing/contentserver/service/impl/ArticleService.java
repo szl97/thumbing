@@ -72,8 +72,9 @@ public class ArticleService extends BaseMongoService<Article, IArticleRepository
         return null;
     }
 
+    @SneakyThrows
     @Override
-    public Boolean publishArticle(PublishArticleInput input, UserContext context) throws JsonProcessingException {
+    public Boolean publishArticle(PublishArticleInput input, UserContext context) {
         Article article = mapper.map(input, Article.class);
         article.setAbstracts(input.getContent().substring(0,100));
         article.setNickNameSequence(0);
@@ -150,7 +151,7 @@ public class ArticleService extends BaseMongoService<Article, IArticleRepository
 
     private void confirmArticleThumbsInRedis(ArticleIdInput input) {
         if (!(articleCache.existThumbingUser(input.getId()) && articleCache.existArticleThumbsNum(input.getId()))) {
-            if(lockOperation.getArticle(input) == null) getArticleContent(input);
+            if(lockOperation.getArticle(input) == null) confirmArticleThumbsInRedis(input);
         }
     }
 
@@ -159,7 +160,7 @@ public class ArticleService extends BaseMongoService<Article, IArticleRepository
             return articleCache.getArticleNoChangedInfo(input.getId());
         } else {
             Article article = lockOperation.getArticle(input);
-            if (article == null) getArticleContent(input);
+            if (article == null) confirmArticleInRedis(input);
             return article;
         }
     }

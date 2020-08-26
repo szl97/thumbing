@@ -19,7 +19,7 @@ public class Moments extends MongoFullAuditedEntity {
     /**
      * 用户id
      */
-    private long userId;
+    private Long userId;
     /**
      * 标题
      */
