@@ -55,25 +55,26 @@ public class CommentService extends BaseMongoService<Comment, ICommentRepository
     @Override
     public Boolean publishComment(CommentInput input, UserContext context) {
         Comment comment = mapper.map(input, Comment.class);
-        if (comment.getFromNickName() == null) {
-            if (input.getContentType() == ContentType.ARTICLE) {
-                ArticleIdInput idInput = new ArticleIdInput();
-                idInput.setId(input.getContentId());
+        if (input.getContentType() == ContentType.ARTICLE) {
+            ArticleIdInput idInput = new ArticleIdInput();
+            idInput.setId(input.getContentId());
+            existArticle(idInput);
+            if (comment.getFromNickName() == null) {
                 int currentSeq = getArticleCurrentSeq(idInput);
                 String userNickName;
-                if(currentSeq > 0){
+                if (currentSeq > 0) {
                     userNickName = getArticleUserNickName(idInput, context.getId());
-                }
-                else {
+                } else {
                     int seq = articleCache.getNickNameSeq(input.getContentId());
                     userNickName = getNickName(seq);
                 }
                 comment.setFromNickName(userNickName);
-            } else {
-                //todo: moments
-
             }
+        }else {
+            //todo: moments
+
         }
+
         int commentsNum = input.getContentType() == ContentType.ARTICLE ? articleCache.getArticleCommentsNum(input.getContentId()) : momentsCache.getMomentsCommentsNum(input.getContentId());
         if(commentsNum > 0) storeCommentsInRedis(input);
         comment.setFromUserId(context.getId());
@@ -141,6 +142,14 @@ public class CommentService extends BaseMongoService<Comment, ICommentRepository
             }
         }
         repository.updateIsDeleteByCommentId(input.getId());
+        return true;
+    }
+
+    private Boolean existArticle(ArticleIdInput idInput){
+        if(articleCache.existArticleInfo(idInput.getId())){
+            return true;
+        }
+        if(articleLockOperation.getArticle(idInput) == null) existArticle(idInput);
         return true;
     }
 

@@ -70,7 +70,7 @@ elasticsearch:
     shardNum: 3
     replicasNum: 2
     properties:
-      -id
+      -contentId
       -name
       -title
       -tags

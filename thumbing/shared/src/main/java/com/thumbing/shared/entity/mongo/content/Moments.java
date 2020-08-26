@@ -29,10 +29,6 @@ public class Moments extends MongoFullAuditedEntity {
      */
     private Set<Long> tagIds;
     /**
-     * 可见天数
-     */
-    private int totalDays;
-    /**
      * 内容
      */
     private String content;

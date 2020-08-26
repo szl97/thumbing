@@ -23,6 +23,11 @@ import org.elasticsearch.common.settings.Settings;
 import org.elasticsearch.common.xcontent.XContentBuilder;
 import org.elasticsearch.common.xcontent.XContentType;
 import org.elasticsearch.index.query.*;
+import org.elasticsearch.index.reindex.BulkByScrollResponse;
+import org.elasticsearch.index.reindex.DeleteByQueryRequest;
+import org.elasticsearch.index.reindex.UpdateByQueryRequest;
+import org.elasticsearch.script.Script;
+import org.elasticsearch.script.ScriptType;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.SearchHits;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
@@ -32,10 +37,7 @@ import org.elasticsearch.search.fetch.subphase.highlight.HighlightField;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author Stan Sai
@@ -140,7 +142,6 @@ public class ElasticUtils {
 
     /**
      * 删除索引
-     *
      * @param indexName
      * @return
      */
@@ -162,7 +163,6 @@ public class ElasticUtils {
 
     /**
      * 批量索引文档
-     *
      * @param indexName
      * @param docList
      * @return
@@ -192,8 +192,58 @@ public class ElasticUtils {
 
 
     /**
+     * 修改文档内容
+     * @param indexName
+     * @param type
+     * @param id
+     * @param content
+     * @throws IOException
+     */
+    public void updateDocContent(String indexName,
+                          String type,
+                          String id,
+                          String content) throws IOException {
+
+        BoolQueryBuilder boolBuilder = QueryBuilders.boolQuery();
+        TermQueryBuilder termQueryBuilder = QueryBuilders.termQuery("name", type);
+        boolBuilder.must(termQueryBuilder);
+        TermQueryBuilder termQueryBuilder1 = QueryBuilders.termQuery("contentId", id);
+        boolBuilder.must(termQueryBuilder1);
+        UpdateByQueryRequest updateByQueryRequest = new UpdateByQueryRequest(indexName);
+        updateByQueryRequest.setQuery(boolBuilder);
+        updateByQueryRequest.setMaxDocs(1);
+        Map<String, Object> params = new HashMap<String, Object>();
+        params.put("content", content);
+        ScriptType scriptType = ScriptType.INLINE;
+        String lang = "painless";
+        String code = "ctx._source.content=params.content";
+        Script script = new Script(scriptType, lang, code, params);
+        updateByQueryRequest.setScript(script);
+        client.updateByQuery(updateByQueryRequest, RequestOptions.DEFAULT);
+    }
+
+    /**
+     * 删除文档
+     * @param indexName
+     * @param type
+     * @param id
+     * @throws IOException
+     */
+    public void deleteDoc(String indexName,
+                          String type,
+                          String id) throws IOException {
+        BoolQueryBuilder boolBuilder = QueryBuilders.boolQuery();
+        TermQueryBuilder termQueryBuilder = QueryBuilders.termQuery("name", type);
+        boolBuilder.must(termQueryBuilder);
+        TermQueryBuilder termQueryBuilder1 = QueryBuilders.termQuery("contentId", id);
+        boolBuilder.must(termQueryBuilder1);
+        DeleteByQueryRequest deleteByQueryRequest = new DeleteByQueryRequest(indexName);
+        deleteByQueryRequest.setQuery(boolBuilder);
+        client.deleteByQuery(deleteByQueryRequest, RequestOptions.DEFAULT);
+    }
+
+    /**
      * 搜索文档
-     *
      * @param indices
      * @param keyword
      * @param fieldNames
@@ -249,7 +299,7 @@ public class ElasticUtils {
         //高亮
         searchSourceBuilder.highlighter(highlightBuilder);
         //查询语句
-        searchSourceBuilder.query(multiMatchQuery);
+        searchSourceBuilder.query(boolBuilder);
         //分页
         searchSourceBuilder.from((pageNum - 1) * pageSize);
         searchSourceBuilder.size(pageSize);

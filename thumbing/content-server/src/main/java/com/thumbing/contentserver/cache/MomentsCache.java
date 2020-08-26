@@ -72,21 +72,23 @@ public class MomentsCache {
      * @param end
      * @return
      */
-    public List<Moments> getMoments(int from, int end){
+    public List<Moments> getMomentsList(int from, int end){
         List<String> ids = RedisUtilsForList.get(stringRedisTemplate.opsForList(), momentsList, from, end);
-        return ids.parallelStream().map(id->{
-            String key = infoMoments+id;
-            Moments moments = RedisUtilsForHash.get(momentsRedisTemplate.opsForHash(), key, detailsHashKey);
-            if(moments != null){
-                Integer thumbingNum = RedisUtilsForHash.get(integerRedisTemplate.opsForHash(), key, thumbingNumHashKey);
-                Integer commentsNum = RedisUtilsForHash.get(integerRedisTemplate.opsForHash(), key, commentsNumHashKey);
-                Set<Long> userIds = RedisUtilsForSet.members(longRedisTemplate.opsForSet(), thumbingUserIds+id);
-                moments.setThumbingNum(thumbingNum);
-                moments.setCommentsNum(commentsNum);
-                moments.setThumbUserIds(userIds);
-            }
-            return moments;
-        }).collect(Collectors.toList());
+        return ids.parallelStream().map(id->getMoments(id)).collect(Collectors.toList());
+    }
+
+    public Moments getMoments(String id){
+        String key = infoMoments+id;
+        Moments moments = RedisUtilsForHash.get(momentsRedisTemplate.opsForHash(), key, detailsHashKey);
+        if(moments != null){
+            Integer thumbingNum = RedisUtilsForHash.get(integerRedisTemplate.opsForHash(), key, thumbingNumHashKey);
+            Integer commentsNum = RedisUtilsForHash.get(integerRedisTemplate.opsForHash(), key, commentsNumHashKey);
+            Set<Long> userIds = RedisUtilsForSet.members(longRedisTemplate.opsForSet(), thumbingUserIds+id);
+            moments.setThumbingNum(thumbingNum);
+            moments.setCommentsNum(commentsNum);
+            moments.setThumbUserIds(userIds);
+        }
+        return moments;
     }
 
     /**

@@ -6,15 +6,13 @@ import com.thumbing.contentserver.dto.output.ArticleDto;
 import com.thumbing.shared.auth.model.UserContext;
 import com.thumbing.shared.dto.output.PageResultDto;
 
-import java.io.IOException;
-
 /**
  * @Author: Stan Sai
- * @Date: 2020/8/3 17:17
+ * @Date: 2020/8/26 10:09
  */
-public interface IArticleService {
+public interface IMomentsService {
     /**
-     * 获取文章列表
+     * 获取帖子列表
      * @param input
      * @param context
      * @return
@@ -22,7 +20,14 @@ public interface IArticleService {
     PageResultDto<ArticleDto> fetchArticles(FetchArticleInput input, UserContext context);
 
     /**
-     * 发表文章
+     * 获取帖子
+     * @param input
+     * @return
+     */
+    ArticleDto getMoments(MomentsIdInput input);
+
+    /**
+     * 发表帖子
      * @param input
      * @param context
      * @return
@@ -31,26 +36,12 @@ public interface IArticleService {
     Boolean publishArticle(PublishArticleInput input, UserContext context) throws JsonProcessingException;
 
     /**
-     * 获取文章内容
-     * @param input
-     * @return
-     */
-    String getArticleContent(ArticleIdInput input);
-
-    /**
-     * 获取文章
-     * @param input
-     * @return
-     */
-    ArticleDto getArticle(ArticleIdInput input);
-
-    /**
-     * 删除文章
+     * 删除帖子
      * @param input
      * @param context
      * @return
      */
-    Boolean deleteArticle(ArticleIdInput input, UserContext context) throws IOException;
+    Boolean deleteArticle(ArticleIdInput input, UserContext context);
 
     /**
      * 点赞
@@ -61,7 +52,7 @@ public interface IArticleService {
     Boolean thumbArticle(ThumbArticleInput input, UserContext context);
 
     /**
-     * 修改文章
+     * 修改帖子
      * @param input
      * @param context
      * @return

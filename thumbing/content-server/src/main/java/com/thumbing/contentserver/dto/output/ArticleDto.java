@@ -29,6 +29,10 @@ public class ArticleDto extends DocumentDto {
      */
     private String abstracts;
     /**
+     * 内容
+     */
+    private String content;
+    /**
      * 点赞用户
      */
     private Set<Long> thumbUserIds;

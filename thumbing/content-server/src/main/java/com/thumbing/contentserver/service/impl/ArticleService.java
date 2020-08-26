@@ -22,6 +22,7 @@ import com.thumbing.shared.repository.mongo.content.IArticleContentRepository;
 import com.thumbing.shared.repository.mongo.content.IArticleRepository;
 import com.thumbing.shared.service.impl.BaseMongoService;
 import com.thumbing.shared.utils.dozermapper.DozerUtils;
+import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -29,6 +30,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
@@ -84,7 +86,7 @@ public class ArticleService extends BaseMongoService<Article, IArticleRepository
         contentRepository.save(articleContent);
         articleCache.addArticle(article, input.getContent());
         ElasticBaseEntity elasticBaseEntity = new ElasticBaseEntity();
-        elasticBaseEntity.setId(article.getId());
+        elasticBaseEntity.setContentId(article.getId());
         elasticBaseEntity.setContent(article.getAbstracts());
         elasticBaseEntity.setName(ContentType.ARTICLE);
         elasticBaseEntity.setDateTime(article.getCreateTime());
@@ -105,8 +107,18 @@ public class ArticleService extends BaseMongoService<Article, IArticleRepository
     }
 
     @Override
-    public Boolean deleteArticle(ArticleIdInput input, UserContext context) {
-        Article article = null;
+    public ArticleDto getArticle(ArticleIdInput input) {
+        Article article = confirmArticleInRedis(input);
+        String content = getArticleContent(input);
+        ArticleDto articleDto = mapper.map(article, ArticleDto.class);
+        articleDto.setContent(content);
+        return articleDto;
+    }
+
+    @SneakyThrows
+    @Override
+    public Boolean deleteArticle(ArticleIdInput input, UserContext context){
+        Article article;
         if(articleCache.existArticleInfo(input.getId())){
             article = articleCache.getArticleNoChangedInfo(input.getId());
         }
@@ -115,6 +127,7 @@ public class ArticleService extends BaseMongoService<Article, IArticleRepository
         }
         if(!article.getUserId().equals(context.getId())) throw new BusinessException("当前用户无法删除");
         if(!lockOperation.deleteArticle(input)) return deleteArticle(input, context);
+        elasticUtils.deleteDoc(ElasticSearchConfig.indexName, ContentType.ARTICLE.value(), input.getId());
         return true;
     }
 
@@ -125,11 +138,13 @@ public class ArticleService extends BaseMongoService<Article, IArticleRepository
         return true;
     }
 
+    @SneakyThrows
     @Override
     public Boolean updateArticle(UpdateArticleInput input, UserContext context) {
         Article article = confirmArticleInRedis(input);
         if(!article.getUserId().equals(context.getId())) throw new BusinessException("当前用户无法修改");
         articleCache.changeContent(input.getId(), input.getContent());
+        elasticUtils.updateDocContent(ElasticSearchConfig.indexName, ContentType.ARTICLE.value(), input.getId(), input.getContent().substring(0,100));
         return true;
     }
 

@@ -75,21 +75,23 @@ public class ArticleCache {
      */
     public List<Article> getArticles(int from, int end){
         List<String> ids = RedisUtilsForList.get(stringRedisTemplate.opsForList(), articleList, from, end);
-        return ids.parallelStream().map(id->{
-            String key = infoArticle+id;
-            Article article = RedisUtilsForHash.get(articleRedisTemplate.opsForHash(), key, detailsHashKey);
-            if(article != null){
-                Integer thumbingNum = RedisUtilsForHash.get(integerRedisTemplate.opsForHash(), key, thumbingNumHashKey);
-                Integer commentsNum = RedisUtilsForHash.get(integerRedisTemplate.opsForHash(), key, commentsNumHashKey);
-                String abstracts = RedisUtilsForHash.get(stringRedisTemplate.opsForHash(), key, abstractsHashKey);
-                Set<Long> userIds = RedisUtilsForSet.members(longRedisTemplate.opsForSet(), thumbingUserIds+id);
-                article.setThumbingNum(thumbingNum);
-                article.setCommentsNum(commentsNum);
-                article.setAbstracts(abstracts);
-                article.setThumbUserIds(userIds);
-            }
-            return article;
-        }).collect(Collectors.toList());
+        return ids.parallelStream().map(id-> getArticle(id)).collect(Collectors.toList());
+    }
+
+    public Article getArticle(String id){
+        String key = infoArticle+id;
+        Article article = RedisUtilsForHash.get(articleRedisTemplate.opsForHash(), key, detailsHashKey);
+        if(article != null){
+            Integer thumbingNum = RedisUtilsForHash.get(integerRedisTemplate.opsForHash(), key, thumbingNumHashKey);
+            Integer commentsNum = RedisUtilsForHash.get(integerRedisTemplate.opsForHash(), key, commentsNumHashKey);
+            String abstracts = RedisUtilsForHash.get(stringRedisTemplate.opsForHash(), key, abstractsHashKey);
+            Set<Long> userIds = RedisUtilsForSet.members(longRedisTemplate.opsForSet(), thumbingUserIds+id);
+            article.setThumbingNum(thumbingNum);
+            article.setCommentsNum(commentsNum);
+            article.setAbstracts(abstracts);
+            article.setThumbUserIds(userIds);
+        }
+        return article;
     }
 
     /**
