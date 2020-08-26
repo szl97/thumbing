@@ -5,12 +5,14 @@ import com.thumbing.shared.entity.mongo.record.ChatRecord;
 import com.thumbing.shared.repository.mongo.record.IChatRecordRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * @Author: Stan Sai
  * @Date: 2020/8/12 14:49
  */
 @Component
+@Transactional
 public class RecordPersistence {
     @Autowired
     private IChatRecordRepository chatRepository;

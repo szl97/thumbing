@@ -5,12 +5,14 @@ import com.thumbing.shared.entity.mongo.record.PushDataRecord;
 import com.thumbing.shared.repository.mongo.record.IPushDataRecordRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * @Author: Stan Sai
  * @Date: 2020/8/17 10:18
  */
 @Component
+@Transactional
 public class PushDataPersistence {
     @Autowired
     private IPushDataRecordRepository pushDataRecordRepository;

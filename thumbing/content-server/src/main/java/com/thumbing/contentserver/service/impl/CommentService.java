@@ -5,10 +5,8 @@ import com.thumbing.contentserver.cache.ArticleCache;
 import com.thumbing.contentserver.cache.CommentCache;
 import com.thumbing.contentserver.cache.MomentsCache;
 import com.thumbing.contentserver.cache.NickNameCache;
-import com.thumbing.contentserver.dto.input.ArticleIdInput;
-import com.thumbing.contentserver.dto.input.CommentIdInput;
-import com.thumbing.contentserver.dto.input.CommentInput;
-import com.thumbing.contentserver.dto.input.FetchCommentInput;
+import com.thumbing.contentserver.dto.input.*;
+import com.thumbing.contentserver.dto.output.ChildCommentDto;
 import com.thumbing.contentserver.dto.output.CommentDto;
 import com.thumbing.contentserver.lockoperation.ArticleLockOperation;
 import com.thumbing.contentserver.lockoperation.CommentLockOperation;
@@ -20,6 +18,7 @@ import com.thumbing.shared.entity.mongo.content.Comment;
 import com.thumbing.shared.entity.mongo.content.enums.ContentType;
 import com.thumbing.shared.repository.mongo.content.ICommentRepository;
 import com.thumbing.shared.service.impl.BaseMongoService;
+import com.thumbing.shared.utils.dozermapper.DozerUtils;
 import com.thumbing.shared.utils.generateid.SnowFlake;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,9 +59,9 @@ public class CommentService extends BaseMongoService<Comment, ICommentRepository
             if (input.getContentType() == ContentType.ARTICLE) {
                 ArticleIdInput idInput = new ArticleIdInput();
                 idInput.setId(input.getContentId());
-                int commentsNum = getArticleCommentsNum(idInput);
+                int currentSeq = getArticleCurrentSeq(idInput);
                 String userNickName;
-                if(commentsNum > 0){
+                if(currentSeq > 0){
                     userNickName = getArticleUserNickName(idInput, context.getId());
                 }
                 else {
@@ -75,6 +74,8 @@ public class CommentService extends BaseMongoService<Comment, ICommentRepository
 
             }
         }
+        int commentsNum = input.getContentType() == ContentType.ARTICLE ? articleCache.getArticleCommentsNum(input.getContentId()) : momentsCache.getMomentsCommentsNum(input.getContentId());
+        if(commentsNum > 0) storeCommentsInRedis(input);
         comment.setFromUserId(context.getId());
         comment.setCreateTime(LocalDateTime.now());
         comment.setCommentId(SnowFlake.getInstance().nextId());
@@ -84,12 +85,63 @@ public class CommentService extends BaseMongoService<Comment, ICommentRepository
 
     @Override
     public List<CommentDto> fetchComments(FetchCommentInput input, UserContext context) {
-        return null;
+        int commentNum = 0;
+        if(input.getContentType()==ContentType.ARTICLE){
+            ArticleIdInput idInput = new ArticleIdInput();
+            idInput.setId(input.getContentId());
+            commentNum = getArticleCommentsNum(idInput);
+        }
+        else {
+
+        }
+        if(commentNum > 0) {
+            storeCommentsInRedis(input);
+        }
+        if(input.getContentType()==ContentType.ARTICLE) {
+            if (!commentCache.existArticleComments(input.getContentId())){
+                return null;
+            }
+        }
+        else{
+            if (!commentCache.existMomentsComments(input.getContentId())){
+                return null;
+            }
+        }
+        List<Comment> parentComments = commentCache.getParentsCommentsList(input.getContentId(), input.getContentType(), 0, -1);
+        List<CommentDto> result = DozerUtils.mapListSync(mapper, parentComments, CommentDto.class);
+        result.parallelStream().forEach(
+                parent->{
+                    if(commentCache.existChildComments(parent.getCommentId())) {
+                        List<Comment> child = commentCache.getChildCommentsList(parent.getCommentId(), 0, -1);
+                        parent.setChildComments(DozerUtils.mapListSync(mapper, child, ChildCommentDto.class));
+                    }
+                }
+        );
+        return result;
     }
 
     @Override
     public Boolean deleteComment(CommentIdInput input, UserContext context) {
-        return null;
+        boolean b = false;
+        if(input.getContentType() == ContentType.ARTICLE){
+            if(commentCache.existArticleComments(input.getContentId())){
+                b = true;
+            }
+        }
+        else{
+            if(commentCache.existMomentsComments(input.getContentId())){
+                b = true;
+            }
+        }
+        if(b) {
+            Comment comment = commentCache.getCommentNoChangedInfo(input.getId());
+            if (comment != null) {
+                commentCache.deleteComments(input.getId());
+                return true;
+            }
+        }
+        repository.updateIsDeleteByCommentId(input.getId());
+        return true;
     }
 
     private String getNickName(int seq){
@@ -100,12 +152,21 @@ public class CommentService extends BaseMongoService<Comment, ICommentRepository
         return getNickName(seq);
     }
 
-    private int getArticleCommentsNum(ArticleIdInput idInput){
+    private int getArticleCurrentSeq(ArticleIdInput idInput){
         if(articleCache.existArticleInfo(idInput.getId())){
+            return articleCache.getCurrentNickNameSeq(idInput.getId());
+        }
+        Article article = articleLockOperation.getArticle(idInput);
+        if(article == null) return  getArticleCurrentSeq(idInput);
+        return article.getNickNameSequence();
+    }
+
+    private int getArticleCommentsNum(ArticleIdInput idInput) {
+        if (articleCache.existArticleInfo(idInput.getId())) {
             return articleCache.getArticleCommentsNum(idInput.getId());
         }
         Article article = articleLockOperation.getArticle(idInput);
-        if(article == null) return  getArticleCommentsNum(idInput);
+        if (article == null) return getArticleCommentsNum(idInput);
         return article.getCommentsNum() == null ? 0 : article.getCommentsNum();
     }
 
@@ -120,5 +181,20 @@ public class CommentService extends BaseMongoService<Comment, ICommentRepository
         }
         nickNameLockOperation.storeArticleNickName(idInput);
         return getArticleUserNickName(idInput, userId);
+    }
+
+    private Boolean storeCommentsInRedis(FetchCommentInput input){
+        if(input.getContentType() == ContentType.ARTICLE){
+            if(commentCache.existArticleComments(input.getContentId())){
+                return true;
+            }
+        }
+        else{
+            if(commentCache.existMomentsComments(input.getContentId())){
+                return true;
+            }
+        }
+        lockOperation.getComments(input);
+        return storeCommentsInRedis(input);
     }
 }

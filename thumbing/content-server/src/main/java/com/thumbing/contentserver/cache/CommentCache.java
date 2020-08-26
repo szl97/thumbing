@@ -105,6 +105,7 @@ public class CommentCache {
      */
     public Comment getCommentDetails(Long id){
         Comment comment = RedisUtilsForHash.get(commentRedisTemplate.opsForHash(), commentsDetails+id, detailsHashKey);
+        if(comment == null) return null;
         Integer thumbs = RedisUtilsForHash.get(integerRedisTemplate.opsForHash(), commentsDetails+id, thumbingNumHashKey);
         thumbs = thumbs == null ? 0 : thumbs;
         comment.setThumbingNum(thumbs);
@@ -113,6 +114,10 @@ public class CommentCache {
             comment.setThumbUserIds(thumbUserIds);
         }
         return comment;
+    }
+
+    public Comment getCommentNoChangedInfo(Long id){
+        return RedisUtilsForHash.get(commentRedisTemplate.opsForHash(), commentsDetails+id, detailsHashKey);
     }
 
     /**
@@ -223,6 +228,18 @@ public class CommentCache {
      */
     public Set<Long> getThumbUserIds(Long id){
         return RedisUtilsForSet.members(longRedisTemplate.opsForSet(), thumbingUserIds+id);
+    }
+
+    public Boolean existArticleComments(String id){
+        return RedisUtils.hasKey(longRedisTemplate, articleCommentsIdList+id);
+    }
+
+    public Boolean existMomentsComments(String id){
+        return RedisUtils.hasKey(longRedisTemplate, momentsCommentsIdList+id);
+    }
+
+    public Boolean existChildComments(Long id){
+        return RedisUtils.hasKey(longRedisTemplate, childCommentsIdList+id);
     }
 
     /**

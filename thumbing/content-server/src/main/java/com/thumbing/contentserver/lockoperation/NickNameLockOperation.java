@@ -12,6 +12,8 @@ import com.thumbing.shared.repository.mongo.content.IUserNickNameRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -21,6 +23,7 @@ import java.util.stream.Collectors;
  * @Date: 2020/8/25 13:40
  */
 @Component
+@Transactional(propagation = Propagation.NESTED)
 public class NickNameLockOperation {
     @Autowired
     private INickNameRepository nickNameRepository;

@@ -10,15 +10,7 @@ import java.io.Serializable;
  * @date 2020-08-26 5:03
  */
 @Data
-public class CommentInput implements Serializable {
-    /**
-     * 文章或帖子的Id
-     */
-    private String contentId;
-    /**
-     * 文章还是帖子
-     */
-    private ContentType contentType;
+public class CommentInput extends FetchCommentInput {
     /**
      * 父评论Id
      */

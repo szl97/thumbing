@@ -19,6 +19,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -27,6 +29,7 @@ import java.util.List;
  * @Date: 2020/8/24 18:00
  */
 @Component
+@Transactional(propagation = Propagation.NESTED)
 public class ArticleLockOperation {
     @Autowired
     private IArticleRepository articleRepository;

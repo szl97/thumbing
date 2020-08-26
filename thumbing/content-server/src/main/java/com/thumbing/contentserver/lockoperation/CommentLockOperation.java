@@ -9,6 +9,8 @@ import com.thumbing.shared.repository.mongo.content.ICommentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -17,6 +19,7 @@ import java.util.List;
  * @Date: 2020/8/25 13:53
  */
 @Component
+@Transactional(propagation = Propagation.NESTED)
 public class CommentLockOperation {
     @Autowired
     private ICommentRepository commentRepository;
