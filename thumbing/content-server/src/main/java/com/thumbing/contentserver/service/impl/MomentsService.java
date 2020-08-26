@@ -107,6 +107,7 @@ public class MomentsService extends BaseMongoService<Moments, IMomentsRepository
     public Boolean thumbMoments(ThumbMomentsInput input, UserContext context) {
         confirmMomentsThumbsInRedis(input);
         momentsCache.changeThumbs(input.getId(), input.isAdd(), context.getId());
+        //todo:发送到消息队列，record-server和data-center接收
         return true;
     }
 

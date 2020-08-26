@@ -129,6 +129,7 @@ public class ArticleService extends BaseMongoService<Article, IArticleRepository
     public Boolean thumbArticle(ThumbArticleInput input, UserContext context) {
         confirmArticleThumbsInRedis(input);
         articleCache.changeThumbs(input.getId(), input.isAdd(), context.getId());
+        //todo:发送到消息队列，record-server和data-center接收
         return true;
     }
 

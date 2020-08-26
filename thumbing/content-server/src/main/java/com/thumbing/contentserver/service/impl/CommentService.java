@@ -75,7 +75,6 @@ public class CommentService extends BaseMongoService<Comment, ICommentRepository
                 comment.setFromNickName(userNickName);
             }
         }else {
-            //todo: moments
             MomentsIdInput idInput = new MomentsIdInput();
             idInput.setId(input.getContentId());
             existMoments(idInput);
@@ -91,13 +90,13 @@ public class CommentService extends BaseMongoService<Comment, ICommentRepository
                 comment.setFromNickName(userNickName);
             }
         }
-
         int commentsNum = input.getContentType() == ContentType.ARTICLE ? articleCache.getArticleCommentsNum(input.getContentId()) : momentsCache.getMomentsCommentsNum(input.getContentId());
         if(commentsNum > 0) storeCommentsInRedis(input);
         comment.setFromUserId(context.getId());
         comment.setCreateTime(LocalDateTime.now());
         comment.setCommentId(SnowFlake.getInstance().nextId());
         commentCache.addComments(comment);
+        //todo:发送到消息队列，record-server和data-center接收
         return true;
     }
 
@@ -168,6 +167,7 @@ public class CommentService extends BaseMongoService<Comment, ICommentRepository
     public Boolean thumbComment(ThumbCommentInput input, UserContext context) {
         confirmCommentsThumbsInRedis(input);
         commentCache.thumbsChanged(input.getId(), context.getId(), input.isAdd());
+        //todo:发送到消息队列，record-server和data-center接收
         return true;
     }
 
