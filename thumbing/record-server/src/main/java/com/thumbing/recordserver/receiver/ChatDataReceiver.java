@@ -18,9 +18,9 @@ import org.springframework.stereotype.Component;
 public class ChatDataReceiver {
 
     @Autowired
-    ChatDataHandler chatDataHandler;
+    private ChatDataHandler chatDataHandler;
     @Autowired
-    CustomThreadPool threadPool;
+    private CustomThreadPool threadPool;
 
     @RabbitHandler
     public void process(ChatDataMsg msg){

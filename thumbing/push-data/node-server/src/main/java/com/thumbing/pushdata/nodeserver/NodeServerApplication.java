@@ -20,10 +20,10 @@ import org.springframework.context.annotation.FilterType;
         "com.thumbing.pushdata.common",
         "com.thumbing.pushdata.nodeserver"
 })
-public class NodeserverApplication {
+public class NodeServerApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(NodeserverApplication.class, args);
+        SpringApplication.run(NodeServerApplication.class, args);
     }
 
 }

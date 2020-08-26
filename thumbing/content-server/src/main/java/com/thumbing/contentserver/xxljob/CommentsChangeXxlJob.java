@@ -25,7 +25,7 @@ public class CommentsChangeXxlJob {
     private ICommentRepository commentRepository;
 
     @XxlJob("commentsChangeHandler")
-    public ReturnT<String> articleChangeHandler(){
+    public ReturnT<String> execute(String param){
         List<Comment> newComments = commentCache.getAndClearNewComments();
         commentRepository.saveAll(newComments);
         Set<Long> set1 = commentCache.getAndClearThumbsNumChanged();

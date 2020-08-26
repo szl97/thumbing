@@ -1,10 +1,7 @@
 package com.thumbing.contentserver.xxljob;
 
 import cn.hutool.core.util.ArrayUtil;
-import com.thumbing.contentserver.cache.ArticleCache;
 import com.thumbing.contentserver.cache.MomentsCache;
-import com.thumbing.shared.repository.mongo.content.IArticleContentRepository;
-import com.thumbing.shared.repository.mongo.content.IArticleRepository;
 import com.thumbing.shared.repository.mongo.content.IMomentsRepository;
 import com.xxl.job.core.biz.model.ReturnT;
 import com.xxl.job.core.handler.annotation.XxlJob;
@@ -26,7 +23,7 @@ public class MomentsChangeXxlJob {
     private IMomentsRepository momentsRepository;
 
     @XxlJob("momentsChangeHandler")
-    public ReturnT<String> articleChangeHandler(){
+    public ReturnT<String> execute(String param){
         Set<String> set1 = momentsCache.getAndClearThumbsOrCommentsChangedSet();
         CompletableFuture<Void> task1 = CompletableFuture.runAsync(() -> changeCommentsNumAndThumbsNumInMongo(set1));
         Set<String> set2 = momentsCache.getAndClearContentChangedSet();

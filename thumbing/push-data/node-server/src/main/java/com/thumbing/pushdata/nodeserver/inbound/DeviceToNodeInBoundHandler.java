@@ -9,7 +9,6 @@ import org.springframework.stereotype.Component;
 
 /**
  * 设备客户端消息的处理类
- *
  * @author Stan Sai
  * @date 2020-06-23
  */

@@ -21,24 +21,14 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
         "com.thumbing.pushdata.common",
         "com.thumbing.pushdata.datacenter",
 }
-//,
-//        exclude = {
-//                RedisAutoConfiguration.class,
-//                RedisRepositoriesAutoConfiguration.class
-//        }
 )
-//@EnableFeignClients(basePackages = {
-//        "com.loserclub.shared",
-//        "com.loserclub.pushdata.common",
-//        "com.loserclub.pushdata.datacenter"
-//})
 @EnableFeignClients
 @EnableDiscoveryClient
 @EnableSwagger2
-public class DatacenterApplication {
+public class DataCenterApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(DatacenterApplication.class, args);
+        SpringApplication.run(DataCenterApplication.class, args);
     }
 
 }
