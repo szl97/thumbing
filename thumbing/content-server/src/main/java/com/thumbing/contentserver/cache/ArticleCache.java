@@ -225,19 +225,19 @@ public class ArticleCache {
         storeArticle(article, content);
         Long size = RedisUtilsForList.rightPush(stringRedisTemplate.opsForList(), articleList, article.getId());
         if(size > maxLength){
-            RedisUtilsForList.clearAndPersist(stringRedisTemplate.opsForList(), articleList, size-maxLength, size);
+            RedisUtilsForList.clearAndPersist(stringRedisTemplate.opsForList(), articleList, maxLength-size, -1);
         }
     }
 
     /**
-     * 添加文章 从左到右
+     * 添加文章
      * @param article
      */
     public void addArticleWhenInitialize(Article article){
         storeArticle(article);
         Long size = RedisUtilsForList.leftPush(stringRedisTemplate.opsForList(), articleList, article.getId());
         if(size > maxLength){
-            RedisUtilsForList.clearAndPersist(stringRedisTemplate.opsForList(), articleList, size-maxLength, size);
+            RedisUtilsForList.clearAndPersist(stringRedisTemplate.opsForList(), articleList, maxLength-size, -1);
         }
     }
 
@@ -248,7 +248,7 @@ public class ArticleCache {
      */
     public void storeArticleInList(Article article, int position){
         storeArticle(article);
-        if(!existArticleInfo(article.getId())) {
+        if(existArticleInfo(article.getId())) {
             RedisUtilsForList.setListValue(stringRedisTemplate.opsForList(), articleList, position, article.getId());
         }
     }
@@ -330,6 +330,7 @@ public class ArticleCache {
     }
 
     public void removeArticle(String id){
+        RedisUtilsForList.remove(stringRedisTemplate.opsForList(), articleList, 1, id);
         RedisUtils.remove(stringRedisTemplate, infoArticle+id);
     }
 

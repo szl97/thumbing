@@ -241,4 +241,32 @@ public class CacheKeyConstants {
      * 过期时间30天
      */
     public static final String USER_NICK_NAME_MOMENTS = "USER:NICK:NAME:MOMENTS:";
+    /**
+     * set和list都存储roast的Id(String)
+     * set用于随机获取roast
+     * list用于限制roast的长度，最大长度为50000
+     */
+    public static final String ROAST_SET = "ROAST:SET";
+    public static final String ROAST_LIST = "ROAST:LIST";
+    /**
+     * 代表使用的changed set的序号
+     */
+    public static final String ROAST_CHANGED_THUMBING_SEQ = "ROAST:CHANGED:THUMBING:SEQ";
+    /**
+     * 点赞数发生改变的roast的id
+     * set
+     */
+    public static final String ROAST_CHANGED_THUMBING_NUM = "ROAST:CHANGED:THUMBING_NUM";
+    /**
+     * hash
+     * 详情和点赞数
+     * 过期时间30天
+     */
+    public static final String INFO_ROAST = "INFO:ROAST:";
+    /**
+     * 吐槽的点赞用户集合
+     * set
+     * 存储userId(Long)
+     */
+    public static final String ROAST_THUMBING_USER_SET = "ROAST:THUMBING:USER_Id:SET:";
 }

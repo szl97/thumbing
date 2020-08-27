@@ -77,7 +77,7 @@ public class MomentsLockOperation {
     public Boolean deleteMoments(MomentsIdInput idInput){
         momentsRepository.updateIsDeleteById(idInput.getId());
         if(momentsCache.existMomentsInfo(idInput.getId())){
-            momentsCache.removeArticle(idInput.getId());
+            momentsCache.removeMoments(idInput.getId());
         }
         return true;
     }

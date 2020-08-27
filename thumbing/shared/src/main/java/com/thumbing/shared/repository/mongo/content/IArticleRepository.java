@@ -36,4 +36,6 @@ public interface IArticleRepository extends IBaseMongoRepository<Article> {
     @Modifying
     @Query(value = "update article set is_delete = 1 where id = :id")
     void updateIsDeleteById(@Param("id") String id);
+
+    Page<Article> findAllByUserIdAndIsDelete(Long userId, int isDelete, Pageable pageable);
 }

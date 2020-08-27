@@ -78,6 +78,8 @@ public class ArticleService extends BaseMongoService<Article, IArticleRepository
         article.setNickNameSequence(0);
         article.setUserId(context.getId());
         article.setCreateTime(LocalDateTime.now());
+        article.setThumbingNum(0);
+        article.setCommentsNum(0);
         article = repository.save(article);
         ArticleContent articleContent = new ArticleContent();
         articleContent.setContent(input.getContent());

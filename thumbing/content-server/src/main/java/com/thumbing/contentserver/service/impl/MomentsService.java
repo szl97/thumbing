@@ -80,6 +80,8 @@ public class MomentsService extends BaseMongoService<Moments, IMomentsRepository
         moments.setNickNameSequence(0);
         moments.setUserId(context.getId());
         moments.setCreateTime(LocalDateTime.now());
+        moments.setThumbingNum(0);
+        moments.setCommentsNum(0);
         moments = repository.save(moments);
         momentsCache.addMoments(moments);
         ElasticBaseEntity elasticBaseEntity = new ElasticBaseEntity();

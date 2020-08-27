@@ -202,7 +202,7 @@ public class MomentsCache {
         storeMoments(moments);
         Long size = RedisUtilsForList.rightPush(stringRedisTemplate.opsForList(), momentsList, moments.getId());
         if(size > maxLength){
-            RedisUtilsForList.clearAndPersist(stringRedisTemplate.opsForList(), momentsList, size-maxLength, size);
+            RedisUtilsForList.clearAndPersist(stringRedisTemplate.opsForList(), momentsList, maxLength-size, -1);
         }
     }
 
@@ -214,7 +214,7 @@ public class MomentsCache {
         storeMoments(moments);
         Long size = RedisUtilsForList.leftPush(stringRedisTemplate.opsForList(), momentsList, moments.getId());
         if(size > maxLength){
-            RedisUtilsForList.clearAndPersist(stringRedisTemplate.opsForList(), momentsList, size-maxLength, size);
+            RedisUtilsForList.clearAndPersist(stringRedisTemplate.opsForList(), momentsList, maxLength-size, -1);
         }
     }
 
@@ -256,7 +256,8 @@ public class MomentsCache {
         RedisUtilsForHash.put(stringRedisTemplate.opsForHash(), infoMoments+id, stringMap);
     }
 
-    public void removeArticle(String id){
+    public void removeMoments(String id){
+        RedisUtilsForList.remove(stringRedisTemplate.opsForList(), momentsList, 1, id);
         RedisUtils.remove(stringRedisTemplate, infoMoments+id);
     }
 

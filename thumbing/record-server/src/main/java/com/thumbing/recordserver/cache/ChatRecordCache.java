@@ -27,7 +27,7 @@ public class ChatRecordCache {
         RedisUtils.expire(redisTemplate, KEY+dto.getUserId1()+":"+dto.getUserId2(), expireDays, TimeUnit.DAYS);
         Long len = size(dto.getUserId1(), dto.getUserId2());
         if(len > 1000) {
-            RedisUtilsForList.clearAndPersist(redisTemplate.opsForList(), KEY+dto.getUserId1()+":"+dto.getUserId2(), len - 1000, len);
+            RedisUtilsForList.clearAndPersist(redisTemplate.opsForList(), KEY+dto.getUserId1()+":"+dto.getUserId2(), 1000-len, -1);
         }
     }
 

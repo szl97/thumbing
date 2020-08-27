@@ -4,6 +4,7 @@ import com.thumbing.shared.entity.mongo.MongoFullAuditedEntity;
 import com.thumbing.shared.entity.mongo.content.enums.ContentType;
 import lombok.Data;
 import lombok.experimental.FieldNameConstants;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.Set;
@@ -19,10 +20,12 @@ public class Comment extends MongoFullAuditedEntity {
     /**
      * 评论Id
      */
+    @Indexed
     private Long commentId;
     /**
      * 文章或帖子的Id
      */
+    @Indexed
     private String contentId;
     /**
      * 文章还是帖子
