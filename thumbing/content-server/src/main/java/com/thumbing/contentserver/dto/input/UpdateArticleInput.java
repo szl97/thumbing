@@ -14,6 +14,6 @@ import javax.validation.constraints.Size;
 public class UpdateArticleInput extends ArticleIdInput {
     @ApiModelProperty(value = "内容")
     @NotNull(message = "内容不可为空")
-    @Size(max = 10000, min = 500)
+    @Size(max = 10000, min = 500, message = "内容长度限制500-10000")
     private String content;
 }

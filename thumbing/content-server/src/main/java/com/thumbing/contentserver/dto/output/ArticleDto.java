@@ -7,6 +7,7 @@ import com.thumbing.shared.utils.serializer.*;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 
@@ -38,4 +39,6 @@ public class ArticleDto extends DocumentDto {
     private Integer commentsNum;
     @ApiModelProperty(value = "文章中的图片在OSS中的标识")
     private List<String> graphIds;
+    @ApiModelProperty(value = "创建时间")
+    private LocalDateTime createTime;
 }

@@ -11,6 +11,7 @@ import com.thumbing.shared.utils.serializer.StringToLongSetDeserializer;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 
@@ -42,6 +43,8 @@ public class CommentDto extends DocumentDto {
     private Set<Long> thumbUserIds;
     @ApiModelProperty(value = "点赞数")
     private Integer thumbingNum;
+    @ApiModelProperty(value = "创建时间")
+    private LocalDateTime createTime;
     /**
      * 子评论
      */

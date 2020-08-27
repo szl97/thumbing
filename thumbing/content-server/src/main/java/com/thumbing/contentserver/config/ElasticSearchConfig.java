@@ -25,6 +25,7 @@ import java.io.IOException;
 @Data
 @Configuration
 public class ElasticSearchConfig {
+    public final static String[] searchFields = {"title","content","tags"};
     public final static String indexName = "doc";
     @Value("${elasticsearch.host}")
     private String host;

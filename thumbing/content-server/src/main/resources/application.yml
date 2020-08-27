@@ -77,7 +77,6 @@ elasticsearch:
       -content
       -date
       -userId
-      -nickName
 
 xxl:
   job:
