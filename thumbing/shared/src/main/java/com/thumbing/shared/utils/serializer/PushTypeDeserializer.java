@@ -23,6 +23,7 @@ public class PushTypeDeserializer extends JsonDeserializer<PushDataTypeEnum> {
         if(t.equals(PushDataTypeEnum.MC.getType())) return PushDataTypeEnum.MC;
         if(t.equals(PushDataTypeEnum.MT.getType())) return PushDataTypeEnum.MT;
         if(t.equals(PushDataTypeEnum.RT.getType())) return PushDataTypeEnum.RT;
+        if(t.equals(PushDataTypeEnum.CT.getType())) return PushDataTypeEnum.CT;
         return null;
     }
 }

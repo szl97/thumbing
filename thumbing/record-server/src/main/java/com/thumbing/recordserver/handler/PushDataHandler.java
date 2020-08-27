@@ -28,4 +28,8 @@ public class PushDataHandler {
         dataRecord.setCreateTime(msg.getTime());
         pushDataPersistence.saveInDb(dataRecord);
     }
+
+    public void handle(PushDataRecord record){
+        pushDataPersistence.saveInDb(record);
+    }
 }

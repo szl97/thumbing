@@ -2,6 +2,7 @@ package com.thumbing.recordserver.receiver;
 
 import com.thumbing.recordserver.handler.PushDataHandler;
 import com.thumbing.shared.config.RabbitConfig;
+import com.thumbing.shared.entity.mongo.record.PushDataRecord;
 import com.thumbing.shared.message.RelationApplyMsg;
 import com.thumbing.shared.thread.CustomThreadPool;
 import org.springframework.amqp.rabbit.annotation.RabbitHandler;
@@ -14,8 +15,7 @@ import org.springframework.stereotype.Component;
  * @Date: 2020/8/10 16:05
  */
 @Component
-@RabbitListener(queues= RabbitConfig.relationApplyRecordQueueName)
-public class RelationApplyReceiver {
+public class PushDataReceiver {
 
     @Autowired
     private PushDataHandler pushDataHandler;
@@ -24,11 +24,20 @@ public class RelationApplyReceiver {
     private CustomThreadPool threadPool;
 
     @RabbitHandler
+    @RabbitListener(queues= RabbitConfig.relationApplyRecordQueueName)
     public void process(RelationApplyMsg msg){
-        threadPool.submit(
-                ()->{
-                    pushDataHandler.handle(msg);
-                }
-        );
+        threadPool.submit(()-> pushDataHandler.handle(msg));
+    }
+
+    @RabbitHandler
+    @RabbitListener(queues= RabbitConfig.commentRecordQueueName)
+    public void processComment(PushDataRecord msg) {
+        threadPool.submit(()-> pushDataHandler.handle(msg));
+    }
+
+    @RabbitHandler
+    @RabbitListener(queues= RabbitConfig.thumbRecordQueueName)
+    public void processThumb(PushDataRecord msg) {
+        threadPool.submit(()-> pushDataHandler.handle(msg));
     }
 }
