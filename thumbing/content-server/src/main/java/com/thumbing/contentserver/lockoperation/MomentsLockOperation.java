@@ -44,7 +44,7 @@ public class MomentsLockOperation {
     @Autowired
     private Mapper mapper;
 
-    @AccessLock(value = "com.thumbing.shared.entity.mongo.content.Moments",
+    @AccessLock(value = {"com.thumbing.shared.entity.mongo.content.Moments"},
             className = "com.thumbing.contentserver.dto.input.FetchMomentsInput",
             fields = {
                     "getPosition"})
@@ -60,7 +60,7 @@ public class MomentsLockOperation {
         return DozerUtils.mapToPagedResultDtoSync(mapper, page, MomentsDto.class);
     }
 
-    @AccessLock(value = "com.thumbing.shared.entity.mongo.content.Moments",
+    @AccessLock(value = {"com.thumbing.shared.entity.mongo.content.Moments"},
             className = "com.thumbing.contentserver.dto.input.MomentsIdInput",
             fields = {
                     "getId"})
@@ -70,7 +70,7 @@ public class MomentsLockOperation {
         return moments;
     }
 
-    @AccessLock(value = "com.thumbing.shared.entity.mongo.content.Moments",
+    @AccessLock(value = {"com.thumbing.shared.entity.mongo.content.Moments"},
             className = "com.thumbing.contentserver.dto.input.MomentsIdInput",
             fields = {
                     "getId"})

@@ -53,7 +53,7 @@ public class PersonalConfiguration implements IPersonalConfiguration {
         return dto;
     }
 
-    @AccessLock(value = "com.thumbing.usermanagement.dto.output.PersonalConfigurationDto")
+    @AccessLock(value = {"com.thumbing.usermanagement.dto.output.PersonalConfigurationDto"})
     private PersonalConfigurationDto fetchInDataBase(){
         PersonalConfigurationDto personalConfigurationDto = new PersonalConfigurationDto();
         CompletableFuture<Void> completableFutureJob = CompletableFuture

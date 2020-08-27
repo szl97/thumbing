@@ -17,7 +17,7 @@ public class RecordPersistence {
     @Autowired
     private IChatRecordRepository chatRepository;
 
-    @AccessLock(value = "com.thumbing.shared.entity.mongo.record.ChatRecord",
+    @AccessLock(value = {"com.thumbing.shared.entity.mongo.record.ChatRecord"},
             className = "com.thumbing.shared.entity.mongo.record.ChatRecord",
             fields = {
                     "getDataId"

@@ -40,7 +40,7 @@ public class ArticleLockOperation {
     @Autowired
     private Mapper mapper;
 
-    @AccessLock(value = "com.thumbing.shared.entity.mongo.content.ArticleContent",
+    @AccessLock(value = {"com.thumbing.shared.entity.mongo.content.ArticleContent"},
             className = "com.thumbing.contentserver.dto.input.ArticleIdInput",
             fields = {
                     "getId"})
@@ -50,7 +50,7 @@ public class ArticleLockOperation {
         return articleContent.getContent();
     }
 
-    @AccessLock(value = "com.thumbing.shared.entity.mongo.content.Article",
+    @AccessLock(value = {"com.thumbing.shared.entity.mongo.content.Article"},
             className = "com.thumbing.contentserver.dto.input.FetchArticleInput",
             fields = {
                     "getPosition"})
@@ -66,7 +66,7 @@ public class ArticleLockOperation {
         return DozerUtils.mapToPagedResultDtoSync(mapper, page, ArticleDto.class);
     }
 
-    @AccessLock(value = "com.thumbing.shared.entity.mongo.content.Article",
+    @AccessLock(value = {"com.thumbing.shared.entity.mongo.content.Article"},
             className = "com.thumbing.contentserver.dto.input.ArticleIdInput",
             fields = {
                     "getId"})

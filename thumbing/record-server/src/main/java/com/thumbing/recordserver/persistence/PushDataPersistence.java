@@ -17,7 +17,7 @@ public class PushDataPersistence {
     @Autowired
     private IPushDataRecordRepository pushDataRecordRepository;
 
-    @AccessLock(value = "com.thumbing.shared.entity.mongo.record.PushDataRecord",
+    @AccessLock(value = {"com.thumbing.shared.entity.mongo.record.PushDataRecord"},
             className = "com.thumbing.shared.entity.mongo.record.PushDataRecord",
             fields = {
                     "getPushType", "getDataId"

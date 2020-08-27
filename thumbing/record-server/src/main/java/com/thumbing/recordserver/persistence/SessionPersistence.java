@@ -22,7 +22,7 @@ public class SessionPersistence {
     @Autowired
     private SessionRecordCache sessionRecordCache;
 
-    @AccessLock(value = "com.thumbing.shared.message.ChatDataMsg",
+    @AccessLock(value = {"com.thumbing.shared.message.ChatDataMsg"},
             className = "com.thumbing.shared.message.ChatDataMsg",
             fields = {
                     "getToFromUser","getToUser"
@@ -46,7 +46,7 @@ public class SessionPersistence {
         }
     }
 
-    @AccessLock(value = "com.thumbing.shared.message.ChatDataMsg",
+    @AccessLock(value = {"com.thumbing.shared.message.ChatDataMsg"},
             className = "com.thumbing.shared.message.ChatDataMsg",
             fields = {
                     "getToUser","getFromUser"
@@ -78,7 +78,7 @@ public class SessionPersistence {
         }
     }
 
-    @AccessLock(value = "com.thumbing.shared.message.ChatDataMsg",
+    @AccessLock(value = {"com.thumbing.shared.message.ChatDataMsg"},
             className = "com.thumbing.shared.message.ChatDataMsg",
             fields = {
                     "getToUser","getFromUser"
