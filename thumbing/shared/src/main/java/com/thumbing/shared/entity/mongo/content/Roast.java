@@ -25,15 +25,11 @@ public class Roast extends MongoFullAuditedEntity {
      * 用户id
      */
     @Indexed
-    private long userId;
+    private Long userId;
     /**
-     * 标题
+     * 内容
      */
-    private String title;
-    /**
-     * 可见天数
-     */
-    private int totalDays;
+    private String content;
     /**
      * 点赞数
      */
@@ -42,8 +38,4 @@ public class Roast extends MongoFullAuditedEntity {
      * 点赞用户
      */
     private Set<Long> thumbUserIds;
-    /**
-     * 不可见后是否可以在一段时间后被打捞
-     */
-    private boolean fishing;
 }

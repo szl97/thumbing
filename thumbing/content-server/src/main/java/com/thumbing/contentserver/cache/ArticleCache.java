@@ -329,8 +329,11 @@ public class ArticleCache {
         RedisUtilsForHash.put(stringRedisTemplate.opsForHash(), infoArticle+id, stringMap);
     }
 
-    public void removeArticle(String id){
+    public void removeInList(String id){
         RedisUtilsForList.remove(stringRedisTemplate.opsForList(), articleList, 1, id);
+    }
+    public void removeArticle(String id){
+        removeInList(id);
         RedisUtils.remove(stringRedisTemplate, infoArticle+id);
     }
 

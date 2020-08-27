@@ -19,9 +19,7 @@ public class RecordPersistence {
 
     @AccessLock(value = {"com.thumbing.shared.entity.mongo.record.ChatRecord"},
             className = "com.thumbing.shared.entity.mongo.record.ChatRecord",
-            fields = {
-                    "getDataId"
-            })
+            fields = {"getDataId"})
     public ChatRecord saveInDb(ChatRecord chatRecord) {
         ChatRecord record = null;
         if (chatRecord.getId() != null) {

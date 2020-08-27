@@ -13,6 +13,7 @@ import com.thumbing.contentserver.sender.PushDataSender;
 import com.thumbing.contentserver.service.IMomentsService;
 import com.thumbing.shared.auth.model.UserContext;
 import com.thumbing.shared.dto.output.PageResultDto;
+import com.thumbing.shared.entity.mongo.MongoCreationEntity;
 import com.thumbing.shared.entity.mongo.content.Moments;
 import com.thumbing.shared.entity.mongo.content.enums.ContentType;
 import com.thumbing.shared.entity.mongo.record.PushDataRecord;
@@ -23,6 +24,9 @@ import com.thumbing.shared.service.impl.BaseMongoService;
 import com.thumbing.shared.utils.dozermapper.DozerUtils;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -133,6 +137,14 @@ public class MomentsService extends BaseMongoService<Moments, IMomentsRepository
         momentsCache.changeContent(input.getId(), input.getContent());
         elasticUtils.updateDocContent(ElasticSearchConfig.indexName, ContentType.MOMENTS.value(), input.getId(), input.getContent());
         return true;
+    }
+
+    @Override
+    public PageResultDto<MomentsDto> getMine(FetchMomentsInput input, UserContext context) {
+        Sort sort = Sort.by(Sort.Direction.DESC, MongoCreationEntity.Fields.createTime);
+        PageRequest pageRequest = PageRequest.of(input.getPageNumber(), input.getPageSize(), sort);
+        Page<Moments> page = repository.findAllByUserIdAndIsDelete(context.getId(), 0, pageRequest);
+        return DozerUtils.mapToPagedResultDtoSync(mapper,page, MomentsDto.class);
     }
 
     private Long confirmMomentsThumbsInRedis(MomentsIdInput input) {

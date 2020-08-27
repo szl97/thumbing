@@ -256,8 +256,12 @@ public class MomentsCache {
         RedisUtilsForHash.put(stringRedisTemplate.opsForHash(), infoMoments+id, stringMap);
     }
 
-    public void removeMoments(String id){
+    public void removeInList(String id){
         RedisUtilsForList.remove(stringRedisTemplate.opsForList(), momentsList, 1, id);
+    }
+
+    public void removeMoments(String id){
+        removeInList(id);
         RedisUtils.remove(stringRedisTemplate, infoMoments+id);
     }
 

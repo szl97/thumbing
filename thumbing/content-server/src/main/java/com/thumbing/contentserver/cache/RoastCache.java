@@ -220,10 +220,13 @@ public class RoastCache {
         }
     }
 
-
-    public void removeRoast(String id){
+    public void removeInCollection(String id){
         RedisUtilsForList.remove(stringRedisTemplate.opsForList(), roastList, 1, id);
         RedisUtilsForSet.remove(stringRedisTemplate.opsForSet(), roastSet, id);
+    }
+
+    public void removeRoast(String id){
+        removeInCollection(id);
         RedisUtils.remove(stringRedisTemplate, infoRoast+id);
     }
 

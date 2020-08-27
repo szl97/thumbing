@@ -19,9 +19,7 @@ public class PushDataPersistence {
 
     @AccessLock(value = {"com.thumbing.shared.entity.mongo.record.PushDataRecord"},
             className = "com.thumbing.shared.entity.mongo.record.PushDataRecord",
-            fields = {
-                    "getPushType", "getDataId"
-            })
+            fields = {"getPushType", "getDataId"})
     public PushDataRecord saveInDb(PushDataRecord pushDataRecord) {
         PushDataRecord record = null;
         if (pushDataRecord.getId() != null) {

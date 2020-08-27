@@ -58,4 +58,12 @@ public interface IMomentsService {
      * @return
      */
     Boolean updateMoments(UpdateMomentsInput input, UserContext context);
+
+    /**
+     * 获取自己发布的帖子
+     * @param input
+     * @param context
+     * @return
+     */
+    PageResultDto<MomentsDto> getMine(FetchMomentsInput input, UserContext context);
 }

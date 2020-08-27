@@ -46,8 +46,7 @@ public class MomentsLockOperation {
 
     @AccessLock(value = {"com.thumbing.shared.entity.mongo.content.Moments"},
             className = "com.thumbing.contentserver.dto.input.FetchMomentsInput",
-            fields = {
-                    "getPosition"})
+            fields = {"getPosition"})
     public PageResultDto<MomentsDto> getMomentsPage(FetchMomentsInput input){
         Sort sort = Sort.by(Sort.Direction.DESC, MongoCreationEntity.Fields.createTime);
         Page<Moments> page = momentsRepository.findAllByIsDelete(0, PageRequest.of(input.getPageNumber() - 1, input.getPageSize(), sort));
@@ -62,8 +61,7 @@ public class MomentsLockOperation {
 
     @AccessLock(value = {"com.thumbing.shared.entity.mongo.content.Moments"},
             className = "com.thumbing.contentserver.dto.input.MomentsIdInput",
-            fields = {
-                    "getId"})
+            fields = {"getId"})
     public Moments getMoments(MomentsIdInput idInput){
         Moments moments = momentsRepository.findByIdAndIsDelete(idInput.getId(), 0).orElseThrow(()->new BusinessException("帖子不存在"));
         momentsCache.storeMoments(moments);
@@ -72,12 +70,13 @@ public class MomentsLockOperation {
 
     @AccessLock(value = {"com.thumbing.shared.entity.mongo.content.Moments"},
             className = "com.thumbing.contentserver.dto.input.MomentsIdInput",
-            fields = {
-                    "getId"})
+            fields = {"getId"})
     public Boolean deleteMoments(MomentsIdInput idInput){
         momentsRepository.updateIsDeleteById(idInput.getId());
         if(momentsCache.existMomentsInfo(idInput.getId())){
             momentsCache.removeMoments(idInput.getId());
+        }else {
+            momentsCache.removeInList(idInput.getId());
         }
         return true;
     }

@@ -67,4 +67,12 @@ public interface IArticleService {
      * @return
      */
     Boolean updateArticle(UpdateArticleInput input, UserContext context);
+
+    /**
+     * 获取自己发布的文章
+     * @param input
+     * @param context
+     * @return
+     */
+    PageResultDto<ArticleDto> getMine(FetchArticleInput input, UserContext context);
 }
