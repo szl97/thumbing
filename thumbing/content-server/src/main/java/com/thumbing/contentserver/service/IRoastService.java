@@ -8,7 +8,6 @@ import com.thumbing.contentserver.dto.input.ThumbRoastInput;
 import com.thumbing.contentserver.dto.output.RoastDto;
 import com.thumbing.shared.auth.model.UserContext;
 import com.thumbing.shared.dto.output.PageResultDto;
-import com.thumbing.shared.entity.mongo.content.Roast;
 
 import java.util.List;
 
@@ -23,7 +22,7 @@ public interface IRoastService {
      * @param context
      * @return
      */
-    List<Roast> fetchRoasts(UserContext context);
+    List<RoastDto> fetchRoasts(UserContext context);
 
     /**
      * 发表心情吐槽
@@ -32,7 +31,7 @@ public interface IRoastService {
      * @return
      * @throws JsonProcessingException
      */
-    Boolean publishRoasts(PublishRoastInput input, UserContext context);
+    Boolean publishRoast(PublishRoastInput input, UserContext context);
 
     /**
      * 删除心情吐槽
