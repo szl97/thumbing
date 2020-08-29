@@ -135,6 +135,8 @@ public class MomentsService extends BaseMongoService<Moments, IMomentsRepository
     @SneakyThrows
     @Override
     public Boolean updateMoments(UpdateMomentsInput input, UserContext context) {
+        SensitiveFilter filter = SensitiveFilter.DEFAULT;
+        input.setContent(filter.filter(input.getContent(),'*'));
         Moments moments = confirmMomentsInRedis(input);
         if(!moments.getUserId().equals(context.getId())) throw new BusinessException("当前用户无法修改");
         momentsCache.changeContent(input.getId(), input.getContent());

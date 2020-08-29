@@ -13,6 +13,7 @@ import com.thumbing.shared.repository.sql.black.IBlackListRepository;
 import com.thumbing.shared.repository.sql.relation.IRelationApplyInfoRepository;
 import com.thumbing.shared.repository.sql.relation.IRelationRepository;
 import com.thumbing.shared.utils.dozermapper.DozerUtils;
+import com.thumbing.shared.utils.sensitiveword.SensitiveFilter;
 import com.thumbing.usermanagement.dto.input.RelationApplyHandlerInput;
 import com.thumbing.usermanagement.dto.input.RelationApplyInput;
 import com.thumbing.usermanagement.dto.input.RelationRemoveInput;
@@ -59,6 +60,8 @@ public class RelationService implements IRelationService {
      */
     @Override
     public Boolean applyRelation(UserContext userContext, RelationApplyInput input) {
+        SensitiveFilter filter = SensitiveFilter.DEFAULT;
+        input.setRemark(filter.filter(input.getRemark(),'*'));
         if(input.getTargetUserId().equals(userContext.getId())) throw new BusinessException("操作错误");
         //todo: 判断对方是否存在于你的黑名单中 + 判断对方是否把你拉黑
         Specification<BlackList> specification1 = Specifications.where(spec->{

@@ -157,6 +157,8 @@ public class ArticleService extends BaseMongoService<Article, IArticleRepository
     @SneakyThrows
     @Override
     public Boolean updateArticle(UpdateArticleInput input, UserContext context) {
+        SensitiveFilter filter = SensitiveFilter.DEFAULT;
+        input.setContent(filter.filter(input.getContent(),'*'));
         Article article = confirmArticleInRedis(input);
         if(!article.getUserId().equals(context.getId())) throw new BusinessException("当前用户无法修改");
         articleCache.changeContent(input.getId(), input.getContent());
