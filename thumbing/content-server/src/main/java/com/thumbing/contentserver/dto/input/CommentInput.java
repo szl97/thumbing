@@ -31,6 +31,6 @@ public class CommentInput extends FetchCommentInput {
     private String toNickName;
     @ApiModelProperty(value = "评论内容")
     @NotNull(message = "评论内容不可为空")
-    @Size(max = 200)
+    @Size(max = 200, message = "评论长度限制1-200")
     private String content;
 }

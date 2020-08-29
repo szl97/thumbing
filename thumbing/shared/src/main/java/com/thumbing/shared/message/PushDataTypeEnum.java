@@ -10,7 +10,8 @@ public enum PushDataTypeEnum {
     AT("articleThumbing"),
     MC("momentComment"),
     MT("momentThumbing"),
-    RT("roastThumbing");
+    RT("roastThumbing"),
+    CT("commentThumbing");
     String type;
     PushDataTypeEnum(String type){
         this.type = type;

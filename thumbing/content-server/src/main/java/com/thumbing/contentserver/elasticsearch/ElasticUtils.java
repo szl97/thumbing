@@ -1,5 +1,6 @@
 package com.thumbing.contentserver.elasticsearch;
 
+import cn.hutool.core.util.ArrayUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.thumbing.shared.utils.context.SpringContextUtils;
 import lombok.Data;
@@ -23,7 +24,6 @@ import org.elasticsearch.common.settings.Settings;
 import org.elasticsearch.common.xcontent.XContentBuilder;
 import org.elasticsearch.common.xcontent.XContentType;
 import org.elasticsearch.index.query.*;
-import org.elasticsearch.index.reindex.BulkByScrollResponse;
 import org.elasticsearch.index.reindex.DeleteByQueryRequest;
 import org.elasticsearch.index.reindex.UpdateByQueryRequest;
 import org.elasticsearch.script.Script;
@@ -256,6 +256,24 @@ public class ElasticUtils {
                                   String[] fieldNames,
                                   int pageNum,
                                   int pageSize,
+                                  Class<T> clazz){
+        return searchDocs(indices, keyword, fieldNames, pageNum, pageSize, clazz, null, null, null);
+    }
+
+    /**
+     * 搜索文档
+     * @param indices
+     * @param keyword
+     * @param fieldNames
+     * @param pageNum
+     * @param pageSize
+     * @return
+     */
+    public <T> List<T> searchDocs(String indices,
+                                  String keyword,
+                                  String[] fieldNames,
+                                  int pageNum,
+                                  int pageSize,
                                   Class<T> clazz,
                                   @Nullable List<Long> blackList,
                                   @Nullable String type,
@@ -269,7 +287,7 @@ public class ElasticUtils {
             boolBuilder.must(termQueryBuilder);
         }
         //黑名单中的用户查不到
-        if (blackList != null) {
+        if (ArrayUtil.isNotEmpty(blackList)) {
             TermQueryBuilder termQueryBuilder = QueryBuilders.termQuery("userId", blackList.toArray());
             boolBuilder.mustNot(termQueryBuilder);
         }

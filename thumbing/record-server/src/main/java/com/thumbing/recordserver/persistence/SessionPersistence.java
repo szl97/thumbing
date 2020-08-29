@@ -22,11 +22,9 @@ public class SessionPersistence {
     @Autowired
     private SessionRecordCache sessionRecordCache;
 
-    @AccessLock(value = "com.thumbing.shared.message.ChatDataMsg",
+    @AccessLock(value = {"com.thumbing.shared.message.ChatDataMsg"},
             className = "com.thumbing.shared.message.ChatDataMsg",
-            fields = {
-                    "getToFromUser","getToUser"
-            })
+            fields = {"getToFromUser","getToUser"})
     public void saveForFromUser(ChatDataMsg msg){
         SessionRecordDto dto1 =sessionRecordCache.getOne(msg.getFromUser(), msg.getToUser());
         if(dto1 == null) {
@@ -46,11 +44,9 @@ public class SessionPersistence {
         }
     }
 
-    @AccessLock(value = "com.thumbing.shared.message.ChatDataMsg",
+    @AccessLock(value = {"com.thumbing.shared.message.ChatDataMsg"},
             className = "com.thumbing.shared.message.ChatDataMsg",
-            fields = {
-                    "getToUser","getFromUser"
-            })
+            fields = {"getToUser","getFromUser"})
     public void saveForToUser(ChatDataMsg msg){
         boolean isSave = false;
         SessionRecordDto dto2 =sessionRecordCache.getOne(msg.getToUser(), msg.getFromUser());
@@ -78,11 +74,9 @@ public class SessionPersistence {
         }
     }
 
-    @AccessLock(value = "com.thumbing.shared.message.ChatDataMsg",
+    @AccessLock(value = {"com.thumbing.shared.message.ChatDataMsg"},
             className = "com.thumbing.shared.message.ChatDataMsg",
-            fields = {
-                    "getToUser","getFromUser"
-            })
+            fields = {"getToUser","getFromUser"})
     public void saveAllInCache(ChatMsgInputDto msg, ReadChatRecord input){
         SessionRecordDto dto =sessionRecordCache.getOne(msg.getToUser(), msg.getFromUser());
         if(dto == null) {

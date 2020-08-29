@@ -3,6 +3,7 @@ package com.thumbing.shared.entity.mongo.content;
 import com.thumbing.shared.entity.mongo.MongoFullAuditedEntity;
 import lombok.Data;
 import lombok.experimental.FieldNameConstants;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.List;
@@ -19,6 +20,7 @@ public class Article extends MongoFullAuditedEntity {
     /**
      * 用户id
      */
+    @Indexed
     private Long userId;
     /**
      * 标题

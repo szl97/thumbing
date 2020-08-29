@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.experimental.FieldNameConstants;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.Set;
@@ -23,21 +24,18 @@ public class Roast extends MongoFullAuditedEntity {
     /**
      * 用户id
      */
-    private long userId;
+    @Indexed
+    private Long userId;
     /**
-     * 标题
+     * 内容
      */
-    private String title;
+    private String content;
     /**
-     * 可见天数
+     * 点赞数
      */
-    private int totalDays;
+    private Integer thumbingNum;
     /**
      * 点赞用户
      */
     private Set<Long> thumbUserIds;
-    /**
-     * 不可见后是否可以在一段时间后被打捞
-     */
-    private boolean fishing;
 }

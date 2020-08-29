@@ -20,5 +20,4 @@ public class ElasticBaseEntity {
     private String content;
     private String tags;
     private LocalDateTime dateTime;
-    private String nickName;
 }

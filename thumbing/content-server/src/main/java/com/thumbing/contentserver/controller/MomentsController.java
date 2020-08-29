@@ -1,7 +1,6 @@
 package com.thumbing.contentserver.controller;
 
 import com.thumbing.contentserver.dto.input.*;
-import com.thumbing.contentserver.dto.output.ArticleDto;
 import com.thumbing.contentserver.dto.output.MomentsDto;
 import com.thumbing.contentserver.service.IMomentsService;
 import com.thumbing.shared.annotation.Authorize;
@@ -68,5 +67,12 @@ public class MomentsController extends ThumbingBaseController {
     @RequestMapping(value = "update", method = RequestMethod.POST)
     public Boolean updateArticle(@Valid UpdateMomentsInput input){
         return momentsService.updateMoments(input, getCurrentUser());
+    }
+
+    @ApiOperation("获取自己发布的帖子")
+    @Authorize(PermissionConstants.ACCESS)
+    @RequestMapping(value = "getMine", method = RequestMethod.GET)
+    public PageResultDto<MomentsDto> getMine(FetchMomentsInput input){
+        return momentsService.getMine(input, getCurrentUser());
     }
 }

@@ -12,12 +12,16 @@ import com.thumbing.contentserver.lockoperation.ArticleLockOperation;
 import com.thumbing.contentserver.lockoperation.CommentLockOperation;
 import com.thumbing.contentserver.lockoperation.MomentsLockOperation;
 import com.thumbing.contentserver.lockoperation.NickNameLockOperation;
+import com.thumbing.contentserver.sender.PushDataSender;
 import com.thumbing.contentserver.service.ICommentService;
 import com.thumbing.shared.auth.model.UserContext;
 import com.thumbing.shared.entity.mongo.content.Article;
 import com.thumbing.shared.entity.mongo.content.Comment;
 import com.thumbing.shared.entity.mongo.content.Moments;
 import com.thumbing.shared.entity.mongo.content.enums.ContentType;
+import com.thumbing.shared.entity.mongo.record.PushDataRecord;
+import com.thumbing.shared.exception.BusinessException;
+import com.thumbing.shared.message.PushDataTypeEnum;
 import com.thumbing.shared.repository.mongo.content.ICommentRepository;
 import com.thumbing.shared.service.impl.BaseMongoService;
 import com.thumbing.shared.utils.dozermapper.DozerUtils;
@@ -54,6 +58,8 @@ public class CommentService extends BaseMongoService<Comment, ICommentRepository
     @Autowired
     private MomentsLockOperation momentsLockOperation;
     @Autowired
+    private PushDataSender sender;
+    @Autowired
     private Mapper mapper;
 
     @Override
@@ -63,7 +69,7 @@ public class CommentService extends BaseMongoService<Comment, ICommentRepository
             ArticleIdInput idInput = new ArticleIdInput();
             idInput.setId(input.getContentId());
             existArticle(idInput);
-            if (comment.getFromNickName() == null) {
+            if (StringUtils.isBlank(comment.getFromNickName())) {
                 int currentSeq = getArticleCurrentSeq(idInput);
                 String userNickName;
                 if (currentSeq > 0) {
@@ -78,7 +84,7 @@ public class CommentService extends BaseMongoService<Comment, ICommentRepository
             MomentsIdInput idInput = new MomentsIdInput();
             idInput.setId(input.getContentId());
             existMoments(idInput);
-            if (comment.getFromNickName() == null) {
+            if (StringUtils.isBlank(comment.getFromNickName())) {
                 int currentSeq = getMomentsCurrentSeq(idInput);
                 String userNickName;
                 if (currentSeq > 0) {
@@ -97,6 +103,17 @@ public class CommentService extends BaseMongoService<Comment, ICommentRepository
         comment.setCommentId(SnowFlake.getInstance().nextId());
         commentCache.addComments(comment);
         //todo:发送到消息队列，record-server和data-center接收
+        PushDataRecord msg = new PushDataRecord();
+        msg.setDataId(comment.getCommentId().toString());
+        msg.setData(comment.getContent());
+        msg.setRead(false);
+        msg.setCreateTime(comment.getCreateTime());
+        msg.setPushType(comment.getContentType() == ContentType.ARTICLE ? PushDataTypeEnum.AC : PushDataTypeEnum.MC);
+        msg.setFromUserId(context.getId());
+        msg.setFromUserName(context.getName());
+        msg.setFromUserNickName(comment.getFromNickName());
+        msg.setToUserId(comment.getToUserId());
+        sender.sendComment(msg);
         return true;
     }
 
@@ -165,9 +182,16 @@ public class CommentService extends BaseMongoService<Comment, ICommentRepository
 
     @Override
     public Boolean thumbComment(ThumbCommentInput input, UserContext context) {
-        confirmCommentsThumbsInRedis(input);
+        Long userId = confirmCommentsThumbsInRedis(input);
         commentCache.thumbsChanged(input.getId(), context.getId(), input.isAdd());
         //todo:发送到消息队列，record-server和data-center接收
+        PushDataRecord msg = new PushDataRecord();
+        msg.setDataId(input.getId().toString());
+        msg.setRead(false);
+        msg.setCreateTime(LocalDateTime.now());
+        msg.setToUserId(userId);
+        msg.setPushType(PushDataTypeEnum.CT);
+        sender.sendThumb(msg);
         return true;
     }
 
@@ -272,9 +296,12 @@ public class CommentService extends BaseMongoService<Comment, ICommentRepository
         return storeCommentsInRedis(input);
     }
 
-    private void confirmCommentsThumbsInRedis(CommentIdInput input) {
+    private Long confirmCommentsThumbsInRedis(CommentIdInput input) {
         if (!(commentCache.existThumbingUser(input.getId()) && commentCache.existCommentThumbsNum(input.getId()))) {
-            if(lockOperation.getCommentDetails(input) == null) confirmCommentsThumbsInRedis(input);
+            if(lockOperation.getCommentDetails(input) == null) return confirmCommentsThumbsInRedis(input);
         }
+        Comment comment = commentCache.getCommentNoChangedInfo(input.getId());
+        if(comment == null) throw new BusinessException("评论未找到");
+        return comment.getFromUserId();
     }
 }

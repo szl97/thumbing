@@ -28,7 +28,7 @@ public class CommentLockOperation {
     @Autowired
     private CommentCache commentCache;
 
-    @AccessLock(value = "com.thumbing.shared.entity.mongo.content.Comment",
+    @AccessLock(value = {"com.thumbing.shared.entity.mongo.content.Comment"},
                 className = "com.thumbing.contentserver.dto.input.FetchCommentInput",
                 fields = {"getContentId","getContentType"})
     public Boolean getComments(FetchCommentInput input){
@@ -42,7 +42,7 @@ public class CommentLockOperation {
         return true;
     }
 
-    @AccessLock(value = "com.thumbing.shared.entity.mongo.content.Comment",
+    @AccessLock(value = {"com.thumbing.shared.entity.mongo.content.Comment"},
             className = "com.thumbing.contentserver.dto.input.CommentIdInput",
             fields = {"getId"})
     public Comment getCommentDetails(CommentIdInput input){

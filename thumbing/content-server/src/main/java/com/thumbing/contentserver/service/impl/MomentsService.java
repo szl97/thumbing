@@ -9,17 +9,24 @@ import com.thumbing.contentserver.dto.output.MomentsDto;
 import com.thumbing.contentserver.elasticsearch.ElasticBaseEntity;
 import com.thumbing.contentserver.elasticsearch.ElasticUtils;
 import com.thumbing.contentserver.lockoperation.MomentsLockOperation;
+import com.thumbing.contentserver.sender.PushDataSender;
 import com.thumbing.contentserver.service.IMomentsService;
 import com.thumbing.shared.auth.model.UserContext;
 import com.thumbing.shared.dto.output.PageResultDto;
+import com.thumbing.shared.entity.mongo.MongoCreationEntity;
 import com.thumbing.shared.entity.mongo.content.Moments;
 import com.thumbing.shared.entity.mongo.content.enums.ContentType;
+import com.thumbing.shared.entity.mongo.record.PushDataRecord;
 import com.thumbing.shared.exception.BusinessException;
+import com.thumbing.shared.message.PushDataTypeEnum;
 import com.thumbing.shared.repository.mongo.content.IMomentsRepository;
 import com.thumbing.shared.service.impl.BaseMongoService;
 import com.thumbing.shared.utils.dozermapper.DozerUtils;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -40,6 +47,8 @@ public class MomentsService extends BaseMongoService<Moments, IMomentsRepository
     private MomentsCache momentsCache;
     @Autowired
     private MomentsLockOperation lockOperation;
+    @Autowired
+    private PushDataSender sender;
     @Autowired
     private Mapper mapper;
     @Autowired
@@ -75,6 +84,8 @@ public class MomentsService extends BaseMongoService<Moments, IMomentsRepository
         moments.setNickNameSequence(0);
         moments.setUserId(context.getId());
         moments.setCreateTime(LocalDateTime.now());
+        moments.setThumbingNum(0);
+        moments.setCommentsNum(0);
         moments = repository.save(moments);
         momentsCache.addMoments(moments);
         ElasticBaseEntity elasticBaseEntity = new ElasticBaseEntity();
@@ -105,9 +116,16 @@ public class MomentsService extends BaseMongoService<Moments, IMomentsRepository
 
     @Override
     public Boolean thumbMoments(ThumbMomentsInput input, UserContext context) {
-        confirmMomentsThumbsInRedis(input);
+        Long userId = confirmMomentsThumbsInRedis(input);
         momentsCache.changeThumbs(input.getId(), input.isAdd(), context.getId());
         //todo:发送到消息队列，record-server和data-center接收
+        PushDataRecord msg = new PushDataRecord();
+        msg.setDataId(input.getId());
+        msg.setRead(false);
+        msg.setCreateTime(LocalDateTime.now());
+        msg.setToUserId(userId);
+        msg.setPushType(PushDataTypeEnum.MT);
+        sender.sendThumb(msg);
         return true;
     }
 
@@ -121,10 +139,21 @@ public class MomentsService extends BaseMongoService<Moments, IMomentsRepository
         return true;
     }
 
-    private void confirmMomentsThumbsInRedis(MomentsIdInput input) {
+    @Override
+    public PageResultDto<MomentsDto> getMine(FetchMomentsInput input, UserContext context) {
+        Sort sort = Sort.by(Sort.Direction.DESC, MongoCreationEntity.Fields.createTime);
+        PageRequest pageRequest = PageRequest.of(input.getPageNumber(), input.getPageSize(), sort);
+        Page<Moments> page = repository.findAllByUserIdAndIsDelete(context.getId(), 0, pageRequest);
+        return DozerUtils.mapToPagedResultDtoSync(mapper,page, MomentsDto.class);
+    }
+
+    private Long confirmMomentsThumbsInRedis(MomentsIdInput input) {
         if (!(momentsCache.existThumbingUser(input.getId()) && momentsCache.existMomentsThumbsNum(input.getId()))) {
-            if(lockOperation.getMoments(input) == null) confirmMomentsThumbsInRedis(input);
+            if(lockOperation.getMoments(input) == null) return confirmMomentsThumbsInRedis(input);
         }
+        Moments moments = momentsCache.getMomentsNoChangedInfo(input.getId());
+        if(moments == null) throw new BusinessException("帖子未找到");
+        return moments.getUserId();
     }
 
     private Moments confirmMomentsInRedis(MomentsIdInput input) {

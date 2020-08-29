@@ -14,6 +14,6 @@ import javax.validation.constraints.Size;
 public class UpdateMomentsInput extends MomentsIdInput {
     @ApiModelProperty(value = "内容")
     @NotNull(message = "内容不可为空")
-    @Size(max = 1200, min = 30)
+    @Size(max = 1200, min = 30, message = "内容长度限制30-1200")
     private String content;
 }

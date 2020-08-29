@@ -17,14 +17,14 @@ import java.util.Set;
 public class PublishArticleInput implements Serializable {
     @ApiModelProperty(value = "标题")
     @NotNull(message = "标题不可为空")
-    @Size(max = 30)
+    @Size(max = 30, message = "标题长度限制1-30")
     private String title;
     @ApiModelProperty(value = "标签")
     @NotNull(message = "标签不可为空")
     private Set<String> tagIds;
     @ApiModelProperty(value = "内容")
     @NotNull(message = "内容不可为空")
-    @Size(max = 10000, min = 500)
+    @Size(max = 10000, min = 500, message = "长度限制500-10000")
     private String content;
     @ApiModelProperty(value = "图片在对象服务器上的存储Id")
     private List<String> graphIds;

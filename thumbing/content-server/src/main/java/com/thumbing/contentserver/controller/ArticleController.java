@@ -75,4 +75,11 @@ public class ArticleController extends ThumbingBaseController {
     public Boolean updateArticle(@Valid UpdateArticleInput input){
         return articleService.updateArticle(input, getCurrentUser());
     }
+
+    @ApiOperation("获取自己发布的文章")
+    @Authorize(PermissionConstants.ACCESS)
+    @RequestMapping(value = "getMine", method = RequestMethod.GET)
+    public PageResultDto<ArticleDto> getMine(FetchArticleInput input){
+        return articleService.getMine(input, getCurrentUser());
+    }
 }

@@ -33,7 +33,7 @@ public class NickNameLockOperation {
     @Autowired
     private NickNameCache cache;
 
-    @AccessLock(value = "com.thumbing.shared.entity.mongo.content.NickName")
+    @AccessLock(value = {"com.thumbing.shared.entity.mongo.content.NickName"})
     public Boolean storeAllNickNames(){
         Sort sort = Sort.by(Sort.Direction.ASC, NickName.Fields.sequence);
         List<NickName> nickNameList = nickNameRepository.findAll(sort);

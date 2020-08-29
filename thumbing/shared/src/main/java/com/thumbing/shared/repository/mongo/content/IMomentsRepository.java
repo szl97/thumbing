@@ -37,4 +37,6 @@ public interface IMomentsRepository extends IBaseMongoRepository<Moments> {
     @Modifying
     @Query(value = "update moments set is_delete = 1 where id = :id")
     void updateIsDeleteById(@Param("id") String id);
+
+    Page<Moments> findAllByUserIdAndIsDelete(Long userId, int isDelete, Pageable pageable);
 }

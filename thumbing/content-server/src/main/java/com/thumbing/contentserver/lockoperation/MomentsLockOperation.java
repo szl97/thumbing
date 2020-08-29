@@ -44,10 +44,9 @@ public class MomentsLockOperation {
     @Autowired
     private Mapper mapper;
 
-    @AccessLock(value = "com.thumbing.shared.entity.mongo.content.Moments",
+    @AccessLock(value = {"com.thumbing.shared.entity.mongo.content.Moments"},
             className = "com.thumbing.contentserver.dto.input.FetchMomentsInput",
-            fields = {
-                    "getPosition"})
+            fields = {"getPosition"})
     public PageResultDto<MomentsDto> getMomentsPage(FetchMomentsInput input){
         Sort sort = Sort.by(Sort.Direction.DESC, MongoCreationEntity.Fields.createTime);
         Page<Moments> page = momentsRepository.findAllByIsDelete(0, PageRequest.of(input.getPageNumber() - 1, input.getPageSize(), sort));
@@ -60,24 +59,24 @@ public class MomentsLockOperation {
         return DozerUtils.mapToPagedResultDtoSync(mapper, page, MomentsDto.class);
     }
 
-    @AccessLock(value = "com.thumbing.shared.entity.mongo.content.Moments",
+    @AccessLock(value = {"com.thumbing.shared.entity.mongo.content.Moments"},
             className = "com.thumbing.contentserver.dto.input.MomentsIdInput",
-            fields = {
-                    "getId"})
+            fields = {"getId"})
     public Moments getMoments(MomentsIdInput idInput){
         Moments moments = momentsRepository.findByIdAndIsDelete(idInput.getId(), 0).orElseThrow(()->new BusinessException("帖子不存在"));
         momentsCache.storeMoments(moments);
         return moments;
     }
 
-    @AccessLock(value = "com.thumbing.shared.entity.mongo.content.Moments",
+    @AccessLock(value = {"com.thumbing.shared.entity.mongo.content.Moments"},
             className = "com.thumbing.contentserver.dto.input.MomentsIdInput",
-            fields = {
-                    "getId"})
+            fields = {"getId"})
     public Boolean deleteMoments(MomentsIdInput idInput){
         momentsRepository.updateIsDeleteById(idInput.getId());
         if(momentsCache.existMomentsInfo(idInput.getId())){
-            momentsCache.removeArticle(idInput.getId());
+            momentsCache.removeMoments(idInput.getId());
+        }else {
+            momentsCache.removeInList(idInput.getId());
         }
         return true;
     }

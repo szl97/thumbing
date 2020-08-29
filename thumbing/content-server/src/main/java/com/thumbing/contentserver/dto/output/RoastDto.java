@@ -15,38 +15,22 @@ import java.util.Set;
 
 /**
  * @Author: Stan Sai
- * @Date: 2020/8/19 15:31
+ * @Date: 2020/8/27 17:34
  */
 @Data
-public class ChildCommentDto extends DocumentDto {
+public class RoastDto extends DocumentDto {
     @JsonSerialize(using = LongToStringSerializer.class)
     @JsonDeserialize(using = StringToLongDeserializer.class)
-    @ApiModelProperty(value = "评论Id")
-    private Long commentId;
-    @JsonSerialize(using = LongToStringSerializer.class)
-    @JsonDeserialize(using = StringToLongDeserializer.class)
-    @ApiModelProperty(value = "父评论Id")
-    private Long parentCommentId;
-    @JsonSerialize(using = LongToStringSerializer.class)
-    @JsonDeserialize(using = StringToLongDeserializer.class)
-    @ApiModelProperty(value = "发送方Id")
-    private Long fromUserId;
-    @JsonSerialize(using = LongToStringSerializer.class)
-    @JsonDeserialize(using = StringToLongDeserializer.class)
-    @ApiModelProperty(value = "接收方Id")
-    private Long toUserId;
-    @ApiModelProperty(value = "发表方昵称")
-    private String fromNickName;
-    @ApiModelProperty(value = "接收方昵称")
-    private String toNickName;
+    @ApiModelProperty(value = "用户Id")
+    private Long userId;
     @ApiModelProperty(value = "内容")
     private String content;
+    @ApiModelProperty(value = "点赞数")
+    private Integer thumbingNum;
     @JsonSerialize(using = LongToStringSetSerializer.class)
     @JsonDeserialize(using = StringToLongSetDeserializer.class)
     @ApiModelProperty(value = "点赞用户")
     private Set<Long> thumbUserIds;
-    @ApiModelProperty(value = "点赞数")
-    private int thumbingNum;
     @ApiModelProperty(value = "创建时间")
     private LocalDateTime createTime;
 }

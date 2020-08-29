@@ -3,6 +3,7 @@ package com.thumbing.shared.entity.mongo.content;
 import com.thumbing.shared.entity.mongo.MongoFullAuditedEntity;
 import lombok.Data;
 import lombok.experimental.FieldNameConstants;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 /**
@@ -14,5 +15,6 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @FieldNameConstants
 public class ArticleContent extends MongoFullAuditedEntity {
     private String content;
+    @Indexed
     private String articleId;
 }

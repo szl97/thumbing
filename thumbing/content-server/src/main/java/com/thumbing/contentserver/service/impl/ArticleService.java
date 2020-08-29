@@ -9,13 +9,17 @@ import com.thumbing.contentserver.dto.output.ArticleDto;
 import com.thumbing.contentserver.elasticsearch.ElasticBaseEntity;
 import com.thumbing.contentserver.elasticsearch.ElasticUtils;
 import com.thumbing.contentserver.lockoperation.ArticleLockOperation;
+import com.thumbing.contentserver.sender.PushDataSender;
 import com.thumbing.contentserver.service.IArticleService;
 import com.thumbing.shared.auth.model.UserContext;
 import com.thumbing.shared.dto.output.PageResultDto;
+import com.thumbing.shared.entity.mongo.MongoCreationEntity;
 import com.thumbing.shared.entity.mongo.content.Article;
 import com.thumbing.shared.entity.mongo.content.ArticleContent;
 import com.thumbing.shared.entity.mongo.content.enums.ContentType;
+import com.thumbing.shared.entity.mongo.record.PushDataRecord;
 import com.thumbing.shared.exception.BusinessException;
+import com.thumbing.shared.message.PushDataTypeEnum;
 import com.thumbing.shared.repository.mongo.content.IArticleContentRepository;
 import com.thumbing.shared.repository.mongo.content.IArticleRepository;
 import com.thumbing.shared.service.impl.BaseMongoService;
@@ -23,6 +27,9 @@ import com.thumbing.shared.utils.dozermapper.DozerUtils;
 import com.thumbing.shared.utils.sensitiveword.SensitiveFilter;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -45,6 +52,8 @@ public class ArticleService extends BaseMongoService<Article, IArticleRepository
     private ArticleCache articleCache;
     @Autowired
     private ArticleLockOperation lockOperation;
+    @Autowired
+    private PushDataSender sender;
     @Autowired
     private Mapper mapper;
     @Autowired
@@ -76,6 +85,8 @@ public class ArticleService extends BaseMongoService<Article, IArticleRepository
         article.setNickNameSequence(0);
         article.setUserId(context.getId());
         article.setCreateTime(LocalDateTime.now());
+        article.setThumbingNum(0);
+        article.setCommentsNum(0);
         article = repository.save(article);
         ArticleContent articleContent = new ArticleContent();
         articleContent.setContent(input.getContent());
@@ -130,9 +141,16 @@ public class ArticleService extends BaseMongoService<Article, IArticleRepository
 
     @Override
     public Boolean thumbArticle(ThumbArticleInput input, UserContext context) {
-        confirmArticleThumbsInRedis(input);
+        Long userId = confirmArticleThumbsInRedis(input);
         articleCache.changeThumbs(input.getId(), input.isAdd(), context.getId());
         //todo:发送到消息队列，record-server和data-center接收
+        PushDataRecord msg = new PushDataRecord();
+        msg.setDataId(input.getId());
+        msg.setRead(false);
+        msg.setCreateTime(LocalDateTime.now());
+        msg.setToUserId(userId);
+        msg.setPushType(PushDataTypeEnum.AT);
+        sender.sendThumb(msg);
         return true;
     }
 
@@ -146,10 +164,21 @@ public class ArticleService extends BaseMongoService<Article, IArticleRepository
         return true;
     }
 
-    private void confirmArticleThumbsInRedis(ArticleIdInput input) {
+    @Override
+    public PageResultDto<ArticleDto> getMine(FetchArticleInput input, UserContext context) {
+        Sort sort = Sort.by(Sort.Direction.DESC, MongoCreationEntity.Fields.createTime);
+        PageRequest pageRequest = PageRequest.of(input.getPageNumber(), input.getPageSize(), sort);
+        Page<Article> page = repository.findAllByUserIdAndIsDelete(context.getId(), 0, pageRequest);
+        return DozerUtils.mapToPagedResultDtoSync(mapper,page,ArticleDto.class);
+    }
+
+    private Long confirmArticleThumbsInRedis(ArticleIdInput input) {
         if (!(articleCache.existThumbingUser(input.getId()) && articleCache.existArticleThumbsNum(input.getId()))) {
-            if(lockOperation.getArticle(input) == null) confirmArticleThumbsInRedis(input);
+            if(lockOperation.getArticle(input) == null) return confirmArticleThumbsInRedis(input);
         }
+        Article article = articleCache.getArticleNoChangedInfo(input.getId());
+        if(article == null) throw new BusinessException("文章未找到");
+        return article.getUserId();
     }
 
     private Article confirmArticleInRedis(ArticleIdInput input) {

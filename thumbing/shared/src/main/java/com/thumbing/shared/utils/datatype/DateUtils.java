@@ -29,7 +29,6 @@ public class DateUtils {
 
     /**
      * 返回时间
-     *
      * @param text 字符串
      * @return
      */
@@ -56,7 +55,6 @@ public class DateUtils {
 
     /**
      * 返回自定义格式化工具
-     *
      * @param pattern 模式
      * @return
      */

@@ -1,10 +1,9 @@
 package com.thumbing.shared.entity.mongo.content;
 
 import com.thumbing.shared.entity.mongo.BaseMongoEntity;
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 import lombok.experimental.FieldNameConstants;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 /**
@@ -16,5 +15,6 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @FieldNameConstants
 public class NickName extends BaseMongoEntity {
     private String name;
+    @Indexed
     private int sequence;
 }
