@@ -20,6 +20,7 @@ import com.thumbing.shared.repository.mongo.content.IArticleContentRepository;
 import com.thumbing.shared.repository.mongo.content.IArticleRepository;
 import com.thumbing.shared.service.impl.BaseMongoService;
 import com.thumbing.shared.utils.dozermapper.DozerUtils;
+import com.thumbing.shared.utils.sensitiveword.SensitiveFilter;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -68,6 +69,8 @@ public class ArticleService extends BaseMongoService<Article, IArticleRepository
     @SneakyThrows
     @Override
     public Boolean publishArticle(PublishArticleInput input, UserContext context) {
+        SensitiveFilter filter = SensitiveFilter.DEFAULT;
+        input.setContent(filter.filter(input.getContent(),'*'));
         Article article = mapper.map(input, Article.class);
         article.setAbstracts(input.getContent().substring(0,100));
         article.setNickNameSequence(0);
