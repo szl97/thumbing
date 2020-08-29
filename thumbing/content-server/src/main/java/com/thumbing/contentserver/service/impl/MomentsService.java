@@ -22,6 +22,7 @@ import com.thumbing.shared.message.PushDataTypeEnum;
 import com.thumbing.shared.repository.mongo.content.IMomentsRepository;
 import com.thumbing.shared.service.impl.BaseMongoService;
 import com.thumbing.shared.utils.dozermapper.DozerUtils;
+import com.thumbing.shared.utils.sensitiveword.SensitiveFilter;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -80,6 +81,8 @@ public class MomentsService extends BaseMongoService<Moments, IMomentsRepository
     @SneakyThrows
     @Override
     public Boolean publishMoments(PublishMomentsInput input, UserContext context) {
+        SensitiveFilter filter = SensitiveFilter.DEFAULT;
+        input.setContent(filter.filter(input.getContent(),'*'));
         Moments moments = mapper.map(input, Moments.class);
         moments.setNickNameSequence(0);
         moments.setUserId(context.getId());

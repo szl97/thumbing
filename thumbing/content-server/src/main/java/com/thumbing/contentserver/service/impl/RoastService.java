@@ -20,6 +20,7 @@ import com.thumbing.shared.message.PushDataTypeEnum;
 import com.thumbing.shared.repository.mongo.content.IRoastRepository;
 import com.thumbing.shared.service.impl.BaseMongoService;
 import com.thumbing.shared.utils.dozermapper.DozerUtils;
+import com.thumbing.shared.utils.sensitiveword.SensitiveFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -54,6 +55,8 @@ public class RoastService extends BaseMongoService<Roast, IRoastRepository> impl
 
     @Override
     public Boolean publishRoast(PublishRoastInput input, UserContext context) {
+        SensitiveFilter filter = SensitiveFilter.DEFAULT;
+        input.setContent(filter.filter(input.getContent(),'*'));
         Roast roast = new Roast();
         roast.setContent(input.getContent());
         roast.setThumbingNum(0);

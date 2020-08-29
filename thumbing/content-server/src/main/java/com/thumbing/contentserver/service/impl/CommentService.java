@@ -26,6 +26,7 @@ import com.thumbing.shared.repository.mongo.content.ICommentRepository;
 import com.thumbing.shared.service.impl.BaseMongoService;
 import com.thumbing.shared.utils.dozermapper.DozerUtils;
 import com.thumbing.shared.utils.generateid.SnowFlake;
+import com.thumbing.shared.utils.sensitiveword.SensitiveFilter;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -64,6 +65,8 @@ public class CommentService extends BaseMongoService<Comment, ICommentRepository
 
     @Override
     public Boolean publishComment(CommentInput input, UserContext context) {
+        SensitiveFilter filter = SensitiveFilter.DEFAULT;
+        input.setContent(filter.filter(input.getContent(),'*'));
         Comment comment = mapper.map(input, Comment.class);
         if (input.getContentType() == ContentType.ARTICLE) {
             ArticleIdInput idInput = new ArticleIdInput();
