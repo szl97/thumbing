@@ -2,9 +2,7 @@ package com.thumbing.auth.service.impl;
 
 import com.github.dozermapper.core.Mapper;
 import com.thumbing.auth.cache.FailureLoginCache;
-import com.thumbing.auth.client.IUserInfoServiceClient;
 import com.thumbing.auth.context.LoginUserContextHolder;
-import com.thumbing.auth.dto.feign.UserInfoInput;
 import com.thumbing.auth.dto.input.LoginRequest;
 import com.thumbing.auth.service.IAuthService;
 import com.thumbing.shared.auth.model.UserContext;

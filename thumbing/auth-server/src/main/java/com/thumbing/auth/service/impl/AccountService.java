@@ -1,6 +1,5 @@
 package com.thumbing.auth.service.impl;
 
-
 import com.github.dozermapper.core.Mapper;
 import com.thumbing.auth.cache.ValidationCache;
 import com.thumbing.auth.client.IUserInfoServiceClient;

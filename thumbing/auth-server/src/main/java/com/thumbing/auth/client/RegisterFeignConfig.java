@@ -5,7 +5,6 @@ import cn.hutool.core.util.CharsetUtil;
 import cn.hutool.crypto.asymmetric.KeyType;
 import cn.hutool.crypto.asymmetric.RSA;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.thumbing.shared.auth.authentication.AuthorizationContextHolder;
 import com.thumbing.shared.constants.HttpHeaderConstants;
 import com.thumbing.shared.exception.BusinessException;
 import feign.RequestInterceptor;
