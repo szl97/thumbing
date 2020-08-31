@@ -72,7 +72,10 @@ public class CommentService extends BaseMongoService<Comment, ICommentRepository
             ArticleIdInput idInput = new ArticleIdInput();
             idInput.setId(input.getContentId());
             existArticle(idInput);
-            if (StringUtils.isBlank(comment.getFromNickName())) {
+            Article article = articleCache.getArticleNoChangedInfo(input.getContentId());
+            if(article.getUserId().equals(context.getId())){
+                input.setFromNickName("作者");
+            } else {
                 int currentSeq = getArticleCurrentSeq(idInput);
                 String userNickName;
                 if (currentSeq > 0) {
@@ -87,7 +90,10 @@ public class CommentService extends BaseMongoService<Comment, ICommentRepository
             MomentsIdInput idInput = new MomentsIdInput();
             idInput.setId(input.getContentId());
             existMoments(idInput);
-            if (StringUtils.isBlank(comment.getFromNickName())) {
+            Moments moments = momentsCache.getMomentsNoChangedInfo(input.getContentId());
+            if(moments.getUserId().equals(context.getId())){
+                input.setFromNickName("楼主");
+            } else{
                 int currentSeq = getMomentsCurrentSeq(idInput);
                 String userNickName;
                 if (currentSeq > 0) {
@@ -99,8 +105,7 @@ public class CommentService extends BaseMongoService<Comment, ICommentRepository
                 comment.setFromNickName(userNickName);
             }
         }
-        int commentsNum = input.getContentType() == ContentType.ARTICLE ? articleCache.getArticleCommentsNum(input.getContentId()) : momentsCache.getMomentsCommentsNum(input.getContentId());
-        if(commentsNum > 0) storeCommentsInRedis(input);
+        storeCommentsInRedis(input);
         comment.setFromUserId(context.getId());
         comment.setCreateTime(LocalDateTime.now());
         comment.setCommentId(SnowFlake.getInstance().nextId());
