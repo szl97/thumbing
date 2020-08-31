@@ -22,7 +22,7 @@ public class RoastChangeXxlJob {
     @Autowired
     private IRoastRepository roastRepository;
 
-    @XxlJob("commentsChangeHandler")
+    @XxlJob("roastChangeHandler")
     public ReturnT<String> execute(String param){
         Set<String> set1 = roastCache.getAndClearThumbChangedSet();
         CompletableFuture<Void> task1 = CompletableFuture.runAsync(() -> changeThumbsNum(set1));
