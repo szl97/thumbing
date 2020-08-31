@@ -13,6 +13,7 @@ import com.thumbing.shared.controller.ThumbingBaseController;
 import com.thumbing.shared.dto.output.PageResultDto;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -34,7 +35,7 @@ public class RoastController extends ThumbingBaseController {
     @ApiOperation("发表心情吐槽")
     @Authorize(PermissionConstants.ACCESS)
     @RequestMapping(value = "publish", method = RequestMethod.PUT)
-    public Boolean publishRoast(@Valid PublishRoastInput input){
+    public Boolean publishRoast(@RequestBody @Valid PublishRoastInput input){
         return roastService.publishRoast(input, getCurrentUser());
     }
 
@@ -55,7 +56,7 @@ public class RoastController extends ThumbingBaseController {
     @ApiOperation("点赞")
     @Authorize(PermissionConstants.REGISTER)
     @RequestMapping(value = "thumb", method = RequestMethod.POST)
-    public Boolean thumbRoast(@Valid ThumbRoastInput input){
+    public Boolean thumbRoast(@RequestBody @Valid ThumbRoastInput input){
         return roastService.thumbRoast(input, getCurrentUser());
     }
 

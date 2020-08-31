@@ -8,7 +8,7 @@
         <version>0.0.1-SNAPSHOT</version>
     </parent>
     <groupId>com.thumbing</groupId>
-    <artifactId>auth</artifactId>
+    <artifactId>authserver</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>auth-server</name>
 

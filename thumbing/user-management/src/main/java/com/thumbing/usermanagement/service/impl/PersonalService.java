@@ -13,6 +13,7 @@ import com.thumbing.shared.repository.sql.system.IUserRepository;
 import com.thumbing.shared.repository.sql.user.IUserInfoRepository;
 import com.thumbing.shared.service.impl.BaseSqlService;
 import com.thumbing.shared.utils.dozermapper.DozerUtils;
+import com.thumbing.usermanagement.context.UserContextHolder;
 import com.thumbing.usermanagement.dto.input.PersonalEditInput;
 import com.thumbing.usermanagement.dto.input.PersonalInput;
 import com.thumbing.usermanagement.dto.input.UserInfoInput;
@@ -38,6 +39,15 @@ public class PersonalService extends BaseSqlService<Personal, IPersonalRepositor
     private IUserInfoRepository userInfoRepository;
     @Autowired
     private Mapper mapper;
+
+    @Override
+    public Boolean createUserInfo(UserContext putUserContext) {
+        UserContext userContext = UserContextHolder.getUser();
+        if(!userContext.getId().equals(putUserContext.getId()) || !userContext.getName().equals(putUserContext.getName())) throw new BusinessException("数据被修改");
+        UserInfoInput input = new UserInfoInput();
+        input.setNickName(userContext.getName());
+        return createUserInfo(userContext, input);
+    }
 
     @Override
     public Boolean createUserInfo(UserContext userContext, UserInfoInput input){

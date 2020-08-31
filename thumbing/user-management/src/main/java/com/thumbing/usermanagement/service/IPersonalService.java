@@ -14,6 +14,11 @@ import com.thumbing.usermanagement.dto.output.PersonalDto;
 public interface IPersonalService {
     /**
      * 创建用户信息
+     * @return
+     */
+    Boolean createUserInfo(UserContext userContext);
+    /**
+     * 创建用户信息
      * @param userContext
      * @param input
      * @return
