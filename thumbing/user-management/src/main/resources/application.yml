@@ -97,3 +97,7 @@ authentication:
   expirationTime: 3600 # Number of minutes
   issuer: thumbing
   signingKey: xm8EV6Hy5RMFK4EEACIDAwQus48djvcnjsdksfksjdfwiuersdkjhfskjdhfskjdf
+
+rsa:
+  password: NLoReUF7QXnrr6hVWaAKQ9RYuw3SKzxv
+  publicKey: MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCaHAsz6EJ/cWzkhzHnq/MOKyXi97UwZLEW8LNZGvQZ/vFjgpXlcfYI4Fx84WPoDBeYckUw801sXyk/gCYHfIWfyleVCqDKHj9WGrAXHIZryNWlB7WNc5Ei3LBhS0qYmBnMGZOhusPukHJdIFYewRHpsZfbQCneHFZxPaPPPM3CzQIDAQAB

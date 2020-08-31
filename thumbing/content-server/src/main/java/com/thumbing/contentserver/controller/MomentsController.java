@@ -10,6 +10,7 @@ import com.thumbing.shared.controller.ThumbingBaseController;
 import com.thumbing.shared.dto.output.PageResultDto;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -30,7 +31,7 @@ public class MomentsController extends ThumbingBaseController {
     @ApiOperation("发表帖子")
     @Authorize(PermissionConstants.ACCESS)
     @RequestMapping(value = "publish", method = RequestMethod.PUT)
-    public Boolean publishMoments(@Valid PublishMomentsInput input){
+    public Boolean publishMoments(@RequestBody @Valid PublishMomentsInput input){
         return momentsService.publishMoments(input, getCurrentUser());
     }
 
@@ -58,14 +59,14 @@ public class MomentsController extends ThumbingBaseController {
     @ApiOperation("点赞")
     @Authorize(PermissionConstants.REGISTER)
     @RequestMapping(value = "thumb", method = RequestMethod.POST)
-    public Boolean thumbArticle(@Valid ThumbMomentsInput input){
+    public Boolean thumbArticle(@RequestBody @Valid ThumbMomentsInput input){
         return momentsService.thumbMoments(input, getCurrentUser());
     }
 
     @ApiOperation("修改内容")
     @Authorize(PermissionConstants.ACCESS)
     @RequestMapping(value = "update", method = RequestMethod.POST)
-    public Boolean updateArticle(@Valid UpdateMomentsInput input){
+    public Boolean updateArticle(@RequestBody @Valid UpdateMomentsInput input){
         return momentsService.updateMoments(input, getCurrentUser());
     }
 

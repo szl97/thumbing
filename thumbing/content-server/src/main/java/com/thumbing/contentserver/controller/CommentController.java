@@ -12,6 +12,7 @@ import com.thumbing.shared.auth.permission.PermissionConstants;
 import com.thumbing.shared.controller.ThumbingBaseController;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -33,7 +34,7 @@ public class CommentController extends ThumbingBaseController {
     @ApiOperation("发表评论")
     @Authorize(PermissionConstants.ACCESS)
     @RequestMapping(value = "publish", method = RequestMethod.PUT)
-    public Boolean publishComment(@Valid CommentInput input){
+    public Boolean publishComment(@RequestBody @Valid CommentInput input){
         return commentService.publishComment(input, getCurrentUser());
     }
 
@@ -54,7 +55,7 @@ public class CommentController extends ThumbingBaseController {
     @ApiOperation("点赞")
     @Authorize(PermissionConstants.REGISTER)
     @RequestMapping(value = "thumb", method = RequestMethod.POST)
-    public Boolean thumbComment(@Valid ThumbCommentInput input){
+    public Boolean thumbComment(@RequestBody @Valid ThumbCommentInput input){
         return commentService.thumbComment(input, getCurrentUser());
     }
 }

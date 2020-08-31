@@ -1,5 +1,6 @@
 package com.thumbing.usermanagement.controller;
 
+import com.thumbing.shared.annotation.AllowAnonymous;
 import com.thumbing.shared.annotation.Authorize;
 import com.thumbing.shared.annotation.EnableResponseAdvice;
 import com.thumbing.shared.auth.model.UserContext;
@@ -27,6 +28,13 @@ import org.springframework.web.bind.annotation.RestController;
 public class PersonalController extends ThumbingBaseController {
     @Autowired
     private IPersonalService personalService;
+
+    @ApiOperation("注册时调用创建用户信息")
+    @RequestMapping(value = "/userInfo/register", method = RequestMethod.PUT)
+    @AllowAnonymous
+    public Boolean createPersonal(@RequestBody UserContext userContext){
+        return personalService.createUserInfo(userContext);
+    }
 
     @ApiOperation("创建用户信息")
     @RequestMapping(value = "/userInfo", method = RequestMethod.PUT)

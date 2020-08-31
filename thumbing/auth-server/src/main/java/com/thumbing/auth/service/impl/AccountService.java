@@ -3,12 +3,14 @@ package com.thumbing.auth.service.impl;
 
 import com.github.dozermapper.core.Mapper;
 import com.thumbing.auth.cache.ValidationCache;
+import com.thumbing.auth.client.IUserInfoServiceClient;
 import com.thumbing.auth.dto.input.ChangePasswordRequest;
 import com.thumbing.auth.dto.input.SignUpInput;
 import com.thumbing.auth.dto.input.CheckUniqueInput;
 import com.thumbing.auth.dto.output.AccountDto;
 import com.thumbing.auth.service.IAccountService;
 import com.thumbing.shared.annotation.UniqueLock;
+import com.thumbing.shared.auth.model.UserContext;
 import com.thumbing.shared.entity.sql.system.Device;
 import com.thumbing.shared.entity.sql.system.User;
 import com.thumbing.shared.exception.BusinessException;
@@ -35,6 +37,8 @@ public class AccountService extends BaseSqlService<User, IUserRepository> implem
     private PasswordEncoder passwordEncoder;
     @Autowired
     private Mapper mapper;
+    @Autowired
+    private IUserInfoServiceClient client;
 
     @Override
     @UniqueLock(className = "com.thumbing.auth.dto.input.SignUpInput",
@@ -88,6 +92,10 @@ public class AccountService extends BaseSqlService<User, IUserRepository> implem
             user.setPhoneNum("000");
         }
         User entity = repository.save(user);
+        UserContext userContext = new UserContext();
+        userContext.setId(entity.getId());
+        userContext.setName(entity.getUserName());
+        client.createPersonal(userContext);
         return mapper.map(entity, AccountDto.class);
     }
 
