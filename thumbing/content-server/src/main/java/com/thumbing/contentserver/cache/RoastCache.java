@@ -214,6 +214,7 @@ public class RoastCache {
      */
     public void changeThumbs(String id, Long userId){
         if(!existThumbingUser(id) || !RedisUtilsForSet.isExist(longRedisTemplate.opsForSet(), thumbingUserIds+id, userId)) {
+            RedisUtilsForSet.add(longRedisTemplate.opsForSet(), thumbingUserIds+id, userId);
             RedisUtilsForHash.increment(integerRedisTemplate.opsForHash(), infoRoast+id, thumbingNumHashKey, 1);
             RedisUtilsForSet.add(stringRedisTemplate.opsForSet(), thumbingChanged+RedisUtilsForValue.get(integerRedisTemplate.opsForValue(), thumbingChangedSeq), id);
             setRoastExpireTime(id);

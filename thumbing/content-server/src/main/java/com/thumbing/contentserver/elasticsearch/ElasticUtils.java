@@ -300,7 +300,8 @@ public class ElasticUtils {
         }
         MultiMatchQueryBuilder multiMatchQuery = QueryBuilders
                 .multiMatchQuery(keyword, fieldNames)
-                .operator(Operator.AND);
+                .type(MultiMatchQueryBuilder.Type.BEST_FIELDS)
+                .tieBreaker(0.3f);
         boolBuilder.must(multiMatchQuery);
         //设置高亮 tags title content abstracts要设置高亮
         HighlightBuilder highlightBuilder = new HighlightBuilder();
@@ -333,7 +334,7 @@ public class ElasticUtils {
                 String source = hit.getSourceAsString();
                 T item = objectMapper.readValue(source, clazz);
                 Field[] fields = clazz.getDeclaredFields();
-                for (Field field : fields) {
+                for (Field field : fields){
                     field.setAccessible(true);
                     if (highlightFields.containsKey(field.getName())) {
                         try {

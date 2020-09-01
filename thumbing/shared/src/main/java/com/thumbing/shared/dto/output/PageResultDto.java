@@ -2,7 +2,7 @@ package com.thumbing.shared.dto.output;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.thumbing.shared.utils.serializer.LongToStringListSerializer;
+import com.thumbing.shared.utils.serializer.LongToStringSerializer;
 import com.thumbing.shared.utils.serializer.StringToLongDeserializer;
 import lombok.Data;
 
@@ -15,7 +15,7 @@ import java.util.List;
  */
 @Data
 public class PageResultDto<T> implements Serializable {
-    @JsonSerialize(using = LongToStringListSerializer.class)
+    @JsonSerialize(using = LongToStringSerializer.class)
     @JsonDeserialize(using = StringToLongDeserializer.class)
     private Long totalCount;
     private List<T> items;

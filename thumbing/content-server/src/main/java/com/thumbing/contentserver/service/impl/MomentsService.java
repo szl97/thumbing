@@ -92,7 +92,9 @@ public class MomentsService extends BaseMongoService<Moments, IMomentsRepository
         moments = repository.save(moments);
         momentsCache.addMoments(moments);
         ElasticBaseEntity elasticBaseEntity = new ElasticBaseEntity();
+        elasticBaseEntity.setUserId(moments.getUserId());
         elasticBaseEntity.setContentId(moments.getId());
+        elasticBaseEntity.setTitle(moments.getTitle());
         elasticBaseEntity.setContent(moments.getContent());
         elasticBaseEntity.setName(ContentType.MOMENTS);
         elasticBaseEntity.setDateTime(moments.getCreateTime());
@@ -147,7 +149,7 @@ public class MomentsService extends BaseMongoService<Moments, IMomentsRepository
     @Override
     public PageResultDto<MomentsDto> getMine(FetchMomentsInput input, UserContext context) {
         Sort sort = Sort.by(Sort.Direction.DESC, MongoCreationEntity.Fields.createTime);
-        PageRequest pageRequest = PageRequest.of(input.getPageNumber(), input.getPageSize(), sort);
+        PageRequest pageRequest = PageRequest.of(input.getPageNumber() - 1, input.getPageSize(), sort);
         Page<Moments> page = repository.findAllByUserIdAndIsDelete(context.getId(), 0, pageRequest);
         return DozerUtils.mapToPagedResultDtoSync(mapper,page, MomentsDto.class);
     }
@@ -163,7 +165,7 @@ public class MomentsService extends BaseMongoService<Moments, IMomentsRepository
 
     private Moments confirmMomentsInRedis(MomentsIdInput input) {
         if (momentsCache.existMomentsInfo(input.getId())) {
-            return momentsCache.getMomentsNoChangedInfo(input.getId());
+            return momentsCache.getMoments(input.getId());
         } else {
             Moments moments = lockOperation.getMoments(input);
             if (moments == null) confirmMomentsInRedis(input);

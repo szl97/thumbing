@@ -15,6 +15,12 @@ spring:
   jackson:
     serialization:
       FAIL_ON_EMPTY_BEANS: false
+      INDENT_OUTPUT: true
+    parser:
+      #允许出现特殊字符和转义符
+      allow_unquoted_control_chars: true
+      #允许出现单引号
+      allow_single_quotes: true
   rabbitmq:
     username: guest
     password: guest

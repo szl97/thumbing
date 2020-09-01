@@ -300,6 +300,7 @@ public class ArticleCache {
      */
     public void changeThumbs(String id, boolean add, Long userId){
         if(!existThumbingUser(id) || (RedisUtilsForSet.isExist(longRedisTemplate.opsForSet(), thumbingUserIds+id, userId)^add)) {
+            Long l = add ?  RedisUtilsForSet.add(longRedisTemplate.opsForSet(), thumbingUserIds+id, userId) : RedisUtilsForSet.remove(longRedisTemplate.opsForSet(), thumbingUserIds+id, userId);
             RedisUtilsForHash.increment(integerRedisTemplate.opsForHash(), infoArticle+id, thumbingNumHashKey, add?1:-1);
             RedisUtilsForSet.add(stringRedisTemplate.opsForSet(), thumbingChanged+RedisUtilsForValue.get(integerRedisTemplate.opsForValue(), thumbingChangedSeq), id);
             setArticleExpireTime(id);

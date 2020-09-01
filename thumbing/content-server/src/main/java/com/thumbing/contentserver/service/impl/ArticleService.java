@@ -81,7 +81,8 @@ public class ArticleService extends BaseMongoService<Article, IArticleRepository
         SensitiveFilter filter = SensitiveFilter.DEFAULT;
         input.setContent(filter.filter(input.getContent(),'*'));
         Article article = mapper.map(input, Article.class);
-        article.setAbstracts(input.getContent().substring(0,100));
+        String abstracts = input.getContent().substring(0,100);
+        article.setAbstracts(abstracts);
         article.setNickNameSequence(0);
         article.setUserId(context.getId());
         article.setCreateTime(LocalDateTime.now());
@@ -95,7 +96,9 @@ public class ArticleService extends BaseMongoService<Article, IArticleRepository
         articleCache.addArticle(article, input.getContent());
         ElasticBaseEntity elasticBaseEntity = new ElasticBaseEntity();
         elasticBaseEntity.setContentId(article.getId());
-        elasticBaseEntity.setContent(article.getAbstracts());
+        elasticBaseEntity.setTitle(article.getTitle());
+        elasticBaseEntity.setUserId(article.getUserId());
+        elasticBaseEntity.setContent(abstracts);
         elasticBaseEntity.setName(ContentType.ARTICLE);
         elasticBaseEntity.setDateTime(article.getCreateTime());
         elasticBaseEntity.setTags(objectMapper.writeValueAsString(article.getTagIds()));
@@ -169,7 +172,7 @@ public class ArticleService extends BaseMongoService<Article, IArticleRepository
     @Override
     public PageResultDto<ArticleDto> getMine(FetchArticleInput input, UserContext context) {
         Sort sort = Sort.by(Sort.Direction.DESC, MongoCreationEntity.Fields.createTime);
-        PageRequest pageRequest = PageRequest.of(input.getPageNumber(), input.getPageSize(), sort);
+        PageRequest pageRequest = PageRequest.of(input.getPageNumber() - 1, input.getPageSize(), sort);
         Page<Article> page = repository.findAllByUserIdAndIsDelete(context.getId(), 0, pageRequest);
         return DozerUtils.mapToPagedResultDtoSync(mapper,page,ArticleDto.class);
     }
@@ -185,7 +188,7 @@ public class ArticleService extends BaseMongoService<Article, IArticleRepository
 
     private Article confirmArticleInRedis(ArticleIdInput input) {
         if (articleCache.existArticleInfo(input.getId())) {
-            return articleCache.getArticleNoChangedInfo(input.getId());
+            return articleCache.getArticle(input.getId());
         } else {
             Article article = lockOperation.getArticle(input);
             if (article == null) confirmArticleInRedis(input);

@@ -39,9 +39,8 @@ public enum ContentType {
     public static class ContentTypeDeserializer extends JsonDeserializer<ContentType> {
 
         @Override
-        public ContentType deserialize(JsonParser p, DeserializationContext ctxt) throws IOException, JsonProcessingException {
-            JsonNode node = p.getCodec().readTree(p);
-            String name = node.get("name").asText();
+        public ContentType deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {
+            String name = p.getText();
             if (name.equals(ContentType.ARTICLE.value)) {
                 return ContentType.ARTICLE;
             } else if (name.equals(ContentType.MOMENTS.value())) {

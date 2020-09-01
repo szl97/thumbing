@@ -205,6 +205,7 @@ public class CommentCache {
      */
     public void thumbsChanged(Long commentsId, Long userId, boolean add){
         if(!existThumbingUser(commentsId) || (RedisUtilsForSet.isExist(longRedisTemplate.opsForSet(), thumbingUserIds+commentsId, userId)^add)) {
+            Long l = add ?  RedisUtilsForSet.add(longRedisTemplate.opsForSet(), thumbingUserIds+commentsId, userId) : RedisUtilsForSet.remove(longRedisTemplate.opsForSet(), thumbingUserIds+commentsId, userId);
             RedisUtilsForHash.increment(integerRedisTemplate.opsForHash(), commentsDetails+commentsId, thumbingNumHashKey, add?1:-1);
             if(!RedisUtilsForSet.isExist(longRedisTemplate.opsForSet(), commentsNewSet+RedisUtilsForValue.get(integerRedisTemplate.opsForValue(), commentsNewSeq), commentsId)) {
                 RedisUtilsForSet.add(longRedisTemplate.opsForSet(), thumbingChangedSet + RedisUtilsForValue.get(integerRedisTemplate.opsForValue(), thumbingChangedSeq), commentsId);

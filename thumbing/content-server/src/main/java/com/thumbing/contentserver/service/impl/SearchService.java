@@ -34,7 +34,7 @@ public class SearchService implements ISearchService {
         List<ElasticBaseEntity> entities = elasticUtils.searchDocs(ElasticSearchConfig.indexName,
                 input.getKeyword(),
                 ElasticSearchConfig.searchFields,
-                input.getPageNumber() - 1,
+                input.getPageNumber(),
                 input.getPageSize(),
                 ElasticBaseEntity.class);
         List<SearchOutput> result = DozerUtils.mapListSync(mapper, entities, SearchOutput.class, (s,t)->{
