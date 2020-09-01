@@ -47,7 +47,7 @@ public class ArticleChangeXxlJob {
         CompletableFuture<Void> task1 = CompletableFuture.runAsync(() -> changeCommentsNumAndThumbsNumInMongo(set1));
         Set<String> set2 = articleCache.getAndClearContentChangedSet();
         CompletableFuture<Void> task2 = CompletableFuture.runAsync(()->changeContent(set2));
-        CompletableFuture.allOf(task1, task2);
+        CompletableFuture.allOf(task1, task2).join();
         return ReturnT.SUCCESS;
     }
 
@@ -90,7 +90,7 @@ public class ArticleChangeXxlJob {
                                 Update update = Update.update(ArticleContent.Fields.content, content);
                                 mongoTemplate.updateFirst(query, update, ArticleContent.class);
                             });
-                            CompletableFuture.allOf(task1, task2);
+                            CompletableFuture.allOf(task1, task2).join();
                         }
                     }
             );

@@ -36,7 +36,7 @@ public class MomentsChangeXxlJob {
         CompletableFuture<Void> task1 = CompletableFuture.runAsync(() -> changeCommentsNumAndThumbsNumInMongo(set1));
         Set<String> set2 = momentsCache.getAndClearContentChangedSet();
         CompletableFuture<Void> task2 = CompletableFuture.runAsync(()->changeContent(set2));
-        CompletableFuture.allOf(task1, task2);
+        CompletableFuture.allOf(task1, task2).join();
         return ReturnT.SUCCESS;
     }
 

@@ -39,7 +39,7 @@ public class CommentsChangeXxlJob {
         CompletableFuture<Void> task1 = CompletableFuture.runAsync(() -> changeThumbsNum(set1));
         Set<Long> set2 = commentCache.getAndClearDeletedCommentsId();
         CompletableFuture<Void> task2 = CompletableFuture.runAsync(()-> deleteComments(set2));
-        CompletableFuture.allOf(task1, task2);
+        CompletableFuture.allOf(task1, task2).join();
         return ReturnT.SUCCESS;
     }
 
