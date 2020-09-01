@@ -314,7 +314,7 @@ public class CommentService extends BaseMongoService<Comment, ICommentRepository
     }
 
     private Long confirmCommentsThumbsInRedis(CommentIdInput input) {
-        if (!(commentCache.existThumbingUser(input.getId()) && commentCache.existCommentThumbsNum(input.getId()))) {
+        if (!(commentCache.existThumbingUser(input.getId()) && commentCache.getThumbsNum(input.getId()) > 0)) {
             if(lockOperation.getCommentDetails(input) == null) return confirmCommentsThumbsInRedis(input);
         }
         Comment comment = commentCache.getCommentNoChangedInfo(input.getId());

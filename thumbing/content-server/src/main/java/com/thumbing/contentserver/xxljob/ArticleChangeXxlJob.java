@@ -1,6 +1,5 @@
 package com.thumbing.contentserver.xxljob;
 
-import cn.hutool.core.util.ArrayUtil;
 import com.thumbing.contentserver.cache.ArticleCache;
 import com.thumbing.shared.entity.mongo.BaseMongoEntity;
 import com.thumbing.shared.entity.mongo.content.Article;
@@ -9,6 +8,7 @@ import com.thumbing.shared.repository.mongo.content.IArticleContentRepository;
 import com.thumbing.shared.repository.mongo.content.IArticleRepository;
 import com.xxl.job.core.biz.model.ReturnT;
 import com.xxl.job.core.handler.annotation.XxlJob;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -52,11 +52,11 @@ public class ArticleChangeXxlJob {
     }
 
     private void changeCommentsNumAndThumbsNumInMongo(Set<String> set){
-        if(ArrayUtil.isNotEmpty(set)) {
+        if(CollectionUtils.isNotEmpty(set)) {
             set.parallelStream().forEach(
                     id -> {
                         List<Integer> integers = articleCache.getCommentsNumAndThumbsNum(id);
-                        if (ArrayUtil.isNotEmpty(integers) && integers.size() > 1) {
+                        if (integers != null && integers.size() > 1) {
                             int commentsNum = integers.get(0) == null ? 0 : integers.get(0);
                             int thumbsNum = integers.get(1) == null ? 0 : integers.get(1);
                             int seq = articleCache.getCurrentNickNameSeq(id);
@@ -74,7 +74,7 @@ public class ArticleChangeXxlJob {
     }
 
     private void changeContent(Set<String> set){
-        if(ArrayUtil.isNotEmpty(set)) {
+        if(CollectionUtils.isNotEmpty(set)) {
             set.parallelStream().forEach(
                     id -> {
                         String content = articleCache.getContent(id);

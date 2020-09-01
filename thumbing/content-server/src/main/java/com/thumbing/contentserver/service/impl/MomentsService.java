@@ -155,7 +155,7 @@ public class MomentsService extends BaseMongoService<Moments, IMomentsRepository
     }
 
     private Long confirmMomentsThumbsInRedis(MomentsIdInput input) {
-        if (!(momentsCache.existThumbingUser(input.getId()) && momentsCache.existMomentsThumbsNum(input.getId()))) {
+        if (!(momentsCache.existThumbingUser(input.getId()) && momentsCache.getThumbNum(input.getId()) > 0)) {
             if(lockOperation.getMoments(input) == null) return confirmMomentsThumbsInRedis(input);
         }
         Moments moments = momentsCache.getMomentsNoChangedInfo(input.getId());

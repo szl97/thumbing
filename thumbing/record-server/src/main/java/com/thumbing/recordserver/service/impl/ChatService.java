@@ -1,6 +1,5 @@
 package com.thumbing.recordserver.service.impl;
 
-import cn.hutool.core.util.ArrayUtil;
 import com.github.dozermapper.core.Mapper;
 import com.thumbing.recordserver.cache.ChatRecordCache;
 import com.thumbing.recordserver.cache.SessionRecordCache;
@@ -19,6 +18,7 @@ import com.thumbing.shared.entity.mongo.record.ChatRecord;
 import com.thumbing.shared.repository.mongo.record.IChatRecordRepository;
 import com.thumbing.shared.service.impl.BaseMongoService;
 import com.thumbing.shared.utils.dozermapper.DozerUtils;
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -65,7 +65,7 @@ public class ChatService extends BaseMongoService<ChatRecord, IChatRecordReposit
             int end = Math.min(len, input.getPosition());
             int start = Math.max(end - input.getPageSize(), 0);
             List<ChatRecordDto> recordDtoList = chatRecordCache.getRecord(userId1, userId2, start, end);
-            if(ArrayUtil.isNotEmpty(recordDtoList)){
+            if(CollectionUtils.isNotEmpty(recordDtoList)){
                 return new PageResultDto<>(0, recordDtoList, start - 1);
             }
         }
@@ -90,12 +90,12 @@ public class ChatService extends BaseMongoService<ChatRecord, IChatRecordReposit
     @Override
     public List<SessionRecordDto> fetchAllSessions(UserContext context) {
         List<SessionRecordDto> sessionRecordDtoList = sessionRecordCache.getAll(context.getId());
-        if(ArrayUtil.isNotEmpty(sessionRecordDtoList)){
+        if(CollectionUtils.isNotEmpty(sessionRecordDtoList)){
             return sessionRecordDtoList;
         }
         Sort sort = Sort.by(Sort.Direction.DESC, MongoCreationEntity.Fields.createTime, ChatRecord.Fields.fromId);
         List<ChatRecord> chatRecordList = repository.findAllByToIdAndRead(context.getId(),false, sort);
-        if(ArrayUtil.isEmpty(chatRecordList)) return null;
+        if(CollectionUtils.isEmpty(chatRecordList)) return null;
         sessionRecordDtoList = new ArrayList<>();
         Long id = null;
         String nickName = null;
@@ -133,7 +133,7 @@ public class ChatService extends BaseMongoService<ChatRecord, IChatRecordReposit
 
     @Override
     public Boolean readChatMessage(ReadChatRecord input, UserContext context) {
-        if(ArrayUtil.isEmpty(input.getMsg())){
+        if(CollectionUtils.isEmpty(input.getMsg())){
             return false;
         }
         //todo:处理会话缓存

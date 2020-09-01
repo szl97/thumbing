@@ -1,12 +1,12 @@
 package com.thumbing.contentserver.xxljob;
 
-import cn.hutool.core.util.ArrayUtil;
 import com.thumbing.contentserver.cache.CommentCache;
 import com.thumbing.shared.entity.mongo.MongoFullAuditedEntity;
 import com.thumbing.shared.entity.mongo.content.Comment;
 import com.thumbing.shared.repository.mongo.content.ICommentRepository;
 import com.xxl.job.core.biz.model.ReturnT;
 import com.xxl.job.core.handler.annotation.XxlJob;
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -44,7 +44,7 @@ public class CommentsChangeXxlJob {
     }
 
     private void changeThumbsNum(Set<Long> set){
-        if(ArrayUtil.isNotEmpty(set)) {
+        if(CollectionUtils.isNotEmpty(set)) {
             set.parallelStream().forEach(id->{
                 int thumbs = commentCache.getThumbsNum(id);
                 Set<Long> userIds = commentCache.getThumbUserIds(id);
@@ -57,7 +57,7 @@ public class CommentsChangeXxlJob {
     }
 
     private void deleteComments(Set<Long> set){
-        if(ArrayUtil.isNotEmpty(set)){
+        if(CollectionUtils.isNotEmpty(set)){
             set.parallelStream().forEach(id->{
                 Query query = Query.query(Criteria.where(Comment.Fields.commentId).is(id));
                 Update update = Update.update(MongoFullAuditedEntity.Fields.isDelete, 1);

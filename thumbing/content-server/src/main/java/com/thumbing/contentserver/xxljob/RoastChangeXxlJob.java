@@ -1,11 +1,11 @@
 package com.thumbing.contentserver.xxljob;
 
-import cn.hutool.core.util.ArrayUtil;
 import com.thumbing.contentserver.cache.RoastCache;
 import com.thumbing.shared.entity.mongo.BaseMongoEntity;
 import com.thumbing.shared.entity.mongo.content.Roast;
 import com.xxl.job.core.biz.model.ReturnT;
 import com.xxl.job.core.handler.annotation.XxlJob;
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -36,7 +36,7 @@ public class RoastChangeXxlJob {
     }
 
     private void changeThumbsNum(Set<String> set){
-        if(ArrayUtil.isNotEmpty(set)) {
+        if(CollectionUtils.isNotEmpty(set)) {
             set.parallelStream().forEach(id->{
                 int thumbs = roastCache.getThumbsNum(id);
                 Set<Long> userIds = roastCache.getThumbUserIds(id);

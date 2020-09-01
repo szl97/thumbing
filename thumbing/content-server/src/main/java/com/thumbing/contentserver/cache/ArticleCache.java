@@ -1,9 +1,9 @@
 package com.thumbing.contentserver.cache;
 
-import cn.hutool.core.util.ArrayUtil;
 import com.thumbing.shared.constants.CacheKeyConstants;
 import com.thumbing.shared.entity.mongo.content.Article;
 import com.thumbing.shared.utils.redis.*;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -147,7 +147,7 @@ public class ArticleCache {
      */
     public List<Integer> getCommentsNumAndThumbsNum(String id){
         List<String> keys = new ArrayList<>();
-        keys.add(commentsChangedSeq);
+        keys.add(commentsNumHashKey);
         keys.add(thumbingNumHashKey);
         return RedisUtilsForHash.get(integerRedisTemplate.opsForHash(), infoArticle+id, keys);
     }
@@ -203,6 +203,15 @@ public class ArticleCache {
      */
     public Set<Long> getThumbUserIds(String id){
         return RedisUtilsForSet.members(longRedisTemplate.opsForSet(), thumbingUserIds+id);
+    }
+
+    /**
+     * 获取点赞数
+     * @param id
+     * @return
+     */
+    public Integer getThumbNum(String id){
+        return RedisUtilsForHash.get(integerRedisTemplate.opsForHash(), infoArticle+id, thumbingNumHashKey);
     }
 
     /**
@@ -283,7 +292,7 @@ public class ArticleCache {
         integerMap.put(commentsNumHashKey, comments);
         integerMap.put(nickNameHashKey, article.getNickNameSequence());
         RedisUtilsForHash.put(integerRedisTemplate.opsForHash(), key, integerMap);
-        if(ArrayUtil.isNotEmpty(article.getThumbUserIds())){
+        if(CollectionUtils.isNotEmpty(article.getThumbUserIds())){
             Long[] userIds = new Long[article.getThumbUserIds().size()];
             RedisUtilsForSet.add(longRedisTemplate.opsForSet(), thumbingUserIds+article.getId(), article.getThumbUserIds().toArray(userIds));
         }

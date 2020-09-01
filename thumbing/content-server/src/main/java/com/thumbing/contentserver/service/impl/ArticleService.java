@@ -178,7 +178,7 @@ public class ArticleService extends BaseMongoService<Article, IArticleRepository
     }
 
     private Long confirmArticleThumbsInRedis(ArticleIdInput input) {
-        if (!(articleCache.existThumbingUser(input.getId()) && articleCache.existArticleThumbsNum(input.getId()))) {
+        if (!(articleCache.existThumbingUser(input.getId()) && articleCache.getThumbNum(input.getId()) > 0)) {
             if(lockOperation.getArticle(input) == null) return confirmArticleThumbsInRedis(input);
         }
         Article article = articleCache.getArticleNoChangedInfo(input.getId());

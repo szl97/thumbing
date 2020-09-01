@@ -1,10 +1,10 @@
 package com.thumbing.contentserver.elasticsearch;
 
-import cn.hutool.core.util.ArrayUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.thumbing.shared.utils.context.SpringContextUtils;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.elasticsearch.action.admin.indices.delete.DeleteIndexRequest;
 import org.elasticsearch.action.bulk.BulkRequest;
@@ -287,7 +287,7 @@ public class ElasticUtils {
             boolBuilder.must(termQueryBuilder);
         }
         //黑名单中的用户查不到
-        if (ArrayUtil.isNotEmpty(blackList)) {
+        if (CollectionUtils.isNotEmpty(blackList)) {
             TermQueryBuilder termQueryBuilder = QueryBuilders.termQuery("userId", blackList.toArray());
             boolBuilder.mustNot(termQueryBuilder);
         }

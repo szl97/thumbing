@@ -1,6 +1,5 @@
 package com.thumbing.usermanagement.service.impl;
 
-import cn.hutool.core.util.ArrayUtil;
 import com.github.dozermapper.core.Mapper;
 import com.thumbing.shared.auth.model.UserContext;
 import com.thumbing.shared.entity.sql.black.BlackList;
@@ -21,6 +20,7 @@ import com.thumbing.usermanagement.dto.output.RelationApplyDto;
 import com.thumbing.usermanagement.dto.output.RelationDto;
 import com.thumbing.usermanagement.sender.RelationApplySender;
 import com.thumbing.usermanagement.service.IRelationService;
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
@@ -171,7 +171,7 @@ public class RelationService implements IRelationService {
     @Override
     public List<RelationDto> getAllRelation(UserContext userContext) {
         List<Relation> relations = relationRepository.findAllByUserIdOneOrUserIdTwo(userContext.getId(), userContext.getId());
-        if(ArrayUtil.isEmpty(relations)) return null;
+        if(CollectionUtils.isEmpty(relations)) return null;
         return DozerUtils.mapListSync(mapper, relations, RelationDto.class, (relation, relationDto) -> {
             if(relation.getUserIdTwo().equals(userContext.getId())) {
                 relationDto.setUserId(relation.getUserIdOne());
@@ -187,7 +187,7 @@ public class RelationService implements IRelationService {
     @Override
     public List<RelationApplyDto> getAllRelationApply(UserContext userContext) {
         List<RelationApplyInfo> relationApplyInfos = relationApplyInfoRepository.findAllByTargetUserId(userContext.getId());
-        if(ArrayUtil.isEmpty(relationApplyInfos)) return null;
+        if(CollectionUtils.isEmpty(relationApplyInfos)) return null;
         return DozerUtils.mapListSync(mapper, relationApplyInfos, RelationApplyDto.class, (relationApply, relationApplyDto)->{
             if(relationApply.getUserInfo() != null) {
                 relationApplyDto.setNickName(relationApply.getUserInfo().getUserName());

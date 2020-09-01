@@ -1,10 +1,10 @@
 package com.thumbing.contentserver.cache;
 
-import cn.hutool.core.util.ArrayUtil;
 import com.thumbing.shared.constants.CacheKeyConstants;
 import com.thumbing.shared.entity.mongo.content.Comment;
 import com.thumbing.shared.entity.mongo.content.enums.ContentType;
 import com.thumbing.shared.utils.redis.*;
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
@@ -110,7 +110,7 @@ public class CommentCache {
         thumbs = thumbs == null ? 0 : thumbs;
         comment.setThumbingNum(thumbs);
         Set<Long> thumbUserIds = RedisUtilsForSet.members(longRedisTemplate.opsForSet(), thumbingUserIds+id);
-        if(ArrayUtil.isNotEmpty(thumbUserIds)) {
+        if(CollectionUtils.isNotEmpty(thumbUserIds)) {
             comment.setThumbUserIds(thumbUserIds);
         }
         return comment;
@@ -176,7 +176,7 @@ public class CommentCache {
         thumbsNum = thumbsNum == null ? 0 : thumbsNum;
         RedisUtilsForHash.put(integerRedisTemplate.opsForHash(), key, thumbingNumHashKey, thumbsNum);
         Set<Long> thumbsUserIds = comment.getThumbUserIds();
-        if(ArrayUtil.isNotEmpty(thumbsUserIds)){
+        if(CollectionUtils.isNotEmpty(thumbsUserIds)){
             Long[] array = new Long[thumbsUserIds.size()];
             RedisUtilsForSet.add(longRedisTemplate.opsForSet(), thumbingUserIds+comment.getCommentId(), thumbsUserIds.toArray(array));
         }

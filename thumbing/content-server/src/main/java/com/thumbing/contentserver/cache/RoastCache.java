@@ -1,9 +1,9 @@
 package com.thumbing.contentserver.cache;
 
-import cn.hutool.core.util.ArrayUtil;
 import com.thumbing.shared.constants.CacheKeyConstants;
 import com.thumbing.shared.entity.mongo.content.Roast;
 import com.thumbing.shared.utils.redis.*;
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
@@ -199,7 +199,7 @@ public class RoastCache {
         Integer thumbs = roast.getThumbingNum();
         thumbs = thumbs == null ? 0 : thumbs;
         RedisUtilsForHash.put(integerRedisTemplate.opsForHash(), key, thumbingNumHashKey, thumbs);
-        if(ArrayUtil.isNotEmpty(roast.getThumbUserIds())){
+        if(CollectionUtils.isNotEmpty(roast.getThumbUserIds())){
             Long[] userIds = new Long[roast.getThumbUserIds().size()];
             RedisUtilsForSet.add(longRedisTemplate.opsForSet(), thumbingUserIds+roast.getId(), roast.getThumbUserIds().toArray(userIds));
         }

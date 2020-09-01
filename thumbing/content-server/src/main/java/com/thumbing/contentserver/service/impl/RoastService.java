@@ -105,7 +105,7 @@ public class RoastService extends BaseMongoService<Roast, IRoastRepository> impl
     }
 
     private Long confirmRoastThumbsInRedis(RoastIdInput input) {
-        if (!(roastCache.existThumbingUser(input.getId()) && roastCache.existRoastThumbsNum(input.getId()))) {
+        if (!(roastCache.existThumbingUser(input.getId()) && roastCache.getThumbsNum(input.getId()) > 0)) {
             if(lockOperation.getRoast(input) == null) return confirmRoastThumbsInRedis(input);
         }
         Roast roast = roastCache.getRoastNoChangedInfo(input.getId());

@@ -1,6 +1,5 @@
 package com.thumbing.recordserver.service.impl;
 
-import cn.hutool.core.util.ArrayUtil;
 import com.github.dozermapper.core.Mapper;
 import com.thumbing.recordserver.dto.input.ReadPushDataRecord;
 import com.thumbing.recordserver.dto.output.PushDataDto;
@@ -12,6 +11,7 @@ import com.thumbing.shared.entity.mongo.record.PushDataRecord;
 import com.thumbing.shared.repository.mongo.record.IPushDataRecordRepository;
 import com.thumbing.shared.service.impl.BaseMongoService;
 import com.thumbing.shared.utils.dozermapper.DozerUtils;
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -34,7 +34,7 @@ public class PushDataService extends BaseMongoService<PushDataRecord, IPushDataR
     @Override
     public List<PushDataDto> fetchAllPushDataRecords(UserContext context) {
         List<PushDataRecord> records = repository.findAllByToUserIdAndRead(context.getId(), false, Sort.by(MongoCreationEntity.Fields.createTime));
-        if(ArrayUtil.isEmpty(records)) return null;
+        if(CollectionUtils.isEmpty(records)) return null;
         return DozerUtils.mapListSync(mapper, records, PushDataDto.class, (s,t)->{
             t.setTime(s.getCreateTime());
         });
@@ -42,7 +42,7 @@ public class PushDataService extends BaseMongoService<PushDataRecord, IPushDataR
 
     @Override
     public Boolean readRecord(ReadPushDataRecord input, UserContext context) {
-        if(ArrayUtil.isEmpty(input.getMsg())) return false;
+        if(CollectionUtils.isEmpty(input.getMsg())) return false;
         input.getMsg().parallelStream().forEach(
                 s->{
                     PushDataRecord record = mapper.map(s, PushDataRecord.class);
