@@ -30,7 +30,7 @@ public class MomentsController extends ThumbingBaseController {
 
     @ApiOperation("发表帖子")
     @Authorize(PermissionConstants.ACCESS)
-    @RequestMapping(value = "publish", method = RequestMethod.PUT)
+    @RequestMapping(value = "publish", method = RequestMethod.POST)
     public Boolean publishMoments(@RequestBody @Valid PublishMomentsInput input){
         return momentsService.publishMoments(input, getCurrentUser());
     }
@@ -58,14 +58,14 @@ public class MomentsController extends ThumbingBaseController {
 
     @ApiOperation("点赞")
     @Authorize(PermissionConstants.REGISTER)
-    @RequestMapping(value = "thumb", method = RequestMethod.POST)
+    @RequestMapping(value = "thumb", method = RequestMethod.PATCH)
     public Boolean thumbArticle(@RequestBody @Valid ThumbMomentsInput input){
         return momentsService.thumbMoments(input, getCurrentUser());
     }
 
     @ApiOperation("修改内容")
     @Authorize(PermissionConstants.ACCESS)
-    @RequestMapping(value = "update", method = RequestMethod.POST)
+    @RequestMapping(value = "update", method = RequestMethod.PUT)
     public Boolean updateArticle(@RequestBody @Valid UpdateMomentsInput input){
         return momentsService.updateMoments(input, getCurrentUser());
     }

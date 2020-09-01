@@ -36,7 +36,7 @@ public class PushDataController extends ThumbingBaseController {
     }
 
     @ApiOperation("推送消息已读")
-    @RequestMapping(method = RequestMethod.POST)
+    @RequestMapping(method = RequestMethod.PUT)
     @Authorize(PermissionConstants.REGISTER)
     public Boolean readRecord(@RequestBody @Valid ReadPushDataRecord input){
         return dataService.readRecord(input, getCurrentUser());

@@ -30,7 +30,7 @@ public class ArticleController extends ThumbingBaseController {
 
     @ApiOperation("发表文章")
     @Authorize(PermissionConstants.ACCESS)
-    @RequestMapping(value = "publish", method = RequestMethod.PUT)
+    @RequestMapping(value = "publish", method = RequestMethod.POST)
     public Boolean publishArticle(@RequestBody @Valid PublishArticleInput input){
         return articleService.publishArticle(input, getCurrentUser());
     }
@@ -65,14 +65,14 @@ public class ArticleController extends ThumbingBaseController {
 
     @ApiOperation("点赞")
     @Authorize(PermissionConstants.REGISTER)
-    @RequestMapping(value = "thumb", method = RequestMethod.POST)
+    @RequestMapping(value = "thumb", method = RequestMethod.PATCH)
     public Boolean thumbArticle(@RequestBody @Valid ThumbArticleInput input){
         return articleService.thumbArticle(input, getCurrentUser());
     }
 
     @ApiOperation("修改内容")
     @Authorize(PermissionConstants.ACCESS)
-    @RequestMapping(value = "update", method = RequestMethod.POST)
+    @RequestMapping(value = "update", method = RequestMethod.PUT)
     public Boolean updateArticle(@RequestBody @Valid UpdateArticleInput input){
         return articleService.updateArticle(input, getCurrentUser());
     }

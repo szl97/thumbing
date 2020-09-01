@@ -12,10 +12,7 @@ import java.util.Optional;
  * @Date: 2020/7/19 11:16
  */
 public interface IRelationRepository extends IBaseSqlRepository<Relation> {
-
     List<Relation> findAllByUserIdOneOrUserIdTwo(Long idOne, Long idTwo);
 
     Optional<Relation> findByUserIdOneAndUserIdTwo(Long idOne, Long idTwo);
-
-
 }

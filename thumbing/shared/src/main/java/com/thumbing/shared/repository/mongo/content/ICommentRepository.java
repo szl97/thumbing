@@ -17,7 +17,6 @@ import java.util.Set;
  * @Date: 2020/8/21 16:19
  */
 public interface ICommentRepository extends IBaseMongoRepository<Comment> {
-    
     List<Comment> findAllByContentIdAndContentType(String contentId, ContentType contentType, Sort sort);
 
     Optional<Comment> findByCommentId(Long commentId);

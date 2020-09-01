@@ -46,7 +46,7 @@ public class RecordController extends ThumbingBaseController {
     }
 
     @ApiOperation("已读消息处理")
-    @RequestMapping(method = RequestMethod.POST)
+    @RequestMapping(method = RequestMethod.PUT)
     @Authorize(PermissionConstants.REGISTER)
     Boolean readChatMessage(@RequestBody @Valid ReadChatRecord input){
         return chatService.readChatMessage(input, getCurrentUser());

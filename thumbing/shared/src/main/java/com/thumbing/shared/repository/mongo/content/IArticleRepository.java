@@ -12,7 +12,6 @@ import java.util.Optional;
  * @Date: 2020/7/19 11:21
  */
 public interface IArticleRepository extends IBaseMongoRepository<Article> {
-
     Optional<Article> findByIdAndIsDelete(String id, int isDelete);
 
     Page<Article> findAllByIsDelete(int isDelete, Pageable pageable);

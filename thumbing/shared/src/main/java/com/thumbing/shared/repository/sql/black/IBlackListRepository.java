@@ -12,9 +12,7 @@ import java.util.Optional;
  * @Date: 2020/8/7 16:41
  */
 public interface IBlackListRepository extends IBaseSqlRepository<BlackList> {
-
     Optional<BlackList> findByUserIdAndTargetUserId(Long id1, Long id2);
-
     @EntityGraph(BlackList.NamedEntityGraph_userInfo)
     List<BlackList> findAllByUserId(Long id);
 }

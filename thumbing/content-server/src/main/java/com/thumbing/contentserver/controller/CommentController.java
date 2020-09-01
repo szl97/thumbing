@@ -33,7 +33,7 @@ public class CommentController extends ThumbingBaseController {
 
     @ApiOperation("发表评论")
     @Authorize(PermissionConstants.ACCESS)
-    @RequestMapping(value = "publish", method = RequestMethod.PUT)
+    @RequestMapping(value = "publish", method = RequestMethod.POST)
     public Boolean publishComment(@RequestBody @Valid CommentInput input){
         return commentService.publishComment(input, getCurrentUser());
     }
@@ -54,7 +54,7 @@ public class CommentController extends ThumbingBaseController {
 
     @ApiOperation("点赞")
     @Authorize(PermissionConstants.REGISTER)
-    @RequestMapping(value = "thumb", method = RequestMethod.POST)
+    @RequestMapping(value = "thumb", method = RequestMethod.PATCH)
     public Boolean thumbComment(@RequestBody @Valid ThumbCommentInput input){
         return commentService.thumbComment(input, getCurrentUser());
     }

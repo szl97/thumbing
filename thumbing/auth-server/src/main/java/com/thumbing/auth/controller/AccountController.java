@@ -34,7 +34,7 @@ public class AccountController extends ThumbingBaseController {
 
     @ApiOperation("更改密码")
     @AllowAnonymous
-    @RequestMapping(value = "/changePassword", method = RequestMethod.POST)
+    @RequestMapping(value = "/changePassword", method = RequestMethod.PATCH)
     public AccountDto changePassword(@Valid @RequestBody ChangePasswordRequest changePasswordRequest){
         return accountService.changePassword(changePasswordRequest);
     }

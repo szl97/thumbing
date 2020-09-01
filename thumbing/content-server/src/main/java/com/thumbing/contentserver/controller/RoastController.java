@@ -34,7 +34,7 @@ public class RoastController extends ThumbingBaseController {
 
     @ApiOperation("发表心情吐槽")
     @Authorize(PermissionConstants.ACCESS)
-    @RequestMapping(value = "publish", method = RequestMethod.PUT)
+    @RequestMapping(value = "publish", method = RequestMethod.POST)
     public Boolean publishRoast(@RequestBody @Valid PublishRoastInput input){
         return roastService.publishRoast(input, getCurrentUser());
     }
@@ -55,7 +55,7 @@ public class RoastController extends ThumbingBaseController {
 
     @ApiOperation("点赞")
     @Authorize(PermissionConstants.REGISTER)
-    @RequestMapping(value = "thumb", method = RequestMethod.POST)
+    @RequestMapping(value = "thumb", method = RequestMethod.PATCH)
     public Boolean thumbRoast(@RequestBody @Valid ThumbRoastInput input){
         return roastService.thumbRoast(input, getCurrentUser());
     }
