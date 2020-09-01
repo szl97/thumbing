@@ -2,11 +2,16 @@ package com.thumbing.contentserver.xxljob;
 
 import cn.hutool.core.util.ArrayUtil;
 import com.thumbing.contentserver.cache.CommentCache;
+import com.thumbing.shared.entity.mongo.MongoFullAuditedEntity;
 import com.thumbing.shared.entity.mongo.content.Comment;
 import com.thumbing.shared.repository.mongo.content.ICommentRepository;
 import com.xxl.job.core.biz.model.ReturnT;
 import com.xxl.job.core.handler.annotation.XxlJob;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -23,6 +28,8 @@ public class CommentsChangeXxlJob {
     private CommentCache commentCache;
     @Autowired
     private ICommentRepository commentRepository;
+    @Autowired
+    private MongoTemplate mongoTemplate;
 
     @XxlJob("commentsChangeHandler")
     public ReturnT<String> execute(String param){
@@ -41,14 +48,21 @@ public class CommentsChangeXxlJob {
             set.parallelStream().forEach(id->{
                 int thumbs = commentCache.getThumbsNum(id);
                 Set<Long> userIds = commentCache.getThumbUserIds(id);
-                commentRepository.updateThumbingNumAndThumbUserIdsByCommentId(id, thumbs, userIds);
+                Query query = Query.query(Criteria.where(Comment.Fields.commentId).is(id));
+                Update update = Update.update(Comment.Fields.thumbingNum, thumbs)
+                        .set(Comment.Fields.thumbUserIds, userIds);
+                mongoTemplate.updateFirst(query, update, Comment.class);
             });
         }
     }
 
     private void deleteComments(Set<Long> set){
         if(ArrayUtil.isNotEmpty(set)){
-            set.parallelStream().forEach(id->commentRepository.updateIsDeleteByCommentId(id));
+            set.parallelStream().forEach(id->{
+                Query query = Query.query(Criteria.where(Comment.Fields.commentId).is(id));
+                Update update = Update.update(MongoFullAuditedEntity.Fields.isDelete, 1);
+                mongoTemplate.updateFirst(query, update, Comment.class);
+            });
         }
     }
 }

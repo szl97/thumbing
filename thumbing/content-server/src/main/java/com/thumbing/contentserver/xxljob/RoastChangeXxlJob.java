@@ -2,10 +2,15 @@ package com.thumbing.contentserver.xxljob;
 
 import cn.hutool.core.util.ArrayUtil;
 import com.thumbing.contentserver.cache.RoastCache;
-import com.thumbing.shared.repository.mongo.content.IRoastRepository;
+import com.thumbing.shared.entity.mongo.BaseMongoEntity;
+import com.thumbing.shared.entity.mongo.content.Roast;
 import com.xxl.job.core.biz.model.ReturnT;
 import com.xxl.job.core.handler.annotation.XxlJob;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Component;
 
 import java.util.Set;
@@ -20,7 +25,7 @@ public class RoastChangeXxlJob {
     @Autowired
     private RoastCache roastCache;
     @Autowired
-    private IRoastRepository roastRepository;
+    private MongoTemplate mongoTemplate;
 
     @XxlJob("roastChangeHandler")
     public ReturnT<String> execute(String param){
@@ -35,7 +40,10 @@ public class RoastChangeXxlJob {
             set.parallelStream().forEach(id->{
                 int thumbs = roastCache.getThumbsNum(id);
                 Set<Long> userIds = roastCache.getThumbUserIds(id);
-                roastRepository.updateThumbingNumAndThumbUserIdsById(id, thumbs, userIds);
+                Query query = Query.query(Criteria.where(BaseMongoEntity.Fields.id).is(id));
+                Update update = Update.update(Roast.Fields.thumbingNum, thumbs)
+                        .set(Roast.Fields.thumbUserIds, userIds);
+                mongoTemplate.updateFirst(query, update, Roast.class);
             });
         }
     }

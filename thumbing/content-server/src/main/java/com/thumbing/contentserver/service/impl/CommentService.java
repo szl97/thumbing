@@ -15,6 +15,7 @@ import com.thumbing.contentserver.lockoperation.NickNameLockOperation;
 import com.thumbing.contentserver.sender.PushDataSender;
 import com.thumbing.contentserver.service.ICommentService;
 import com.thumbing.shared.auth.model.UserContext;
+import com.thumbing.shared.entity.mongo.MongoFullAuditedEntity;
 import com.thumbing.shared.entity.mongo.content.Article;
 import com.thumbing.shared.entity.mongo.content.Comment;
 import com.thumbing.shared.entity.mongo.content.Moments;
@@ -29,6 +30,10 @@ import com.thumbing.shared.utils.generateid.SnowFlake;
 import com.thumbing.shared.utils.sensitiveword.SensitiveFilter;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -62,6 +67,8 @@ public class CommentService extends BaseMongoService<Comment, ICommentRepository
     private PushDataSender sender;
     @Autowired
     private Mapper mapper;
+    @Autowired
+    private MongoTemplate mongoTemplate;
 
     @Override
     public Boolean publishComment(CommentInput input, UserContext context) {
@@ -184,7 +191,9 @@ public class CommentService extends BaseMongoService<Comment, ICommentRepository
                 return true;
             }
         }
-        repository.updateIsDeleteByCommentId(input.getId());
+        Query query = Query.query(Criteria.where(Comment.Fields.commentId).is(input.getId()));
+        Update update = Update.update(MongoFullAuditedEntity.Fields.isDelete, 1);
+        mongoTemplate.updateFirst(query, update, Comment.class);
         return true;
     }
 

@@ -2,12 +2,19 @@ package com.thumbing.contentserver.xxljob;
 
 import cn.hutool.core.util.ArrayUtil;
 import com.thumbing.contentserver.cache.ArticleCache;
+import com.thumbing.shared.entity.mongo.BaseMongoEntity;
+import com.thumbing.shared.entity.mongo.content.Article;
+import com.thumbing.shared.entity.mongo.content.ArticleContent;
 import com.thumbing.shared.repository.mongo.content.IArticleContentRepository;
 import com.thumbing.shared.repository.mongo.content.IArticleRepository;
 import com.xxl.job.core.biz.model.ReturnT;
 import com.xxl.job.core.handler.annotation.XxlJob;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -31,6 +38,8 @@ public class ArticleChangeXxlJob {
     private IArticleRepository articleRepository;
     @Autowired
     private IArticleContentRepository articleContentRepository;
+    @Autowired
+    private MongoTemplate mongoTemplate;
 
     @XxlJob("articleChangeHandler")
     public ReturnT<String> execute(String param){
@@ -52,7 +61,12 @@ public class ArticleChangeXxlJob {
                             int thumbsNum = integers.get(1) == null ? 0 : integers.get(1);
                             int seq = articleCache.getCurrentNickNameSeq(id);
                             Set<Long> users = articleCache.getThumbUserIds(id);
-                            articleRepository.updateNickUserSequenceAndCommentsNumAndThumbingNumAndThumbUserIdsById(id, seq, commentsNum, thumbsNum, users);
+                            Query query = Query.query(Criteria.where(BaseMongoEntity.Fields.id).is(id));
+                            Update update = Update.update(Article.Fields.nickNameSequence, seq)
+                                    .set(Article.Fields.commentsNum, commentsNum)
+                                    .set(Article.Fields.thumbingNum, thumbsNum)
+                                    .set(Article.Fields.thumbUserIds, users);
+                            mongoTemplate.updateFirst(query, update, Article.class);
                         }
                     }
             );
@@ -66,8 +80,16 @@ public class ArticleChangeXxlJob {
                         String content = articleCache.getContent(id);
                         if (StringUtils.isNotBlank(content)) {
                             String abstracts = content.substring(0, 100);
-                            CompletableFuture<Void> task1 = CompletableFuture.runAsync(() -> articleRepository.updateAbstractsById(id, abstracts));
-                            CompletableFuture<Void> task2 = CompletableFuture.runAsync(() -> articleContentRepository.updateContentByArticleId(id, content));
+                            CompletableFuture<Void> task1 = CompletableFuture.runAsync(() -> {
+                                Query query = Query.query(Criteria.where(BaseMongoEntity.Fields.id).is(id));
+                                Update update = Update.update(Article.Fields.abstracts, abstracts);
+                                mongoTemplate.updateFirst(query, update, Article.class);
+                            });
+                            CompletableFuture<Void> task2 = CompletableFuture.runAsync(() -> {
+                                Query query = Query.query(Criteria.where(BaseMongoEntity.Fields.id).is(id));
+                                Update update = Update.update(ArticleContent.Fields.content, content);
+                                mongoTemplate.updateFirst(query, update, ArticleContent.class);
+                            });
                             CompletableFuture.allOf(task1, task2);
                         }
                     }

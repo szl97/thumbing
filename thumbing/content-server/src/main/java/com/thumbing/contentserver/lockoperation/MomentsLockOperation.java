@@ -1,29 +1,27 @@
 package com.thumbing.contentserver.lockoperation;
 
 import com.github.dozermapper.core.Mapper;
-import com.thumbing.contentserver.cache.ArticleCache;
 import com.thumbing.contentserver.cache.MomentsCache;
-import com.thumbing.contentserver.dto.input.ArticleIdInput;
-import com.thumbing.contentserver.dto.input.FetchArticleInput;
 import com.thumbing.contentserver.dto.input.FetchMomentsInput;
 import com.thumbing.contentserver.dto.input.MomentsIdInput;
-import com.thumbing.contentserver.dto.output.ArticleDto;
 import com.thumbing.contentserver.dto.output.MomentsDto;
 import com.thumbing.shared.annotation.AccessLock;
 import com.thumbing.shared.dto.output.PageResultDto;
+import com.thumbing.shared.entity.mongo.BaseMongoEntity;
 import com.thumbing.shared.entity.mongo.MongoCreationEntity;
-import com.thumbing.shared.entity.mongo.content.Article;
-import com.thumbing.shared.entity.mongo.content.ArticleContent;
+import com.thumbing.shared.entity.mongo.MongoFullAuditedEntity;
 import com.thumbing.shared.entity.mongo.content.Moments;
 import com.thumbing.shared.exception.BusinessException;
-import com.thumbing.shared.repository.mongo.content.IArticleContentRepository;
-import com.thumbing.shared.repository.mongo.content.IArticleRepository;
 import com.thumbing.shared.repository.mongo.content.IMomentsRepository;
 import com.thumbing.shared.utils.dozermapper.DozerUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -43,6 +41,8 @@ public class MomentsLockOperation {
     private MomentsCache momentsCache;
     @Autowired
     private Mapper mapper;
+    @Autowired
+    private MongoTemplate mongoTemplate;
 
     @AccessLock(value = {"com.thumbing.shared.entity.mongo.content.Moments"},
             className = "com.thumbing.contentserver.dto.input.FetchMomentsInput",
@@ -72,7 +72,9 @@ public class MomentsLockOperation {
             className = "com.thumbing.contentserver.dto.input.MomentsIdInput",
             fields = {"getId"})
     public Boolean deleteMoments(MomentsIdInput idInput){
-        momentsRepository.updateIsDeleteById(idInput.getId());
+        Query query = Query.query(Criteria.where(BaseMongoEntity.Fields.id).is(idInput.getId()));
+        Update update = Update.update(MongoFullAuditedEntity.Fields.isDelete, 1);
+        mongoTemplate.updateFirst(query, update, Moments.class);
         if(momentsCache.existMomentsInfo(idInput.getId())){
             momentsCache.removeMoments(idInput.getId());
         }else {

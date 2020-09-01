@@ -1,23 +1,31 @@
 package com.thumbing.contentserver.lockoperation;
 
 import com.github.dozermapper.core.Mapper;
+import com.mongodb.client.MongoClient;
 import com.thumbing.contentserver.cache.ArticleCache;
 import com.thumbing.contentserver.dto.input.ArticleIdInput;
 import com.thumbing.contentserver.dto.input.FetchArticleInput;
 import com.thumbing.contentserver.dto.output.ArticleDto;
 import com.thumbing.shared.annotation.AccessLock;
 import com.thumbing.shared.dto.output.PageResultDto;
+import com.thumbing.shared.entity.mongo.BaseMongoEntity;
 import com.thumbing.shared.entity.mongo.MongoCreationEntity;
+import com.thumbing.shared.entity.mongo.MongoFullAuditedEntity;
 import com.thumbing.shared.entity.mongo.content.Article;
 import com.thumbing.shared.entity.mongo.content.ArticleContent;
 import com.thumbing.shared.exception.BusinessException;
 import com.thumbing.shared.repository.mongo.content.IArticleContentRepository;
 import com.thumbing.shared.repository.mongo.content.IArticleRepository;
 import com.thumbing.shared.utils.dozermapper.DozerUtils;
+import org.bson.Document;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -39,6 +47,8 @@ public class ArticleLockOperation {
     private ArticleCache articleCache;
     @Autowired
     private Mapper mapper;
+    @Autowired
+    private MongoTemplate mongoTemplate;
 
     @AccessLock(value = {"com.thumbing.shared.entity.mongo.content.ArticleContent"},
             className = "com.thumbing.contentserver.dto.input.ArticleIdInput",
@@ -77,7 +87,9 @@ public class ArticleLockOperation {
             className = "com.thumbing.contentserver.dto.input.ArticleIdInput",
             fields = {"getId"})
     public Boolean deleteArticle(ArticleIdInput idInput){
-        articleRepository.updateIsDeleteById(idInput.getId());
+        Query query = Query.query(Criteria.where(BaseMongoEntity.Fields.id).is(idInput.getId()));
+        Update update = Update.update(MongoFullAuditedEntity.Fields.isDelete, 1);
+        mongoTemplate.updateFirst(query, update, Article.class);
         if(articleCache.existArticleInfo(idInput.getId())){
             articleCache.removeArticle(idInput.getId());
         } else {

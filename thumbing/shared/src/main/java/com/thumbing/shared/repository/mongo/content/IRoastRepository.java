@@ -16,17 +16,9 @@ import java.util.Set;
  * @Date: 2020/7/19 11:22
  */
 public interface IRoastRepository extends IBaseMongoRepository<Roast> {
-    @Modifying
-    @Query(value = "update roast set thumbing_num = :thumbingNum, thumb_user_ids = :thumbUserIds where id = :id")
-    void updateThumbingNumAndThumbUserIdsById(@Param("id") String id, @Param("thumbingNum") int thumbingNum, @Param("thumbUserIds") Set<Long> thumbUserIds);
-
     Optional<Roast> findByIdAndIsDelete(String id, int isDelete);
 
     Page<Roast> findAllByIsDelete(int isDelete, Pageable pageable);
 
     Page<Roast> findAllByUserIdAndIsDelete(Long userId, int isDelete, Pageable pageable);
-
-    @Modifying
-    @Query(value = "update roast set is_delete = 1 where id = :id")
-    void updateIsDeleteById(@Param("id") String id);
 }

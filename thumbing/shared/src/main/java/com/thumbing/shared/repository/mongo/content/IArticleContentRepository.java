@@ -13,9 +13,5 @@ import java.util.Optional;
  * @Date: 2020/8/18 17:38
  */
 public interface IArticleContentRepository extends IBaseMongoRepository<ArticleContent> {
-    @Modifying
-    @Query(value = "update article_content set content = :content where article_id = :articleId")
-    void updateContentByArticleId(@Param("articleId") String articleId, @Param("content") String content);
-
     Optional<ArticleContent> findByArticleId(String id);
 }

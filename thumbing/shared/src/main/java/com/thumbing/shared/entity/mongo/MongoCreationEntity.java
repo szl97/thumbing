@@ -20,6 +20,5 @@ import java.time.LocalDateTime;
 @FieldNameConstants
 public class MongoCreationEntity extends BaseMongoEntity {
     private static final long serialVersionUID = -305433542418558052L;
-    @Column(name = EntityConstants.CREATE_TIME)
     private LocalDateTime createTime;
 }
