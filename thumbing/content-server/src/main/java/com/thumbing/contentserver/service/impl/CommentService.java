@@ -286,7 +286,8 @@ public class CommentService extends BaseMongoService<Comment, ICommentRepository
             }
             return userNickName;
         }
-        nickNameLockOperation.storeArticleNickName(idInput);
+        Boolean b = nickNameLockOperation.storeArticleNickName(idInput);
+        if(b != null && !b) throw new BusinessException("生成昵称错误");
         return getArticleUserNickName(idInput, userId);
     }
 
@@ -299,27 +300,30 @@ public class CommentService extends BaseMongoService<Comment, ICommentRepository
             }
             return userNickName;
         }
-        nickNameLockOperation.storeMomentsNickName(idInput);
+        Boolean b = nickNameLockOperation.storeMomentsNickName(idInput);
+        if(b != null && !b) throw new BusinessException("生成昵称错误");
         return getMomentsUserNickName(idInput, userId);
     }
 
     private Boolean storeCommentsInRedis(FetchCommentInput input){
         if(input.getContentType() == ContentType.ARTICLE){
             if(commentCache.existArticleComments(input.getContentId())
-//            || articleCache.getArticleCommentsNum(input.getContentId())==0
+            || articleCache.getArticleCommentsNum(input.getContentId())==0
             ){
                 return true;
             }
         }
         else{
             if(commentCache.existMomentsComments(input.getContentId())
-//            || momentsCache.getMomentsCommentsNum(input.getContentId())==0
+            || momentsCache.getMomentsCommentsNum(input.getContentId())==0
             ){
                 return true;
             }
         }
-        lockOperation.getComments(input);
-        return storeCommentsInRedis(input);
+        if(lockOperation.getComments(input) == null) {
+            return storeCommentsInRedis(input);
+        }
+        return true;
     }
 
     private Long confirmCommentsThumbsInRedis(CommentIdInput input) {

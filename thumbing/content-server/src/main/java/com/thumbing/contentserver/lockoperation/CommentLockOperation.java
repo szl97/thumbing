@@ -32,19 +32,19 @@ public class CommentLockOperation {
     @AccessLock(value = {"com.thumbing.shared.entity.mongo.content.Comment"},
                 className = "com.thumbing.contentserver.dto.input.FetchCommentInput",
                 fields = {"getContentId","getContentType"})
-    public Boolean getComments(FetchCommentInput input){
+    public Boolean getComments(FetchCommentInput input) {
         Sort sort = Sort.by(Sort.Direction.DESC, MongoCreationEntity.Fields.createTime);
         List<Comment> comments = commentRepository.findAllByContentIdAndContentType(input.getContentId(), input.getContentType(), sort);
-        if(CollectionUtils.isNotEmpty(comments)) {
-            comments.stream().forEach(
-                    comment -> {
-                        commentCache.storeComments(comment);
-                    }
-            );
-        }else {
-            commentCache.addCommentListKey(input.getContentType(), input.getContentId());
+        if (CollectionUtils.isNotEmpty(comments)) {
+            return false;
         }
+        comments.stream().forEach(
+                comment -> {
+                    commentCache.storeComments(comment);
+                }
+        );
         return true;
+
     }
 
     @AccessLock(value = {"com.thumbing.shared.entity.mongo.content.Comment"},

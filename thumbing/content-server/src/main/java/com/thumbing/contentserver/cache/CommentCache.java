@@ -9,10 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.Nullable;
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
@@ -165,14 +163,6 @@ public class CommentCache {
                 : momentsCommentsIdList+comment.getContentId())
                 : childCommentsIdList+comment.getParentCommentId();
         RedisUtilsForList.rightPush(longRedisTemplate.opsForList(), key, comment.getCommentId());
-        setExpireTimeForCommentsList(key);
-    }
-
-    public void addCommentListKey(ContentType contentType, String contentId){
-
-        String key = contentType == ContentType.ARTICLE ? articleCommentsIdList + contentId
-                :momentsCommentsIdList + contentId;
-        RedisUtilsForList.rightPush(longRedisTemplate.opsForList(), key, new ArrayList<>());
         setExpireTimeForCommentsList(key);
     }
 
