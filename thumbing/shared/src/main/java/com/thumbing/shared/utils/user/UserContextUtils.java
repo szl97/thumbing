@@ -36,7 +36,6 @@ public class UserContextUtils {
             catch (Exception ex){
                 log.info(ex.getMessage());
             }
-
         }
         return userContext;
     }

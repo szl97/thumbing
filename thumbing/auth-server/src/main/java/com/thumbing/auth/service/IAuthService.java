@@ -16,6 +16,8 @@ public interface IAuthService {
      * @return
      */
     boolean auth(String authorization , String applicationName,String url);
+
+    boolean auth(String userName);
     /**
      * 检查用户名和密码是否正确
      * @param userName

@@ -30,4 +30,11 @@ public class AuthorizationController extends ThumbingBaseController {
                              @RequestParam("url") String url){
         return authService.auth(authorization, applicationName, url);
     }
+
+    @ApiOperation("认证")
+    @AllowAnonymous
+    @RequestMapping(value = "/checkAuthorization", method = RequestMethod.GET)
+    public Boolean checkAuthorization(@RequestParam(name = "userName", required = false) String userName){
+        return authService.auth(userName);
+    }
 }

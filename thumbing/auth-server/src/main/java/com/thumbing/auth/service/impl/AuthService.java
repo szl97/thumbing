@@ -5,6 +5,7 @@ import com.thumbing.auth.cache.FailureLoginCache;
 import com.thumbing.auth.context.LoginUserContextHolder;
 import com.thumbing.auth.dto.input.LoginRequest;
 import com.thumbing.auth.service.IAuthService;
+import com.thumbing.shared.auth.authentication.AuthorizationContextHolder;
 import com.thumbing.shared.auth.model.UserContext;
 import com.thumbing.shared.auth.permission.PermissionCache;
 import com.thumbing.shared.auth.permission.SkipPathRequestMatcher;
@@ -66,6 +67,17 @@ public class AuthService implements IAuthService {
     public boolean auth(String authorization, String applicationName, String url) {
         if(ignoreAuthentication(applicationName, url))  return true;
         return hasPermission(authorization, applicationName, url);
+    }
+
+    @Override
+    public boolean auth(String userName) {
+        String authorization = AuthorizationContextHolder.getAuthorization();
+        UserContext userContext = userContextUtils.getUserContext(authorization);
+        if (userContext == null) {
+            //TODO:抛出gateway可识别得异常
+            throw new UserContextException("尚未登陆");
+        }
+        return userContext.getName().equals(userName);
     }
 
     @Override
