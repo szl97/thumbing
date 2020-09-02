@@ -86,7 +86,7 @@ public class ArticleChangeXxlJob {
                                 mongoTemplate.updateFirst(query, update, Article.class);
                             });
                             CompletableFuture<Void> task2 = CompletableFuture.runAsync(() -> {
-                                Query query = Query.query(Criteria.where(BaseMongoEntity.Fields.id).is(id));
+                                Query query = Query.query(Criteria.where(ArticleContent.Fields.articleId).is(id));
                                 Update update = Update.update(ArticleContent.Fields.content, content);
                                 mongoTemplate.updateFirst(query, update, ArticleContent.class);
                             });

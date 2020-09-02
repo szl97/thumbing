@@ -300,12 +300,14 @@ public class CommentService extends BaseMongoService<Comment, ICommentRepository
 
     private Boolean storeCommentsInRedis(FetchCommentInput input){
         if(input.getContentType() == ContentType.ARTICLE){
-            if(commentCache.existArticleComments(input.getContentId())){
+            if(commentCache.existArticleComments(input.getContentId())
+            || articleCache.getArticleCommentsNum(input.getContentId())==0){
                 return true;
             }
         }
         else{
-            if(commentCache.existMomentsComments(input.getContentId())){
+            if(commentCache.existMomentsComments(input.getContentId())
+            || momentsCache.getMomentsCommentsNum(input.getContentId())==0){
                 return true;
             }
         }
