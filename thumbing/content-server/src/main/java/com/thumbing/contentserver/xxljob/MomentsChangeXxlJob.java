@@ -13,6 +13,7 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Set;
@@ -22,6 +23,7 @@ import java.util.concurrent.CompletableFuture;
  * @Author: Stan Sai
  * @Date: 2020/8/24 16:05
  */
+@Component
 public class MomentsChangeXxlJob {
     @Autowired
     private MomentsCache momentsCache;
