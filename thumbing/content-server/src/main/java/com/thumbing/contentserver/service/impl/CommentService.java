@@ -117,6 +117,11 @@ public class CommentService extends BaseMongoService<Comment, ICommentRepository
         comment.setCreateTime(LocalDateTime.now());
         comment.setCommentId(SnowFlake.getInstance().nextId());
         commentCache.addComments(comment);
+        if(input.getContentType() == ContentType.ARTICLE){
+            articleCache.addComments(input.getContentId());
+        }else{
+            momentsCache.addComments(input.getContentId());
+        }
         //todo:发送到消息队列，record-server和data-center接收
         PushDataRecord msg = new PushDataRecord();
         msg.setDataId(comment.getCommentId().toString());
@@ -301,13 +306,15 @@ public class CommentService extends BaseMongoService<Comment, ICommentRepository
     private Boolean storeCommentsInRedis(FetchCommentInput input){
         if(input.getContentType() == ContentType.ARTICLE){
             if(commentCache.existArticleComments(input.getContentId())
-            || articleCache.getArticleCommentsNum(input.getContentId())==0){
+//            || articleCache.getArticleCommentsNum(input.getContentId())==0
+            ){
                 return true;
             }
         }
         else{
             if(commentCache.existMomentsComments(input.getContentId())
-            || momentsCache.getMomentsCommentsNum(input.getContentId())==0){
+//            || momentsCache.getMomentsCommentsNum(input.getContentId())==0
+            ){
                 return true;
             }
         }

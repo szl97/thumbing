@@ -8,6 +8,7 @@ import com.thumbing.shared.entity.mongo.MongoCreationEntity;
 import com.thumbing.shared.entity.mongo.content.Comment;
 import com.thumbing.shared.exception.BusinessException;
 import com.thumbing.shared.repository.mongo.content.ICommentRepository;
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
@@ -34,11 +35,15 @@ public class CommentLockOperation {
     public Boolean getComments(FetchCommentInput input){
         Sort sort = Sort.by(Sort.Direction.DESC, MongoCreationEntity.Fields.createTime);
         List<Comment> comments = commentRepository.findAllByContentIdAndContentType(input.getContentId(), input.getContentType(), sort);
-        comments.stream().forEach(
-                comment -> {
-                    commentCache.storeComments(comment);
-                }
-        );
+        if(CollectionUtils.isNotEmpty(comments)) {
+            comments.stream().forEach(
+                    comment -> {
+                        commentCache.storeComments(comment);
+                    }
+            );
+        }else {
+            commentCache.addCommentListKey(input.getContentType(), input.getContentId());
+        }
         return true;
     }
 
