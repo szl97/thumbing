@@ -22,7 +22,7 @@ public class PersonalDto extends EntityDto {
     @ApiModelProperty(value = "性别")
     private String gender;
     @ApiModelProperty(value = "出生日期")
-    private LocalDateTime birth_date;
+    private LocalDateTime birthDate;
     @ApiModelProperty(value = "星座")
     private String constellation;
     @ApiModelProperty(value = "是否是学生")
