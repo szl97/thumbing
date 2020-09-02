@@ -35,10 +35,6 @@ public class ArticleChangeXxlJob {
     @Autowired
     private ArticleCache articleCache;
     @Autowired
-    private IArticleRepository articleRepository;
-    @Autowired
-    private IArticleContentRepository articleContentRepository;
-    @Autowired
     private MongoTemplate mongoTemplate;
 
     @XxlJob("articleChangeHandler")

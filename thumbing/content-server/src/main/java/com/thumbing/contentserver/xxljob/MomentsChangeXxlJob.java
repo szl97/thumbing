@@ -28,8 +28,6 @@ public class MomentsChangeXxlJob {
     @Autowired
     private MomentsCache momentsCache;
     @Autowired
-    private IMomentsRepository momentsRepository;
-    @Autowired
     private MongoTemplate mongoTemplate;
 
     @XxlJob("momentsChangeHandler")
