@@ -38,7 +38,7 @@ public class DataBaseAccessAspect {
                         try {
                             Thread.sleep(9000);
                             //todo: 所有正在执行线程的key过期时间重新设置为10s
-                            map.entrySet().parallelStream().forEach(
+                            map.entrySet().stream().forEach(
                                     e->{
                                         if(e.getValue().isAlive()&&!e.getValue().isInterrupted()){
                                             lockCache.expire(e.getKey(), 10);

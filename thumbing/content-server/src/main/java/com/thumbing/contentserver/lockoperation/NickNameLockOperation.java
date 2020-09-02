@@ -49,7 +49,7 @@ public class NickNameLockOperation {
                     "getId"})
     public Boolean storeArticleNickName(ArticleIdInput idInput){
         List<UserNickName> userNickNames = userNickNameRepository.findAllByContentIdAndContentType(idInput.getId(), ContentType.ARTICLE);
-        userNickNames.parallelStream().forEach(
+        userNickNames.stream().forEach(
                 userNickName -> {
                     cache.setUserNickNameArticle(userNickName.getContentId(), userNickName.getUserId(), userNickName.getNickName());
                 }
@@ -63,7 +63,7 @@ public class NickNameLockOperation {
                     "getId"})
     public Boolean storeMomentsNickName(MomentsIdInput idInput){
         List<UserNickName> userNickNames = userNickNameRepository.findAllByContentIdAndContentType(idInput.getId(), ContentType.MOMENTS);
-        userNickNames.parallelStream().forEach(
+        userNickNames.stream().forEach(
                 userNickName -> {
                     cache.setUserNickNameMoments(userNickName.getContentId(), userNickName.getUserId(), userNickName.getNickName());
                 }

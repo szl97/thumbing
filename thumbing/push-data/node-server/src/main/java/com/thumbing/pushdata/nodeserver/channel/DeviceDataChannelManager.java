@@ -11,6 +11,7 @@ import javax.annotation.PreDestroy;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ConcurrentSkipListMap;
+import java.util.stream.Collectors;
 
 /**
  * 管理客户端和node-server之间的消息通道，用于客户端的消息推送
@@ -67,9 +68,7 @@ public class DeviceDataChannelManager implements IChannelManager<Long> {
 
     @Override
     public List<Channel> getAll(){
-        return channelPool.entrySet().parallelStream().map(e->e.getValue()).collect(
-                ArrayList::new, ArrayList::add, ArrayList::addAll
-        );
+        return channelPool.entrySet().parallelStream().map(e->e.getValue()).collect(Collectors.toList());
     }
 
 
@@ -80,11 +79,6 @@ public class DeviceDataChannelManager implements IChannelManager<Long> {
 
 
     public List<Long> getAllDevices() {
-        List<Long> list = new ArrayList<>();
-        channelPool.entrySet().forEach(e -> {
-                    list.add(e.getKey());
-                }
-        );
-        return list;
+        return channelPool.entrySet().parallelStream().map(e->e.getKey()).collect(Collectors.toList());
     }
 }

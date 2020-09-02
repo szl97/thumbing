@@ -159,12 +159,12 @@ public class CommentService extends BaseMongoService<Comment, ICommentRepository
             }
         }
         List<Comment> parentComments = commentCache.getParentsCommentsList(input.getContentId(), input.getContentType(), 0, -1);
-        List<CommentDto> result = DozerUtils.mapListSync(mapper, parentComments, CommentDto.class);
-        result.parallelStream().forEach(
+        List<CommentDto> result = DozerUtils.mapList(mapper, parentComments, CommentDto.class);
+        result.stream().forEach(
                 parent->{
                     if(commentCache.existChildComments(parent.getCommentId())) {
                         List<Comment> child = commentCache.getChildCommentsList(parent.getCommentId(), 0, -1);
-                        parent.setChildComments(DozerUtils.mapListSync(mapper, child, ChildCommentDto.class));
+                        parent.setChildComments(DozerUtils.mapList(mapper, child, ChildCommentDto.class));
                     }
                 }
         );

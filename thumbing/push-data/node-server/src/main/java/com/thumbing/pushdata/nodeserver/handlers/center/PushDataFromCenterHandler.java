@@ -33,7 +33,6 @@ public class PushDataFromCenterHandler implements ICenterDataHandler<PushData> {
                 l->{
                     Channel channel = deviceChannelManager.getChannel(l);
                     if(channel != null){
-
                         try {
                             channel.writeAndFlush(
                                     PushData.builder()

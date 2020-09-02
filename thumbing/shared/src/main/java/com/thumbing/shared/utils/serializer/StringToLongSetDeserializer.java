@@ -20,7 +20,7 @@ public class StringToLongSetDeserializer extends JsonDeserializer<Set<Long>> {
         if(p.getText().startsWith("[")) {
             Iterator<Set<Object>> iterator = p.readValuesAs(new StringToLongSetDeserializer.SetTypeReference());
             Set<Object>strs = iterator.next();
-            Set<Long> r = strs.parallelStream()
+            Set<Long> r = strs.stream()
                     .map(str -> Long.parseLong(str.toString()))
                     .collect(Collectors.toSet());
             return r;

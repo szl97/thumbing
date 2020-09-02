@@ -41,7 +41,7 @@ public class GroupDataFromNodeHandler implements IDeviceDataHandler<GroupData> {
     public void call(ChannelHandlerContext ctx, GroupData message){
         Channel channel = ctx.channel();
         ConcurrentHashMap<String, List<Long>> map = new ConcurrentHashMap<>();
-        message.getToUsers().parallelStream().forEach(
+        message.getToUsers().stream().forEach(
                 a -> {
                     String name = deviceManager.getNodeServer(a);
                     if (name != null && !name.equals(message.getName())) {

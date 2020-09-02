@@ -11,6 +11,7 @@ import javax.annotation.PreDestroy;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ConcurrentSkipListMap;
+import java.util.stream.Collectors;
 
 
 /**
@@ -67,9 +68,7 @@ public class DataFlowChannelManager implements IChannelManager<String> {
 
     @Override
     public List<Channel> getAll(){
-        return channelPool.entrySet().parallelStream().map(e->e.getValue()).collect(
-                ArrayList::new, ArrayList::add, ArrayList::addAll
-        );
+        return channelPool.entrySet().stream().map(e->e.getValue()).collect(Collectors.toList());
     }
 
 

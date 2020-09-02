@@ -39,9 +39,9 @@ public class SyncClientMonitorHandler implements IMonitorsHandler<ConnectSet> {
         if (deviceManager.isExists(message.getName())) {
             List<Long> ids = message.getUserIds();
             if (message.getOperation() == OperationEnum.ADD) {
-                ids.parallelStream().forEach(i -> deviceManager.addOrUpdateClient(i, message.getName()));
+                ids.stream().forEach(i -> deviceManager.addOrUpdateClient(i, message.getName()));
             } else if (message.getOperation() == OperationEnum.DEL) {
-                ids.parallelStream().forEach(i -> deviceManager.removeClient(i, message.getName()));
+                ids.stream().forEach(i -> deviceManager.removeClient(i, message.getName()));
             }
             channel.writeAndFlush(Confirm.builder().build().encode());
         } else {

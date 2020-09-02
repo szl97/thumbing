@@ -56,7 +56,7 @@ public class MomentsLockOperation {
                     momentsCache.addMomentsWhenInitialize(moments);
                 }
         );
-        return DozerUtils.mapToPagedResultDtoSync(mapper, page, MomentsDto.class);
+        return DozerUtils.mapToPagedResultDto(mapper, page, MomentsDto.class);
     }
 
     @AccessLock(value = {"com.thumbing.shared.entity.mongo.content.Moments"},

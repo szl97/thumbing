@@ -61,7 +61,7 @@ public class RoastCache {
      */
     public List<Roast> getRoasts(){
         Set<String> ids = RedisUtilsForSet.distinctRandomMembers(stringRedisTemplate.opsForSet(), roastSet, 100);
-        return ids.parallelStream().map(id-> getArticle(id)).collect(Collectors.toList());
+        return ids.stream().map(id-> getArticle(id)).collect(Collectors.toList());
     }
 
     public Roast getArticle(String id){

@@ -73,7 +73,7 @@ public class MomentsCache {
      */
     public List<Moments> getMomentsList(int from, int end){
         List<String> ids = RedisUtilsForList.get(stringRedisTemplate.opsForList(), momentsList, from, end);
-        return ids.parallelStream().map(id->getMoments(id)).collect(Collectors.toList());
+        return ids.stream().map(id->getMoments(id)).collect(Collectors.toList());
     }
 
     public Moments getMoments(String id){

@@ -172,7 +172,7 @@ public class RelationService implements IRelationService {
     public List<RelationDto> getAllRelation(UserContext userContext) {
         List<Relation> relations = relationRepository.findAllByUserIdOneOrUserIdTwo(userContext.getId(), userContext.getId());
         if(CollectionUtils.isEmpty(relations)) return null;
-        return DozerUtils.mapListSync(mapper, relations, RelationDto.class, (relation, relationDto) -> {
+        return DozerUtils.mapList(mapper, relations, RelationDto.class, (relation, relationDto) -> {
             if(relation.getUserIdTwo().equals(userContext.getId())) {
                 relationDto.setUserId(relation.getUserIdOne());
                 relationDto.setUserName(relation.getNickNameOne());
@@ -188,7 +188,7 @@ public class RelationService implements IRelationService {
     public List<RelationApplyDto> getAllRelationApply(UserContext userContext) {
         List<RelationApplyInfo> relationApplyInfos = relationApplyInfoRepository.findAllByTargetUserId(userContext.getId());
         if(CollectionUtils.isEmpty(relationApplyInfos)) return null;
-        return DozerUtils.mapListSync(mapper, relationApplyInfos, RelationApplyDto.class, (relationApply, relationApplyDto)->{
+        return DozerUtils.mapList(mapper, relationApplyInfos, RelationApplyDto.class, (relationApply, relationApplyDto)->{
             if(relationApply.getUserInfo() != null) {
                 relationApplyDto.setNickName(relationApply.getUserInfo().getUserName());
                 relationApplyDto.setNickName(relationApply.getUserInfo().getNickName());

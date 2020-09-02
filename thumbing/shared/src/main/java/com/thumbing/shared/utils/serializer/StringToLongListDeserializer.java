@@ -23,7 +23,7 @@ public class StringToLongListDeserializer extends JsonDeserializer<List<Long>> {
         if(p.getText().startsWith("[")) {
             Iterator<List<Object>> iterator = p.readValuesAs(new ListTypeReference());
             List<Object>strs = iterator.next();
-            List<Long> r = strs.parallelStream()
+            List<Long> r = strs.stream()
                     .map(str -> Long.parseLong(str.toString()))
                     .collect(ArrayList::new, ArrayList::add, ArrayList::addAll);
             return r;

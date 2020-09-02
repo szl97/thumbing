@@ -75,7 +75,7 @@ public class ArticleCache {
      */
     public List<Article> getArticles(int from, int end){
         List<String> ids = RedisUtilsForList.get(stringRedisTemplate.opsForList(), articleList, from, end);
-        return ids.parallelStream().map(id-> getArticle(id)).collect(Collectors.toList());
+        return ids.stream().map(id-> getArticle(id)).collect(Collectors.toList());
     }
 
     public Article getArticle(String id){

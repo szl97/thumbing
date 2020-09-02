@@ -44,7 +44,7 @@ public class UniqueAspect {
                         try {
                             Thread.sleep(27000);
                             //todo: 所有正在执行线程的key过期时间重新设置为30s
-                            map.entrySet().parallelStream().forEach(
+                            map.entrySet().stream().forEach(
                                     e->{
                                         if(e.getValue().isAlive()&&!e.getValue().isInterrupted()){
                                             lockCache.expire(e.getKey(), 30);

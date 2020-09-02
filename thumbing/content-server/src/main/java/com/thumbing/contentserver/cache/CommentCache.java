@@ -73,7 +73,7 @@ public class CommentCache {
     public List<Comment> getParentsCommentsList(String id, ContentType type, int from, int end){
         String key = (type == ContentType.ARTICLE ? articleCommentsIdList : momentsCommentsIdList) + id;
         List<Long> parentCommentsIds = RedisUtilsForList.get(longRedisTemplate.opsForList(), key, from, end);
-        return parentCommentsIds.parallelStream().map(i->getCommentDetailsAndSetExpireTime(i)).collect(Collectors.toList());
+        return parentCommentsIds.stream().map(i->getCommentDetailsAndSetExpireTime(i)).collect(Collectors.toList());
     }
 
     /**
@@ -84,7 +84,7 @@ public class CommentCache {
     public List<Comment> getChildCommentsList(Long commentsId,  int from, int end){
         String key = childCommentsIdList+commentsId;
         List<Long> childCommentsIds = RedisUtilsForList.get(longRedisTemplate.opsForList(), key, from, end);
-        return childCommentsIds.parallelStream().map(i->getCommentDetailsAndSetExpireTime(i)).collect(Collectors.toList());
+        return childCommentsIds.stream().map(i->getCommentDetailsAndSetExpireTime(i)).collect(Collectors.toList());
     }
 
     /**
@@ -266,7 +266,7 @@ public class CommentCache {
         if (RedisUtils.hasKey(longRedisTemplate, commentsNewSet + seq)) {
             Set<Long> set = RedisUtilsForSet.members(longRedisTemplate.opsForSet(), commentsNewSet + seq);
             RedisUtils.remove(longRedisTemplate, commentsNewSet + seq);
-            return set.parallelStream().map(id->getCommentDetails(id)).collect(Collectors.toList());
+            return set.stream().map(id->getCommentDetails(id)).collect(Collectors.toList());
         } else {
             return null;
         }

@@ -37,7 +37,7 @@ public class SearchService implements ISearchService {
                 input.getPageNumber(),
                 input.getPageSize(),
                 ElasticBaseEntity.class);
-        List<SearchOutput> result = DozerUtils.mapListSync(mapper, entities, SearchOutput.class, (s,t)->{
+        List<SearchOutput> result = DozerUtils.mapList(mapper, entities, SearchOutput.class, (s,t)->{
             t.setContentType(s.getName());
             if(StringUtils.isNotBlank(s.getTags())){
                 t.setTagIds(Arrays.asList(s.getTags().split(",")));

@@ -74,7 +74,7 @@ public class ChatService extends BaseMongoService<ChatRecord, IChatRecordReposit
         Sort sort = Sort.by(MongoCreationEntity.Fields.createTime);
         Page<ChatRecord> recordPage = repository.findAllByUserId1AndUserId2AndCreateTimeIsAfter(userId1,userId2,input.getEarlyTime(),
                 PageRequest.of(pageable.getPageNumber() - 1,pageable.getPageSize(), sort));
-        PageResultDto<ChatRecordDto> resultDto = DozerUtils.mapToPagedResultDtoSync(mapper, recordPage, ChatRecordDto.class, (s,t)->{
+        PageResultDto<ChatRecordDto> resultDto = DozerUtils.mapToPagedResultDto(mapper, recordPage, ChatRecordDto.class, (s,t)->{
             t.setTime(s.getCreateTime());
         });
         resultDto.setPosition(-1);

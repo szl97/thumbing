@@ -66,7 +66,7 @@ public class SyncClientChannelManager implements IChannelManager<String> {
 
     @Override
     public List<Channel> getAll(){
-        return channelPool.entrySet().parallelStream().map(e->e.getValue()).collect(
+        return channelPool.entrySet().stream().map(e->e.getValue()).collect(
                 ArrayList::new, ArrayList::add, ArrayList::addAll
         );
     }

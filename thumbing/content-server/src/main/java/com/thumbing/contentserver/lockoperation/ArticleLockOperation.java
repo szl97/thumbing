@@ -71,7 +71,7 @@ public class ArticleLockOperation {
                  articleCache.addArticleWhenInitialize(article);
              }
         );
-        return DozerUtils.mapToPagedResultDtoSync(mapper, page, ArticleDto.class);
+        return DozerUtils.mapToPagedResultDto(mapper, page, ArticleDto.class);
     }
 
     @AccessLock(value = {"com.thumbing.shared.entity.mongo.content.Article"},

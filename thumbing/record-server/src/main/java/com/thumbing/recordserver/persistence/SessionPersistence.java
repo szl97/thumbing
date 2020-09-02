@@ -94,7 +94,7 @@ public class SessionPersistence {
                     : msg.getData());
             final SessionRecordDto finalDto = dto;
             int chatRecordNums = (int)input.getMsg()
-                    .parallelStream()
+                    .stream()
                     .filter(s->s.getTime().isAfter(finalDto.getLastReadTime()))
                     .count();
             int noReadNum = dto.getNoReadNum() - chatRecordNums;

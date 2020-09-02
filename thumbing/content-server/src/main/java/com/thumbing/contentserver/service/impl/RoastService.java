@@ -101,7 +101,7 @@ public class RoastService extends BaseMongoService<Roast, IRoastRepository> impl
         Sort sort = Sort.by(Sort.Direction.DESC, MongoCreationEntity.Fields.createTime);
         PageRequest pageRequest = PageRequest.of(input.getPageNumber() - 1, input.getPageSize(), sort);
         Page<Roast> page = repository.findAllByUserIdAndIsDelete(context.getId(), 0, pageRequest);
-        return DozerUtils.mapToPagedResultDtoSync(mapper,page, RoastDto.class);
+        return DozerUtils.mapToPagedResultDto(mapper,page, RoastDto.class);
     }
 
     private Long confirmRoastThumbsInRedis(RoastIdInput input) {
