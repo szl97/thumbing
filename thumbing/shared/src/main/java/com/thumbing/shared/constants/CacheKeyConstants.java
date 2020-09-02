@@ -107,7 +107,7 @@ public class CacheKeyConstants {
      * 因此先把所有元素pop到一个对应的list中，然后根据这个list修改数据库
      */
     public static final String ARTICLE_CHANGED_THUMBING_NUM = "ARTICLE:CHANGED:THUMBING_NUM";
-    public static final String ARTICLE_CHANGED_COMMENTS_NUM = "ARTICLE:CHANGED:THUMBING:COMMENTS_NUM";
+    public static final String ARTICLE_CHANGED_COMMENTS_NUM = "ARTICLE:CHANGED:COMMENTS_NUM";
     public static final String ARTICLE_CHANGED_CONTENT = "ARTICLE:CHANGED:CONTENT";
     /**
      * 代表使用的changed set的序号
@@ -142,7 +142,7 @@ public class CacheKeyConstants {
      * 因此先把所有元素pop到一个对应的list中，然后根据这个list修改数据库
      */
     public static final String MOMENTS_CHANGED_THUMBING_NUM = "MOMENTS:CHANGED:THUMBING_NUM";
-    public static final String MOMENTS_CHANGED_COMMENTS_NUM = "MOMENTS:CHANGED:THUMBING:COMMENTS_NUM";
+    public static final String MOMENTS_CHANGED_COMMENTS_NUM = "MOMENTS:CHANGED:COMMENTS_NUM";
     public static final String MOMENTS_CHANGED_CONTENT = "MOMENTS:CHANGED:CONTENT";
      /**
      * 代表使用的changed set的序号
@@ -156,14 +156,14 @@ public class CacheKeyConstants {
      * list
      * 过期时间30天，每次修改更新过期时间
      */
-    public static final String COMMENTS_ARTICLES = "COMMENTS:CHANGED:";
+    public static final String COMMENTS_ARTICLES = "COMMENTS:ARTICLE:";
     /**
      * 帖子下的评论列表 key+moments的主键
      * 只存储父评论的commentID(Long)
      * list
      * 过期时间30天，每次修改更新过期时间
      */
-    public static final String COMMENTS_MOMENTS = "COMMENTS:MOMENTS";
+    public static final String COMMENTS_MOMENTS = "COMMENTS:MOMENTS:";
     /**
      * 存储评论下的子评论Id(Long)
      * key+父评论的CommentsId
