@@ -30,8 +30,8 @@ roastPageResultItemFromJson(RoastPageResultItem data, Map<String, dynamic> json)
 	if (json['content'] != null) {
 		data.content = json['content']?.toString();
 	}
-	if (json['createTime'] != null) {
-		data.createTime = DateTime.parse(json['createTime']?.toString());
+	if(json['createTime'] != null){
+		data.createTime = DateTime.tryParse(json['createTime']);
 	}
 	if (json['id'] != null) {
 		data.id = json['id']?.toString();
@@ -51,7 +51,7 @@ roastPageResultItemFromJson(RoastPageResultItem data, Map<String, dynamic> json)
 Map<String, dynamic> roastPageResultItemToJson(RoastPageResultItem entity) {
 	final Map<String, dynamic> data = new Map<String, dynamic>();
 	data['content'] = entity.content;
-	data['createTime'] = entity.createTime;
+	data['createTime'] = entity.createTime?.toString();
 	data['id'] = entity.id;
 	data['thumbUserIds'] = entity.thumbUserIds;
 	data['thumbingNum'] = entity.thumbingNum;

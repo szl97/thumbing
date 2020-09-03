@@ -39,6 +39,8 @@ import 'package:thumbing/data/model/roast/output/roast_page_result_entity.dart';
 import 'package:thumbing/generated/json/roast_page_result_entity_helper.dart';
 import 'package:thumbing/data/model/content/moments/input/thumb_moments_input_entity.dart';
 import 'package:thumbing/generated/json/thumb_moments_input_entity_helper.dart';
+import 'package:thumbing/data/model/user/login_input_entity.dart';
+import 'package:thumbing/generated/json/login_input_entity_helper.dart';
 import 'package:thumbing/data/model/roast/input/thumb_roast_input_entity.dart';
 import 'package:thumbing/generated/json/thumb_roast_input_entity_helper.dart';
 import 'package:thumbing/data/model/content/comment/input/publish_comment_input_entity.dart';
@@ -92,7 +94,8 @@ class JsonConvert<T> {
 			return signUpInputDeviceInputFromJson(data as SignUpInputDeviceInput, json) as T;			case RoastPageResultEntity:
 			return roastPageResultEntityFromJson(data as RoastPageResultEntity, json) as T;			case RoastPageResultItem:
 			return roastPageResultItemFromJson(data as RoastPageResultItem, json) as T;			case ThumbMomentsInputEntity:
-			return thumbMomentsInputEntityFromJson(data as ThumbMomentsInputEntity, json) as T;			case ThumbRoastInputEntity:
+			return thumbMomentsInputEntityFromJson(data as ThumbMomentsInputEntity, json) as T;			case LoginInputEntity:
+			return loginInputEntityFromJson(data as LoginInputEntity, json) as T;			case ThumbRoastInputEntity:
 			return thumbRoastInputEntityFromJson(data as ThumbRoastInputEntity, json) as T;			case PublishCommentInputEntity:
 			return publishCommentInputEntityFromJson(data as PublishCommentInputEntity, json) as T;			case UpdatePersonalInputEntity:
 			return updatePersonalInputEntityFromJson(data as UpdatePersonalInputEntity, json) as T;			case UpdatePersonalInputInterest:
@@ -137,7 +140,8 @@ class JsonConvert<T> {
 			return signUpInputDeviceInputToJson(data as SignUpInputDeviceInput);			case RoastPageResultEntity:
 			return roastPageResultEntityToJson(data as RoastPageResultEntity);			case RoastPageResultItem:
 			return roastPageResultItemToJson(data as RoastPageResultItem);			case ThumbMomentsInputEntity:
-			return thumbMomentsInputEntityToJson(data as ThumbMomentsInputEntity);			case ThumbRoastInputEntity:
+			return thumbMomentsInputEntityToJson(data as ThumbMomentsInputEntity);			case LoginInputEntity:
+			return loginInputEntityToJson(data as LoginInputEntity);			case ThumbRoastInputEntity:
 			return thumbRoastInputEntityToJson(data as ThumbRoastInputEntity);			case PublishCommentInputEntity:
 			return publishCommentInputEntityToJson(data as PublishCommentInputEntity);			case UpdatePersonalInputEntity:
 			return updatePersonalInputEntityToJson(data as UpdatePersonalInputEntity);			case UpdatePersonalInputInterest:
@@ -182,7 +186,8 @@ class JsonConvert<T> {
 			return SignUpInputDeviceInput().fromJson(json);			case 'RoastPageResultEntity':
 			return RoastPageResultEntity().fromJson(json);			case 'RoastPageResultItem':
 			return RoastPageResultItem().fromJson(json);			case 'ThumbMomentsInputEntity':
-			return ThumbMomentsInputEntity().fromJson(json);			case 'ThumbRoastInputEntity':
+			return ThumbMomentsInputEntity().fromJson(json);			case 'LoginInputEntity':
+			return LoginInputEntity().fromJson(json);			case 'ThumbRoastInputEntity':
 			return ThumbRoastInputEntity().fromJson(json);			case 'PublishCommentInputEntity':
 			return PublishCommentInputEntity().fromJson(json);			case 'UpdatePersonalInputEntity':
 			return UpdatePersonalInputEntity().fromJson(json);			case 'UpdatePersonalInputInterest':
@@ -228,7 +233,8 @@ class JsonConvert<T> {
 			return List<SignUpInputDeviceInput>();			case 'RoastPageResultEntity':
 			return List<RoastPageResultEntity>();			case 'RoastPageResultItem':
 			return List<RoastPageResultItem>();			case 'ThumbMomentsInputEntity':
-			return List<ThumbMomentsInputEntity>();			case 'ThumbRoastInputEntity':
+			return List<ThumbMomentsInputEntity>();			case 'LoginInputEntity':
+			return List<LoginInputEntity>();			case 'ThumbRoastInputEntity':
 			return List<ThumbRoastInputEntity>();			case 'PublishCommentInputEntity':
 			return List<PublishCommentInputEntity>();			case 'UpdatePersonalInputEntity':
 			return List<UpdatePersonalInputEntity>();			case 'UpdatePersonalInputInterest':
