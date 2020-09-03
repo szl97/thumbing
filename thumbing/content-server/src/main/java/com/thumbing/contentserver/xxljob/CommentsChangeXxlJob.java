@@ -34,7 +34,9 @@ public class CommentsChangeXxlJob {
     @XxlJob("commentsChangeHandler")
     public ReturnT<String> execute(String param){
         List<Comment> newComments = commentCache.getAndClearNewComments();
-        commentRepository.saveAll(newComments);
+        if (newComments != null) {
+            commentRepository.saveAll(newComments);
+        }
         Set<Long> set1 = commentCache.getAndClearThumbsNumChanged();
         CompletableFuture<Void> task1 = CompletableFuture.runAsync(() -> changeThumbsNum(set1));
         Set<Long> set2 = commentCache.getAndClearDeletedCommentsId();
