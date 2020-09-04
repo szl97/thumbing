@@ -41,12 +41,15 @@ public class DefaultAuthenticationSuccessHandler implements AuthenticationSucces
     public void onAuthenticationSuccess(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Authentication authentication) throws IOException {
         UserContext userContext = (UserContext) authentication.getPrincipal();
         String accessToken = jwtTokenFactory.createJwtToken(userContext);
+        if(accessToken == null){
+            mapper.writeValue(httpServletResponse.getWriter(),BaseApiResult.errorServer("服务器错误"));
+        }
         AuthorizationContextHolder.setAuthorization(HEADER_PREFIX + accessToken);
         httpServletResponse.setContentType(MediaType.APPLICATION_JSON_VALUE);
         httpServletResponse.setCharacterEncoding(StandardCharsets.UTF_8.toString());
         LoginRequest loginRequest = LoginRequestContextHolder.getLoginRequest();
         authService.succeedLogin(loginRequest);
-        mapper.writeValue(httpServletResponse.getWriter(),  BaseApiResult.success(accessToken,"登录成功"));
+        mapper.writeValue(httpServletResponse.getWriter(),BaseApiResult.success(accessToken,"登录成功"));
         clearAuthenticationAttributes(httpServletRequest);
         LoginRequestContextHolder.clear();
         LoginUserContextHolder.clear();

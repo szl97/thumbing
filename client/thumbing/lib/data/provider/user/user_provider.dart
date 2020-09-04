@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:html';
 import 'package:dio/dio.dart';
 import 'package:thumbing/data/model/reponse/base_result_entity.dart';
 import 'package:thumbing/data/model/user/check_auth_input_entity.dart';
@@ -37,7 +36,7 @@ class UserProvider {
     bool b;
     try{
       BaseResultEntity data = await DioManager().get(HttpPath.checkAuthorization, entity.toJson());
-      b = data.data;
+      b = data.data??false;
     }on DioError catch(e){
       throw e;
     }

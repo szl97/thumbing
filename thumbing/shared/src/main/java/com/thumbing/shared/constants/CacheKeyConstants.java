@@ -25,6 +25,13 @@ public class CacheKeyConstants {
     public static final String TOKEN = "TOKEN:USER_NAME:";
     /**
      * String
+     * 存储用户修改密码的时间
+     * 过期时间和token一样
+     * userId
+     */
+    public static final String CHANGE_PASSWORD = "CHANGE:PASSWORD:";
+    /**
+     * String
      * 用户的失败登录次数
      * userName
      */

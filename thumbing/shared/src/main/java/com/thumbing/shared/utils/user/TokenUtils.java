@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Date;
 
 /**
  * @Author: Stan Sai
@@ -16,7 +17,7 @@ import javax.servlet.http.HttpServletRequest;
  */
 @Component
 @Slf4j
-public class UserContextUtils {
+public class TokenUtils {
     private final String AUTHORIZATION_HEADER = "Authorization";
     @Autowired
     private JwtHeaderTokenExtractor jwtHeaderTokenExtractor;
@@ -30,13 +31,24 @@ public class UserContextUtils {
     public UserContext getUserContext(String authorization){
         UserContext userContext=null;
         if (!StringUtils.isBlank(authorization)) {
-            try {
-                userContext=  jwtTokenFactory.parseJwtToken(jwtHeaderTokenExtractor.extract(authorization));
-            }
-            catch (Exception ex){
-                log.info(ex.getMessage());
-            }
+            userContext = jwtTokenFactory.parseJwtToken(jwtHeaderTokenExtractor.extract(authorization));
         }
         return userContext;
+    }
+
+    public Date getTokenExpireTime(String authorization){
+        Date date = null;
+        if(!StringUtils.isBlank(authorization)){
+            date = jwtTokenFactory.parseTokenExpireTime(jwtHeaderTokenExtractor.extract(authorization));
+        }
+        return date;
+    }
+
+    public Date getTokenCreationTime(String authorization){
+        Date date = null;
+        if(!StringUtils.isBlank(authorization)){
+            date = jwtTokenFactory.parseTokenCreationTime(jwtHeaderTokenExtractor.extract(authorization));
+        }
+        return date;
     }
 }

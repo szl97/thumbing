@@ -1,6 +1,7 @@
 package com.thumbing.auth.service.impl;
 
 import com.github.dozermapper.core.Mapper;
+import com.thumbing.auth.cache.PasswordChangeCache;
 import com.thumbing.auth.cache.ValidationCache;
 import com.thumbing.auth.client.IUserInfoServiceClient;
 import com.thumbing.auth.dto.input.ChangePasswordRequest;
@@ -23,6 +24,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+
 /**
  * @Author: Stan Sai
  * @Date: 2020/8/4 16:59
@@ -35,9 +38,11 @@ public class AccountService extends BaseSqlService<User, IUserRepository> implem
     @Autowired
     private PasswordEncoder passwordEncoder;
     @Autowired
-    private Mapper mapper;
+    private PasswordChangeCache passwordChangeCache;
     @Autowired
     private IUserInfoServiceClient client;
+    @Autowired
+    private Mapper mapper;
 
     @Override
     @UniqueLock(className = "com.thumbing.auth.dto.input.SignUpInput",
@@ -120,6 +125,7 @@ public class AccountService extends BaseSqlService<User, IUserRepository> implem
         }
         user.setPassword(changePasswordRequest.getPassword());
         user = repository.save(user);
+        passwordChangeCache.setChangeTime(user.getId(), LocalDateTime.now());
         return mapper.map(user, AccountDto.class);
     }
 

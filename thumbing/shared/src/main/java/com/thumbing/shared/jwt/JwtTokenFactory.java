@@ -1,5 +1,6 @@
 package com.thumbing.shared.jwt;
 
+import com.thumbing.shared.annotation.AccessLock;
 import com.thumbing.shared.auth.model.UserContext;
 import com.thumbing.shared.jwt.exception.JwtExpiredTokenException;
 import io.jsonwebtoken.*;
@@ -35,10 +36,12 @@ public class JwtTokenFactory {
 
     /**
      * 创建jwt token
-     *
      * @param userContext
      * @return
      */
+    @AccessLock(value = {"com.thumbing.shared.jwt.JwtTokenFactory"},
+            className = "com.thumbing.shared.auth.model.UserContext",
+            fields = {"getId"})
     public String createJwtToken(UserContext userContext) {
         Claims claims = Jwts.claims().setSubject(String.valueOf(userContext.getId()));
         claims.put(CLAIM_NAME, userContext.getName());
@@ -60,7 +63,6 @@ public class JwtTokenFactory {
 
     /**
      * 反序列化token
-     *
      * @param token
      * @return
      */
@@ -77,6 +79,44 @@ public class JwtTokenFactory {
                     .collect(Collectors.toList());
             userContext.setAuthorities(authorities);
             return userContext;
+        } catch (UnsupportedJwtException | MalformedJwtException | IllegalArgumentException | SignatureException ex) {
+            logger.error("Invalid JWT Token", ex);
+            throw new UnsupportedJwtException("Invalid JWT token: ", ex);
+        } catch (ExpiredJwtException expiredEx) {
+            logger.info("JWT Token is expired", expiredEx);
+            throw new JwtExpiredTokenException("JWT Token expired", expiredEx);
+        }
+    }
+
+    /**
+     * 反序列化token
+     * @param token
+     * @return
+     */
+    public Date parseTokenExpireTime(String token) {
+        try {
+            SecretKey key = Keys.hmacShaKeyFor(jwtSettings.getSigningKey().getBytes(StandardCharsets.UTF_8));
+            Jws<Claims> jwsClaims = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
+            return jwsClaims.getBody().getExpiration();
+        } catch (UnsupportedJwtException | MalformedJwtException | IllegalArgumentException | SignatureException ex) {
+            logger.error("Invalid JWT Token", ex);
+            throw new UnsupportedJwtException("Invalid JWT token: ", ex);
+        } catch (ExpiredJwtException expiredEx) {
+            logger.info("JWT Token is expired", expiredEx);
+            throw new JwtExpiredTokenException("JWT Token expired", expiredEx);
+        }
+    }
+
+    /**
+     * 反序列化token
+     * @param token
+     * @return
+     */
+    public Date parseTokenCreationTime(String token) {
+        try {
+            SecretKey key = Keys.hmacShaKeyFor(jwtSettings.getSigningKey().getBytes(StandardCharsets.UTF_8));
+            Jws<Claims> jwsClaims = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
+            return jwsClaims.getBody().getIssuedAt();
         } catch (UnsupportedJwtException | MalformedJwtException | IllegalArgumentException | SignatureException ex) {
             logger.error("Invalid JWT Token", ex);
             throw new UnsupportedJwtException("Invalid JWT token: ", ex);

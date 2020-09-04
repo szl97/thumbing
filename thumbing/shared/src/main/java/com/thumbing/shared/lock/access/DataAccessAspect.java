@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
  * @Date: 2020/8/6 16:58
  */
 @Aspect
-public class DataBaseAccessAspect {
+public class DataAccessAspect {
 
     @Autowired
     private LockCache lockCache;
@@ -30,7 +30,7 @@ public class DataBaseAccessAspect {
 
     private ConcurrentSkipListMap<String, Thread> map;
 
-    public DataBaseAccessAspect(){
+    public DataAccessAspect(){
         map = new ConcurrentSkipListMap();
         thread = new Thread(
                 ()->{

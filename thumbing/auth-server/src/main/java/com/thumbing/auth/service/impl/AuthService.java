@@ -2,6 +2,7 @@ package com.thumbing.auth.service.impl;
 
 import com.github.dozermapper.core.Mapper;
 import com.thumbing.auth.cache.FailureLoginCache;
+import com.thumbing.auth.cache.PasswordChangeCache;
 import com.thumbing.auth.context.LoginUserContextHolder;
 import com.thumbing.auth.dto.input.LoginRequest;
 import com.thumbing.auth.service.IAuthService;
@@ -18,7 +19,7 @@ import com.thumbing.shared.jwt.JwtTokenFactory;
 import com.thumbing.shared.jwt.extractor.JwtHeaderTokenExtractor;
 import com.thumbing.shared.repository.sql.system.IUserRepository;
 import com.thumbing.shared.thread.CustomThreadPool;
-import com.thumbing.shared.utils.user.UserContextUtils;
+import com.thumbing.shared.utils.user.TokenUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
@@ -30,6 +31,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -42,11 +45,7 @@ import java.util.List;
 public class AuthService implements IAuthService {
     private final Integer MAX_FAILURE_TIMES = 5;
     @Autowired
-    private JwtTokenFactory jwtTokenFactory;
-    @Autowired
-    private JwtHeaderTokenExtractor jwtHeaderTokenExtractor;
-    @Autowired
-    private UserContextUtils userContextUtils;
+    private TokenUtils tokenUtils;
     @Autowired
     private SkipPathRequestMatcher skipPathRequestMatcher;
     @Autowired
@@ -60,6 +59,8 @@ public class AuthService implements IAuthService {
     @Autowired
     private FailureLoginCache failureLoginCache;
     @Autowired
+    private PasswordChangeCache passwordChangeCache;
+    @Autowired
     private CustomThreadPool customThreadPool;
 
 
@@ -72,10 +73,18 @@ public class AuthService implements IAuthService {
     @Override
     public boolean auth(String userName) {
         String authorization = AuthorizationContextHolder.getAuthorization();
-        UserContext userContext = userContextUtils.getUserContext(authorization);
+        UserContext userContext = tokenUtils.getUserContext(authorization);
         if (userContext == null) {
             //TODO:抛出gateway可识别得异常
             throw new UserContextException("尚未登陆");
+        }
+        if(passwordChangeCache.exist(userContext.getId())){
+            LocalDateTime changeTime = passwordChangeCache.getChangeTime(userContext.getId());
+            Date time = tokenUtils.getTokenCreationTime(authorization);
+            Date change = Date.from(changeTime.atZone(ZoneId.systemDefault()).toInstant());
+            if(change.after(time)){
+                throw new UserContextException("登录过期");
+            }
         }
         return userContext.getName().equals(userName);
     }
@@ -143,7 +152,7 @@ public class AuthService implements IAuthService {
      * @return
      */
     private boolean hasPermission(String authorization, String applicationName, String url) {
-        UserContext userContext = userContextUtils.getUserContext(authorization);
+        UserContext userContext = tokenUtils.getUserContext(authorization);
         if (userContext == null) {
             //TODO:抛出gateway可识别得异常
             throw new UserContextException("尚未登陆");
