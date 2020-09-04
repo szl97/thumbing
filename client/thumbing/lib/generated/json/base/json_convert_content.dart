@@ -15,6 +15,8 @@ import 'package:thumbing/data/model/reponse/base_result_entity.dart';
 import 'package:thumbing/generated/json/base_result_entity_helper.dart';
 import 'package:thumbing/data/model/personal/output/personal_entity.dart';
 import 'package:thumbing/generated/json/personal_entity_helper.dart';
+import 'package:thumbing/data/model/content/comment/input/delete_comment_input_entity.dart';
+import 'package:thumbing/generated/json/delete_comment_input_entity_helper.dart';
 import 'package:thumbing/data/model/content/article/input/update_artilce_input_entity.dart';
 import 'package:thumbing/generated/json/update_artilce_input_entity_helper.dart';
 import 'package:thumbing/data/model/personal/output/personal_configuration_entity.dart';
@@ -25,10 +27,18 @@ import 'package:thumbing/data/model/content/article/input/thumb_article_input_en
 import 'package:thumbing/generated/json/thumb_article_input_entity_helper.dart';
 import 'package:thumbing/data/model/account/output/account_entity.dart';
 import 'package:thumbing/generated/json/account_entity_helper.dart';
+import 'package:thumbing/data/model/content/search/output/search_result_entity.dart';
+import 'package:thumbing/generated/json/search_result_entity_helper.dart';
 import 'package:thumbing/data/model/account/input/check_unique_input_entity.dart';
 import 'package:thumbing/generated/json/check_unique_input_entity_helper.dart';
 import 'package:thumbing/data/model/content/comment/input/thumb_comment_input_entity.dart';
 import 'package:thumbing/generated/json/thumb_comment_input_entity_helper.dart';
+import 'package:thumbing/data/model/user/check_auth_input_entity.dart';
+import 'package:thumbing/generated/json/check_auth_input_entity_helper.dart';
+import 'package:thumbing/data/model/request/page_request_entity.dart';
+import 'package:thumbing/generated/json/page_request_entity_helper.dart';
+import 'package:thumbing/data/model/content/search/input/search_input_entity.dart';
+import 'package:thumbing/generated/json/search_input_entity_helper.dart';
 import 'package:thumbing/data/model/content/article/output/article_page_result_entity.dart';
 import 'package:thumbing/generated/json/article_page_result_entity_helper.dart';
 import 'package:thumbing/data/model/content/article/input/publish_article_input_entity.dart';
@@ -37,6 +47,8 @@ import 'package:thumbing/data/model/account/input/sign_up_input_entity.dart';
 import 'package:thumbing/generated/json/sign_up_input_entity_helper.dart';
 import 'package:thumbing/data/model/roast/output/roast_page_result_entity.dart';
 import 'package:thumbing/generated/json/roast_page_result_entity_helper.dart';
+import 'package:thumbing/data/model/request/id_request_entity.dart';
+import 'package:thumbing/generated/json/id_request_entity_helper.dart';
 import 'package:thumbing/data/model/content/moments/input/thumb_moments_input_entity.dart';
 import 'package:thumbing/generated/json/thumb_moments_input_entity_helper.dart';
 import 'package:thumbing/data/model/user/login_input_entity.dart';
@@ -45,6 +57,8 @@ import 'package:thumbing/data/model/roast/input/thumb_roast_input_entity.dart';
 import 'package:thumbing/generated/json/thumb_roast_input_entity_helper.dart';
 import 'package:thumbing/data/model/content/comment/input/publish_comment_input_entity.dart';
 import 'package:thumbing/generated/json/publish_comment_input_entity_helper.dart';
+import 'package:thumbing/data/model/content/comment/input/fetch_comments_input_entity.dart';
+import 'package:thumbing/generated/json/fetch_comments_input_entity_helper.dart';
 import 'package:thumbing/data/model/personal/input/update_personal_input_entity.dart';
 import 'package:thumbing/generated/json/update_personal_input_entity_helper.dart';
 import 'package:thumbing/data/model/content/moments/input/publish_moments_input_entity.dart';
@@ -73,7 +87,8 @@ class JsonConvert<T> {
 			return personalEntityFromJson(data as PersonalEntity, json) as T;			case PersonalInterest:
 			return personalInterestFromJson(data as PersonalInterest, json) as T;			case PersonalJob:
 			return personalJobFromJson(data as PersonalJob, json) as T;			case PersonalOccupation:
-			return personalOccupationFromJson(data as PersonalOccupation, json) as T;			case UpdateArtilceInputEntity:
+			return personalOccupationFromJson(data as PersonalOccupation, json) as T;			case DeleteCommentInputEntity:
+			return deleteCommentInputEntityFromJson(data as DeleteCommentInputEntity, json) as T;			case UpdateArtilceInputEntity:
 			return updateArtilceInputEntityFromJson(data as UpdateArtilceInputEntity, json) as T;			case PersonalConfigurationEntity:
 			return personalConfigurationEntityFromJson(data as PersonalConfigurationEntity, json) as T;			case PersonalConfigurationInterest:
 			return personalConfigurationInterestFromJson(data as PersonalConfigurationInterest, json) as T;			case PersonalConfigurationJob:
@@ -84,20 +99,26 @@ class JsonConvert<T> {
 			return createPersonalInputJobFromJson(data as CreatePersonalInputJob, json) as T;			case CreatePersonalInputOccupation:
 			return createPersonalInputOccupationFromJson(data as CreatePersonalInputOccupation, json) as T;			case ThumbArticleInputEntity:
 			return thumbArticleInputEntityFromJson(data as ThumbArticleInputEntity, json) as T;			case AccountEntity:
-			return accountEntityFromJson(data as AccountEntity, json) as T;			case CheckUniqueInputEntity:
+			return accountEntityFromJson(data as AccountEntity, json) as T;			case SearchResultEntity:
+			return searchResultEntityFromJson(data as SearchResultEntity, json) as T;			case CheckUniqueInputEntity:
 			return checkUniqueInputEntityFromJson(data as CheckUniqueInputEntity, json) as T;			case ThumbCommentInputEntity:
-			return thumbCommentInputEntityFromJson(data as ThumbCommentInputEntity, json) as T;			case ArticlePageResultEntity:
+			return thumbCommentInputEntityFromJson(data as ThumbCommentInputEntity, json) as T;			case CheckAuthInputEntity:
+			return checkAuthInputEntityFromJson(data as CheckAuthInputEntity, json) as T;			case PageRequestEntity:
+			return pageRequestEntityFromJson(data as PageRequestEntity, json) as T;			case SearchInputEntity:
+			return searchInputEntityFromJson(data as SearchInputEntity, json) as T;			case ArticlePageResultEntity:
 			return articlePageResultEntityFromJson(data as ArticlePageResultEntity, json) as T;			case ArticlePageResultItem:
 			return articlePageResultItemFromJson(data as ArticlePageResultItem, json) as T;			case PublishArticleInputEntity:
 			return publishArticleInputEntityFromJson(data as PublishArticleInputEntity, json) as T;			case SignUpInputEntity:
 			return signUpInputEntityFromJson(data as SignUpInputEntity, json) as T;			case SignUpInputDeviceInput:
 			return signUpInputDeviceInputFromJson(data as SignUpInputDeviceInput, json) as T;			case RoastPageResultEntity:
 			return roastPageResultEntityFromJson(data as RoastPageResultEntity, json) as T;			case RoastPageResultItem:
-			return roastPageResultItemFromJson(data as RoastPageResultItem, json) as T;			case ThumbMomentsInputEntity:
+			return roastPageResultItemFromJson(data as RoastPageResultItem, json) as T;			case IdRequestEntity:
+			return idRequestEntityFromJson(data as IdRequestEntity, json) as T;			case ThumbMomentsInputEntity:
 			return thumbMomentsInputEntityFromJson(data as ThumbMomentsInputEntity, json) as T;			case LoginInputEntity:
 			return loginInputEntityFromJson(data as LoginInputEntity, json) as T;			case ThumbRoastInputEntity:
 			return thumbRoastInputEntityFromJson(data as ThumbRoastInputEntity, json) as T;			case PublishCommentInputEntity:
-			return publishCommentInputEntityFromJson(data as PublishCommentInputEntity, json) as T;			case UpdatePersonalInputEntity:
+			return publishCommentInputEntityFromJson(data as PublishCommentInputEntity, json) as T;			case FetchCommentsInputEntity:
+			return fetchCommentsInputEntityFromJson(data as FetchCommentsInputEntity, json) as T;			case UpdatePersonalInputEntity:
 			return updatePersonalInputEntityFromJson(data as UpdatePersonalInputEntity, json) as T;			case UpdatePersonalInputInterest:
 			return updatePersonalInputInterestFromJson(data as UpdatePersonalInputInterest, json) as T;			case UpdatePersonalInputJob:
 			return updatePersonalInputJobFromJson(data as UpdatePersonalInputJob, json) as T;			case UpdatePersonalInputOccupation:
@@ -119,7 +140,8 @@ class JsonConvert<T> {
 			return personalEntityToJson(data as PersonalEntity);			case PersonalInterest:
 			return personalInterestToJson(data as PersonalInterest);			case PersonalJob:
 			return personalJobToJson(data as PersonalJob);			case PersonalOccupation:
-			return personalOccupationToJson(data as PersonalOccupation);			case UpdateArtilceInputEntity:
+			return personalOccupationToJson(data as PersonalOccupation);			case DeleteCommentInputEntity:
+			return deleteCommentInputEntityToJson(data as DeleteCommentInputEntity);			case UpdateArtilceInputEntity:
 			return updateArtilceInputEntityToJson(data as UpdateArtilceInputEntity);			case PersonalConfigurationEntity:
 			return personalConfigurationEntityToJson(data as PersonalConfigurationEntity);			case PersonalConfigurationInterest:
 			return personalConfigurationInterestToJson(data as PersonalConfigurationInterest);			case PersonalConfigurationJob:
@@ -130,20 +152,26 @@ class JsonConvert<T> {
 			return createPersonalInputJobToJson(data as CreatePersonalInputJob);			case CreatePersonalInputOccupation:
 			return createPersonalInputOccupationToJson(data as CreatePersonalInputOccupation);			case ThumbArticleInputEntity:
 			return thumbArticleInputEntityToJson(data as ThumbArticleInputEntity);			case AccountEntity:
-			return accountEntityToJson(data as AccountEntity);			case CheckUniqueInputEntity:
+			return accountEntityToJson(data as AccountEntity);			case SearchResultEntity:
+			return searchResultEntityToJson(data as SearchResultEntity);			case CheckUniqueInputEntity:
 			return checkUniqueInputEntityToJson(data as CheckUniqueInputEntity);			case ThumbCommentInputEntity:
-			return thumbCommentInputEntityToJson(data as ThumbCommentInputEntity);			case ArticlePageResultEntity:
+			return thumbCommentInputEntityToJson(data as ThumbCommentInputEntity);			case CheckAuthInputEntity:
+			return checkAuthInputEntityToJson(data as CheckAuthInputEntity);			case PageRequestEntity:
+			return pageRequestEntityToJson(data as PageRequestEntity);			case SearchInputEntity:
+			return searchInputEntityToJson(data as SearchInputEntity);			case ArticlePageResultEntity:
 			return articlePageResultEntityToJson(data as ArticlePageResultEntity);			case ArticlePageResultItem:
 			return articlePageResultItemToJson(data as ArticlePageResultItem);			case PublishArticleInputEntity:
 			return publishArticleInputEntityToJson(data as PublishArticleInputEntity);			case SignUpInputEntity:
 			return signUpInputEntityToJson(data as SignUpInputEntity);			case SignUpInputDeviceInput:
 			return signUpInputDeviceInputToJson(data as SignUpInputDeviceInput);			case RoastPageResultEntity:
 			return roastPageResultEntityToJson(data as RoastPageResultEntity);			case RoastPageResultItem:
-			return roastPageResultItemToJson(data as RoastPageResultItem);			case ThumbMomentsInputEntity:
+			return roastPageResultItemToJson(data as RoastPageResultItem);			case IdRequestEntity:
+			return idRequestEntityToJson(data as IdRequestEntity);			case ThumbMomentsInputEntity:
 			return thumbMomentsInputEntityToJson(data as ThumbMomentsInputEntity);			case LoginInputEntity:
 			return loginInputEntityToJson(data as LoginInputEntity);			case ThumbRoastInputEntity:
 			return thumbRoastInputEntityToJson(data as ThumbRoastInputEntity);			case PublishCommentInputEntity:
-			return publishCommentInputEntityToJson(data as PublishCommentInputEntity);			case UpdatePersonalInputEntity:
+			return publishCommentInputEntityToJson(data as PublishCommentInputEntity);			case FetchCommentsInputEntity:
+			return fetchCommentsInputEntityToJson(data as FetchCommentsInputEntity);			case UpdatePersonalInputEntity:
 			return updatePersonalInputEntityToJson(data as UpdatePersonalInputEntity);			case UpdatePersonalInputInterest:
 			return updatePersonalInputInterestToJson(data as UpdatePersonalInputInterest);			case UpdatePersonalInputJob:
 			return updatePersonalInputJobToJson(data as UpdatePersonalInputJob);			case UpdatePersonalInputOccupation:
@@ -165,7 +193,8 @@ class JsonConvert<T> {
 			return PersonalEntity().fromJson(json);			case 'PersonalInterest':
 			return PersonalInterest().fromJson(json);			case 'PersonalJob':
 			return PersonalJob().fromJson(json);			case 'PersonalOccupation':
-			return PersonalOccupation().fromJson(json);			case 'UpdateArtilceInputEntity':
+			return PersonalOccupation().fromJson(json);			case 'DeleteCommentInputEntity':
+			return DeleteCommentInputEntity().fromJson(json);			case 'UpdateArtilceInputEntity':
 			return UpdateArtilceInputEntity().fromJson(json);			case 'PersonalConfigurationEntity':
 			return PersonalConfigurationEntity().fromJson(json);			case 'PersonalConfigurationInterest':
 			return PersonalConfigurationInterest().fromJson(json);			case 'PersonalConfigurationJob':
@@ -176,20 +205,26 @@ class JsonConvert<T> {
 			return CreatePersonalInputJob().fromJson(json);			case 'CreatePersonalInputOccupation':
 			return CreatePersonalInputOccupation().fromJson(json);			case 'ThumbArticleInputEntity':
 			return ThumbArticleInputEntity().fromJson(json);			case 'AccountEntity':
-			return AccountEntity().fromJson(json);			case 'CheckUniqueInputEntity':
+			return AccountEntity().fromJson(json);			case 'SearchResultEntity':
+			return SearchResultEntity().fromJson(json);			case 'CheckUniqueInputEntity':
 			return CheckUniqueInputEntity().fromJson(json);			case 'ThumbCommentInputEntity':
-			return ThumbCommentInputEntity().fromJson(json);			case 'ArticlePageResultEntity':
+			return ThumbCommentInputEntity().fromJson(json);			case 'CheckAuthInputEntity':
+			return CheckAuthInputEntity().fromJson(json);			case 'PageRequestEntity':
+			return PageRequestEntity().fromJson(json);			case 'SearchInputEntity':
+			return SearchInputEntity().fromJson(json);			case 'ArticlePageResultEntity':
 			return ArticlePageResultEntity().fromJson(json);			case 'ArticlePageResultItem':
 			return ArticlePageResultItem().fromJson(json);			case 'PublishArticleInputEntity':
 			return PublishArticleInputEntity().fromJson(json);			case 'SignUpInputEntity':
 			return SignUpInputEntity().fromJson(json);			case 'SignUpInputDeviceInput':
 			return SignUpInputDeviceInput().fromJson(json);			case 'RoastPageResultEntity':
 			return RoastPageResultEntity().fromJson(json);			case 'RoastPageResultItem':
-			return RoastPageResultItem().fromJson(json);			case 'ThumbMomentsInputEntity':
+			return RoastPageResultItem().fromJson(json);			case 'IdRequestEntity':
+			return IdRequestEntity().fromJson(json);			case 'ThumbMomentsInputEntity':
 			return ThumbMomentsInputEntity().fromJson(json);			case 'LoginInputEntity':
 			return LoginInputEntity().fromJson(json);			case 'ThumbRoastInputEntity':
 			return ThumbRoastInputEntity().fromJson(json);			case 'PublishCommentInputEntity':
-			return PublishCommentInputEntity().fromJson(json);			case 'UpdatePersonalInputEntity':
+			return PublishCommentInputEntity().fromJson(json);			case 'FetchCommentsInputEntity':
+			return FetchCommentsInputEntity().fromJson(json);			case 'UpdatePersonalInputEntity':
 			return UpdatePersonalInputEntity().fromJson(json);			case 'UpdatePersonalInputInterest':
 			return UpdatePersonalInputInterest().fromJson(json);			case 'UpdatePersonalInputJob':
 			return UpdatePersonalInputJob().fromJson(json);			case 'UpdatePersonalInputOccupation':
@@ -212,7 +247,8 @@ class JsonConvert<T> {
 			return List<PersonalEntity>();			case 'PersonalInterest':
 			return List<PersonalInterest>();			case 'PersonalJob':
 			return List<PersonalJob>();			case 'PersonalOccupation':
-			return List<PersonalOccupation>();			case 'UpdateArtilceInputEntity':
+			return List<PersonalOccupation>();			case 'DeleteCommentInputEntity':
+			return List<DeleteCommentInputEntity>();			case 'UpdateArtilceInputEntity':
 			return List<UpdateArtilceInputEntity>();			case 'PersonalConfigurationEntity':
 			return List<PersonalConfigurationEntity>();			case 'PersonalConfigurationInterest':
 			return List<PersonalConfigurationInterest>();			case 'PersonalConfigurationJob':
@@ -223,20 +259,26 @@ class JsonConvert<T> {
 			return List<CreatePersonalInputJob>();			case 'CreatePersonalInputOccupation':
 			return List<CreatePersonalInputOccupation>();			case 'ThumbArticleInputEntity':
 			return List<ThumbArticleInputEntity>();			case 'AccountEntity':
-			return List<AccountEntity>();			case 'CheckUniqueInputEntity':
+			return List<AccountEntity>();			case 'SearchResultEntity':
+			return List<SearchResultEntity>();			case 'CheckUniqueInputEntity':
 			return List<CheckUniqueInputEntity>();			case 'ThumbCommentInputEntity':
-			return List<ThumbCommentInputEntity>();			case 'ArticlePageResultEntity':
+			return List<ThumbCommentInputEntity>();			case 'CheckAuthInputEntity':
+			return List<CheckAuthInputEntity>();			case 'PageRequestEntity':
+			return List<PageRequestEntity>();			case 'SearchInputEntity':
+			return List<SearchInputEntity>();			case 'ArticlePageResultEntity':
 			return List<ArticlePageResultEntity>();			case 'ArticlePageResultItem':
 			return List<ArticlePageResultItem>();			case 'PublishArticleInputEntity':
 			return List<PublishArticleInputEntity>();			case 'SignUpInputEntity':
 			return List<SignUpInputEntity>();			case 'SignUpInputDeviceInput':
 			return List<SignUpInputDeviceInput>();			case 'RoastPageResultEntity':
 			return List<RoastPageResultEntity>();			case 'RoastPageResultItem':
-			return List<RoastPageResultItem>();			case 'ThumbMomentsInputEntity':
+			return List<RoastPageResultItem>();			case 'IdRequestEntity':
+			return List<IdRequestEntity>();			case 'ThumbMomentsInputEntity':
 			return List<ThumbMomentsInputEntity>();			case 'LoginInputEntity':
 			return List<LoginInputEntity>();			case 'ThumbRoastInputEntity':
 			return List<ThumbRoastInputEntity>();			case 'PublishCommentInputEntity':
-			return List<PublishCommentInputEntity>();			case 'UpdatePersonalInputEntity':
+			return List<PublishCommentInputEntity>();			case 'FetchCommentsInputEntity':
+			return List<FetchCommentsInputEntity>();			case 'UpdatePersonalInputEntity':
 			return List<UpdatePersonalInputEntity>();			case 'UpdatePersonalInputInterest':
 			return List<UpdatePersonalInputInterest>();			case 'UpdatePersonalInputJob':
 			return List<UpdatePersonalInputJob>();			case 'UpdatePersonalInputOccupation':

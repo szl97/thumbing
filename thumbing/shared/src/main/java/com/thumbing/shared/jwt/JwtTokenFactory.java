@@ -77,7 +77,6 @@ public class JwtTokenFactory {
                     .collect(Collectors.toList());
             userContext.setAuthorities(authorities);
             return userContext;
-
         } catch (UnsupportedJwtException | MalformedJwtException | IllegalArgumentException | SignatureException ex) {
             logger.error("Invalid JWT Token", ex);
             throw new UnsupportedJwtException("Invalid JWT token: ", ex);

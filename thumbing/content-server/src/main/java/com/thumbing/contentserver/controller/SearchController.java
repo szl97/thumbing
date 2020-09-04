@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
 import java.util.List;
 
 /**
@@ -29,7 +30,7 @@ public class SearchController extends ThumbingBaseController {
     @ApiOperation("搜索文章和帖子")
     @Authorize(PermissionConstants.REGISTER)
     @RequestMapping(method = RequestMethod.GET)
-    public List<SearchOutput> search(SearchInput input){
+    public List<SearchOutput> search(@Valid SearchInput input){
         return searchService.search(input, getCurrentUser());
     }
 }

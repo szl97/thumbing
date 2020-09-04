@@ -13,10 +13,8 @@ import java.io.Serializable;
  */
 @Data
 public class FetchCommentInput implements Serializable {
-    @ApiModelProperty(value = "文章或帖子Id")
     @NotNull(message = "文章或帖子Id不可为空")
     private String contentId;
-    @ApiModelProperty(value = "内容类型")
     @NotNull(message = "内容类型不可为空")
     private ContentType contentType;
 }

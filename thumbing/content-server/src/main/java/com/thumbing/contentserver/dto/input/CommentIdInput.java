@@ -13,10 +13,8 @@ import javax.validation.constraints.NotNull;
  */
 @Data
 public class CommentIdInput extends EntityDto {
-    @ApiModelProperty(value = "文章或帖子Id")
     @NotNull(message = "文章或帖子Id不可为空")
     private String contentId;
-    @ApiModelProperty(value = "内容类型")
     @NotNull(message = "内容类型不可为空")
     private ContentType contentType;
 }

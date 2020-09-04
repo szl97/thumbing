@@ -11,8 +11,12 @@ class UserRepository {
     return await userProvider.getUserInfo();
   }
 
-  Future<User> checkUser(String userName, String password) async {
+  Future<String> checkUser(String userName, String password) async {
     return await userProvider.checkUser(userName, password);
+  }
+
+  Future<bool> checkAuthorization(String token, String userName) async {
+    return await userProvider.checkAuthorization(token, userName);
   }
 
   Future<void> logout(String userName) async {

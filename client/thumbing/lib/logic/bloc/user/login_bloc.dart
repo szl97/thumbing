@@ -1,3 +1,4 @@
+
 import 'package:bloc/bloc.dart';
 import 'package:thumbing/data/model/user/user.dart';
 import 'package:thumbing/data/local/save_util.dart';
@@ -18,9 +19,10 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         try {
           var userName = await SaveUtil.getSavedByKey("userName");
           var password = await SaveUtil.getSavedByKey("password");
+          var token = await SaveUtil.getSavedByKey("token");
           if (userName != null && password != null) {
             yield currentState.copyWith(userName: userName, password: password);
-            this.add(Login(userName: userName, password: password));
+            this.add(Login(token: token, userName: userName, password: password));
           }
         } catch (_) {}
       }
@@ -29,14 +31,28 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       if (currentState is LoginInitial) {
         try {
           yield SubmissionInProgress();
-          final user =
-              await userRepository.checkUser(event.userName, event.password);
-          if (user == null)
-            yield LoginFailure(
-                message: "用户名或密码错误", times: currentState.times + 1);
-          yield LoginSuccess(userInfo: user);
-          await SaveUtil.saveBydate("userName", user.userName);
-          await SaveUtil.saveBydate("password", user.password);
+          bool b = false;
+          if(event.token != null){
+            b = await userRepository.checkAuthorization(event.token, event.userName);
+            this.add(Login(userName: event.userName, password: event.password));
+          }
+          else {
+            final token =
+            await userRepository.checkUser(event.userName, event.password);
+            if (token == null) {
+              yield LoginFailure(
+                  message: "用户名或密码错误", times: currentState.times + 1);
+            }
+            else{
+              b = true;
+            }
+          }
+          if(b){
+            User user = User(userName: event.userName, password: event.password);
+            yield LoginSuccess(userInfo: user);
+            await SaveUtil.saveByKey("userName", user.userName);
+            await SaveUtil.saveByKey("password", user.password);
+          }
         } catch (_) {
           yield LoginFailure(
               userName: currentState.userName,

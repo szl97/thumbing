@@ -37,14 +37,14 @@ public class ArticleController extends ThumbingBaseController {
 
     @ApiOperation("获取文章内容")
     @Authorize(PermissionConstants.REGISTER)
-    @RequestMapping(value = "getContent", method = RequestMethod.GET)
+    @RequestMapping(value = "content", method = RequestMethod.GET)
     public String getArticleContent(ArticleIdInput input){
         return articleService.getArticleContent(input);
     }
 
     @ApiOperation("获取文章详情")
     @Authorize(PermissionConstants.REGISTER)
-    @RequestMapping(value = "getDetails", method = RequestMethod.GET)
+    @RequestMapping(value = "details", method = RequestMethod.GET)
     public ArticleDto getArticle(ArticleIdInput input){
         return articleService.getArticle(input);
     }
@@ -79,7 +79,7 @@ public class ArticleController extends ThumbingBaseController {
 
     @ApiOperation("获取自己发布的文章")
     @Authorize(PermissionConstants.ACCESS)
-    @RequestMapping(value = "getMine", method = RequestMethod.GET)
+    @RequestMapping(value = "mine", method = RequestMethod.GET)
     public PageResultDto<ArticleDto> getMine(FetchArticleInput input){
         return articleService.getMine(input, getCurrentUser());
     }

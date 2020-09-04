@@ -11,7 +11,7 @@ class SaveUtil {
   }
 
   //保存数据
-  static Future<bool> saveBydate(String keyName, String value) async {
+  static Future<bool> saveByKey(String keyName, String value) async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     bool isOk = await sharedPreferences.setString(keyName, value);
     if (isOk)
@@ -22,7 +22,7 @@ class SaveUtil {
   }
 
   //删除数据
-  static Future<bool> removeBydate(String keyName) async {
+  static Future<bool> removeByKey(String keyName) async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     bool isOk = await sharedPreferences.remove(keyName);
     if (isOk)

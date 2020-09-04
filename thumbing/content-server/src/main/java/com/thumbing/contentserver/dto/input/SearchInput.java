@@ -13,7 +13,6 @@ import javax.validation.constraints.Size;
  */
 @Data
 public class SearchInput extends PagedAndSortedInput {
-    @ApiModelProperty(value = "关键字")
     @NotNull(message = "关键字不可为空")
     @Size(max = 30, message = "搜索内容长度限制1-30")
     private String keyword;

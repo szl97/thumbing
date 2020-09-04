@@ -38,7 +38,7 @@ public class DefaultAuthenticationSuccessHandler implements AuthenticationSucces
     private IAuthService authService;
 
     @Override
-    public void onAuthenticationSuccess(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Authentication authentication) throws IOException, ServletException {
+    public void onAuthenticationSuccess(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Authentication authentication) throws IOException {
         UserContext userContext = (UserContext) authentication.getPrincipal();
         String accessToken = jwtTokenFactory.createJwtToken(userContext);
         AuthorizationContextHolder.setAuthorization(HEADER_PREFIX + accessToken);

@@ -45,7 +45,7 @@ public class JWTAuthenticationFilter extends AbstractAuthenticationProcessingFil
 
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException, IOException, ServletException {
-        UsernamePasswordAuthenticationToken token = null;
+        UsernamePasswordAuthenticationToken token;
         try {
             LoginRequest loginRequest = objectMapper.readValue(request.getReader(), LoginRequest.class);
             LoginRequestContextHolder.setLoginRequest(loginRequest);

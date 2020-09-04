@@ -43,8 +43,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     }
     if (event is CancelAuthentication) {
       print("cancel");
-      await SaveUtil.removeBydate("userName");
-      await SaveUtil.removeBydate("password");
+      await SaveUtil.removeByKey("token");
+      await SaveUtil.removeByKey("userName");
+      await SaveUtil.removeByKey("password");
       loginBloc.add(Logout(userName: CurrentUser.getUserName()));
     }
   }

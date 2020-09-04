@@ -41,14 +41,14 @@ public class CommentController extends ThumbingBaseController {
     @ApiOperation("获取所有评论")
     @Authorize(PermissionConstants.REGISTER)
     @RequestMapping(value = "fetch", method = RequestMethod.GET)
-    List<CommentDto> fetchComments(FetchCommentInput input){
+    List<CommentDto> fetchComments(@Valid FetchCommentInput input){
         return commentService.fetchComments(input, getCurrentUser());
     }
 
     @ApiOperation("删除评论")
     @Authorize(PermissionConstants.ACCESS)
     @RequestMapping(value = "delete", method = RequestMethod.DELETE)
-    public Boolean deleteComment(CommentIdInput input) {
+    public Boolean deleteComment(@Valid CommentIdInput input) {
         return commentService.deleteComment(input, getCurrentUser());
     }
 

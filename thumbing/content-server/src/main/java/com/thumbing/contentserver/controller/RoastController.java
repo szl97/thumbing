@@ -62,7 +62,7 @@ public class RoastController extends ThumbingBaseController {
 
     @ApiOperation("获取自己发布的心情吐槽")
     @Authorize(PermissionConstants.ACCESS)
-    @RequestMapping(value = "getMine", method = RequestMethod.GET)
+    @RequestMapping(value = "mine", method = RequestMethod.GET)
     public PageResultDto<RoastDto> getMine(FetchRoastInput input){
         return roastService.getMine(input, getCurrentUser());
     }

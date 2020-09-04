@@ -37,7 +37,7 @@ public class MomentsController extends ThumbingBaseController {
 
     @ApiOperation("获取帖子详情")
     @Authorize(PermissionConstants.REGISTER)
-    @RequestMapping(value = "getDetails", method = RequestMethod.GET)
+    @RequestMapping(value = "details", method = RequestMethod.GET)
     public MomentsDto getMoments(MomentsIdInput input){
         return momentsService.getMoments(input);
     }
@@ -72,7 +72,7 @@ public class MomentsController extends ThumbingBaseController {
 
     @ApiOperation("获取自己发布的帖子")
     @Authorize(PermissionConstants.ACCESS)
-    @RequestMapping(value = "getMine", method = RequestMethod.GET)
+    @RequestMapping(value = "mine", method = RequestMethod.GET)
     public PageResultDto<MomentsDto> getMine(FetchMomentsInput input){
         return momentsService.getMine(input, getCurrentUser());
     }

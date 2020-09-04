@@ -45,7 +45,7 @@ public class RelationController extends ThumbingBaseController {
     }
 
     @ApiOperation("申请添加好友")
-    @RequestMapping(value = "/apply", method = RequestMethod.POST)
+    @RequestMapping(value = "/apply", method = RequestMethod.PUT)
     @Authorize(PermissionConstants.REGISTER)
     public Boolean applyRelation(@RequestBody RelationApplyInput input){
         return relationService.applyRelation(getCurrentUser(), input);

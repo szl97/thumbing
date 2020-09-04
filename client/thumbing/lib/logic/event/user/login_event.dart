@@ -9,11 +9,12 @@ abstract class LoginEvent extends Equatable {
 class InitializeLogin extends LoginEvent {}
 
 class Login extends LoginEvent {
+  final String token;
   final String userName;
   final String password;
-  const Login({this.userName, this.password}) : super();
+  const Login({this.token, this.userName, this.password}) : super();
   @override
-  List<Object> get props => [userName, password];
+  List<Object> get props => [token, userName, password];
 }
 
 class Logout extends LoginEvent {
