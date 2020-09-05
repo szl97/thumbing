@@ -1,4 +1,6 @@
 
+import 'dart:math';
+
 import 'package:bloc/bloc.dart';
 import 'package:thumbing/data/model/user/user.dart';
 import 'package:thumbing/data/local/save_util.dart';
@@ -41,7 +43,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
             await userRepository.checkUser(event.userName, event.password);
             if (token == null) {
               yield LoginFailure(
-                  message: "用户名或密码错误", times: currentState.times + 1);
+                  message: "用户名或密码错误", times: currentState.times + 1, userName: event.userName, password: event.password);
             }
             else{
               b = true;
@@ -54,11 +56,42 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
             await SaveUtil.saveByKey("password", user.password);
           }
         } catch (_) {
+          if (event.token != null) {
+            this.add(Login(userName: event.userName, password: event.password));
+          }
+          else {
+            yield LoginFailure(
+                userName: event.userName,
+                password: event.password,
+                message: "用户名或密码错误",
+                times: currentState.times);
+          }
+        }
+      }
+      else if(currentState is SubmissionInProgress){
+        try {
+          final token =
+          await userRepository.checkUser(event.userName, event.password);
+          if (token == null) {
+            yield LoginFailure(
+                message: "用户名或密码错误",
+                times: 1,
+                userName: event.userName,
+                password: event.password);
+          }
+          else {
+            User user = User(
+                userName: event.userName, password: event.password);
+            yield LoginSuccess(userInfo: user);
+            await SaveUtil.saveByKey("userName", user.userName);
+            await SaveUtil.saveByKey("password", user.password);
+          }
+        }catch (_) {
           yield LoginFailure(
-              userName: currentState.userName,
-              password: currentState.password,
+              userName: event.userName,
+              password: event.password,
               message: "用户名或密码错误",
-              times: currentState.times + 1);
+              times: 1);
         }
       }
     }

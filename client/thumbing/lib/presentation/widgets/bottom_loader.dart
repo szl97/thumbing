@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:thumbing/presentation/util/screen_utils.dart';
 
 class BottomLoader extends StatelessWidget {
   @override
@@ -7,8 +8,8 @@ class BottomLoader extends StatelessWidget {
       alignment: Alignment.center,
       child: Center(
         child: SizedBox(
-          width: 33,
-          height: 33,
+          width: ScreenUtils.getInstance().getHeight(30),
+          height: ScreenUtils.getInstance().getHeight(30),
           child: CircularProgressIndicator(
             strokeWidth: 1.5,
           ),

@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:thumbing/data/model/reponse/base_result_entity.dart';
 import 'package:thumbing/data/model/user/check_auth_input_entity.dart';
@@ -15,12 +16,16 @@ class UserProvider {
   }
 
   Future<String> checkUser(String userName, String password) async {
+    print("login");
     LoginInputEntity entity = new LoginInputEntity(userName: userName,password: password);
     String token;
     try{
-      BaseResultEntity data = await DioManager().get(HttpPath.logIn, entity.toJson());
+      print(jsonEncode(entity.toJson()));
+      BaseResultEntity data = await DioManager().post(HttpPath.logIn, entity.toJson());
       token = data.data;
+      print(data.data);
     }on DioError catch(e){
+      print(e.message);
       throw e;
     }
     if(token != null){
@@ -38,6 +43,7 @@ class UserProvider {
       BaseResultEntity data = await DioManager().get(HttpPath.checkAuthorization, entity.toJson());
       b = data.data??false;
     }on DioError catch(e){
+      print(e.message);
       throw e;
     }
     if(b){

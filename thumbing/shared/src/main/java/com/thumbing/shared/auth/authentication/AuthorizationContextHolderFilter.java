@@ -3,6 +3,7 @@ package com.thumbing.shared.auth.authentication;
 import com.thumbing.shared.auth.model.UserContext;
 import com.thumbing.shared.jwt.JwtTokenFactory;
 import com.thumbing.shared.utils.user.TokenUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.GenericFilterBean;
@@ -36,15 +37,17 @@ public class AuthorizationContextHolderFilter extends GenericFilterBean {
         HttpServletRequest request = (HttpServletRequest) servletRequest;
         HttpServletResponse response = (HttpServletResponse) servletResponse;
         String authorization = request.getHeader(AUTHORIZATION_HEADER);
-        Date date = tokenUtils.getTokenExpireTime(authorization);
-        Date compare = Date.from(LocalDateTime.now().plusHours(1).atZone(ZoneId.systemDefault()).toInstant());
-        if(compare.after(date)){
-            UserContext userContext = tokenUtils.getUserContext(authorization);
-            String refreshAuthorization = jwtTokenFactory.createJwtToken(userContext);
-            if(refreshAuthorization != null){
-                authorization = refreshAuthorization;
+        if(StringUtils.isNotBlank(authorization)) {
+            Date date = tokenUtils.getTokenExpireTime(authorization);
+            Date compare = Date.from(LocalDateTime.now().plusHours(1).atZone(ZoneId.systemDefault()).toInstant());
+            if (compare.after(date)) {
+                UserContext userContext = tokenUtils.getUserContext(authorization);
+                String refreshAuthorization = jwtTokenFactory.createJwtToken(userContext);
+                if (refreshAuthorization != null) {
+                    authorization = refreshAuthorization;
+                }
+                response.setHeader(REFRESH_AUTHORIZATION_HEADER, authorization);
             }
-            response.setHeader(REFRESH_AUTHORIZATION_HEADER, authorization);
         }
         AuthorizationContextHolder.setAuthorization(authorization);
         filterChain.doFilter(request, response);

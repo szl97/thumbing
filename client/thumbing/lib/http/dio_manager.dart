@@ -1,4 +1,3 @@
-import 'dart:html';
 
 import 'package:dio/dio.dart';
 import 'package:thumbing/data/local/save_util.dart';
@@ -10,7 +9,7 @@ class DioManager {
   static DioManager _instance;
   Dio _dio;
   
-  static String _baseUrl = "192.168.60.152:8081";
+  static String _baseUrl = "http://192.168.1.6:8081";
   DioManager._internal() {
     _dio = Dio(BaseOptions(baseUrl:_baseUrl, connectTimeout: 15000, responseType: ResponseType.json));
   }
@@ -26,11 +25,11 @@ class DioManager {
     if(_instance == null) _instance = _getInstance();
     if(_instance._dio.options.headers == null){
       Map<String, dynamic> map = new Map();
-      map.putIfAbsent("Authorization", () => token);
+      map.putIfAbsent("Authorization", () => "Bearer "+token);
       _instance._dio.options.headers = map;
     }
     else{
-      _instance._dio.options.headers.putIfAbsent("Authorization", () => token);
+      _instance._dio.options.headers.putIfAbsent("Authorization", () => "Bearer "+token);
     }
   }
 
@@ -48,19 +47,20 @@ class DioManager {
 
   post(String path, Map<String, dynamic> params) async {
     Response response;
-    response = await _dio.post(path, queryParameters: params);
+    response = await _dio.post(path, data: params);
     String token = response.headers.value("RefreshAuthorization");
     if(token != null){
       //refresh token
       setAuthorizationHeader(token);
       SaveUtil.saveByKey("token", token);
     }
+    print(response.toString());
     return toBaseResult(response.data);
   }
 
   put(String path, Map<String, dynamic> params) async {
     Response response;
-    response = await _dio.put(path, queryParameters: params);
+    response = await _dio.put(path, data: params);
     String token = response.headers.value("RefreshAuthorization");
     if(token != null){
       //refresh token
@@ -72,7 +72,7 @@ class DioManager {
 
   patch(String path, Map<String, dynamic> params) async {
     Response response;
-    response = await _dio.patch(path, queryParameters: params);
+    response = await _dio.patch(path, data: params);
     String token = response.headers.value("RefreshAuthorization");
     if(token != null){
       //refresh token

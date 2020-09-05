@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:thumbing/presentation/util/screen_utils.dart';
 import 'package:thumbing/presentation/widgets/bottom_loader.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:thumbing/logic/bloc/content/all_content_bloc.dart';
@@ -24,43 +25,18 @@ var _tabs = ['帖子', "文章"];
 class _HomeState extends State<Home> {
   MomentsBloc momentsBloc;
   ArticleBloc articleBloc;
-  ScrollController _mScrollController;
-  ScrollController _aScrollController;
   @override
   void initState() {
     super.initState();
     momentsBloc =
         MomentsBloc(allContentBloc: BlocProvider.of<AllContentBloc>(context));
-    _mScrollController = ScrollController();
-    // 监听ListView是否滚动到底部
-    _mScrollController.addListener(() {
-      if (_mScrollController.position.pixels >=
-          _mScrollController.position.maxScrollExtent) {
-        // 滑动到了底部
-        // 这里可以执行上拉加载逻辑
-        _loadMoreMoments();
-      }
-    });
     articleBloc =
         ArticleBloc(allContentBloc: BlocProvider.of<AllContentBloc>(context));
-    _aScrollController = ScrollController();
-    // 监听ListView是否滚动到底部
-    _aScrollController.addListener(() {
-      if (_aScrollController.position.pixels >=
-          _aScrollController.position.maxScrollExtent) {
-        // 滑动到了底部
-        // 这里可以执行上拉加载逻辑
-        _loadMoreArticles();
-      }
-    });
   }
 
   @override
   void dispose() {
     super.dispose();
-    // 这里不要忘了将监听移除
-    _mScrollController.dispose();
-    _aScrollController.dispose();
   }
 
   Future<Null> _loadMoreMoments() async {
@@ -145,24 +121,58 @@ class _HomeState extends State<Home> {
               },
               body: TabBarView(children: <Widget>[
                 Center(
-                  child: Container(
-                      margin: EdgeInsets.only(top: 100),
-                      child: RefreshIndicator(
-                          child: getMonmets(),
-                          onRefresh: _handleRefreshMoments)),
+                  child: SafeArea(top: false,
+                        bottom: false,
+                        child: Builder(
+                          builder: (BuildContext context){
+                            return NotificationListener(
+                              onNotification: (ScrollNotification note) {
+                                if (note.metrics.pixels == note.metrics.maxScrollExtent) {
+                                 _loadMoreMoments();
+                                }
+                                return true;
+                              },
+                              child: RefreshIndicator(
+                                  child: getMoments(),
+                                  onRefresh: _handleRefreshMoments),
+                            );
+                          },
+                        ),
+                      )
+
                 ),
                 Center(
+                    //getArticles()
                   child: Container(
-                      margin: EdgeInsets.only(top: 100),
-                      child: RefreshIndicator(
-                          child: getArticles(),
-                          onRefresh: _handleRefreshArticles)),
+                      child: SafeArea(top: false,
+                        bottom: false,
+                        child: Builder(
+                          builder: (BuildContext context){
+                            return NotificationListener(
+                              onNotification: (ScrollNotification note) {
+                                if (note.metrics.pixels == note.metrics.maxScrollExtent) {
+                                  _loadMoreArticles();
+                                }
+                                return true;
+                              },
+                              child:
+                              RefreshIndicator(
+                                  child: getArticles(),
+                                  onRefresh: _handleRefreshArticles),
+                            );
+                          },
+                        ),
+                      )
+//                      RefreshIndicator(
+//                          child: getArticles(),
+//                          onRefresh: _handleRefreshArticles)
+                  ),
                 ),
               ])),
         ));
   }
 
-  getMonmets() {
+  getMoments() {
     return BlocBuilder<MomentsBloc, MomentState>(
       bloc: momentsBloc,
       builder: (context, state) {
@@ -171,19 +181,63 @@ class _HomeState extends State<Home> {
             child: CircularProgressIndicator(),
           );
         } else if (state is MomentSuccess) {
-          return ListView.builder(
-            itemCount: state.hasReachedMax
-                ? state.moments.length
-                : state.moments.length + 1,
-            itemBuilder: (BuildContext context, int index) {
-              return index >= state.moments.length
-                  ? BottomLoader()
-                  : MomentsWidget(
-                      moments: state.moments[index],
-                    );
-            },
-            controller: _mScrollController,
-            shrinkWrap: true,
+          return CustomScrollView(
+            // The "controller" and "primary" members should be left
+            // unset, so that the NestedScrollView can control this
+            // inner scroll view.
+            // If the "controller" property is set, then this scroll
+            // view will not be associated with the NestedScrollView.
+            // The PageStorageKey should be unique to this ScrollView;
+            // it allows the list to remember its scroll position when
+            // the tab view is not on the screen.
+            key: PageStorageKey<String>(_tabs[0]),
+            slivers: <Widget>[
+              SliverOverlapInjector(
+                // This is the flip side of the SliverOverlapAbsorber
+                // above.
+                handle: NestedScrollView.sliverOverlapAbsorberHandleFor(
+                    context),
+              ),
+              SliverPadding(
+                padding: const EdgeInsets.all(8.0),
+                // In this example, the inner scroll view has
+                // fixed-height list items, hence the use of
+                // SliverFixedExtentList. However, one could use any
+                // sliver widget here, e.g. SliverList or SliverGrid.
+                sliver: SliverFixedExtentList(
+                  // The items in this example are fixed to 48 pixels
+                  // high. This matches the Material Design spec for
+                  // ListTile widgets.
+                  itemExtent: ScreenUtils.getInstance().getHeight(160),
+                  delegate: SliverChildBuilderDelegate(
+                          (BuildContext context, int index) {
+                        // This builder is called for each child.
+                        // In this example, we just number each list item.
+                        return MomentsWidget(
+                          moments: state.moments[index],
+                        );
+                      },
+
+                      // The childCount of the SliverChildBuilderDelegate
+                      // specifies how many children this inner list
+                      // has. In this example, each tab has a list of
+                      // exactly 30 items, but this is arbitrary.
+                      childCount:state.moments.length
+                  ),
+                ),
+              ),
+              SliverToBoxAdapter(
+                child:  Visibility(
+                  child:  Container(
+                    padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
+                    child:  Center(
+                      child: BottomLoader(),
+                    ),
+                  ),
+                  visible: !state.hasReachedMax,
+                ),
+              ),
+            ],
           );
         } else {
           return Center(
@@ -203,17 +257,62 @@ class _HomeState extends State<Home> {
             child: CircularProgressIndicator(),
           );
         } else if (state is ArticleSuccess) {
-          return ListView.builder(
-            itemCount: state.hasReachedMax
-                ? state.articles.length
-                : state.articles.length + 1,
-            itemBuilder: (BuildContext context, int index) {
-              return index >= state.articles.length
-                  ? BottomLoader()
-                  : ArticleWidget(article: state.articles[index]);
-            },
-            controller: _aScrollController,
-            shrinkWrap: true,
+          return CustomScrollView(
+            // The "controller" and "primary" members should be left
+            // unset, so that the NestedScrollView can control this
+            // inner scroll view.
+            // If the "controller" property is set, then this scroll
+            // view will not be associated with the NestedScrollView.
+            // The PageStorageKey should be unique to this ScrollView;
+            // it allows the list to remember its scroll position when
+            // the tab view is not on the screen.
+            key: PageStorageKey<String>(_tabs[1]),
+            slivers: <Widget>[
+              SliverOverlapInjector(
+                // This is the flip side of the SliverOverlapAbsorber
+                // above.
+                handle: NestedScrollView.sliverOverlapAbsorberHandleFor(
+                    context),
+              ),
+              SliverPadding(
+                padding: const EdgeInsets.all(8.0),
+                // In this example, the inner scroll view has
+                // fixed-height list items, hence the use of
+                // SliverFixedExtentList. However, one could use any
+                // sliver widget here, e.g. SliverList or SliverGrid.
+                sliver: SliverFixedExtentList(
+                  // The items in this example are fixed to 48 pixels
+                  // high. This matches the Material Design spec for
+                  // ListTile widgets.
+                  itemExtent: ScreenUtils.getInstance().getHeight(180),
+                  delegate: SliverChildBuilderDelegate(
+                          (BuildContext context, int index) {
+                        // This builder is called for each child.
+                        // In this example, we just number each list item.
+                        return ArticleWidget(
+                          article: state.articles[index],
+                        );
+                      },
+                      // The childCount of the SliverChildBuilderDelegate
+                      // specifies how many children this inner list
+                      // has. In this example, each tab has a list of
+                      // exactly 30 items, but this is arbitrary.
+                      childCount:state.articles.length
+                  ),
+                ),
+              ),
+              SliverToBoxAdapter(
+                child:  Visibility(
+                  child:  Container(
+                    padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
+                    child:  Center(
+                      child: BottomLoader(),
+                    ),
+                  ),
+                  visible: !state.hasReachedMax,
+                ),
+              ),
+            ],
           );
         } else {
           return Center(
