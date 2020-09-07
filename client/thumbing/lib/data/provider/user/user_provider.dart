@@ -42,7 +42,7 @@ class UserProvider {
     DioManager.setAuthorizationHeader(token);
     bool b;
     try{
-      BaseResultEntity data = await DioManager().get(HttpPath.checkAuthorization, entity.toJson());
+      BaseResultEntity data = await DioManager().get(HttpPath.checkAuthorization, params:entity.toJson());
       b = data.data??false;
     }on DioError catch(e){
       print(e.message);

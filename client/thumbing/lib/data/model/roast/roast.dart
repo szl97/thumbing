@@ -1,5 +1,8 @@
 import 'package:equatable/equatable.dart';
+import 'package:thumbing/presentation/util/format_time_utils.dart';
 import 'package:uuid/uuid.dart';
+
+import 'output/roast_page_result_entity.dart';
 
 class Roast extends Equatable {
   final String id;
@@ -8,11 +11,11 @@ class Roast extends Equatable {
   final int thumbings;
   const Roast({this.id, this.content, this.userId, this.thumbings});
 
-  static Roast getRoast() {
-    return Roast(
+  static RoastPageResultItem getRoast() {
+    return RoastPageResultItem(
       id: Uuid().v4(),
       content: "由于人帅又有才华，感觉活着太无聊，求安慰QAQ",
-      thumbings: 129,
+      thumbingNum: 129,
     );
   }
 

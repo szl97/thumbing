@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:thumbing/data/model/roast/roast.dart';
+import 'package:thumbing/data/model/roast/output/roast_page_result_entity.dart';
 import 'package:thumbing/logic/bloc/roast/my_roast_bloc.dart';
 import 'package:thumbing/logic/event/roast/roast_event.dart';
 import 'package:thumbing/logic/state/roast/roast_state.dart';
@@ -61,7 +61,7 @@ class MyRoast extends StatelessWidget {
   }
 }
 class MyRoastWidget extends StatelessWidget {
-  final Roast roast;
+  final RoastPageResultItem roast;
   const MyRoastWidget({@required this.roast, Key key}) : super(key: key);
 
   @override
@@ -97,7 +97,7 @@ class MyRoastWidget extends StatelessWidget {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[
-                          Text(roast.thumbings.toString() + "人拥抱过"),
+                          Text(roast.thumbingNum.toString() + "人拥抱过"),
                           IconButton(
                             icon: Icon(Icons.more_horiz),
                             onPressed: () {},

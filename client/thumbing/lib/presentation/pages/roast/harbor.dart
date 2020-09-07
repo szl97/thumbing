@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:thumbing/data/model/roast/roast.dart';
+import 'package:thumbing/data/model/roast/output/roast_page_result_entity.dart';
 import 'package:thumbing/logic/bloc/roast/roast_bolc.dart';
 import 'package:thumbing/logic/event/roast/roast_event.dart';
 import 'package:thumbing/logic/state/roast/roast_state.dart';
-import 'package:thumbing/presentation/widgets/bottom_loader.dart';
 import 'package:thumbing/presentation/util/screen_utils.dart';
+import 'package:thumbing/presentation/widgets/bottom_loader.dart';
 
 class Harbor extends StatelessWidget {
   final RoastBloc roastBloc = RoastBloc();
@@ -16,8 +16,12 @@ class Harbor extends StatelessWidget {
     roastBloc.add(RoastFetched());
 
     pageController.addListener(() {
-      if (roastBloc.state is RoastSuccess) {
+      var state = roastBloc.state;
+      if (state is RoastSuccess) {
         roastBloc.add(NextRoast(position: pageController.page.floor()));
+        if (pageController.page == state.roasts.length){
+          pageController.animateToPage(0, duration: Duration(milliseconds: 200), curve:Curves.ease);
+        }
       }
     });
     return Container(
@@ -66,7 +70,7 @@ class Harbor extends StatelessWidget {
 }
 
 class RoastWidget extends StatelessWidget {
-  final Roast roast;
+  final RoastPageResultItem roast;
   const RoastWidget({@required this.roast, Key key}) : super(key: key);
 
   @override
@@ -109,7 +113,7 @@ class RoastWidget extends StatelessWidget {
               children: <Widget>[
                 Spacer(),
                 Text(
-                  roast.thumbings.toString() + "人拥抱过",
+                  roast.thumbingNum.toString() + "人拥抱过",
                   style: TextStyle(color: Colors.grey, fontSize: ScreenUtils.getScaleSp(context,14)),
                 ),
               ],

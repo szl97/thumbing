@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:thumbing/data/model/roast/roast.dart';
+import 'package:thumbing/data/model/roast/output/roast_page_result_entity.dart';
 
 abstract class RoastState extends Equatable {
   const RoastState();
@@ -15,7 +15,7 @@ class RoastFailure extends RoastState {}
 class RoastSuccess extends RoastState {
   final int currentPage;
   final int currentPosition;
-  final List<Roast> roasts;
+  final List<RoastPageResultItem> roasts;
   final bool hasReachedMax;
   final bool isLoading;
 
@@ -27,7 +27,7 @@ class RoastSuccess extends RoastState {
       this.isLoading});
 
   RoastSuccess copyWith(
-      {List<Roast> roasts,
+      {List<RoastPageResultItem> roasts,
       int currentPosition,
       bool hasReachedMax,
       int currentPage,

@@ -33,9 +33,14 @@ class DioManager {
     }
   }
 
- get(String path, Map<String, dynamic> params) async {
+ get(String path, {Map<String, dynamic> params}) async {
     Response response;
-    response = await _dio.get(path, queryParameters: params);
+    if(params != null) {
+      response = await _dio.get(path, queryParameters: params);
+    }
+    else{
+      response = await _dio.get(path);
+    }
     String token = response.headers.value("RefreshAuthorization");
     if(token != null){
       //refresh token

@@ -14,27 +14,25 @@ class RoastBloc extends Bloc<RoastEvent, RoastState> {
   @override
   Stream<RoastState> mapEventToState(RoastEvent event) async* {
     final currentState = state;
-    if (event is RoastFetched && !_hasReachedMax(currentState)) {
+    if (event is RoastFetched) {
       try {
         if (currentState is RoastInitial) {
           final roasts = await roastRepository.getRoasts();
-          yield RoastSuccess(
+          yield roasts.isEmpty ? RoastFailure() : RoastSuccess(
               roasts: roasts,
               hasReachedMax: false,
               currentPosition: 0,
-              currentPage: 0,
               isLoading: false);
           return;
         }
         if (currentState is RoastSuccess) {
-          final articles = await roastRepository.getRoasts();
-          yield articles.isEmpty
-              ? currentState.copyWith(hasReachedMax: true)
+          final roasts = await roastRepository.getRoasts();
+          yield roasts.isEmpty
+              ? currentState.copyWith(hasReachedMax: true, currentPosition: 0)
               : RoastSuccess(
-                  currentPosition: currentState.currentPosition + 1,
-                  roasts: currentState.roasts + articles,
+                  currentPosition: 0,
+                  roasts: roasts,
                   hasReachedMax: false,
-                  currentPage: currentState.currentPage,
                   isLoading: false);
         }
       } catch (_) {

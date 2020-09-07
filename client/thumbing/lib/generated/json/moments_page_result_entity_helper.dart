@@ -26,7 +26,7 @@ Map<String, dynamic> momentsPageResultEntityToJson(MomentsPageResultEntity entit
 	return data;
 }
 
-momantsPageResultItemsFromJson(MomentsPageResultItems data, Map<String, dynamic> json) {
+momentsPageResultItemsFromJson(MomentsPageResultItems data, Map<String, dynamic> json) {
 	if (json['commentsNum'] != null) {
 		data.commentsNum = json['commentsNum']?.toInt();
 	}
@@ -57,7 +57,7 @@ momantsPageResultItemsFromJson(MomentsPageResultItems data, Map<String, dynamic>
 	return data;
 }
 
-Map<String, dynamic> momantsPageResultItemsToJson(MomentsPageResultItems entity) {
+Map<String, dynamic> momentsPageResultItemsToJson(MomentsPageResultItems entity) {
 	final Map<String, dynamic> data = new Map<String, dynamic>();
 	data['commentsNum'] = entity.commentsNum;
 	data['content'] = entity.content;

@@ -18,7 +18,7 @@ class MyRoastBloc extends Bloc<RoastEvent, RoastState> {
       try {
         if (currentState is RoastInitial) {
           final roasts = await roastRepository.getRoasts();
-          yield RoastSuccess(
+          yield roasts.isEmpty ? RoastFailure() : RoastSuccess(
               roasts: roasts,
               hasReachedMax: false,
               currentPosition: 0,
@@ -27,12 +27,12 @@ class MyRoastBloc extends Bloc<RoastEvent, RoastState> {
           return;
         }
         if (currentState is RoastSuccess) {
-          final articles = await roastRepository.getRoasts();
-          yield articles.isEmpty
+          final roasts = await roastRepository.getRoasts();
+          yield roasts.isEmpty
               ? currentState.copyWith(hasReachedMax: true)
               : RoastSuccess(
                   currentPosition: currentState.currentPosition + 1,
-                  roasts: currentState.roasts + articles,
+                  roasts: currentState.roasts + roasts,
                   hasReachedMax: false,
                   currentPage: currentState.currentPage,
                   isLoading: false);

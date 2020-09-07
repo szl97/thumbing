@@ -6,6 +6,7 @@ import 'package:thumbing/data/model/content/moments/output/moments_page_result_e
 import 'package:thumbing/data/model/content/moments_detail.dart';
 import 'package:thumbing/data/model/reponse/base_result_entity.dart';
 import 'package:thumbing/data/model/request/page_request_entity.dart';
+import 'package:thumbing/generated/json/base/json_convert_content.dart';
 import 'package:thumbing/http/dio_manager.dart';
 import 'package:thumbing/http/path/path.dart';
 
@@ -20,8 +21,8 @@ class MomentsProvider {
     PageRequestEntity requestEntity = PageRequestEntity(position: position, pageNumber: pageNum, pageSize: 20);
     MomentsPageResultEntity entity;
     try{
-      BaseResultEntity data = await DioManager().get(HttpPath.fetchMoments, requestEntity.toJson());
-      entity = data.data??entity.fromJson(data.data);
+      BaseResultEntity data = await DioManager().get(HttpPath.fetchMoments,params:requestEntity.toJson());
+      entity = data.data??JsonConvert.fromJsonAsT<MomentsPageResultEntity>(data.data);
     }on DioError catch(e){
       print(e.message);
       throw e;
