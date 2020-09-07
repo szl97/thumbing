@@ -69,12 +69,12 @@ class Personal extends StatelessWidget {
                         Padding(
                           padding: EdgeInsets.only(
                               left: 25.0, top: 15.0, bottom: 20.0, right: 10.0),
-                          child: Text("我的诉说"),
+                          child: Text("我的文章"),
                         )
                       ],
                     ),
                     onTap: () =>
-                        Navigator.pushNamed(context, '/personal/myRoast'),
+                        Navigator.pushNamed(context, '/personal/myArticle'),
                   ),
                 ),
                 SliverToBoxAdapter(
@@ -85,12 +85,12 @@ class Personal extends StatelessWidget {
                         Padding(
                           padding: EdgeInsets.only(
                               left: 25.0, top: 15.0, bottom: 20.0, right: 10.0),
-                          child: Text("我的文章"),
+                          child: Text("我的吐槽"),
                         )
                       ],
                     ),
                     onTap: () =>
-                        Navigator.pushNamed(context, '/personal/myArticle'),
+                        Navigator.pushNamed(context, '/personal/myRoast'),
                   ),
                 ),
                 SliverToBoxAdapter(

@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:thumbing/data/model/content/article.dart';
+import 'package:thumbing/data/model/content/article/output/article_page_result_entity.dart';
 
 abstract class ArticleState extends Equatable {
   const ArticleState();
@@ -14,19 +14,21 @@ class ArticleFailure extends ArticleState {}
 
 class ArticleSuccess extends ArticleState {
   final int currentPage;
-  final List<Article> articles;
+  final int position;
+  final List<ArticlePageResultItem> articles;
   final bool hasReachedMax;
   final bool isLoading;
 
   const ArticleSuccess(
-      {this.currentPage, this.articles, this.hasReachedMax, this.isLoading});
+      {this.currentPage, this.articles, this.hasReachedMax, this.isLoading, this.position});
 
   ArticleSuccess copyWith(
-      {List<Article> articles,
-      bool hasReachedMax,
+      {List<ArticlePageResultItem> articles,
+      bool hasReachedMax, int position,
       int currentPage,
       bool isLoading}) {
     return ArticleSuccess(
+        position:position?? this.position,
         currentPage: currentPage ?? this.currentPage,
         articles: articles ?? this.articles,
         hasReachedMax: hasReachedMax ?? this.hasReachedMax,
@@ -34,5 +36,5 @@ class ArticleSuccess extends ArticleState {
   }
 
   @override
-  List<Object> get props => [articles, hasReachedMax, currentPage, isLoading];
+  List<Object> get props => [articles, hasReachedMax, currentPage, isLoading, position];
 }

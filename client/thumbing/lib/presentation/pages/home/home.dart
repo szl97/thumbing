@@ -1,18 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:thumbing/data/model/content/article/output/article_page_result_entity.dart';
+import 'package:thumbing/data/model/content/moments/output/moments_page_result_entity.dart';
+import 'package:thumbing/logic/bloc/content/article_bloc.dart';
+import 'package:thumbing/logic/bloc/content/moments_bloc.dart';
+import 'package:thumbing/logic/event/content/article_event.dart';
+import 'package:thumbing/logic/event/content/moments_event.dart';
+import 'package:thumbing/logic/state/content/article_state.dart';
+import 'package:thumbing/logic/state/content/moments_state.dart';
+import 'package:thumbing/presentation/util/format_time_utils.dart';
 import 'package:thumbing/presentation/util/screen_utils.dart';
 import 'package:thumbing/presentation/widgets/bottom_loader.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:thumbing/logic/bloc/content/all_content_bloc.dart';
-import 'package:thumbing/logic/bloc/content/moments_bloc.dart';
-import 'package:thumbing/logic/event/content/moments_event.dart';
-import 'package:thumbing/logic/state/content/moments_state.dart';
-import 'home_app_bar.dart' as home_bar;
 import 'package:thumbing/presentation/widgets/search_text_fird_widget.dart';
-import 'package:thumbing/data/model/content/moments.dart';
-import 'package:thumbing/logic/bloc/content/article_bloc.dart';
-import 'package:thumbing/logic/event/content/article_event.dart';
-import 'package:thumbing/logic/state/content/article_state.dart';
-import 'package:thumbing/data/model/content/article.dart';
+
+import 'home_app_bar.dart' as home_bar;
 
 class Home extends StatefulWidget {
   Home({Key key}) : super(key: key);
@@ -28,10 +29,10 @@ class _HomeState extends State<Home> {
   @override
   void initState() {
     super.initState();
-    momentsBloc =
-        MomentsBloc(allContentBloc: BlocProvider.of<AllContentBloc>(context));
-    articleBloc =
-        ArticleBloc(allContentBloc: BlocProvider.of<AllContentBloc>(context));
+    momentsBloc = MomentsBloc();
+    articleBloc = ArticleBloc();
+    momentsBloc.add(MomentsFetched());
+    articleBloc.add(ArticleFetched());
   }
 
   @override
@@ -72,10 +73,10 @@ class _HomeState extends State<Home> {
                     handle: NestedScrollView.sliverOverlapAbsorberHandleFor(
                         context),
                     sliver: home_bar.SliverAppBar(
-                      floating: true,
+                      floating: false,
                       pinned: true,
-                      snap: true,
-                      expandedHeight: 120.0,
+                      snap: false,
+                      expandedHeight: ScreenUtils.getInstance().getHeight(120),
                       primary: true,
                       titleSpacing: 0.0,
                       backgroundColor: Colors.white,
@@ -86,7 +87,7 @@ class _HomeState extends State<Home> {
                           child: SearchTextFieldWidget(
                             hintText: '输入搜索内容',
                             margin:
-                                const EdgeInsets.only(left: 15.0, right: 15.0),
+                                EdgeInsets.only(left: ScreenUtils.getInstance().getWidth(15.0), right: ScreenUtils.getInstance().getWidth(15.0)),
                             onSubmitted: (value) {
                               Navigator.pushNamed(
                                   context, '/personal/myMoment');
@@ -112,7 +113,7 @@ class _HomeState extends State<Home> {
                                     child: Text(
                                       name,
                                     ),
-                                    padding: const EdgeInsets.only(bottom: 5.0),
+                                    padding: EdgeInsets.only(bottom: ScreenUtils.getInstance().getHeight(5.0)),
                                   ))
                               .toList()),
                     ),
@@ -155,8 +156,7 @@ class _HomeState extends State<Home> {
                                 }
                                 return true;
                               },
-                              child:
-                              RefreshIndicator(
+                              child: RefreshIndicator(
                                   child: getArticles(),
                                   onRefresh: _handleRefreshArticles),
                             );
@@ -199,16 +199,12 @@ class _HomeState extends State<Home> {
                     context),
               ),
               SliverPadding(
-                padding: const EdgeInsets.all(8.0),
+                padding: EdgeInsets.all(ScreenUtils.getInstance().getHeight(8.0)),
                 // In this example, the inner scroll view has
                 // fixed-height list items, hence the use of
                 // SliverFixedExtentList. However, one could use any
                 // sliver widget here, e.g. SliverList or SliverGrid.
-                sliver: SliverFixedExtentList(
-                  // The items in this example are fixed to 48 pixels
-                  // high. This matches the Material Design spec for
-                  // ListTile widgets.
-                  itemExtent: ScreenUtils.getInstance().getHeight(160),
+                sliver: SliverList(
                   delegate: SliverChildBuilderDelegate(
                           (BuildContext context, int index) {
                         // This builder is called for each child.
@@ -229,7 +225,7 @@ class _HomeState extends State<Home> {
               SliverToBoxAdapter(
                 child:  Visibility(
                   child:  Container(
-                    padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
+                    padding: EdgeInsets.fromLTRB(0, ScreenUtils.getInstance().getHeight(10.0), 0, ScreenUtils.getInstance().getHeight(10.0)),
                     child:  Center(
                       child: BottomLoader(),
                     ),
@@ -275,16 +271,12 @@ class _HomeState extends State<Home> {
                     context),
               ),
               SliverPadding(
-                padding: const EdgeInsets.all(8.0),
+                padding: EdgeInsets.all(ScreenUtils.getInstance().getHeight(8.0)),
                 // In this example, the inner scroll view has
                 // fixed-height list items, hence the use of
                 // SliverFixedExtentList. However, one could use any
                 // sliver widget here, e.g. SliverList or SliverGrid.
-                sliver: SliverFixedExtentList(
-                  // The items in this example are fixed to 48 pixels
-                  // high. This matches the Material Design spec for
-                  // ListTile widgets.
-                  itemExtent: ScreenUtils.getInstance().getHeight(180),
+                sliver: SliverList(
                   delegate: SliverChildBuilderDelegate(
                           (BuildContext context, int index) {
                         // This builder is called for each child.
@@ -304,7 +296,7 @@ class _HomeState extends State<Home> {
               SliverToBoxAdapter(
                 child:  Visibility(
                   child:  Container(
-                    padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
+                    padding: EdgeInsets.fromLTRB(0, ScreenUtils.getInstance().getHeight(10.0), 0, ScreenUtils.getInstance().getHeight(10.0)),
                     child:  Center(
                       child: BottomLoader(),
                     ),
@@ -325,7 +317,7 @@ class _HomeState extends State<Home> {
 }
 
 class MomentsWidget extends StatelessWidget {
-  final Moments moments;
+  final MomentsPageResultItems moments;
   const MomentsWidget({@required this.moments, Key key}) : super(key: key);
 
   @override
@@ -333,31 +325,39 @@ class MomentsWidget extends StatelessWidget {
     return Card(
       elevation: 3,
       child: Container(
-          padding: EdgeInsets.all(10),
-          margin: EdgeInsets.only(bottom: 10),
+          padding: EdgeInsets.all(ScreenUtils.getInstance().getHeight(10.0)),
+          margin: EdgeInsets.only(bottom: ScreenUtils.getInstance().getHeight(10.0)),
           child: GestureDetector(
             child: Column(
               children: <Widget>[
                 ListTile(
                   title: Text(
-                    "来自 " + moments.nickName + ":",
-                    style: TextStyle(fontSize: 14),
+                    moments.title,
+                    style: TextStyle(fontSize: ScreenUtils.getScaleSp(context,16)),
                   ),
                   subtitle: Column(
                     children: <Widget>[
+                      SizedBox(height: ScreenUtils.getInstance().getHeight(5.0)),
+                      Row(children: <Widget>[
+                        Text(
+                          FormatTimeUtils.toTimeString(moments.createTime),
+                          style: TextStyle(fontSize: ScreenUtils.getScaleSp(context,14)),
+                        )
+                      ]),
+                      SizedBox(height: ScreenUtils.getInstance().getHeight(5.0)),
                       Text(
-                        moments.abstracts,
-                        style: TextStyle(height: 1.8),
+                        moments.content,
+                        style: TextStyle(fontSize: ScreenUtils.getScaleSp(context,14), height: ScreenUtils.getInstance().getHeight(1.8)),
                         maxLines: 3,
                         overflow: TextOverflow.ellipsis,
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[
-                          Text(moments.thumbings.toString() +
+                          Text(moments.thumbingNum.toString() +
                               "点赞" +
-                              moments.comments.toString() +
-                              "评论"),
+                              moments.commentsNum.toString() +
+                              "评论", style: TextStyle(fontSize: ScreenUtils.getScaleSp(context,14)),),
                           IconButton(
                             icon: Icon(Icons.more_horiz),
                             onPressed: () {},
@@ -382,7 +382,7 @@ class MomentsWidget extends StatelessWidget {
 }
 
 class ArticleWidget extends StatelessWidget {
-  final Article article;
+  final ArticlePageResultItem article;
   const ArticleWidget({@required this.article, Key key}) : super(key: key);
 
   @override
@@ -390,36 +390,36 @@ class ArticleWidget extends StatelessWidget {
     return Card(
       elevation: 3,
       child: Container(
-          padding: EdgeInsets.all(10),
-          margin: EdgeInsets.only(bottom: 10),
+          padding: EdgeInsets.all(ScreenUtils.getInstance().getHeight(10.0)),
+          margin: EdgeInsets.only(bottom: ScreenUtils.getInstance().getHeight(10.0)),
           child: GestureDetector(
             child: Column(
               children: <Widget>[
                 ListTile(
-                  title: Text(article.title),
+                  title: Text(article.title, style: TextStyle(fontSize: ScreenUtils.getScaleSp(context,16)),),
                   subtitle: Column(
                     children: <Widget>[
-                      SizedBox(height: 5.0),
+                      SizedBox(height: ScreenUtils.getInstance().getHeight(5.0)),
                       Row(children: <Widget>[
                         Text(
-                          article.nickName,
-                          style: TextStyle(fontSize: 14),
+                          FormatTimeUtils.toTimeString(article.createTime),
+                          style: TextStyle(fontSize: ScreenUtils.getScaleSp(context,14)),
                         )
                       ]),
-                      SizedBox(height: 5.0),
+                      SizedBox(height: ScreenUtils.getInstance().getHeight(5.0)),
                       Text(
                         article.abstracts,
-                        style: TextStyle(height: 1.8),
+                        style: TextStyle(fontSize: ScreenUtils.getScaleSp(context,14), height: ScreenUtils.getInstance().getHeight(1.8)),
                         maxLines: 3,
                         overflow: TextOverflow.ellipsis,
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[
-                          Text(article.thumbings.toString() +
+                          Text(article.thumbingNum.toString() +
                               "点赞" +
-                              article.comments.toString() +
-                              "评论"),
+                              article.commentsNum.toString() +
+                              "评论", style: TextStyle(fontSize: ScreenUtils.getScaleSp(context,14)),),
                           IconButton(
                             icon: Icon(Icons.more_horiz),
                             onPressed: () {},

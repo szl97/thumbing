@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:thumbing/data/model/content/article.dart';
+import 'package:thumbing/data/model/content/article/output/article_page_result_entity.dart';
 
 abstract class ArticleEvent extends Equatable {
   const ArticleEvent();
@@ -12,7 +12,7 @@ class ArticleFetched extends ArticleEvent {}
 class ArticleRefresh extends ArticleEvent {}
 
 class ArticleInitialSuccess extends ArticleEvent {
-  final List<Article> articles;
+  final List<ArticlePageResultItem> articles;
   const ArticleInitialSuccess({this.articles}) : super();
   @override
   List<Object> get props => [articles];

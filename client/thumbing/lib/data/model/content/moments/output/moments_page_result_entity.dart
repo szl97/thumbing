@@ -1,12 +1,15 @@
+import 'package:equatable/equatable.dart';
 import 'package:thumbing/generated/json/base/json_convert_content.dart';
 
 class MomentsPageResultEntity with JsonConvert<MomentsPageResultEntity> {
-	List<MomantsPageResultItems> items;
+	MomentsPageResultEntity({this.items,this.position});
+	List<MomentsPageResultItems> items;
 	int position;
 	String totalCount;
 }
 
-class MomantsPageResultItems with JsonConvert<MomantsPageResultItems> {
+class MomentsPageResultItems extends Equatable with JsonConvert<MomentsPageResultItems> {
+	MomentsPageResultItems({this.commentsNum, this.content, this.createTime, this.id, this.tagIds, this.thumbUserIds, this.thumbingNum, this.title, this.userId});
 	int commentsNum;
 	String content;
 	DateTime createTime;
@@ -16,4 +19,8 @@ class MomantsPageResultItems with JsonConvert<MomantsPageResultItems> {
 	int thumbingNum;
 	String title;
 	String userId;
+
+  @override
+  // TODO: implement props
+  List<Object> get props => [commentsNum, content, createTime, id, tagIds, thumbUserIds, thumbingNum, title, userId];
 }

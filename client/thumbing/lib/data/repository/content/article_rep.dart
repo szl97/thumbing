@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'package:thumbing/data/model/content/article.dart';
+import 'package:thumbing/data/model/content/article/output/article_page_result_entity.dart';
 import 'package:thumbing/data/provider/content/article_provider.dart';
 
 class ArticleRepository {
@@ -8,7 +8,7 @@ class ArticleRepository {
     articleProvider = ArticleProvider();
   }
 
-  Future<List<Article>> getArticles() async {
-    return await articleProvider.getArticles();
+  Future<ArticlePageResultEntity> getArticles(int pageNum, int position) async {
+    return await articleProvider.getArticles(pageNum, position);
   }
 }

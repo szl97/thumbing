@@ -1,27 +1,15 @@
 import 'dart:async';
 import 'package:bloc/bloc.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:thumbing/data/repository/content/moments_rep.dart';
-import 'package:thumbing/logic/bloc/content/all_content_bloc.dart';
 import 'package:thumbing/logic/event/content/moments_event.dart';
-import 'package:thumbing/logic/state/content/all_content_state.dart';
 import 'package:thumbing/logic/state/content/moments_state.dart';
 
 class MomentsBloc extends Bloc<MomentsEvent, MomentState> {
   MomentsRepository momentsRepository;
-  AllContentBloc allContentBloc;
-  StreamSubscription allContentSubscription;
 
-  MomentsBloc({@required this.allContentBloc}) : super(MomentsInitial()) {
+
+  MomentsBloc() : super(MomentsInitial()) {
     momentsRepository = MomentsRepository();
-    allContentSubscription = allContentBloc.listen((state) {
-      if (state is AllContentFailure) {
-        this.add(MomentsInitialFailed());
-      }
-      if (state is AllContentSuccess) {
-        this.add(MomentsInitialSuccess(moments: state.allContent.moments));
-      }
-    });
   }
 
   @override
@@ -30,20 +18,21 @@ class MomentsBloc extends Bloc<MomentsEvent, MomentState> {
     if (event is MomentsFetched && !_hasReachedMax(currentState)) {
       try {
         if (currentState is MomentsInitial) {
-          final moments = await momentsRepository.getMoments();
-          yield MomentSuccess(
-              moments: moments,
+          final moments = await momentsRepository.getMoments(0, 2147483647);
+          yield moments == null || moments.items.isEmpty ? MomentsFailure() :
+          MomentSuccess(
+              moments: moments.items,
               hasReachedMax: false,
               currentPage: 0,
               isLoading: false);
           return;
         }
         if (currentState is MomentSuccess) {
-          final moments = await momentsRepository.getMoments();
-          yield moments.isEmpty
+          final moments = await momentsRepository.getMoments(currentState.currentPage, currentState.position);
+          yield moments == null || moments.items.isEmpty
               ? currentState.copyWith(hasReachedMax: true)
               : MomentSuccess(
-                  moments: currentState.moments + moments,
+                  moments: currentState.moments + moments.items,
                   hasReachedMax: false,
                   currentPage: currentState.currentPage + 1,
                   isLoading: false);
@@ -55,17 +44,17 @@ class MomentsBloc extends Bloc<MomentsEvent, MomentState> {
       try {
         if (currentState is MomentSuccess && !currentState.isLoading) {
           yield currentState.copyWith(isLoading: true);
-          final moments = await momentsRepository.getMoments();
-          yield MomentSuccess(
-              moments: moments,
+          final moments = await momentsRepository.getMoments(0, 2147483647);
+          yield moments == null || moments.items.isEmpty ? MomentsFailure() : MomentSuccess(
+              moments: moments.items,
               hasReachedMax: false,
               currentPage: 0,
               isLoading: false);
         }
         if (currentState is MomentsFailure) {
-          final moments = await momentsRepository.getMoments();
-          yield MomentSuccess(
-              moments: moments,
+          final moments = await momentsRepository.getMoments(0, 2147483647);
+          yield moments == null || moments.items.isEmpty ? MomentsFailure() : MomentSuccess(
+              moments: moments.items,
               hasReachedMax: false,
               currentPage: 0,
               isLoading: false);
@@ -110,7 +99,6 @@ class MomentsBloc extends Bloc<MomentsEvent, MomentState> {
 
   @override
   Future<void> close() {
-    allContentSubscription.cancel();
     super.close();
   }
 }

@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:thumbing/logic/bloc/content/all_content_bloc.dart';
 import 'package:thumbing/presentation/pages/personal/personal.dart';
 import 'package:thumbing/presentation/pages/home/home.dart';
 import 'package:thumbing/presentation/pages/message/message.dart';
 import 'package:thumbing/presentation/pages/roast/harbor.dart';
-import 'package:thumbing/logic/event/content/all_content_event.dart';
+import 'package:thumbing/presentation/util/screen_utils.dart';
 
 class Guid extends StatefulWidget {
   final index;
@@ -23,10 +21,7 @@ class _GuidState extends State<Guid> {
     this.currentIndex = index;
   }
   List pageList = [
-    BlocProvider(
-      create: (context) => AllContentBloc()..add(AllContentFetched()),
-      child: Home(),
-    ),
+    Home(),
     Harbor(),
     Message(),
     Personal(name: "Stan Sai"),
@@ -35,10 +30,10 @@ class _GuidState extends State<Guid> {
   Widget build(BuildContext context) {
     return Scaffold(
       floatingActionButton: Container(
-        height: 70,
-        width: 70,
-        padding: EdgeInsets.all(8),
-        margin: EdgeInsets.only(top: 10),
+        height: ScreenUtils.getInstance().getHeight(70),
+        width: ScreenUtils.getInstance().getWidth(70),
+        padding: EdgeInsets.all(ScreenUtils.getInstance().getHeight(8)),
+        margin: EdgeInsets.only(top: ScreenUtils.getInstance().getHeight(10)),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(40),
           color: Colors.white,

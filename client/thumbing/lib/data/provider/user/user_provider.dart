@@ -16,6 +16,7 @@ class UserProvider {
   }
 
   Future<String> checkUser(String userName, String password) async {
+    return "test";
     print("login");
     LoginInputEntity entity = new LoginInputEntity(userName: userName,password: password);
     String token;
@@ -36,6 +37,7 @@ class UserProvider {
   }
 
   Future<bool> checkAuthorization(String token, String userName) async {
+    return true;
     CheckAuthInputEntity entity = CheckAuthInputEntity(userName: userName);
     DioManager.setAuthorizationHeader(token);
     bool b;

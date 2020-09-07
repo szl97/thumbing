@@ -2,9 +2,9 @@ import 'package:thumbing/data/model/content/moments/output/moments_page_result_e
 
 momentsPageResultEntityFromJson(MomentsPageResultEntity data, Map<String, dynamic> json) {
 	if (json['items'] != null) {
-		data.items = new List<MomantsPageResultItems>();
+		data.items = new List<MomentsPageResultItems>();
 		(json['items'] as List).forEach((v) {
-			data.items.add(new MomantsPageResultItems().fromJson(v));
+			data.items.add(new MomentsPageResultItems().fromJson(v));
 		});
 	}
 	if (json['position'] != null) {
@@ -26,7 +26,7 @@ Map<String, dynamic> momentsPageResultEntityToJson(MomentsPageResultEntity entit
 	return data;
 }
 
-momantsPageResultItemsFromJson(MomantsPageResultItems data, Map<String, dynamic> json) {
+momantsPageResultItemsFromJson(MomentsPageResultItems data, Map<String, dynamic> json) {
 	if (json['commentsNum'] != null) {
 		data.commentsNum = json['commentsNum']?.toInt();
 	}
@@ -57,7 +57,7 @@ momantsPageResultItemsFromJson(MomantsPageResultItems data, Map<String, dynamic>
 	return data;
 }
 
-Map<String, dynamic> momantsPageResultItemsToJson(MomantsPageResultItems entity) {
+Map<String, dynamic> momantsPageResultItemsToJson(MomentsPageResultItems entity) {
 	final Map<String, dynamic> data = new Map<String, dynamic>();
 	data['commentsNum'] = entity.commentsNum;
 	data['content'] = entity.content;
