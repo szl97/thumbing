@@ -84,7 +84,7 @@ class InnerComment extends Equatable {
       isParent: false,
       howLongBefore: "一天前",
       thumbings: 25,
-      content: "努力凑够十五个字，好人一生平安",
+      content: "评论测试水水水水水水水水水水水水水水水水水水水水水水水水水水水水水水水水水水水啊啊啊啊",
     );
   }
 
@@ -97,7 +97,7 @@ class InnerComment extends Equatable {
       isParent: true,
       howLongBefore: "一天前",
       thumbings: 25,
-      content: "努力凑够十五个字，好人一生平安",
+      content: "评论测试水水水水水水水水水水水水水水水水水水水水水水水水水水水水水水水水水水水啊啊啊啊",
       innerComments: getChildList(),
     );
   }

@@ -71,7 +71,7 @@ class ChatSessionWidget extends StatelessWidget {
               );
             } else {
               return Badge(
-                position: BadgePosition.topRight(top:-2,right: -3),
+                position: BadgePosition.topRight(top:-1,right: -3),
                 badgeContent: Text(
                   chatSession.noReadCount.toString(),
                   style: TextStyle(color: Colors.white),

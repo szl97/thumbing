@@ -1,8 +1,69 @@
+
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:thumbing/data/model/content/comment.dart';
+import 'package:thumbing/logic/bloc/content/comments_bloc.dart';
+import 'package:thumbing/logic/event/content/comments_event.dart';
+import 'package:thumbing/logic/state/content/comments_state.dart';
 import 'package:thumbing/presentation/util/screen_utils.dart';
 import 'package:thumbing/presentation/widgets/send_big_widget.dart';
 
+
+class CommentsListWidget extends StatelessWidget{
+  const CommentsListWidget({this.contentId, this.contentType, Key key}) : super(key: key);
+  final String contentType;
+  final String contentId;
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
+    return BlocProvider(
+      create: (context) => CommentsBloc()..add(CommentsFetched(contentId, contentType)),
+      child: BlocBuilder<CommentsBloc, CommentsState>(
+        builder: (context, state) {
+          if (state is CommentsInitial) {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          } else if (state is CommentsSuccess) {
+            return
+              ListView.builder(
+                itemCount: state.momentsDetail.innerComments == null
+                    ? 1
+                    : state.momentsDetail.innerComments.length + 1,
+                itemBuilder: (BuildContext context, int index) {
+                  return index == 0
+                      ? CommentsTitleWidget()
+                      : (state.momentsDetail.innerComments == null ||
+                      state.momentsDetail.innerComments
+                          .length ==
+                          0)
+                      ? Container(
+                    padding: EdgeInsets.all(10),
+                    margin: EdgeInsets.all(20),
+                    child: Text("暂无评论"),
+                  )
+                      : CommentsWidget(
+                    comment: state.momentsDetail
+                        .innerComments[index - 1],
+                    index: index - 1,
+                    onSubmit: (value) {
+                      Navigator.pushNamed(
+                          context, '/personal/myMoment');
+                    },
+                  );
+                },
+              );
+          } else {
+            return Center(
+              child: Text('加载失败'),
+            );
+          }
+        },
+      ),
+    );
+  }
+
+}
 class CommentsTitleWidget extends StatelessWidget {
   const CommentsTitleWidget({Key key}) : super(key: key);
 
@@ -10,15 +71,15 @@ class CommentsTitleWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: <Widget>[
-        Divider(height: 1.0),
+        Divider(height: 1.0,),
         Container(
-          margin: EdgeInsets.only(left: 20.0),
-          padding: EdgeInsets.all(10),
+          padding: EdgeInsets.only(top: 10, bottom: 10),
+          child: Center(
           child: Text(
             "评论",
             style: TextStyle(fontWeight: FontWeight.w500),
           ),
-        ),
+        ),),
         Divider(height: 1.0),
       ],
     );
@@ -45,19 +106,19 @@ class CommentsWidget extends StatelessWidget {
           Row(
             children: <Widget>[
               Container(
-                padding: EdgeInsets.only(top: 10),
-                margin: EdgeInsets.only(left: 20.0),
+                padding: EdgeInsets.only(top: ScreenUtils.getInstance().getHeight(10)),
+                margin: EdgeInsets.only(left: ScreenUtils.getInstance().getWidth(20)),
                 child: Text(
                   comment.fromName,
-                  style: TextStyle(fontSize: 14.0),
+                  style: TextStyle(fontSize: ScreenUtils.getScaleSp(context, 14)),
                 ),
               ),
               Spacer(),
               Container(
-                margin: EdgeInsets.only(right: 20.0),
+                margin: EdgeInsets.only(right: ScreenUtils.getInstance().getWidth(20)),
                 child: Text(
                   index.toString() + "楼",
-                  style: TextStyle(fontSize: 14.0, color: Colors.grey),
+                  style: TextStyle(fontSize: ScreenUtils.getScaleSp(context, 14), color: Colors.grey),
                 ),
               ),
             ],
@@ -65,16 +126,18 @@ class CommentsWidget extends StatelessWidget {
           Row(
             children: <Widget>[
               Container(
-                margin: EdgeInsets.only(left: 20.0, right: 20.0),
+                margin: EdgeInsets.only(left: ScreenUtils.getInstance().getWidth(20)),
                 child: Text(comment.howLongBefore,
-                    style: TextStyle(fontSize: 12.0, color: Colors.grey)),
+                    style: TextStyle(fontSize: ScreenUtils.getScaleSp(context, 12), color: Colors.grey)),
               ),
             ],
           ),
           GestureDetector(
             child: Container(
-              margin: EdgeInsets.only(left: 20.0, right: 20.0),
-              padding: EdgeInsets.only(bottom: 20),
+              padding: EdgeInsets.only(bottom: ScreenUtils.getInstance().getHeight(20),
+                  top: ScreenUtils.getInstance().getHeight(10),
+                  left: ScreenUtils.getInstance().getWidth(20),
+                  right: ScreenUtils.getInstance().getWidth(20)),
               child: Builder(builder: (context) {
                 if (comment.innerComments == null ||
                     comment.innerComments.length == 0) {
@@ -82,7 +145,7 @@ class CommentsWidget extends StatelessWidget {
                     children: <Widget>[
                       Text(
                         comment.content,
-                        style: TextStyle(fontSize: 16.0),
+                        style: TextStyle(fontSize: ScreenUtils.getScaleSp(context, 16)),
                       ),
                       Row(
                         children: <Widget>[
@@ -104,21 +167,22 @@ class CommentsWidget extends StatelessWidget {
                       Container(
                         child: Text(
                           comment.content,
-                          style: TextStyle(fontSize: 16.0),
+                          style: TextStyle(fontSize: ScreenUtils.getScaleSp(context, 16)),
                         ),
                       ),
                       Container(
-                        margin: EdgeInsets.only(left: 30.0, right: 30.0),
+                        padding: EdgeInsets.only(left: ScreenUtils.getInstance().getWidth(20)),
                         child: GestureDetector(
                           child: Row(children: <Widget>[
+                            Spacer(),
                             Icon(
                               Icons.keyboard_arrow_down,
-                              color: Colors.grey,
+                              color: Colors.blueAccent[100],
                             ),
                             Text(
                               "查看其他回复",
                               style:
-                                  TextStyle(fontSize: 12.0, color: Colors.grey),
+                                  TextStyle(fontSize: ScreenUtils.getScaleSp(context, 12), color: Colors.blueAccent[100]),
                             ),
                             Spacer(),
                             IconButton(

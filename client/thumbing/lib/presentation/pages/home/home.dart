@@ -373,7 +373,7 @@ class MomentsWidget extends StatelessWidget {
               Navigator.pushNamed(
                 context,
                 '/content/momentsDetail',
-                arguments: {"id": moments.id},
+                arguments: {"moments": moments},
               );
             },
           )),

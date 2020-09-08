@@ -20,7 +20,7 @@ final routes = {
   '/personal/myRoast': (context) => MyRoast(),
   '/content/pushContent': (context) => PushContent(),
   '/content/momentsDetail': (context, {arguments}) =>
-      MomentsDetailPage(id: arguments["id"]),
+      MomentsDetailPage(moments: arguments["moments"]),
   '/content/childComment': (context, {arguments}) => ChildCommentListWidget(
         index: arguments["index"],
         comment: arguments["comment"],

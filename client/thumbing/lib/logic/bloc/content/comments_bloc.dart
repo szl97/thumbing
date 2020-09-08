@@ -1,41 +1,42 @@
 import 'package:bloc/bloc.dart';
 import 'package:thumbing/data/repository/content/moments_rep.dart';
-import 'package:thumbing/logic/event/content/detail/d_moments_event.dart';
-import 'package:thumbing/logic/state/content/detail/d_moments_state.dart';
+import 'package:thumbing/logic/event/content/comments_event.dart';
+import 'package:thumbing/logic/state/content/comments_state.dart';
 
-class MomentsDetailBloc extends Bloc<MomentsDetailEvent, MomentsDetailState> {
+
+class CommentsBloc extends Bloc<CommentsEvent, CommentsState> {
   MomentsRepository momentsRepository;
 
-  MomentsDetailBloc() : super(MomentsDetailInitial()) {
+  CommentsBloc() : super(CommentsInitial()) {
     momentsRepository = MomentsRepository();
   }
 
   @override
-  Stream<MomentsDetailState> mapEventToState(MomentsDetailEvent event) async* {
+  Stream<CommentsState> mapEventToState(CommentsEvent event) async* {
     final currentState = state;
-    if (event is MomentsDetailFetched) {
+    if (event is CommentsFetched) {
       try {
-        if (currentState is MomentsDetailInitial) {
+        if (currentState is CommentsInitial) {
           final momentsDetail =
               await momentsRepository.getMomentsDetail(event.id);
-          yield MomentsDetailSuccess(
+          yield CommentsSuccess(
               momentsDetail: momentsDetail, isLoading: false);
         }
       } catch (_) {
-        yield MomentsDetailFailure();
+        yield CommentsFailure();
       }
     }
-    if (event is MomentsDetailRefresh) {
+    if (event is CommentsRefresh) {
       try {
-        if (currentState is MomentsDetailSuccess && !currentState.isLoading) {
+        if (currentState is CommentsSuccess && !currentState.isLoading) {
           yield currentState.copyWith(isLoading: true);
           final momentsDetail =
               await momentsRepository.getMomentsDetail(event.id);
-          yield MomentsDetailSuccess(
+          yield CommentsSuccess(
               momentsDetail: momentsDetail, isLoading: false);
         }
       } catch (_) {
-        yield MomentsDetailFailure();
+        yield CommentsFailure();
       }
     }
   }

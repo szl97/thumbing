@@ -29,6 +29,7 @@ class Article extends Equatable {
         tagIds: ["选择", "人生感悟", "勇气"],
         thumbingNum: 1199,
         commentsNum: 253,
+        isThumb: false,
         createTime:DateTime(2020,9,4));
   }
 
