@@ -113,7 +113,7 @@ class MomentsContentWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
         child: Card(
-      elevation: 3,
+      elevation: 1,
       child: Column(
         children: <Widget>[
           Row(
