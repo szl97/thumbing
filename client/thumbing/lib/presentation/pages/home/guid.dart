@@ -16,11 +16,17 @@ class Guid extends StatefulWidget {
 }
 
 class _GuidState extends State<Guid> {
+  final PageController _pageController = PageController();
   int currentIndex;
   _GuidState(index) {
     this.currentIndex = index;
   }
-  List pageList = [
+  @override
+  void dispose() {
+    _pageController.dispose();
+    super.dispose();
+  }
+  List<Widget> pageList = [
     Home(),
     Harbor(),
     Message(),
@@ -47,15 +53,15 @@ class _GuidState extends State<Guid> {
         ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      body: this.pageList[this.currentIndex],
+      body: PageView(
+        physics: const NeverScrollableScrollPhysics(), // 禁止滑动
+        controller: _pageController,
+        onPageChanged: (int index) => setState(()=>this.currentIndex=index),
+        children: this.pageList,
+      ),
       bottomNavigationBar: BottomNavigationBar(
           currentIndex: this.currentIndex, //配置对应的索引值选中
-          onTap: (int index) {
-            setState(() {
-              //改变状态
-              this.currentIndex = index;
-            });
-          },
+          onTap: (int index) => _pageController.jumpToPage(index),
           iconSize: 20.0, //icon的大小
           backgroundColor: Colors.blueAccent,
           unselectedItemColor: Colors.white,

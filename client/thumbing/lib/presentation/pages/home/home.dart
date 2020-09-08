@@ -23,7 +23,7 @@ class Home extends StatefulWidget {
 
 var _tabs = ['帖子', "文章"];
 
-class _HomeState extends State<Home> {
+class _HomeState extends State<Home> with AutomaticKeepAliveClientMixin{
   MomentsBloc momentsBloc;
   ArticleBloc articleBloc;
   @override
@@ -314,6 +314,10 @@ class _HomeState extends State<Home> {
       },
     );
   }
+
+  @override
+  // TODO: implement wantKeepAlive
+  bool get wantKeepAlive => true;
 }
 
 class MomentsWidget extends StatelessWidget {

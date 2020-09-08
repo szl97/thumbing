@@ -7,14 +7,21 @@ import 'package:thumbing/logic/state/roast/roast_state.dart';
 import 'package:thumbing/presentation/util/screen_utils.dart';
 import 'package:thumbing/presentation/widgets/bottom_loader.dart';
 
-class Harbor extends StatelessWidget {
-  final RoastBloc roastBloc = RoastBloc();
-  final PageController pageController = PageController();
-
+class Harbor extends StatefulWidget  {
+  Harbor({Key key}) : super(key: key);
   @override
-  Widget build(BuildContext context) {
-    roastBloc.add(RoastFetched());
+  State<StatefulWidget> createState() => _HarborState();
+}
 
+class _HarborState extends State<Harbor> with AutomaticKeepAliveClientMixin{
+  RoastBloc roastBloc;
+  PageController pageController;
+  @override
+  void initState() {
+    super.initState();
+    roastBloc = RoastBloc();
+    pageController = PageController();
+    roastBloc.add(RoastFetched());
     pageController.addListener(() {
       var state = roastBloc.state;
       if (state is RoastSuccess) {
@@ -24,49 +31,63 @@ class Harbor extends StatelessWidget {
         }
       }
     });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+  @override
+  // TODO: implement wantKeepAlive
+  bool get wantKeepAlive => true;
+
+  @override
+  Widget build(BuildContext context) {
+
     return Container(
         child: Scaffold(
-      appBar: AppBar(
-        title: Text("港湾"),
-        backgroundColor: Colors.blueAccent,
-      ),
-      body: BlocProvider(
-          create:(context) => roastBloc,
-          child: Column(
-            children: <Widget>[
-              Container(
-                height: ScreenUtils.getInstance().getHeight(400),
-                child: BlocBuilder<RoastBloc, RoastState>(
-                  bloc: roastBloc,
-                  builder: (context, state) {
-                    if (state is RoastInitial) {
-                      return Center(
-                        child: CircularProgressIndicator(),
-                      );
-                    } else if (state is RoastSuccess) {
-                      return PageView.builder(
-                        itemCount: state.hasReachedMax
-                            ? state.roasts.length
-                            : state.roasts.length + 1,
-                        controller: pageController,
-                        itemBuilder: (BuildContext context, int index) {
-                          return index >= state.roasts.length
-                              ? BottomLoader()
-                              : RoastWidget(roast: state.roasts[index]);
-                        },
-                      );
-                    } else {
-                      return Center(
-                        child: Text('加载失败'),
-                      );
-                    }
-                  },
-                ),
-              ),
-            ],
-          )),
-    ));
+          appBar: AppBar(
+            title: Text("港湾"),
+            backgroundColor: Colors.blueAccent,
+          ),
+          body: BlocProvider(
+              create:(context) => roastBloc,
+              child: Column(
+                children: <Widget>[
+                  Container(
+                    height: ScreenUtils.getInstance().getHeight(400),
+                    child: BlocBuilder<RoastBloc, RoastState>(
+                      bloc: roastBloc,
+                      builder: (context, state) {
+                        if (state is RoastInitial) {
+                          return Center(
+                            child: CircularProgressIndicator(),
+                          );
+                        } else if (state is RoastSuccess) {
+                          return PageView.builder(
+                            itemCount: state.hasReachedMax
+                                ? state.roasts.length
+                                : state.roasts.length + 1,
+                            controller: pageController,
+                            itemBuilder: (BuildContext context, int index) {
+                              return index >= state.roasts.length
+                                  ? BottomLoader()
+                                  : RoastWidget(roast: state.roasts[index]);
+                            },
+                          );
+                        } else {
+                          return Center(
+                            child: Text('加载失败'),
+                          );
+                        }
+                      },
+                    ),
+                  ),
+                ],
+              )),
+        ));
   }
+
 }
 
 class RoastWidget extends StatelessWidget {
