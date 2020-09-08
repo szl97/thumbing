@@ -26,6 +26,8 @@ import com.thumbing.shared.service.impl.BaseMongoService;
 import com.thumbing.shared.utils.dozermapper.DozerUtils;
 import com.thumbing.shared.utils.sensitiveword.SensitiveFilter;
 import lombok.SneakyThrows;
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.lucene.util.CollectionUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -68,7 +70,11 @@ public class ArticleService extends BaseMongoService<Article, IArticleRepository
                 int from = Math.max(to - input.getPageSize(), 0);
                 List<Article> articles = articleCache.getArticles(from, to);
                 Collections.reverse(articles);
-                List<ArticleDto> dtoList = DozerUtils.mapList(mapper, articles, ArticleDto.class);
+                List<ArticleDto> dtoList = DozerUtils.mapList(mapper, articles, ArticleDto.class, (s, t)->{
+                    if(CollectionUtils.isNotEmpty(s.getThumbUserIds()) && s.getThumbUserIds().contains(context.getId())) {
+                        t.setThumb(true);
+                    }
+                });
                 return new PageResultDto<>(ArticleCache.maxLength, dtoList, from - 1);
             }
         }
@@ -174,7 +180,11 @@ public class ArticleService extends BaseMongoService<Article, IArticleRepository
         Sort sort = Sort.by(Sort.Direction.DESC, MongoCreationEntity.Fields.createTime);
         PageRequest pageRequest = PageRequest.of(input.getPageNumber() - 1, input.getPageSize(), sort);
         Page<Article> page = repository.findAllByUserIdAndIsDelete(context.getId(), 0, pageRequest);
-        return DozerUtils.mapToPagedResultDto(mapper,page,ArticleDto.class);
+        return DozerUtils.mapToPagedResultDto(mapper,page,ArticleDto.class,(s, t)->{
+            if(CollectionUtils.isNotEmpty(s.getThumbUserIds()) && s.getThumbUserIds().contains(context.getId())) {
+                t.setThumb(true);
+            }
+        });
     }
 
     private Long confirmArticleThumbsInRedis(ArticleIdInput input) {

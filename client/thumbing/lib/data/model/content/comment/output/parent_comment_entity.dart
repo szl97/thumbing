@@ -1,7 +1,7 @@
 import 'package:thumbing/generated/json/base/json_convert_content.dart';
 
 class ParentCommentEntity with JsonConvert<ParentCommentEntity> {
-	List<ParentCommantChildCommants> childComments;
+	List<ParentCommentChildComments> childComments;
 	String commentId;
 	String content;
 	String contentId;
@@ -10,11 +10,11 @@ class ParentCommentEntity with JsonConvert<ParentCommentEntity> {
 	String fromNickName;
 	String fromUserId;
 	String id;
-	List<String> thumbUserIds;
+	bool isThumb;
 	int thumbingNum;
 }
 
-class ParentCommantChildCommants with JsonConvert<ParentCommantChildCommants> {
+class ParentCommentChildComments with JsonConvert<ParentCommentChildComments> {
 	String commentId;
 	String content;
 	String createTime;
@@ -22,7 +22,7 @@ class ParentCommantChildCommants with JsonConvert<ParentCommantChildCommants> {
 	String fromUserId;
 	String id;
 	String parentCommentId;
-	List<String> thumbUserIds;
+	bool isThumb;
 	int thumbingNum;
 	String toNickName;
 	String toUserId;

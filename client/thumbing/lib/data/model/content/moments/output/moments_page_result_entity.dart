@@ -9,18 +9,18 @@ class MomentsPageResultEntity with JsonConvert<MomentsPageResultEntity> {
 }
 
 class MomentsPageResultItems extends Equatable with JsonConvert<MomentsPageResultItems> {
-	MomentsPageResultItems({this.commentsNum, this.content, this.createTime, this.id, this.tagIds, this.thumbUserIds, this.thumbingNum, this.title, this.userId});
+	MomentsPageResultItems({this.commentsNum, this.content, this.createTime, this.id, this.tagIds, this.isThumb, this.thumbingNum, this.title, this.userId});
 	int commentsNum;
 	String content;
 	DateTime createTime;
 	String id;
 	List<String> tagIds;
-	List<String> thumbUserIds;
+	bool isThumb;
 	int thumbingNum;
 	String title;
 	String userId;
 
   @override
   // TODO: implement props
-  List<Object> get props => [commentsNum, content, createTime, id, tagIds, thumbUserIds, thumbingNum, title, userId];
+  List<Object> get props => [commentsNum, content, createTime, id, tagIds, isThumb, thumbingNum, title, userId];
 }

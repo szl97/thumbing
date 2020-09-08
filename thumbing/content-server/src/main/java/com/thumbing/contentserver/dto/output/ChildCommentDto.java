@@ -41,10 +41,8 @@ public class ChildCommentDto extends DocumentDto {
     private String toNickName;
     @ApiModelProperty(value = "内容")
     private String content;
-    @JsonSerialize(using = LongToStringSetSerializer.class)
-    @JsonDeserialize(using = StringToLongSetDeserializer.class)
-    @ApiModelProperty(value = "点赞用户")
-    private Set<Long> thumbUserIds;
+    @ApiModelProperty(value = "是否点赞")
+    private boolean isThumb;
     @ApiModelProperty(value = "点赞数")
     private int thumbingNum;
     @ApiModelProperty(value = "创建时间")

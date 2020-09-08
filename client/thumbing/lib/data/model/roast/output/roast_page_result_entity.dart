@@ -9,15 +9,15 @@ class RoastPageResultEntity with JsonConvert<RoastPageResultEntity> {
 }
 
 class RoastPageResultItem extends Equatable with JsonConvert<RoastPageResultItem> {
-	RoastPageResultItem({this.content, this.createTime, this.id, this.thumbUserIds, this.thumbingNum, this.userId});
+	RoastPageResultItem({this.content, this.createTime, this.id, this.isThumb, this.thumbingNum, this.userId});
 	String content;
 	DateTime createTime;
 	String id;
-	List<String> thumbUserIds;
+	bool isThumb;
 	int thumbingNum;
 	String userId;
 
   @override
   // TODO: implement props
-  List<Object> get props => [createTime,content,id,thumbingNum,thumbUserIds,userId];
+  List<Object> get props => [createTime,content,id,thumbingNum,isThumb,userId];
 }

@@ -48,8 +48,8 @@ articlePageResultItemFromJson(ArticlePageResultItem data, Map<String, dynamic> j
 	if (json['tagIds'] != null) {
 		data.tagIds = json['tagIds']?.map((v) => v?.toString())?.toList()?.cast<String>();
 	}
-	if (json['thumbUserIds'] != null) {
-		data.thumbUserIds = json['thumbUserIds']?.map((v) => v?.toString())?.toList()?.cast<String>();
+	if (json['isThumb'] != null) {
+		data.isThumb = json['isThumb'];
 	}
 	if (json['thumbingNum'] != null) {
 		data.thumbingNum = json['thumbingNum']?.toInt();
@@ -72,7 +72,7 @@ Map<String, dynamic> articlePageResultItemToJson(ArticlePageResultItem entity) {
 	data['graphIds'] = entity.graphIds;
 	data['id'] = entity.id;
 	data['tagIds'] = entity.tagIds;
-	data['thumbUserIds'] = entity.thumbUserIds;
+	data['isThumb'] = entity.isThumb;
 	data['thumbingNum'] = entity.thumbingNum;
 	data['title'] = entity.title;
 	data['userId'] = entity.userId;

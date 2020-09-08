@@ -21,6 +21,7 @@ import com.thumbing.shared.repository.mongo.content.IRoastRepository;
 import com.thumbing.shared.service.impl.BaseMongoService;
 import com.thumbing.shared.utils.dozermapper.DozerUtils;
 import com.thumbing.shared.utils.sensitiveword.SensitiveFilter;
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -50,7 +51,11 @@ public class RoastService extends BaseMongoService<Roast, IRoastRepository> impl
     @Override
     public List<RoastDto> fetchRoasts(UserContext context) {
         List<Roast> roasts = roastCache.getRoasts();
-        return DozerUtils.mapList(mapper, roasts, RoastDto.class);
+        return DozerUtils.mapList(mapper, roasts, RoastDto.class, (s, t)->{
+            if(CollectionUtils.isNotEmpty(s.getThumbUserIds()) && s.getThumbUserIds().contains(context.getId())) {
+                t.setThumb(true);
+            }
+        });
     }
 
     @Override
@@ -101,7 +106,11 @@ public class RoastService extends BaseMongoService<Roast, IRoastRepository> impl
         Sort sort = Sort.by(Sort.Direction.DESC, MongoCreationEntity.Fields.createTime);
         PageRequest pageRequest = PageRequest.of(input.getPageNumber() - 1, input.getPageSize(), sort);
         Page<Roast> page = repository.findAllByUserIdAndIsDelete(context.getId(), 0, pageRequest);
-        return DozerUtils.mapToPagedResultDto(mapper,page, RoastDto.class);
+        return DozerUtils.mapToPagedResultDto(mapper,page, RoastDto.class, (s, t)->{
+            if(CollectionUtils.isNotEmpty(s.getThumbUserIds()) && s.getThumbUserIds().contains(context.getId())) {
+                t.setThumb(true);
+            }
+        });
     }
 
     private Long confirmRoastThumbsInRedis(RoastIdInput input) {

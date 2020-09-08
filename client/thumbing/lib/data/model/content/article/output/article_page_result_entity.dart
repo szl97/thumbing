@@ -9,7 +9,7 @@ class ArticlePageResultEntity with JsonConvert<ArticlePageResultEntity> {
 }
 
 class ArticlePageResultItem extends Equatable with JsonConvert<ArticlePageResultItem> {
-	ArticlePageResultItem({this.id,this.tagIds,this.abstracts,this.createTime, this.graphIds,this.thumbingNum,this.thumbUserIds,this.title,this.userId,this.commentsNum,this.content});
+	ArticlePageResultItem({this.id,this.tagIds,this.abstracts,this.createTime, this.graphIds,this.thumbingNum,this.isThumb,this.title,this.userId,this.commentsNum,this.content});
 	String abstracts;
 	int commentsNum;
 	String content;
@@ -17,12 +17,12 @@ class ArticlePageResultItem extends Equatable with JsonConvert<ArticlePageResult
 	List<String> graphIds;
 	String id;
 	List<String> tagIds;
-	List<String> thumbUserIds;
+	bool isThumb;
 	int thumbingNum;
 	String title;
 	String userId;
 
   @override
   // TODO: implement props
-  List<Object> get props => [id,tagIds,abstracts,createTime,graphIds,thumbingNum,thumbUserIds,title,userId,commentsNum,content];
+  List<Object> get props => [id,tagIds,abstracts,createTime,graphIds,thumbingNum,isThumb,title,userId,commentsNum,content];
 }

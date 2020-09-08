@@ -28,6 +28,7 @@ import com.thumbing.shared.service.impl.BaseMongoService;
 import com.thumbing.shared.utils.dozermapper.DozerUtils;
 import com.thumbing.shared.utils.generateid.SnowFlake;
 import com.thumbing.shared.utils.sensitiveword.SensitiveFilter;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -164,12 +165,20 @@ public class CommentService extends BaseMongoService<Comment, ICommentRepository
             }
         }
         List<Comment> parentComments = commentCache.getParentsCommentsList(input.getContentId(), input.getContentType(), 0, -1);
-        List<CommentDto> result = DozerUtils.mapList(mapper, parentComments, CommentDto.class);
+        List<CommentDto> result = DozerUtils.mapList(mapper, parentComments, CommentDto.class, (s, t)->{
+            if(CollectionUtils.isNotEmpty(s.getThumbUserIds()) && s.getThumbUserIds().contains(context.getId())) {
+                t.setThumb(true);
+            }
+        });
         result.stream().forEach(
                 parent->{
                     if(commentCache.existChildComments(parent.getCommentId())) {
                         List<Comment> child = commentCache.getChildCommentsList(parent.getCommentId(), 0, -1);
-                        parent.setChildComments(DozerUtils.mapList(mapper, child, ChildCommentDto.class));
+                        parent.setChildComments(DozerUtils.mapList(mapper, child, ChildCommentDto.class, (s, t)->{
+                            if(CollectionUtils.isNotEmpty(s.getThumbUserIds()) && s.getThumbUserIds().contains(context.getId())) {
+                                t.setThumb(true);
+                            }
+                        }));
                     }
                 }
         );

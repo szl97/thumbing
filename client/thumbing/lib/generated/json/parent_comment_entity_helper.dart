@@ -2,9 +2,9 @@ import 'package:thumbing/data/model/content/comment/output/parent_comment_entity
 
 parentCommentEntityFromJson(ParentCommentEntity data, Map<String, dynamic> json) {
 	if (json['childComments'] != null) {
-		data.childComments = new List<ParentCommantChildCommants>();
+		data.childComments = new List<ParentCommentChildComments>();
 		(json['childComments'] as List).forEach((v) {
-			data.childComments.add(new ParentCommantChildCommants().fromJson(v));
+			data.childComments.add(new ParentCommentChildComments().fromJson(v));
 		});
 	}
 	if (json['commentId'] != null) {
@@ -31,8 +31,8 @@ parentCommentEntityFromJson(ParentCommentEntity data, Map<String, dynamic> json)
 	if (json['id'] != null) {
 		data.id = json['id']?.toString();
 	}
-	if (json['thumbUserIds'] != null) {
-		data.thumbUserIds = json['thumbUserIds']?.map((v) => v?.toString())?.toList()?.cast<String>();
+	if (json['isThumb'] != null) {
+		data.isThumb = json['isThumb'];
 	}
 	if (json['thumbingNum'] != null) {
 		data.thumbingNum = json['thumbingNum']?.toInt();
@@ -53,12 +53,12 @@ Map<String, dynamic> parentCommentEntityToJson(ParentCommentEntity entity) {
 	data['fromNickName'] = entity.fromNickName;
 	data['fromUserId'] = entity.fromUserId;
 	data['id'] = entity.id;
-	data['thumbUserIds'] = entity.thumbUserIds;
+	data['isThumb'] = entity.isThumb;
 	data['thumbingNum'] = entity.thumbingNum;
 	return data;
 }
 
-parentCommantChildCommantsFromJson(ParentCommantChildCommants data, Map<String, dynamic> json) {
+parentCommentChildCommentsFromJson(ParentCommentChildComments data, Map<String, dynamic> json) {
 	if (json['commentId'] != null) {
 		data.commentId = json['commentId']?.toString();
 	}
@@ -80,8 +80,8 @@ parentCommantChildCommantsFromJson(ParentCommantChildCommants data, Map<String, 
 	if (json['parentCommentId'] != null) {
 		data.parentCommentId = json['parentCommentId']?.toString();
 	}
-	if (json['thumbUserIds'] != null) {
-		data.thumbUserIds = json['thumbUserIds']?.map((v) => v?.toString())?.toList()?.cast<String>();
+	if (json['isThumb'] != null) {
+		data.isThumb = json['isThumb'];
 	}
 	if (json['thumbingNum'] != null) {
 		data.thumbingNum = json['thumbingNum']?.toInt();
@@ -95,7 +95,7 @@ parentCommantChildCommantsFromJson(ParentCommantChildCommants data, Map<String, 
 	return data;
 }
 
-Map<String, dynamic> parentCommantChildCommantsToJson(ParentCommantChildCommants entity) {
+Map<String, dynamic> parentCommentChildCommentsToJson(ParentCommentChildComments entity) {
 	final Map<String, dynamic> data = new Map<String, dynamic>();
 	data['commentId'] = entity.commentId;
 	data['content'] = entity.content;
@@ -104,7 +104,7 @@ Map<String, dynamic> parentCommantChildCommantsToJson(ParentCommantChildCommants
 	data['fromUserId'] = entity.fromUserId;
 	data['id'] = entity.id;
 	data['parentCommentId'] = entity.parentCommentId;
-	data['thumbUserIds'] = entity.thumbUserIds;
+	data['isThumb'] = entity.isThumb;
 	data['thumbingNum'] = entity.thumbingNum;
 	data['toNickName'] = entity.toNickName;
 	data['toUserId'] = entity.toUserId;

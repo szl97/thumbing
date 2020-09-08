@@ -27,10 +27,8 @@ public class RoastDto extends DocumentDto {
     private String content;
     @ApiModelProperty(value = "点赞数")
     private Integer thumbingNum;
-    @JsonSerialize(using = LongToStringSetSerializer.class)
-    @JsonDeserialize(using = StringToLongSetDeserializer.class)
-    @ApiModelProperty(value = "点赞用户")
-    private Set<Long> thumbUserIds;
+    @ApiModelProperty(value = "是否点赞")
+    private boolean isThumb;
     @ApiModelProperty(value = "创建时间")
     private LocalDateTime createTime;
 }

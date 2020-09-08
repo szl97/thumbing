@@ -80,8 +80,8 @@ class JsonConvert<T> {
 			return updateMomentsInputEntityFromJson(data as UpdateMomentsInputEntity, json) as T;			case MomentsPageResultEntity:
 			return momentsPageResultEntityFromJson(data as MomentsPageResultEntity, json) as T;			case MomentsPageResultItems:
 			return momentsPageResultItemsFromJson(data as MomentsPageResultItems, json) as T;			case ParentCommentEntity:
-			return parentCommentEntityFromJson(data as ParentCommentEntity, json) as T;			case ParentCommantChildCommants:
-			return parentCommantChildCommantsFromJson(data as ParentCommantChildCommants, json) as T;			case PublishRoastInputEntity:
+			return parentCommentEntityFromJson(data as ParentCommentEntity, json) as T;			case ParentCommentChildComments:
+			return parentCommentChildCommentsFromJson(data as ParentCommentChildComments, json) as T;			case PublishRoastInputEntity:
 			return publishRoastInputEntityFromJson(data as PublishRoastInputEntity, json) as T;			case BaseResultEntity:
 			return baseResultEntityFromJson(data as BaseResultEntity, json) as T;			case PersonalEntity:
 			return personalEntityFromJson(data as PersonalEntity, json) as T;			case PersonalInterest:
@@ -133,8 +133,8 @@ class JsonConvert<T> {
 			return updateMomentsInputEntityToJson(data as UpdateMomentsInputEntity);			case MomentsPageResultEntity:
 			return momentsPageResultEntityToJson(data as MomentsPageResultEntity);			case MomentsPageResultItems:
 			return momentsPageResultItemsToJson(data as MomentsPageResultItems);			case ParentCommentEntity:
-			return parentCommentEntityToJson(data as ParentCommentEntity);			case ParentCommantChildCommants:
-			return parentCommantChildCommantsToJson(data as ParentCommantChildCommants);			case PublishRoastInputEntity:
+			return parentCommentEntityToJson(data as ParentCommentEntity);			case ParentCommentChildComments:
+			return parentCommentChildCommentsToJson(data as ParentCommentChildComments);			case PublishRoastInputEntity:
 			return publishRoastInputEntityToJson(data as PublishRoastInputEntity);			case BaseResultEntity:
 			return baseResultEntityToJson(data as BaseResultEntity);			case PersonalEntity:
 			return personalEntityToJson(data as PersonalEntity);			case PersonalInterest:
@@ -186,8 +186,8 @@ class JsonConvert<T> {
 			return UpdateMomentsInputEntity().fromJson(json);			case 'MomentsPageResultEntity':
 			return MomentsPageResultEntity().fromJson(json);			case 'MomentsPageResultItems':
 			return MomentsPageResultItems().fromJson(json);			case 'ParentCommentEntity':
-			return ParentCommentEntity().fromJson(json);			case 'ParentCommantChildCommants':
-			return ParentCommantChildCommants().fromJson(json);			case 'PublishRoastInputEntity':
+			return ParentCommentEntity().fromJson(json);			case 'ParentCommentChildComments':
+			return ParentCommentChildComments().fromJson(json);			case 'PublishRoastInputEntity':
 			return PublishRoastInputEntity().fromJson(json);			case 'BaseResultEntity':
 			return BaseResultEntity().fromJson(json);			case 'PersonalEntity':
 			return PersonalEntity().fromJson(json);			case 'PersonalInterest':
@@ -240,8 +240,8 @@ class JsonConvert<T> {
 			return List<UpdateMomentsInputEntity>();			case 'MomentsPageResultEntity':
 			return List<MomentsPageResultEntity>();			case 'MomentsPageResultItems':
 			return List<MomentsPageResultItems>();			case 'ParentCommentEntity':
-			return List<ParentCommentEntity>();			case 'ParentCommantChildCommants':
-			return List<ParentCommantChildCommants>();			case 'PublishRoastInputEntity':
+			return List<ParentCommentEntity>();			case 'ParentCommentChildComments':
+			return List<ParentCommentChildComments>();			case 'PublishRoastInputEntity':
 			return List<PublishRoastInputEntity>();			case 'BaseResultEntity':
 			return List<BaseResultEntity>();			case 'PersonalEntity':
 			return List<PersonalEntity>();			case 'PersonalInterest':

@@ -36,8 +36,8 @@ roastPageResultItemFromJson(RoastPageResultItem data, Map<String, dynamic> json)
 	if (json['id'] != null) {
 		data.id = json['id']?.toString();
 	}
-	if (json['thumbUserIds'] != null) {
-		data.thumbUserIds = json['thumbUserIds']?.map((v) => v?.toString())?.toList()?.cast<String>();
+	if (json['isThumb'] != null) {
+		data.isThumb = json['isThumb']?.map((v) => v?.toString())?.toList()?.cast<String>();
 	}
 	if (json['thumbingNum'] != null) {
 		data.thumbingNum = json['thumbingNum']?.toInt();
@@ -53,7 +53,7 @@ Map<String, dynamic> roastPageResultItemToJson(RoastPageResultItem entity) {
 	data['content'] = entity.content;
 	data['createTime'] = entity.createTime?.toString();
 	data['id'] = entity.id;
-	data['thumbUserIds'] = entity.thumbUserIds;
+	data['isThumb'] = entity.isThumb;
 	data['thumbingNum'] = entity.thumbingNum;
 	data['userId'] = entity.userId;
 	return data;

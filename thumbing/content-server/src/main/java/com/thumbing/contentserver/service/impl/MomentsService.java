@@ -24,6 +24,7 @@ import com.thumbing.shared.service.impl.BaseMongoService;
 import com.thumbing.shared.utils.dozermapper.DozerUtils;
 import com.thumbing.shared.utils.sensitiveword.SensitiveFilter;
 import lombok.SneakyThrows;
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -64,7 +65,11 @@ public class MomentsService extends BaseMongoService<Moments, IMomentsRepository
                 int from = Math.max(to - input.getPageSize(), 0);
                 List<Moments> moments = momentsCache.getMomentsList(from, to);
                 Collections.reverse(moments);
-                List<MomentsDto> dtoList = DozerUtils.mapList(mapper, moments, MomentsDto.class);
+                List<MomentsDto> dtoList = DozerUtils.mapList(mapper, moments, MomentsDto.class, (s, t)->{
+                    if(CollectionUtils.isNotEmpty(s.getThumbUserIds()) && s.getThumbUserIds().contains(context.getId())) {
+                        t.setThumb(true);
+                    }
+                });
                 return new PageResultDto<>(MomentsCache.maxLength, dtoList, from - 1);
             }
         }
@@ -151,7 +156,11 @@ public class MomentsService extends BaseMongoService<Moments, IMomentsRepository
         Sort sort = Sort.by(Sort.Direction.DESC, MongoCreationEntity.Fields.createTime);
         PageRequest pageRequest = PageRequest.of(input.getPageNumber() - 1, input.getPageSize(), sort);
         Page<Moments> page = repository.findAllByUserIdAndIsDelete(context.getId(), 0, pageRequest);
-        return DozerUtils.mapToPagedResultDto(mapper,page, MomentsDto.class);
+        return DozerUtils.mapToPagedResultDto(mapper,page, MomentsDto.class, (s, t)->{
+            if(CollectionUtils.isNotEmpty(s.getThumbUserIds()) && s.getThumbUserIds().contains(context.getId())) {
+                t.setThumb(true);
+            }
+        });
     }
 
     private Long confirmMomentsThumbsInRedis(MomentsIdInput input) {
