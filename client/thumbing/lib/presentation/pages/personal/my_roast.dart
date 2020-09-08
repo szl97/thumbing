@@ -25,7 +25,7 @@ class MyRoast extends StatelessWidget {
     });
     return Container(
         child: Scaffold(
-          appBar: AppBar(title: Text("我的吐槽"), backgroundColor: Colors.black12),
+          appBar: AppBar(title: Text("我的吐槽"), backgroundColor: Colors.blueAccent),
           body: BlocProvider(
             create: (context)=>myRoastBloc,
             child: Container(

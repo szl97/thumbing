@@ -12,7 +12,7 @@ class Personal extends StatelessWidget {
     return Container(
       child: Scaffold(
           backgroundColor: Colors.white,
-          appBar: AppBar(title: Text("个人空间"), backgroundColor: Colors.black12),
+          appBar: AppBar(title: Text("个人空间"), backgroundColor: Colors.blueAccent),
           body: SafeArea(
             child: CustomScrollView(
               physics: const BouncingScrollPhysics(),
@@ -20,7 +20,7 @@ class Personal extends StatelessWidget {
               slivers: <Widget>[
                 SliverAppBar(
                   floating: true,
-                  backgroundColor: Colors.black26,
+                  backgroundColor: Colors.blueAccent,
                   flexibleSpace: FlexibleSpaceBar(
                     centerTitle: true,
                     title: Text(

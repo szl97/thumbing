@@ -7,7 +7,7 @@ class PushContent extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
         child: Scaffold(
-      appBar: AppBar(title: Text("发布内容"), backgroundColor: Colors.black12),
+      appBar: AppBar(title: Text("发布内容"), backgroundColor: Colors.blueAccent),
     ));
   }
 }

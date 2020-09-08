@@ -12,7 +12,7 @@ class _MyArticleState extends State<MyArticle> {
   Widget build(BuildContext context) {
     return Container(
         child: Scaffold(
-      appBar: AppBar(title: Text("我的文章"), backgroundColor: Colors.black12),
+      appBar: AppBar(title: Text("我的文章"), backgroundColor: Colors.blueAccent),
     ));
   }
 }

@@ -28,7 +28,7 @@ class Harbor extends StatelessWidget {
         child: Scaffold(
       appBar: AppBar(
         title: Text("港湾"),
-        backgroundColor: Colors.black12,
+        backgroundColor: Colors.blueAccent,
       ),
       body: BlocProvider(
           create:(context) => roastBloc,

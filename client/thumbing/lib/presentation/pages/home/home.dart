@@ -83,7 +83,7 @@ class _HomeState extends State<Home> {
                       flexibleSpace: FlexibleSpaceBar(
                         collapseMode: CollapseMode.pin,
                         background: Container(
-                          color: Colors.black26,
+                          color: Colors.blueAccent,
                           child: SearchTextFieldWidget(
                             hintText: '输入搜索内容',
                             margin:
@@ -340,7 +340,7 @@ class MomentsWidget extends StatelessWidget {
                       SizedBox(height: ScreenUtils.getInstance().getHeight(5.0)),
                       Row(children: <Widget>[
                         Text(
-                          FormatTimeUtils.toTimeString(moments.createTime),
+                          FormatTimeUtils.toDescriptionString(moments.createTime),
                           style: TextStyle(fontSize: ScreenUtils.getScaleSp(context,14)),
                         )
                       ]),
@@ -402,7 +402,7 @@ class ArticleWidget extends StatelessWidget {
                       SizedBox(height: ScreenUtils.getInstance().getHeight(5.0)),
                       Row(children: <Widget>[
                         Text(
-                          FormatTimeUtils.toTimeString(article.createTime),
+                          FormatTimeUtils.toDescriptionString(article.createTime),
                           style: TextStyle(fontSize: ScreenUtils.getScaleSp(context,14)),
                         )
                       ]),

@@ -12,7 +12,7 @@ class _SettingsState extends State<Settings> {
   Widget build(BuildContext context) {
     return Container(
         child: Scaffold(
-      appBar: AppBar(title: Text("系统设置"), backgroundColor: Colors.black12),
+      appBar: AppBar(title: Text("系统设置"), backgroundColor: Colors.blueAccent),
     ));
   }
 }

@@ -670,7 +670,7 @@ class _SliverAppBarDelegate extends SliverPersistentHeaderDelegate {
                 deltaExtent)
         .clamp(0.0, 1.0);
 
-    Color color = Color.lerp(Colors.white, Colors.black26, t);
+    Color color = Color.lerp(Colors.white, Colors.blueAccent, t);
 
 //    List<>getTabBarText(bottom);
     bottom = HomeTabBar(

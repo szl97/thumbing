@@ -12,7 +12,7 @@ class _MyMomentState extends State<MyMoment> {
   Widget build(BuildContext context) {
     return Container(
         child: Scaffold(
-      appBar: AppBar(title: Text("我的帖子"), backgroundColor: Colors.black12),
+      appBar: AppBar(title: Text("我的帖子"), backgroundColor: Colors.blueAccent),
     ));
   }
 }

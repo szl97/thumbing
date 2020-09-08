@@ -16,7 +16,7 @@ class Message extends StatelessWidget {
     chatSessionBloc.add(ChatSessionFetched());
     return Container(
       child: Scaffold(
-        appBar: AppBar(title: Text("消息"), backgroundColor: Colors.black12),
+        appBar: AppBar(title: Text("消息"), backgroundColor: Colors.blueAccent),
         body: BlocProvider(
           create: (context) => chatSessionBloc,
           child: BlocBuilder<ChatSessionBloc, ChatSessionState>(
@@ -66,18 +66,19 @@ class ChatSessionWidget extends StatelessWidget {
             if (chatSession.read) {
               return Icon(
                 Feather.message_circle,
-                color: Colors.grey,
+                color: Colors.blueAccent[100],
                 size: ScreenUtils.getInstance().getHeight(30),
               );
             } else {
               return Badge(
+                position: BadgePosition.topRight(top:-2,right: -3),
                 badgeContent: Text(
                   chatSession.noReadCount.toString(),
                   style: TextStyle(color: Colors.white),
                 ),
                 child: Icon(
                   Feather.message_circle,
-                  color: Colors.grey,
+                  color: Colors.blueAccent[100],
                   size: ScreenUtils.getInstance().getHeight(30),
                 ),
               );

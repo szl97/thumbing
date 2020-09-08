@@ -12,7 +12,7 @@ class LoginPage extends StatelessWidget {
       backgroundColor: Colors.white,
       appBar: AppBar(
         title: const Text('登录'),
-        backgroundColor: Colors.black26,
+        backgroundColor: Colors.blueAccent,
       ),
       body: Padding(
         padding: EdgeInsets.all(12.0),

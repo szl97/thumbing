@@ -192,7 +192,7 @@ class ChildCommentListWidget extends StatelessWidget {
       child: Container(
         child: Scaffold(
           appBar: AppBar(
-            backgroundColor: Colors.black26,
+            backgroundColor: Colors.blueAccent,
             title: Text("第" + index.toString() + "楼"),
           ),
           body: ListView.builder(

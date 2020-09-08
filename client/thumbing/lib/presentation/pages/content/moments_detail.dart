@@ -20,7 +20,7 @@ class MomentsDetailPage extends StatelessWidget {
     return Container(
         child: Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.black26,
+        backgroundColor: Colors.blueAccent,
         title: Text("帖子"),
       ),
       body: BlocProvider(

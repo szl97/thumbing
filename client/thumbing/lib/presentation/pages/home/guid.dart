@@ -30,20 +30,20 @@ class _GuidState extends State<Guid> {
   Widget build(BuildContext context) {
     return Scaffold(
       floatingActionButton: Container(
-        height: ScreenUtils.getInstance().getHeight(70),
-        width: ScreenUtils.getInstance().getWidth(70),
-        padding: EdgeInsets.all(ScreenUtils.getInstance().getHeight(8)),
+        height: ScreenUtils.getInstance().getHeight(55),
+        width: ScreenUtils.getInstance().getWidth(55),
+        padding: EdgeInsets.only(bottom: ScreenUtils.getInstance().getHeight(8), top: ScreenUtils.getInstance().getHeight(1), left: ScreenUtils.getInstance().getHeight(1), right: ScreenUtils.getInstance().getHeight(1)),
         margin: EdgeInsets.only(top: ScreenUtils.getInstance().getHeight(10)),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(40),
-          color: Colors.white,
+          color: Colors.blueAccent,
         ),
         child: FloatingActionButton(
           child: Icon(Icons.add),
           onPressed: () {
             Navigator.pushNamed(context, '/content/pushContent');
           },
-          backgroundColor: Colors.black12,
+          backgroundColor: Colors.blueAccent,
         ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
@@ -57,7 +57,9 @@ class _GuidState extends State<Guid> {
             });
           },
           iconSize: 20.0, //icon的大小
-          fixedColor: Colors.red, //选中的颜色
+          backgroundColor: Colors.blueAccent,
+          unselectedItemColor: Colors.white,
+          fixedColor: Colors.yellow, //选中的颜色
           type: BottomNavigationBarType.fixed, //配置底部tabs可以有多个按钮
           items: [
             BottomNavigationBarItem(icon: Icon(Icons.home), title: Text("首页")),

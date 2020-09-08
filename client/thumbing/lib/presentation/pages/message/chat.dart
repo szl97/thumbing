@@ -23,7 +23,7 @@ class Chat extends StatelessWidget {
       child: Scaffold(
         appBar: AppBar(
             title: Text(session.user.nickName),
-            backgroundColor: Colors.black12),
+            backgroundColor: Colors.blueAccent),
         body: BlocProvider(
           create: (context) => ChatRecordBloc(chatSessionBloc: chatSessionBloc)
             ..add(
@@ -103,7 +103,7 @@ class MessageWidget extends StatelessWidget {
               ? Container(
                   child: CustomPaint(
                     painter: ChatBoxPainter(
-                        height: 20, width: 15, color: Colors.grey[300]),
+                        height: 15, width: 15, color: Colors.grey[200]),
                   ),
                 )
               : Container(),
@@ -111,13 +111,13 @@ class MessageWidget extends StatelessWidget {
             child: Text(chatRecord.message),
             margin: EdgeInsets.only(left: 15, right: 15),
             padding: EdgeInsets.only(
-              left: 20,
-              right: 20,
-              top: 20,
-              bottom: 20,
+              left: 10,
+              right: 10,
+              top: 15,
+              bottom: 15,
             ),
             decoration: BoxDecoration(
-              color: chatRecord.isSender ? Colors.grey[200] : Colors.grey[300],
+              color: chatRecord.isSender ? Colors.lightBlue[100] : Colors.grey[200],
               borderRadius: BorderRadius.circular(10),
             ),
           ),
@@ -127,7 +127,7 @@ class MessageWidget extends StatelessWidget {
                   child: Container(
                     child: CustomPaint(
                       painter: ChatBoxPainter(
-                          height: 20, width: 15, color: Colors.grey[200]),
+                          height: 15, width: 15, color: Colors.lightBlue[100]),
                     ),
                   ),
                 )
