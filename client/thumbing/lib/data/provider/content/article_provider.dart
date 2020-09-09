@@ -10,8 +10,7 @@ import 'package:thumbing/http/dio_manager.dart';
 
 class ArticleProvider {
   Future<ArticlePageResultEntity> getArticles(int pageNum, int position) async {
-    var m = Article.getArticle();
-    List<ArticlePageResultItem> list = List.generate(10, (index) => m);
+    List<ArticlePageResultItem> list = List.generate(10, (index) => Article.getArticle());
     return Future.delayed(
       const Duration(milliseconds: 300),
       () =>ArticlePageResultEntity(items:list, position: 200),

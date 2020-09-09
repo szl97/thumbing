@@ -170,61 +170,32 @@ class CommentsWidget extends StatelessWidget {
                               isThumb: comment.isThumb)),
                         child: BlocBuilder<ThumbBloc, ThumbState>(
                           builder: (context, state) {
-                            if (state is ThumbInitialFinished) {
-                              return Row(
-                                children: <Widget>[
-                                  Spacer(),
-                                  IconButton(
-                                      icon: Icon(
-                                        Icons.thumb_up,
-                                        color: state.isThumb
-                                            ? Colors.blueAccent
-                                            : Colors.grey,
-                                      ),
-                                      onPressed: () =>
-                                      {
-                                        state.isThumb ? BlocProvider.of<
-                                            ThumbBloc>(context).add(CancelThumb(
-                                            commentId: state.commentId,
-                                            thumbsNum: state.thumbsNum,
-                                            isThumb: state.isThumb))
-                                            : BlocProvider.of<ThumbBloc>(
-                                            context).add(AddThumb(
-                                            commentId: state.commentId,
-                                            thumbsNum: state.thumbsNum,
-                                            isThumb: state.isThumb))
-                                      }),
-                                  Text(state.thumbsNum.toString()),
-                                ],
-                              );
-                            }
-                            else {
-                              return Row(
-                                children: <Widget>[
-                                  Spacer(),
-                                  IconButton(
-                                      icon: Icon(
-                                        Icons.thumb_up,
-                                        color: comment.isThumb ? Colors
-                                            .blueAccent : Colors.grey,
-                                      ),
-                                      onPressed: () =>
-                                      {
-                                        comment.isThumb ? BlocProvider.of<
-                                            ThumbBloc>(context).add(CancelThumb(
-                                            id: comment.commentId,
-                                            thumbsNum: comment.thumbings,
-                                            isThumb: comment.isThumb))
-                                            : BlocProvider.of<ThumbBloc>(
-                                            context).add(AddThumb(id: comment
-                                            .commentId,
-                                            thumbsNum: comment.thumbings,
-                                            isThumb: comment.isThumb))
-                                      }),
-                                  Text(comment.thumbings.toString()),
-                                ],
-                              );
-                            }
+                            return Row(
+                              children: <Widget>[
+                                Spacer(),
+                                IconButton(
+                                    icon: Icon(
+                                      Icons.thumb_up,
+                                      color: state.isThumb
+                                          ? Colors.blueAccent
+                                          : Colors.grey,
+                                    ),
+                                    onPressed: () =>
+                                    {
+                                      state.isThumb ? BlocProvider.of<
+                                          ThumbBloc>(context).add(CancelThumb(
+                                          commentId: state.commentId,
+                                          thumbsNum: state.thumbsNum,
+                                          isThumb: state.isThumb))
+                                          : BlocProvider.of<ThumbBloc>(
+                                          context).add(AddThumb(
+                                          commentId: state.commentId,
+                                          thumbsNum: state.thumbsNum,
+                                          isThumb: state.isThumb))
+                                    }),
+                                Text(state.thumbsNum.toString()),
+                              ],
+                            );
                           },
                         ),
                       ),

@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:thumbing/data/model/content/article.dart';
 import 'package:thumbing/logic/bloc/content/article_bloc.dart';
 import 'package:thumbing/logic/bloc/content/moments_bloc.dart';
 import 'package:thumbing/logic/event/content/moments_event.dart';
@@ -24,7 +23,6 @@ class ThumbBloc extends Bloc<ThumbEvent, ThumbState> {
       }
     }
     if(event is AddThumb){
-      print(momentsBloc == null);
       if(event.commentId == null) {
         if (event.contentType == "moments" && momentsBloc != null) {
           momentsBloc.add(AddMomentsThumb(event.id, event.index));

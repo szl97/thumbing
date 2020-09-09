@@ -65,7 +65,8 @@ class MomentsBloc extends Bloc<MomentsEvent, MomentState> {
     }else if(event is AddMomentsThumb){
       if(currentState is MomentSuccess){
         var state = currentState.copyWith();
-        if(state.moments.length < event.index){
+        var list = currentState.moments.where((element) => element.id == event.id);
+        if(state.moments.length > event.index){
           var moments = state.moments[event.index];
           if(moments.id == event.id){
             if(!moments.isThumb){
@@ -76,6 +77,7 @@ class MomentsBloc extends Bloc<MomentsEvent, MomentState> {
             return;
           }
         }
+        print("add by id");
         state.moments.forEach((element) {
           if(element.id == event.id){
             if(!element.isThumb){
@@ -89,7 +91,7 @@ class MomentsBloc extends Bloc<MomentsEvent, MomentState> {
     }else if(event is CancelMomentsThumb){
       if(currentState is MomentSuccess){
         var state = currentState.copyWith();
-        if(state.moments.length < event.index){
+        if(state.moments.length > event.index){
           var moments = state.moments[event.index];
           if(moments.id == event.id){
             if(moments.isThumb){

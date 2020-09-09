@@ -9,8 +9,7 @@ import 'package:thumbing/http/dio_manager.dart';
 
 class RoastProvider {
   Future<List<RoastPageResultItem>> getRoasts() async {
-    var m = Roast.getRoast();
-    List<RoastPageResultItem> list1 = List.generate(10, (index) => m);
+    List<RoastPageResultItem> list1 = List.generate(10, (index) => Roast.getRoast());
     return Future.delayed(
       const Duration(milliseconds: 300),
       () => list1,

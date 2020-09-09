@@ -190,65 +190,36 @@ class MomentsContentWidget extends StatelessWidget {
                   contentType: "moments",
                   index: index)),
               child: BlocBuilder<ThumbBloc, ThumbState>(
-                builder: (context, state){
-                  if(state is ThumbInitialFinished){
-                    return Row(
-                      children: <Widget>[
-                        Spacer(),
-                        IconButton(
-                            icon: Icon(
-                              Icons.thumb_up,
-                              color: state.isThumb ? Colors.blueAccent : Colors.grey,
-                            ),
-                            onPressed: () {
-                              state.isThumb ? BlocProvider.of<ThumbBloc>(context)
-                                  .add(CancelThumb(
-                                  id: state.id,
-                                  thumbsNum: state.thumbsNum,
-                                  isThumb: state.isThumb,
-                                  contentType: "moments",
-                                  index: index))
-                                  : BlocProvider.of<ThumbBloc>(context)
-                                  .add(AddThumb(
-                                  id: state.id,
-                                  thumbsNum: state.thumbsNum,
-                                  isThumb: state.isThumb,
-                                  contentType: "moments",
-                                  index: index
-                              ));
-                            }),
-                        Text(state.thumbsNum.toString()),
-                      ],
-                    );
-                  }
-                  else{
-                    return Row(
-                      children: <Widget>[
-                        Spacer(),
-                        IconButton(
-                            icon: Icon(
-                              Icons.thumb_up,
-                              color: momentsDetail.isThumb ? Colors.blueAccent : Colors.grey,
-                            ),
-                            onPressed: () => {
-                              momentsDetail.isThumb ? BlocProvider.of<ThumbBloc>(context)
-                                  .add(CancelThumb(
-                                  id: momentsDetail.id,
-                                  thumbsNum: momentsDetail.thumbingNum,
-                                  isThumb: momentsDetail.isThumb,
-                                  contentType: "moments",
-                                  index: index))
-                                  : BlocProvider.of<ThumbBloc>(context)
-                                  .add(AddThumb(id: momentsDetail.id,
-                                  thumbsNum: momentsDetail.thumbingNum,
-                                  isThumb: momentsDetail.isThumb,
-                                  contentType: "moments",
-                                  index: index))
-                            }),
-                        Text(momentsDetail.thumbingNum.toString()),
-                      ],
-                    );
-                  }
+                builder: (context, state) {
+                  return Row(
+                    children: <Widget>[
+                      Spacer(),
+                      IconButton(
+                          icon: Icon(
+                            Icons.thumb_up,
+                            color: state.isThumb ? Colors.blueAccent : Colors
+                                .grey,
+                          ),
+                          onPressed: () {
+                            state.isThumb ? BlocProvider.of<ThumbBloc>(context)
+                                .add(CancelThumb(
+                                id: state.id,
+                                thumbsNum: state.thumbsNum,
+                                isThumb: state.isThumb,
+                                contentType: "moments",
+                                index: index))
+                                : BlocProvider.of<ThumbBloc>(context)
+                                .add(AddThumb(
+                                id: state.id,
+                                thumbsNum: state.thumbsNum,
+                                isThumb: state.isThumb,
+                                contentType: "moments",
+                                index: index
+                            ));
+                          }),
+                      Text(state.thumbsNum.toString()),
+                    ],
+                  );
                 },
               ),
             ),

@@ -12,8 +12,7 @@ import 'package:thumbing/http/path/path.dart';
 
 class MomentsProvider {
   Future<MomentsPageResultEntity> getMoments(int pageNum, int position) async {
-    var m = Moments.getMoments();
-    List<MomentsPageResultItems> list = List.generate(10, (index) => m);
+    List<MomentsPageResultItems> list = List.generate(10, (index) => Moments.getMoments());
     return Future.delayed(
       const Duration(milliseconds: 300),
       () => MomentsPageResultEntity(items: list, position: 200),
