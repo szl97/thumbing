@@ -11,11 +11,18 @@ class MomentsFetched extends MomentsEvent {}
 
 class MomentsRefresh extends MomentsEvent {}
 
-class MomentsInitialSuccess extends MomentsEvent {
-  final List<MomentsPageResultItems> moments;
-  const MomentsInitialSuccess({this.moments}) : super();
+class AddMomentsThumb extends MomentsEvent{
+  const AddMomentsThumb(this.id, this.index) : super();
+  final String id;
+  final int index;
   @override
-  List<Object> get props => [moments];
+  List<Object> get props => [id];
 }
 
-class MomentsInitialFailed extends MomentsEvent {}
+class CancelMomentsThumb extends MomentsEvent{
+  const CancelMomentsThumb(this.id, this.index) : super();
+  final String id;
+  final int index;
+  @override
+  List<Object> get props => [id];
+}

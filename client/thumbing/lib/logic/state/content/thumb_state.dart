@@ -9,11 +9,13 @@ abstract class ThumbState extends Equatable {
 class ThumbInitial extends ThumbState {}
 
 class ThumbInitialFinished extends ThumbState{
-  const ThumbInitialFinished({this.id, this.thumbsNum, this.isThumb});
+  const ThumbInitialFinished({this.id, this.thumbsNum, this.isThumb, this.commentId, this.contentType});
   final String id;
   final int thumbsNum;
   final bool isThumb;
+  final String contentType;
+  final String commentId;
   @override
   // TODO: implement props
-  List<Object> get props => [id, thumbsNum, isThumb];
+  List<Object> get props => [id, thumbsNum, isThumb, commentId, contentType];
 }

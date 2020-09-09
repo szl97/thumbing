@@ -62,34 +62,54 @@ class MomentsBloc extends Bloc<MomentsEvent, MomentState> {
       } catch (_) {
         yield MomentsFailure();
       }
-    } else if (event is MomentsInitialSuccess) {
-      try {
-        if (currentState is MomentsInitial) {
-          yield MomentSuccess(
-              moments: event.moments,
-              hasReachedMax: false,
-              currentPage: 0,
-              isLoading: false);
-          return;
+    }else if(event is AddMomentsThumb){
+      if(currentState is MomentSuccess){
+        var state = currentState.copyWith();
+        if(state.moments.length < event.index){
+          var moments = state.moments[event.index];
+          if(moments.id == event.id){
+            if(!moments.isThumb){
+              moments.isThumb = true;
+              moments.thumbingNum+=1;
+            }
+            yield state;
+            return;
+          }
         }
-        if (currentState is MomentsFailure) {
-          yield MomentSuccess(
-              moments: event.moments,
-              hasReachedMax: false,
-              currentPage: 0,
-              isLoading: false);
-        }
-      } catch (_) {
-        yield MomentsFailure();
+        state.moments.forEach((element) {
+          if(element.id == event.id){
+            if(!element.isThumb){
+              element.isThumb = true;
+              element.thumbingNum+=1;
+            }
+          }
+        });
+        yield state;
       }
-    } else if (event is MomentsInitialFailed) {
-      try {
-        if (currentState is MomentsInitial) {
-          yield MomentsFailure();
-          return;
+    }else if(event is CancelMomentsThumb){
+      if(currentState is MomentSuccess){
+        var state = currentState.copyWith();
+        if(state.moments.length < event.index){
+          var moments = state.moments[event.index];
+          if(moments.id == event.id){
+            if(moments.isThumb){
+              moments.isThumb = false;
+              moments.thumbingNum-=1;
+            }
+            yield state;
+            return;
+          }
         }
-      } catch (_) {
-        yield MomentsFailure();
+        state.moments.forEach((element) {
+          if(element.id == event.id){
+            if(element.isThumb){
+              element.isThumb = false;
+              element.thumbingNum-=1;
+            }
+          }
+        });
+        yield state;
+        yield state;
       }
     }
   }

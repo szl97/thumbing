@@ -11,6 +11,7 @@ class InnerComment extends Equatable {
   * 接受方Id
   */
   final String toId;
+  final bool isThumb;
   /*
   * 评论下的评论
   */
@@ -43,9 +44,10 @@ class InnerComment extends Equatable {
   * 是否是第一层
   */
   final bool isParent;
+  final commentId;
 
   const InnerComment(
-      {this.fromId,
+      {this.fromId,this.isThumb,this.commentId,
       this.fromName,
       this.toId,
       this.toName,
@@ -58,6 +60,7 @@ class InnerComment extends Equatable {
 
   @override
   List<Object> get props => [
+        isThumb,
         fromId,
         fromName,
         toId,
@@ -67,7 +70,8 @@ class InnerComment extends Equatable {
         howLongBefore,
         innerComments,
         isParent,
-        thumbings
+        thumbings,
+    commentId
       ];
 
   static InnerComment getChildComment(int i) {
@@ -79,9 +83,11 @@ class InnerComment extends Equatable {
       fromName = temp;
     }
     return InnerComment(
+      commentId: Uuid().v4(),
       fromName: fromName,
       toName: toName,
       isParent: false,
+      isThumb: false,
       howLongBefore: "一天前",
       thumbings: 25,
       content: "评论测试水水水水水水水水水水水水水水水水水水水水水水水水水水水水水水水水水水水啊啊啊啊",
@@ -92,9 +98,11 @@ class InnerComment extends Equatable {
     String fromName = "猎户座的侠客";
     String toName = "天狼星的侠客";
     return InnerComment(
+      commentId: Uuid().v4(),
       fromName: fromName,
       toName: toName,
       isParent: true,
+      isThumb: false,
       howLongBefore: "一天前",
       thumbings: 25,
       content: "评论测试水水水水水水水水水水水水水水水水水水水水水水水水水水水水水水水水水水水啊啊啊啊",

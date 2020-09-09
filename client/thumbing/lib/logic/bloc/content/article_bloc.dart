@@ -64,35 +64,6 @@ class ArticleBloc extends Bloc<ArticleEvent, ArticleState> {
       } catch (_) {
         yield ArticleFailure();
       }
-    } else if (event is ArticleInitialSuccess) {
-      try {
-        if (currentState is ArticleInitial) {
-          yield ArticleSuccess(
-              articles: event.articles,
-              hasReachedMax: false,
-              currentPage: 0,
-              isLoading: false);
-          return;
-        }
-        if (currentState is ArticleFailure) {
-          yield ArticleSuccess(
-              articles: event.articles,
-              hasReachedMax: false,
-              currentPage: 0,
-              isLoading: false);
-        }
-      } catch (_) {
-        yield ArticleFailure();
-      }
-    } else if (event is ArticleInitialFailed) {
-      try {
-        if (currentState is ArticleInitial) {
-          yield ArticleFailure();
-          return;
-        }
-      } catch (_) {
-        yield ArticleFailure();
-      }
     }
   }
 

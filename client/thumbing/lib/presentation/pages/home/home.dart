@@ -210,7 +210,9 @@ class _HomeState extends State<Home> with AutomaticKeepAliveClientMixin{
                         // This builder is called for each child.
                         // In this example, we just number each list item.
                         return MomentsWidget(
+                          index: index,
                           moments: state.moments[index],
+                          momentsBloc: momentsBloc,
                         );
                       },
 
@@ -282,7 +284,9 @@ class _HomeState extends State<Home> with AutomaticKeepAliveClientMixin{
                         // This builder is called for each child.
                         // In this example, we just number each list item.
                         return ArticleWidget(
+                          index: index,
                           article: state.articles[index],
+                          articleBloc: articleBloc,
                         );
                       },
                       // The childCount of the SliverChildBuilderDelegate
@@ -322,7 +326,9 @@ class _HomeState extends State<Home> with AutomaticKeepAliveClientMixin{
 
 class MomentsWidget extends StatelessWidget {
   final MomentsPageResultItems moments;
-  const MomentsWidget({@required this.moments, Key key}) : super(key: key);
+  final MomentsBloc momentsBloc;
+  final int index;
+  const MomentsWidget({@required this.moments, @required this.momentsBloc, @required this.index, Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -377,7 +383,7 @@ class MomentsWidget extends StatelessWidget {
               Navigator.pushNamed(
                 context,
                 '/content/momentsDetail',
-                arguments: {"moments": moments},
+                arguments: {"moments": moments, "momentsBloc":momentsBloc, "index": index},
               );
             },
           )),
@@ -387,7 +393,9 @@ class MomentsWidget extends StatelessWidget {
 
 class ArticleWidget extends StatelessWidget {
   final ArticlePageResultItem article;
-  const ArticleWidget({@required this.article, Key key}) : super(key: key);
+  final ArticleBloc articleBloc;
+  final int index;
+  const ArticleWidget({@required this.article, this.articleBloc, this.index, Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

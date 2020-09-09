@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:thumbing/data/model/content/moments/output/moments_page_result_entity.dart';
 import 'package:thumbing/logic/bloc/content/comments_bloc.dart';
+import 'package:thumbing/logic/bloc/content/moments_bloc.dart';
 import 'package:thumbing/logic/bloc/content/send_comment_bloc.dart';
 import 'package:thumbing/logic/bloc/content/thumb_bloc.dart';
 import 'package:thumbing/logic/event/content/comments_event.dart';
@@ -15,8 +16,12 @@ import 'comment.dart';
 
 class MomentsDetailPage extends StatelessWidget {
   final MomentsPageResultItems moments;
+  final MomentsBloc momentsBloc;
+  final int index;
   const MomentsDetailPage({
     this.moments,
+    this.index,
+    this.momentsBloc,
     Key key,
   }) : super(key: key);
 
@@ -46,6 +51,8 @@ class MomentsDetailPage extends StatelessWidget {
                                   slivers: <Widget>[
                                     SliverToBoxAdapter(
                                       child: MomentsContentWidget(
+                                        index: index,
+                                        momentsBloc: momentsBloc,
                                         momentsDetail: moments,
                                         focusNode: _focusNode,),
                                     ),
@@ -130,8 +137,10 @@ class MomentsDetailPage extends StatelessWidget {
 
 class MomentsContentWidget extends StatelessWidget {
   final MomentsPageResultItems momentsDetail;
+  final int index;
+  final MomentsBloc momentsBloc;
   final FocusNode focusNode;
-  const MomentsContentWidget({this.momentsDetail, this.focusNode, Key key}) : super(key: key);
+  const MomentsContentWidget({this.momentsDetail, this.momentsBloc, this.index, this.focusNode, Key key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -173,10 +182,13 @@ class MomentsContentWidget extends StatelessWidget {
           ),
           Container(
             margin: EdgeInsets.only(right: ScreenUtils.getInstance().getWidth(20)),
-
-            child:
-            BlocProvider(
-              create: (context) => ThumbBloc()..add(SetThumbDetails(id: momentsDetail.id, thumbsNum: momentsDetail.thumbingNum, isThumb: momentsDetail.isThumb)),
+            child:BlocProvider(
+              create: (context) => ThumbBloc(momentsBloc: momentsBloc)
+                ..add(SetThumbDetails(id: momentsDetail.id,
+                  thumbsNum: momentsDetail.thumbingNum,
+                  isThumb: momentsDetail.isThumb,
+                  contentType: "moments",
+                  index: index)),
               child: BlocBuilder<ThumbBloc, ThumbState>(
                 builder: (context, state){
                   if(state is ThumbInitialFinished){
@@ -188,9 +200,22 @@ class MomentsContentWidget extends StatelessWidget {
                               Icons.thumb_up,
                               color: state.isThumb ? Colors.blueAccent : Colors.grey,
                             ),
-                            onPressed: () => {
-                              state.isThumb ? BlocProvider.of<ThumbBloc>(context).add(CancelThumb(id: state.id, thumbsNum: state.thumbsNum, isThumb: state.isThumb))
-                                  : BlocProvider.of<ThumbBloc>(context).add(AddThumb(id: state.id, thumbsNum: state.thumbsNum, isThumb: state.isThumb))
+                            onPressed: () {
+                              state.isThumb ? BlocProvider.of<ThumbBloc>(context)
+                                  .add(CancelThumb(
+                                  id: state.id,
+                                  thumbsNum: state.thumbsNum,
+                                  isThumb: state.isThumb,
+                                  contentType: "moments",
+                                  index: index))
+                                  : BlocProvider.of<ThumbBloc>(context)
+                                  .add(AddThumb(
+                                  id: state.id,
+                                  thumbsNum: state.thumbsNum,
+                                  isThumb: state.isThumb,
+                                  contentType: "moments",
+                                  index: index
+                              ));
                             }),
                         Text(state.thumbsNum.toString()),
                       ],
@@ -206,8 +231,19 @@ class MomentsContentWidget extends StatelessWidget {
                               color: momentsDetail.isThumb ? Colors.blueAccent : Colors.grey,
                             ),
                             onPressed: () => {
-                              momentsDetail.isThumb ? BlocProvider.of<ThumbBloc>(context).add(CancelThumb(id: momentsDetail.id, thumbsNum: momentsDetail.thumbingNum, isThumb: momentsDetail.isThumb))
-                                  : BlocProvider.of<ThumbBloc>(context).add(AddThumb(id: momentsDetail.id, thumbsNum: momentsDetail.thumbingNum, isThumb: momentsDetail.isThumb))
+                              momentsDetail.isThumb ? BlocProvider.of<ThumbBloc>(context)
+                                  .add(CancelThumb(
+                                  id: momentsDetail.id,
+                                  thumbsNum: momentsDetail.thumbingNum,
+                                  isThumb: momentsDetail.isThumb,
+                                  contentType: "moments",
+                                  index: index))
+                                  : BlocProvider.of<ThumbBloc>(context)
+                                  .add(AddThumb(id: momentsDetail.id,
+                                  thumbsNum: momentsDetail.thumbingNum,
+                                  isThumb: momentsDetail.isThumb,
+                                  contentType: "moments",
+                                  index: index))
                             }),
                         Text(momentsDetail.thumbingNum.toString()),
                       ],
