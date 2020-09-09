@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:thumbing/data/model/content/comment.dart';
 import 'package:thumbing/logic/bloc/content/comments_bloc.dart';
+import 'package:thumbing/logic/bloc/content/send_comment_bloc.dart';
 import 'package:thumbing/logic/event/content/comments_event.dart';
 import 'package:thumbing/logic/state/content/comments_state.dart';
 import 'package:thumbing/presentation/util/screen_utils.dart';
@@ -10,9 +11,10 @@ import 'package:thumbing/presentation/widgets/send_big_widget.dart';
 
 
 class CommentsListWidget extends StatelessWidget{
-  const CommentsListWidget({this.contentId, this.contentType, Key key}) : super(key: key);
+  const CommentsListWidget({this.contentId, this.contentType, this.focusNode, Key key}) : super(key: key);
   final String contentType;
   final String contentId;
+  final FocusNode focusNode;
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
@@ -43,6 +45,7 @@ class CommentsListWidget extends StatelessWidget{
                     child: Text("暂无评论"),
                   )
                       : CommentsWidget(
+                    focusNode: focusNode,
                     comment: state.momentsDetail
                         .innerComments[index - 1],
                     index: index - 1,
@@ -90,11 +93,12 @@ class CommentsWidget extends StatelessWidget {
   final InnerComment comment;
   final int index;
   final ValueChanged<String> onSubmit;
+  final FocusNode focusNode;
 
   const CommentsWidget(
       {@required this.comment,
       @required this.index,
-      @required this.onSubmit,
+      @required this.onSubmit, @required this.focusNode,
       Key key})
       : super(key: key);
 
@@ -214,21 +218,10 @@ class CommentsWidget extends StatelessWidget {
               }),
             ),
             onTap: () {
-              showModalBottomSheet(
-                context: context,
-                builder: (BuildContext context) {
-                  return SendTextBigFieldWidget(
-                    height: ScreenUtils.getInstance().getHeight(300),
-                    autoFocus: true,
-                    margin: const EdgeInsets.only(
-                        left: 15.0, right: 15.0, bottom: 5),
-                    hintText: "请输入评论内容",
-                    onSubmitted: onSubmit,
-                    onTab: () {},
-                  );
-                },
-              );
-            },
+              BlocProvider.of<SendCommentBloc>(context).add(ChangeTarget(commentId:"123456", nickName: comment.fromName));
+              FocusScope.of(context).requestFocus(focusNode);
+              focusNode.requestFocus();
+              },
           ),
         ],
       ),
@@ -291,9 +284,9 @@ class ParentCommentWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.only(top: 10),
+      padding: EdgeInsets.only(top: ScreenUtils.getInstance().getHeight(10)),
       child: Card(
-        elevation: 8,
+        elevation: 1,
         child: Column(
           children: <Widget>[
             Row(

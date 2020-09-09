@@ -59,11 +59,11 @@ class Chat extends StatelessWidget {
                       padding: EdgeInsets.only(top: 5, bottom: 5),
                       child: SendTextFieldWidget(
                         autoFocus: false,
-                        margin: const EdgeInsets.only(
-                            left: 15.0, right: 15.0, bottom: 5),
-                        onSubmitted: (value) {
+                        margin: const EdgeInsets.only(left: 15.0, bottom: 5),
+                        onSubmitted: () {
                           Navigator.pushNamed(context, '/personal/myMoment');
                         },
+                        onChanged: (string)=>{},
                         onTab: () {},
                       ),
                     ),
