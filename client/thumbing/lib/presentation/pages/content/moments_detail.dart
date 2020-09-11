@@ -35,17 +35,20 @@ class MomentsDetailPage extends StatelessWidget {
               backgroundColor: Colors.blueAccent,
               title: Text("帖子"),
             ),
-            body: BlocProvider(
-              create: (context) => SendCommentBloc()..add(InitializeSentState(contentId: moments.id, contentType: "moments")),
+            body: MultiBlocProvider(
+              providers: [
+                BlocProvider<CommentsBloc>(
+                  create: (context) =>CommentsBloc()..add(CommentsFetched(moments.id, "moments")),
+                ),
+                BlocProvider<SendCommentBloc>(
+                  create: (context) => SendCommentBloc(commentsBloc: BlocProvider.of<CommentsBloc>(context))..add(InitializeSentState(contentId: moments.id, contentType: "moments")),
+                ),
+              ],
               child: BlocBuilder<SendCommentBloc, SendCommentState>(
                 builder: (context, state){
                   return Column(
                     children: <Widget>[
-                      Flexible(child: BlocProvider(
-                          create: (context) =>
-                          CommentsBloc()
-                            ..add(CommentsFetched(moments.id, "moments")),
-                          child: BlocBuilder<CommentsBloc, CommentsState>(
+                      Flexible(child: BlocBuilder<CommentsBloc, CommentsState>(
                               builder: (context, state) {
                                 return CustomScrollView(
                                   slivers: <Widget>[
@@ -80,12 +83,8 @@ class MomentsDetailPage extends StatelessWidget {
                                                     : CommentsWidget(
                                                   focusNode: _focusNode,
                                                   comment: state.momentsDetail
-                                                      .innerComments[index - 1],
+                                                        .innerComments[index - 1],
                                                   index: index,
-                                                  onSubmit: (value) {
-                                                    Navigator.pushNamed(
-                                                        context, '/personal/myMoment');
-                                                  },
                                                 );
                                               }, childCount: state.momentsDetail
                                               .innerComments == null
@@ -101,7 +100,7 @@ class MomentsDetailPage extends StatelessWidget {
                                   ],
                                 );
                               })
-                      )),
+                      ),
                       Divider(height: 1.0),
                       state is TextFieldFinished ? Container(
                         padding: EdgeInsets.only(top: 5, bottom: 5),
@@ -140,92 +139,125 @@ class MomentsContentWidget extends StatelessWidget {
   final int index;
   final MomentsBloc momentsBloc;
   final FocusNode focusNode;
-  const MomentsContentWidget({this.momentsDetail, this.momentsBloc, this.index, this.focusNode, Key key}) : super(key: key);
+
+  const MomentsContentWidget(
+      {this.momentsDetail, this.momentsBloc, this.index, this.focusNode, Key key})
+      : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Container(
         child: Card(
-      elevation: 1,
-      child: Column(
-        children: <Widget>[
-          Row(
+          elevation: 1,
+          child: Column(
             children: <Widget>[
+              Row(
+                children: <Widget>[
+                  Container(
+                    padding: EdgeInsets.only(
+                        left: ScreenUtils.getInstance().getWidth(10),
+                        right: ScreenUtils.getInstance().getWidth(10)),
+                    margin: EdgeInsets.only(
+                        top: ScreenUtils.getInstance().getHeight(20),
+                        left: ScreenUtils.getInstance().getWidth(10),
+                        right: ScreenUtils.getInstance().getWidth(10)),
+                    child: Text(
+                      momentsDetail.title,
+                      style: TextStyle(
+                          fontSize: ScreenUtils.getScaleSp(context, 18),
+                          fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                ],
+              ),
+              Row(
+                children: <Widget>[
+                  Container(
+                    padding: EdgeInsets.only(
+                        left: ScreenUtils.getInstance().getWidth(10),
+                        right: ScreenUtils.getInstance().getWidth(10)),
+                    margin: EdgeInsets.only(
+                        top: ScreenUtils.getInstance().getHeight(10),
+                        left: ScreenUtils.getInstance().getWidth(20),
+                        right: ScreenUtils.getInstance().getWidth(20)),
+                    child: Text(FormatTimeUtils.toDescriptionString(
+                        momentsDetail.createTime),
+                        style: TextStyle(
+                            fontSize: ScreenUtils.getScaleSp(context, 12),
+                            color: Colors.grey)),
+                  ),
+                ],
+              ),
               Container(
-                padding: EdgeInsets.only(left: ScreenUtils.getInstance().getWidth(10), right: ScreenUtils.getInstance().getWidth(10)),
-                margin: EdgeInsets.only(top: ScreenUtils.getInstance().getHeight(20), left: ScreenUtils.getInstance().getWidth(10), right: ScreenUtils.getInstance().getWidth(10)),
-                child: Text(
-                  momentsDetail.title,
-                  style: TextStyle(fontSize: ScreenUtils.getScaleSp(context, 18), fontWeight: FontWeight.bold),
+                padding: EdgeInsets.only(
+                    left: ScreenUtils.getInstance().getWidth(10),
+                    right: ScreenUtils.getInstance().getWidth(10),
+                    bottom: ScreenUtils.getInstance().getHeight(20)),
+                margin: EdgeInsets.only(
+                    top: ScreenUtils.getInstance().getHeight(10),
+                    left: ScreenUtils.getInstance().getWidth(20),
+                    right: ScreenUtils.getInstance().getWidth(20)),
+                child: GestureDetector(
+                  child: Text(
+                      momentsDetail.content, style: TextStyle(fontSize: 16.0)),
+                  onTap: () {
+                    BlocProvider.of<SendCommentBloc>(context).add(
+                        ChangeTarget());
+                    FocusScope.of(context).requestFocus(focusNode);
+                    focusNode.requestFocus();
+                  },),
+              ),
+              Container(
+                margin: EdgeInsets.only(
+                    right: ScreenUtils.getInstance().getWidth(20)),
+                child: BlocProvider(
+                  create: (context) =>
+                  ThumbBloc(momentsBloc: momentsBloc)
+                    ..add(SetThumbDetails(id: momentsDetail.id,
+                        thumbsNum: momentsDetail.thumbingNum,
+                        isThumb: momentsDetail.isThumb,
+                        contentType: "moments",
+                        index: index)),
+                  child: BlocBuilder<ThumbBloc, ThumbState>(
+                    builder: (context, state) {
+                      return Row(
+                        children: <Widget>[
+                          Spacer(),
+                          IconButton(
+                              icon: Icon(
+                                Icons.thumb_up,
+                                color: state.isThumb
+                                    ? Colors.blueAccent
+                                    : Colors
+                                    .grey,
+                              ),
+                              onPressed: () {
+                                state.isThumb ? BlocProvider.of<ThumbBloc>(
+                                    context)
+                                    .add(CancelThumb(
+                                    id: state.id,
+                                    thumbsNum: state.thumbsNum,
+                                    isThumb: state.isThumb,
+                                    contentType: "moments",
+                                    index: index))
+                                    : BlocProvider.of<ThumbBloc>(context)
+                                    .add(AddThumb(
+                                    id: state.id,
+                                    thumbsNum: state.thumbsNum,
+                                    isThumb: state.isThumb,
+                                    contentType: "moments",
+                                    index: index
+                                ));
+                              }),
+                          Text(state.thumbsNum.toString()),
+                        ],
+                      );
+                    },
+                  ),
                 ),
               ),
             ],
           ),
-          Row(
-            children: <Widget>[
-              Container(
-                padding: EdgeInsets.only(left: ScreenUtils.getInstance().getWidth(10), right: ScreenUtils.getInstance().getWidth(10)),
-                margin: EdgeInsets.only(top: ScreenUtils.getInstance().getHeight(10), left: ScreenUtils.getInstance().getWidth(20), right: ScreenUtils.getInstance().getWidth(20)),
-                child: Text(FormatTimeUtils.toDescriptionString(momentsDetail.createTime),
-                    style: TextStyle(fontSize: ScreenUtils.getScaleSp(context, 12), color: Colors.grey)),
-              ),
-            ],
-          ),
-          Container(
-            padding: EdgeInsets.only(left: ScreenUtils.getInstance().getWidth(10), right: ScreenUtils.getInstance().getWidth(10), bottom: ScreenUtils.getInstance().getHeight(20)),
-            margin: EdgeInsets.only(top: ScreenUtils.getInstance().getHeight(10), left: ScreenUtils.getInstance().getWidth(20), right: ScreenUtils.getInstance().getWidth(20)),
-            child:GestureDetector(
-              child: Text(momentsDetail.content, style: TextStyle(fontSize: 16.0)),
-              onTap: (){
-                BlocProvider.of<SendCommentBloc>(context).add(ChangeTarget());
-                FocusScope.of(context).requestFocus(focusNode);
-                focusNode.requestFocus();},),
-          ),
-          Container(
-            margin: EdgeInsets.only(right: ScreenUtils.getInstance().getWidth(20)),
-            child:BlocProvider(
-              create: (context) => ThumbBloc(momentsBloc: momentsBloc)
-                ..add(SetThumbDetails(id: momentsDetail.id,
-                  thumbsNum: momentsDetail.thumbingNum,
-                  isThumb: momentsDetail.isThumb,
-                  contentType: "moments",
-                  index: index)),
-              child: BlocBuilder<ThumbBloc, ThumbState>(
-                builder: (context, state) {
-                  return Row(
-                    children: <Widget>[
-                      Spacer(),
-                      IconButton(
-                          icon: Icon(
-                            Icons.thumb_up,
-                            color: state.isThumb ? Colors.blueAccent : Colors
-                                .grey,
-                          ),
-                          onPressed: () {
-                            state.isThumb ? BlocProvider.of<ThumbBloc>(context)
-                                .add(CancelThumb(
-                                id: state.id,
-                                thumbsNum: state.thumbsNum,
-                                isThumb: state.isThumb,
-                                contentType: "moments",
-                                index: index))
-                                : BlocProvider.of<ThumbBloc>(context)
-                                .add(AddThumb(
-                                id: state.id,
-                                thumbsNum: state.thumbsNum,
-                                isThumb: state.isThumb,
-                                contentType: "moments",
-                                index: index
-                            ));
-                          }),
-                      Text(state.thumbsNum.toString()),
-                    ],
-                  );
-                },
-              ),
-            ),
-          ),
-        ],
-      ),
-    ));
+        ));
   }
 }

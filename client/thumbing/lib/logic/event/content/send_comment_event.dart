@@ -7,11 +7,13 @@ abstract class SendCommentEvent extends Equatable {
 }
 
 class InitializeSentState extends SendCommentEvent {
-  const InitializeSentState({this.contentId, this.contentType}) : super();
+  const InitializeSentState({this.contentId, this.contentType, this.commentId, this.nickName}) : super();
   final String contentId;
   final String contentType;
+  final String commentId;
+  final String nickName;
   @override
-  List<Object> get props => [contentId, contentType];
+  List<Object> get props => [contentId, contentType, commentId, nickName];
 }
 
 class ChangeTarget extends SendCommentEvent {

@@ -3,7 +3,6 @@ import 'package:thumbing/data/repository/content/moments_rep.dart';
 import 'package:thumbing/logic/event/content/comments_event.dart';
 import 'package:thumbing/logic/state/content/comments_state.dart';
 
-
 class CommentsBloc extends Bloc<CommentsEvent, CommentsState> {
   MomentsRepository momentsRepository;
 
@@ -39,5 +38,6 @@ class CommentsBloc extends Bloc<CommentsEvent, CommentsState> {
         yield CommentsFailure();
       }
     }
+
   }
 }

@@ -25,13 +25,15 @@ final routes = {
         index: arguments["index"],
         comment: arguments["comment"],
         comments: arguments["comments"],
-        onSubmit: arguments["onSubmit"],
+        thumbBloc: arguments["thumbBloc"],
+        commentBloc: arguments["commentBloc"],
       ),
   '/chat': (context, {arguments}) => Chat(
       session: arguments["chatSession"],
       chatSessionBloc: arguments["chatSessionBloc"]),
 };
 
+// ignore: top_level_function_literal_block
 var onGenerateRoute = (RouteSettings settings) {
   // 统一处理
   final String name = settings.name;
@@ -47,5 +49,7 @@ var onGenerateRoute = (RouteSettings settings) {
           MaterialPageRoute(builder: (context) => pageContentBuilder(context));
       return route;
     }
+  }else {
+    return null;
   }
 };

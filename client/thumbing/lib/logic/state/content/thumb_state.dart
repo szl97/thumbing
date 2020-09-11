@@ -12,7 +12,9 @@ abstract class ThumbState extends Equatable {
   List<Object> get props => [id, thumbsNum, isThumb, commentId, contentType];
 }
 
-class ThumbInitial extends ThumbState {}
+class ThumbInitial extends ThumbState {
+  const ThumbInitial() : super(isThumb:false);
+}
 
 class ThumbInitialFinished extends ThumbState{
   const ThumbInitialFinished({id, thumbsNum, isThumb, commentId, contentType}) : super(id: id, thumbsNum: thumbsNum, isThumb: isThumb, commentId: commentId, contentType: contentType);

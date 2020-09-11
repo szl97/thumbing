@@ -2,12 +2,15 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:thumbing/logic/bloc/content/comments_bloc.dart';
+import 'package:thumbing/logic/event/content/comments_event.dart';
 
 part '../../event/content/send_comment_event.dart';
 part '../../state/content/send_comment_state.dart';
 
 class SendCommentBloc extends Bloc<SendCommentEvent, SendCommentState> {
-  SendCommentBloc() : super(SendCommentInitial());
+  final CommentsBloc commentsBloc;
+  SendCommentBloc({this.commentsBloc}) : super(SendCommentInitial());
 
   @override
   Stream<SendCommentState> mapEventToState(SendCommentEvent event) async* {
@@ -17,7 +20,9 @@ class SendCommentBloc extends Bloc<SendCommentEvent, SendCommentState> {
       if(currentState is SendCommentInitial){
         yield TextFieldFinished(
           contentType: event.contentType,
-          commentId: event.contentId,
+          contentId: event.contentId,
+          commentId: event.commentId,
+          nickName: event.nickName,
         );
         return;
       }
@@ -29,18 +34,19 @@ class SendCommentBloc extends Bloc<SendCommentEvent, SendCommentState> {
       }
     }
     if(event is ChangeText){
-      print(event.text);
       if(currentState is TextFieldFinished){
         yield currentState.copyWith(text: event.text);
         return;
       }
     }
     if(event is SubmitComment){
-      print("object");
-      if(state is TextFieldFinished) {
+      if(currentState is TextFieldFinished) {
+        commentsBloc.add(CommentsRefresh(event.contentId, event.contentType));
         yield TextFieldFinished(
-          contentType: "event.contentType",
-          commentId: "event.contentId",
+          contentType: event.contentType,
+          contentId: event.contentId,
+          commentId: event.commentId,
+          nickName: currentState.nickName,
         );
         return;
       }

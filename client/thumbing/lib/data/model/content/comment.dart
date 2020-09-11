@@ -7,6 +7,8 @@ class InnerComment extends Equatable {
   * 发送方Id
   */
   final String fromId;
+  final String contentId;
+  final String contentType;
   /*
   * 接受方Id
   */
@@ -48,7 +50,7 @@ class InnerComment extends Equatable {
 
   const InnerComment(
       {this.fromId,this.isThumb,this.commentId,
-      this.fromName,
+      this.fromName,this.contentType,this.contentId,
       this.toId,
       this.toName,
       this.content,
@@ -71,7 +73,7 @@ class InnerComment extends Equatable {
         innerComments,
         isParent,
         thumbings,
-    commentId
+    commentId,contentType,contentId
       ];
 
   static InnerComment getChildComment(int i) {

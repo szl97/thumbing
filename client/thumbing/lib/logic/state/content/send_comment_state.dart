@@ -20,7 +20,7 @@ class TextFieldFinished extends SendCommentState{
         String contentType,
         String commentId,
         String nickName,
-        String text}
+        String text,}
       ){
     return TextFieldFinished(
       contentId: contentId??this.contentId,
@@ -36,7 +36,7 @@ class TextFieldFinished extends SendCommentState{
     String contentType,
     String commentId,
     String nickName,
-    String text}
+    String text,}
       ){
     return TextFieldFinished(
       contentId: contentId??this.contentId,
