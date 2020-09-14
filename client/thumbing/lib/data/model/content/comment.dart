@@ -13,7 +13,7 @@ class InnerComment extends Equatable {
   * 接受方Id
   */
   final String toId;
-  final bool isThumb;
+  bool isThumb;
   /*
   * 评论下的评论
   */
@@ -33,7 +33,7 @@ class InnerComment extends Equatable {
   /*
   * 点赞用户Id
   */
-  final int thumbings;
+  int thumbings;
   /*
   * 时间
   */
@@ -48,7 +48,7 @@ class InnerComment extends Equatable {
   final bool isParent;
   final commentId;
 
-  const InnerComment(
+  InnerComment(
       {this.fromId,this.isThumb,this.commentId,
       this.fromName,this.contentType,this.contentId,
       this.toId,

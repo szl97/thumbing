@@ -242,11 +242,15 @@ class CommentsWidget extends StatelessWidget {
                                           state.isThumb ? BlocProvider.of<
                                               ThumbBloc>(context).add(
                                               CancelThumb(
+                                                  id: state.id,
+                                                  contentType: state.contentType,
                                                   commentId: state.commentId,
                                                   thumbsNum: state.thumbsNum,
                                                   isThumb: state.isThumb))
                                               : BlocProvider.of<ThumbBloc>(
                                               context).add(AddThumb(
+                                              id: state.id,
+                                              contentType: state.contentType,
                                               commentId: state.commentId,
                                               thumbsNum: state.thumbsNum,
                                               isThumb: state.isThumb))
@@ -337,6 +341,8 @@ class ChildCommentListWidget extends StatelessWidget {
                           );
                         } else {
                           return ChildCommentWidget(
+                            index: index - 1,
+                            parentId: comment.commentId,
                             comment: comments[index - 1],
                             focusNode: _focusNode,
                             commentsBloc: commentBloc,
@@ -438,7 +444,9 @@ class ParentCommentWidget extends StatelessWidget {
               margin: EdgeInsets.only(right: 20),
               child: BlocProvider(
                 create: (context) => ThumbBloc(thumbBloc: thumbBloc)..add(SetThumbDetails
-                  (commentId: thumbBloc.state.commentId,
+                  (id: comment.contentId,
+                  contentType: comment.contentType,
+                  commentId: thumbBloc.state.commentId,
                   thumbsNum: thumbBloc.state.thumbsNum,
                   isThumb: thumbBloc.state.isThumb,
                 )),
@@ -458,11 +466,15 @@ class ParentCommentWidget extends StatelessWidget {
                               state.isThumb ? BlocProvider.of<
                                   ThumbBloc>(context).add(
                                   CancelThumb(
+                                      id: state.id,
+                                      contentType: state.contentType,
                                       commentId: state.commentId,
                                       thumbsNum: state.thumbsNum,
                                       isThumb: state.isThumb))
                                   : BlocProvider.of<ThumbBloc>(
                                   context).add(AddThumb(
+                                  id: state.id,
+                                  contentType: state.contentType,
                                   commentId: state.commentId,
                                   thumbsNum: state.thumbsNum,
                                   isThumb: state.isThumb))
@@ -484,11 +496,13 @@ class ParentCommentWidget extends StatelessWidget {
 }
 
 class ChildCommentWidget extends StatelessWidget {
+  final int index;
+  final String parentId;
   final InnerComment comment;
   final FocusNode focusNode;
   final CommentsBloc commentsBloc;
   const ChildCommentWidget(
-      {@required this.comment, this.focusNode, this.commentsBloc, Key key})
+      {@required this.comment, this.focusNode, this.commentsBloc, this.index,this.parentId, Key key})
       : super(key: key);
 
   @override
@@ -536,20 +550,55 @@ class ChildCommentWidget extends StatelessWidget {
           ),
           Container(
             margin: EdgeInsets.only(right: 20),
-            child: Row(
-              children: <Widget>[
-                Spacer(),
-                IconButton(
-                    icon: Icon(
-                      Icons.thumb_up,
-                      color: Colors.grey,
-                    ),
-                    onPressed: () => {}),
-                Text(
-                  comment.thumbings.toString(),
+            child: BlocProvider(
+                  create: (context) => ThumbBloc(commentsBloc: commentsBloc)..add(
+                    SetThumbDetails(
+                      id: comment.contentId,
+                      contentType: comment.contentType,
+                      commentId: comment.commentId,
+                      thumbsNum: comment.thumbings,
+                      isThumb: comment.isThumb,
+                    )
+                  ),
+                  child: BlocBuilder<ThumbBloc, ThumbState>(
+                    builder: (context, state) {
+                      return Row(
+                        children: <Widget>[
+                          Spacer(),
+                          IconButton(
+                              icon: Icon(
+                                Icons.thumb_up,
+                                color: state.isThumb ? Colors
+                                    .blueAccent : Colors.grey,
+                              ),
+                              onPressed: () =>
+                              {
+                                state.isThumb ? BlocProvider.of<
+                                    ThumbBloc>(context).add(
+                                    CancelThumb(
+                                        id: state.id,
+                                        contentType: state.contentType,
+                                        commentId: state.commentId,
+                                        index: index,
+                                        thumbsNum: state.thumbsNum,
+                                        isThumb: state.isThumb))
+                                    : BlocProvider.of<ThumbBloc>(
+                                    context).add(AddThumb(
+                                    id: state.id,
+                                    contentType: state.contentType,
+                                    commentId: state.commentId,
+                                    index: index,
+                                    thumbsNum: state.thumbsNum,
+                                    isThumb: state.isThumb))
+                              }),
+                          Text(
+                            state.thumbsNum.toString(),
+                          ),
+                        ],
+                      );
+                    },
+                  ),
                 ),
-              ],
-            ),
           ),
           Divider(height: 1.0),
         ],

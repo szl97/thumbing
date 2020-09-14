@@ -216,8 +216,7 @@ class MomentsContentWidget extends StatelessWidget {
                     ..add(SetThumbDetails(id: momentsDetail.id,
                         thumbsNum: momentsDetail.thumbingNum,
                         isThumb: momentsDetail.isThumb,
-                        contentType: "moments",
-                        index: index)),
+                        contentType: "moments")),
                   child: BlocBuilder<ThumbBloc, ThumbState>(
                     builder: (context, state) {
                       return Row(

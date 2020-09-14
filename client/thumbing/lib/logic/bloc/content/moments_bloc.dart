@@ -77,7 +77,6 @@ class MomentsBloc extends Bloc<MomentsEvent, MomentState> {
             return;
           }
         }
-        print("add by id");
         state.moments.forEach((element) {
           if(element.id == event.id){
             if(!element.isThumb){
@@ -110,7 +109,6 @@ class MomentsBloc extends Bloc<MomentsEvent, MomentState> {
             }
           }
         });
-        yield state;
         yield state;
       }
     }

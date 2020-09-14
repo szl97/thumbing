@@ -5,6 +5,7 @@ import 'package:equatable/equatable.dart';
 import 'package:thumbing/logic/bloc/content/article_bloc.dart';
 import 'package:thumbing/logic/bloc/content/comments_bloc.dart';
 import 'package:thumbing/logic/bloc/content/moments_bloc.dart';
+import 'package:thumbing/logic/event/content/comments_event.dart';
 import 'package:thumbing/logic/event/content/moments_event.dart';
 
 part '../../event/content/thumb_event.dart';
@@ -32,7 +33,9 @@ class ThumbBloc extends Bloc<ThumbEvent, ThumbState> {
         }
       }
       else if(event.index != null){
-
+        if(commentsBloc != null){
+          commentsBloc.add(AddCommentThumb(event.id, event.contentType, event.commentId, event.index, event.parentId));
+        }
       }
       else if(thumbBloc != null){
         thumbBloc.add(event);
@@ -44,7 +47,12 @@ class ThumbBloc extends Bloc<ThumbEvent, ThumbState> {
         if (event.contentType == "moments" && momentsBloc != null) {
           momentsBloc.add(CancelMomentsThumb(event.id, event.index));
         }
-      }else if(thumbBloc != null){
+      }else if(event.index != null){
+        if(commentsBloc != null){
+          commentsBloc.add(CancelCommentThumb(event.id, event.contentType, event.commentId, event.index, event.parentId));
+        }
+      }
+      else if(thumbBloc != null){
         thumbBloc.add(event);
       }
       yield ThumbInitialFinished(id: event.id, thumbsNum: event.thumbsNum <= 0 ? 0 : event.thumbsNum - 1, isThumb: false, commentId: event.commentId, contentType: event.contentType);
