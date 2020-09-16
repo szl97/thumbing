@@ -1,9 +1,11 @@
 package com.thumbing.uploadfile.controller;
 
 import com.aliyun.oss.model.OSSObjectSummary;
+import com.qiniu.storage.model.DefaultPutRet;
 import com.thumbing.shared.annotation.Authorize;
 import com.thumbing.shared.auth.permission.PermissionConstants;
 import com.thumbing.shared.controller.ThumbingBaseController;
+import com.thumbing.uploadfile.service.impl.QiNiuService;
 import com.thumbing.uploadfile.dto.FileUploadResult;
 import com.thumbing.uploadfile.service.IFileUploadService;
 import io.swagger.annotations.Api;
@@ -25,15 +27,17 @@ import java.util.List;
  */
 @Api(tags = "上传文件")
 @RestController
-@RequestMapping(value = "/oss")
+@RequestMapping
 public class FileUploadController extends ThumbingBaseController {
     @Autowired
     private IFileUploadService fileUploadService;
+    @Autowired
+    private QiNiuService qiNiuService;
 
     @ApiOperation("文件上传到oss")
     @Authorize(PermissionConstants.ACCESS)
     @RequestMapping(value = "/upload", method = RequestMethod.POST)
-    public FileUploadResult upload(@RequestParam("file") MultipartFile uploadFile) throws Exception {
+    public FileUploadResult upload(@RequestParam("file") MultipartFile uploadFile) {
         return this.fileUploadService.upload(uploadFile);
     }
 
@@ -60,5 +64,19 @@ public class FileUploadController extends ThumbingBaseController {
         response.setHeader("Content-Disposition",
                 "attachment;filename=" + new String(objectName.getBytes(), "ISO-8859-1"));
         this.fileUploadService.exportOssFile(response.getOutputStream(),objectName);
+    }
+
+    @ApiOperation("获取token")
+    @Authorize(PermissionConstants.ACCESS)
+    @RequestMapping(value = "/getToken", method = RequestMethod.GET)
+    public String uploadQi() {
+        return qiNiuService.createToken();
+    }
+
+    @ApiOperation("文件上传到七牛云")
+    @Authorize(PermissionConstants.ACCESS)
+    @RequestMapping(value = "/uploadQi", method = RequestMethod.POST)
+    public DefaultPutRet uploadQi(@RequestParam("file") MultipartFile uploadFile, String token) throws IOException {
+        return qiNiuService.upload(token, uploadFile);
     }
 }

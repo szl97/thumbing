@@ -32,6 +32,7 @@
         <curator.version>4.1.0</curator.version>
         <oss.version>2.8.3</oss.version>
         <joda-time.version>2.9.9</joda-time.version>
+        <qiniu.version>[7.3.0, 7.3.99]</qiniu.version>
     </properties>
 
     <dependencies>

@@ -26,6 +26,11 @@ aliyun:
   bucketName: loserclub
   urlPrefix: loserclub.oss-cn-shenzhen.aliyuncs.com
 
+qiniuyun:
+  accessKey: 73ax0xPetPjRw23fGasQipS5Gaffv1jTyBW3-LEN
+  secretKey: _ZmBpRJp3f4apaebpWWK15up0t709A2lPPaqRVPn
+  bucket: thumb-test111
+  pipeline: default.sys
 use:
   redis: true
   security: true
