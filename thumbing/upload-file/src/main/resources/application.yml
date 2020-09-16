@@ -20,17 +20,17 @@ eureka:
 
 
 aliyun:
-  endpoint: oss-cn-shenzhen.aliyuncs.com
-  accessKeyId: LTAI4G9kPmWqneRHiLPBbE8N
-  accessKeySecret: J9eH5pJWvz6pdzLRy2rW4oucDzTTHb
-  bucketName: loserclub
-  urlPrefix: loserclub.oss-cn-shenzhen.aliyuncs.com
+  endpoint:
+  accessKeyId:
+  accessKeySecret:
+  bucketName:
+  urlPrefix:
 
 qiniuyun:
-  accessKey: 73ax0xPetPjRw23fGasQipS5Gaffv1jTyBW3-LEN
-  secretKey: _ZmBpRJp3f4apaebpWWK15up0t709A2lPPaqRVPn
-  bucket: thumb-test111
-  pipeline: default.sys
+  accessKey:
+  secretKey:
+  bucket:
+  pipeline:
 use:
   redis: true
   security: true

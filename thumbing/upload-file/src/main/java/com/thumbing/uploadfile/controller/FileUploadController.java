@@ -3,6 +3,7 @@ package com.thumbing.uploadfile.controller;
 import com.aliyun.oss.model.OSSObjectSummary;
 import com.qiniu.storage.model.DefaultPutRet;
 import com.thumbing.shared.annotation.Authorize;
+import com.thumbing.shared.annotation.EnableResponseAdvice;
 import com.thumbing.shared.auth.permission.PermissionConstants;
 import com.thumbing.shared.controller.ThumbingBaseController;
 import com.thumbing.uploadfile.service.impl.QiNiuService;
@@ -25,6 +26,7 @@ import java.util.List;
  * @Author: Stan Sai
  * @Date: 2020/7/11 14:27
  */
+@EnableResponseAdvice
 @Api(tags = "上传文件")
 @RestController
 @RequestMapping
