@@ -46,15 +46,14 @@ public class FileUploadController extends ThumbingBaseController {
     @ApiOperation("根据文件名删除oss上的文件")
     @Authorize(PermissionConstants.ACCESS)
     @RequestMapping(value = "/delete", method = RequestMethod.DELETE)
-    public FileUploadResult delete(@RequestParam("fileName") String objectName)
-            throws Exception {
+    public FileUploadResult delete(@RequestParam("fileName") String objectName) {
         return this.fileUploadService.delete(objectName);
     }
 
     @ApiOperation("查询oss上的所有文件")
     @Authorize(PermissionConstants.ACCESS)
     @RequestMapping(value = "/list", method = RequestMethod.GET)
-    public List<OSSObjectSummary> list() throws Exception {
+    public List<OSSObjectSummary> list() {
         return this.fileUploadService.list();
     }
 
