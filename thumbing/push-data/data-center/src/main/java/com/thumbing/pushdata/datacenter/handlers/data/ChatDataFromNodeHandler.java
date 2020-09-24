@@ -1,10 +1,12 @@
 package com.thumbing.pushdata.datacenter.handlers.data;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.thumbing.pushdata.common.cache.DeviceCache;
 import com.thumbing.pushdata.common.channel.IChannelManager;
 import com.thumbing.pushdata.common.message.ChatData;
 import com.thumbing.pushdata.common.message.DefinedMessage;
-import com.thumbing.pushdata.datacenter.device.DeviceManager;
+import com.thumbing.pushdata.datacenter.monitors.CenterZkMonitor;
+import com.thumbing.pushdata.datacenter.utils.NodeServerUtils;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import lombok.Data;
@@ -13,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author Stan Sai
@@ -27,7 +30,10 @@ public class ChatDataFromNodeHandler implements IDeviceDataHandler<ChatData> {
     private IChannelManager channelManager;
 
     @Autowired
-    private DeviceManager deviceManager;
+    private CenterZkMonitor zkMonitor;
+
+    @Autowired
+    private DeviceCache cache;
 
     @Override
     public boolean support(DefinedMessage message) {
@@ -36,7 +42,8 @@ public class ChatDataFromNodeHandler implements IDeviceDataHandler<ChatData> {
 
     @Override
     public void call(ChannelHandlerContext ctx, ChatData message) throws JsonProcessingException {
-        String name = deviceManager.getNodeServer(message.getFromUser());
+        Set<String> nodes = zkMonitor.getAllNodes();
+        String name = NodeServerUtils.getNodeServer(cache, nodes, message.getToUser());
         Channel channel = channelManager.getChannel(name);
         if(!name.equals(message.getName()) && channel != null) {
             channel.writeAndFlush(message.encode());

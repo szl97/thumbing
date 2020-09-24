@@ -8,7 +8,6 @@ import com.thumbing.pushdata.common.register.BaseRegister;
 import com.thumbing.pushdata.datacenter.config.DataCenterConfig;
 import com.thumbing.pushdata.datacenter.config.ZookeeperConfig;
 import com.thumbing.pushdata.datacenter.server.DataFlowBootStrap;
-import com.thumbing.pushdata.datacenter.server.ServerConnectMonitorBootStrap;
 import com.thumbing.shared.utils.ip.IpUtils;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
@@ -34,14 +33,10 @@ public class RegisterDataCenter extends BaseRegister<ZookeeperConfig, DataCenter
     private ObjectMapper objectMapper;
 
     @Autowired
-    private ServerConnectMonitorBootStrap serverConnectMonitorBootStrap;
-
-    @Autowired
     private DataFlowBootStrap dataFlowBootStrap;
 
     @PostConstruct
     public void init() throws InterruptedException {
-        serverConnectMonitorBootStrap.init();
         dataFlowBootStrap.init();
         super.init();
     }
@@ -62,7 +57,6 @@ public class RegisterDataCenter extends BaseRegister<ZookeeperConfig, DataCenter
                 .ip(IpUtils.getIp())
                 .name(getAppConfig().getName())
                 .port(getAppConfig().getPort())
-                .messagePort(getAppConfig().getMessagePort())
                 .build();
         return objectMapper.writeValueAsString(info);
     }

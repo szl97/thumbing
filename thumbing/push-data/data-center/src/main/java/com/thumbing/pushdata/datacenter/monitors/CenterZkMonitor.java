@@ -8,7 +8,6 @@ import com.thumbing.pushdata.common.monitors.BaseMonitor;
 import com.thumbing.pushdata.common.zookeeper.ZkUtils;
 import com.thumbing.pushdata.common.zookeeper.listener.ZkStateListener;
 import com.thumbing.pushdata.datacenter.config.ZookeeperConfig;
-import com.thumbing.pushdata.datacenter.device.DeviceManager;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.curator.framework.CuratorFramework;
@@ -22,6 +21,7 @@ import javax.annotation.PreDestroy;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -42,9 +42,6 @@ public class CenterZkMonitor extends BaseMonitor<ZookeeperConfig, NodeServerInfo
     private ConcurrentHashMap<String, NodeServerInfo> pool = new ConcurrentHashMap<>(16);
 
     private ZkUtils zkUtils = new ZkUtils();
-
-    @Autowired
-    private DeviceManager deviceManager;
 
     @Autowired
     private ZookeeperConfig zookeeperConfig;
@@ -106,7 +103,6 @@ public class CenterZkMonitor extends BaseMonitor<ZookeeperConfig, NodeServerInfo
     @Override
     protected void initDiscovery() {
         pool.clear();
-        deviceManager.clear();
         Map<String, String> datas = zkUtils.readTargetChildsData(ZkGroupEnum.NODE_SERVER.getValue());
         if (datas != null) {
             datas.forEach((k, v) -> {
@@ -173,8 +169,6 @@ public class CenterZkMonitor extends BaseMonitor<ZookeeperConfig, NodeServerInfo
             //检测Node是否还存在，存在的话移除该Node
             pool.remove(key);
         }
-        deviceManager.removeNodeServer(data.getName());
-
     }
 
     @Override
@@ -185,7 +179,6 @@ public class CenterZkMonitor extends BaseMonitor<ZookeeperConfig, NodeServerInfo
         if (!pool.containsKey(key)) {
             //开启node,加入到管理器
             pool.put(key, data);
-            deviceManager.addNodeServer(data.getName());
         } else {
             log.error("node already! {},{}", key, data);
         }
@@ -208,4 +201,7 @@ public class CenterZkMonitor extends BaseMonitor<ZookeeperConfig, NodeServerInfo
         return info.getIp() + ":" + info.getDevicePort();
     }
 
+    public Set<String> getAllNodes(){
+        return pool.keySet();
+    }
 }

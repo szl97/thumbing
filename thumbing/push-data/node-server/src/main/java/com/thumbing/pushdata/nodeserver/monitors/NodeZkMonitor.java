@@ -8,7 +8,6 @@ import com.thumbing.pushdata.common.monitors.BaseMonitor;
 import com.thumbing.pushdata.common.zookeeper.ZkUtils;
 import com.thumbing.pushdata.common.zookeeper.listener.ZkStateListener;
 import com.thumbing.pushdata.nodeserver.client.DataFlowToCenterBootStrap;
-import com.thumbing.pushdata.nodeserver.client.SyncConnectClientBootStrap;
 import com.thumbing.pushdata.nodeserver.config.ZookeeperConfig;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
@@ -43,9 +42,6 @@ public class NodeZkMonitor extends BaseMonitor<ZookeeperConfig, DataCenterInfo> 
     private ConcurrentHashMap<String, DataCenterInfo> pool = new ConcurrentHashMap<>(16);
 
     private ZkUtils zkUtils = new ZkUtils();
-
-    @Autowired
-    private SyncConnectClientBootStrap syncConnectClientBootStrap;
 
     @Autowired
     private DataFlowToCenterBootStrap dataFlowToCenterBootStrap;
@@ -116,7 +112,6 @@ public class NodeZkMonitor extends BaseMonitor<ZookeeperConfig, DataCenterInfo> 
                 try {
                     DataCenterInfo data = objectMapper.readValue(v, DataCenterInfo.class);
                     pool.put(k, data);
-                    syncConnectClientBootStrap.Connect(data, 5, 1);
                     dataFlowToCenterBootStrap.Connect(data, 5, 1);
                 } catch (JsonProcessingException e) {
                     e.printStackTrace();
@@ -174,7 +169,6 @@ public class NodeZkMonitor extends BaseMonitor<ZookeeperConfig, DataCenterInfo> 
     protected void removeEvent(PathChildrenCacheEvent event) throws IOException {
         DataCenterInfo data = toInfo(event);
         String key = data.getName();
-        syncConnectClientBootStrap.DisConnect(data);
         dataFlowToCenterBootStrap.DisConnect(data);
         log.info("center event remove! key:{}, data:{}", key, data);
         if (pool.containsKey(key)) {
@@ -192,7 +186,6 @@ public class NodeZkMonitor extends BaseMonitor<ZookeeperConfig, DataCenterInfo> 
         if (!pool.containsKey(key)) {
             //开启node,加入到管理器
             pool.put(key, data);
-            syncConnectClientBootStrap.Connect(data, 5, 1);
             dataFlowToCenterBootStrap.Connect(data, 5, 1);
         } else {
             log.error("center already! {},{}", key, data);

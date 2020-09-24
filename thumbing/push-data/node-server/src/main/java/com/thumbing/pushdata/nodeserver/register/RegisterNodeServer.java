@@ -51,7 +51,6 @@ public class RegisterNodeServer extends BaseRegister<ZookeeperConfig, NodeServer
                 .ip(IpUtils.getIp())
                 .name(getAppConfig().getName())
                 .port(getAppConfig().getPort())
-                .messagePort(getAppConfig().getMessagePort())
                 .devicePort(getAppConfig().getDevicePort())
                 .build();
         return objectMapper.writeValueAsString(info);

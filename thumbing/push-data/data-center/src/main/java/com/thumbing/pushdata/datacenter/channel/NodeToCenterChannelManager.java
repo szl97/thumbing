@@ -28,7 +28,7 @@ public class NodeToCenterChannelManager implements IChannelManager<String> {
     private ConcurrentSkipListMap<String, Channel> channelPool = new ConcurrentSkipListMap<>();
 
     @PreDestroy
-    public void destory() {
+    public void destroy() {
         channelPool.clear();
     }
 
@@ -68,6 +68,7 @@ public class NodeToCenterChannelManager implements IChannelManager<String> {
 
     @Override
     public Channel getChannel(String name) {
+        if(name == null) return null;
         return channelPool.get(name);
     }
 

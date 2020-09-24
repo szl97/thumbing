@@ -41,7 +41,7 @@ public class DataFlowToCenterBootStrap extends BaseClientBootStrap<DataFlowChann
         channel.writeAndFlush(
                 Confirm.builder()
                         .name(getAppConfig().getName())
-                        .nodeIpWithPort(ip + ":" + getAppConfig().getMessagePort())
+                        .nodeIpWithPort(ip + ":" + getAppConfig().getPort())
                         .build().encode()
         );
         deviceServerBootStrap.init();

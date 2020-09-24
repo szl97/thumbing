@@ -276,4 +276,10 @@ public class CacheKeyConstants {
      * 存储userId(Long)
      */
     public static final String ROAST_THUMBING_USER_SET = "ROAST:THUMBING:USER_Id:SET:";
+    /**
+     * 客户端连接集合
+     * set
+     * 存储userId(Long)
+     */
+    public static final String DEVICE_CONNECTION_SET = "DEVICE:CONNECTION:SET:";
 }

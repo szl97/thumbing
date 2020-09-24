@@ -19,11 +19,11 @@ public class DataFlowBootStrap extends BaseServerBootStrap<NodeToCenterInBoundDa
 
     @Override
     protected int getPort() {
-        return getAppConfig().getMessagePort();
+        return getAppConfig().getPort();
     }
 
     @Override
     protected void success() {
-        log.info("Data center DataFlowBootStrap successful! listening port: {}", getAppConfig().getMessagePort());
+        log.info("Data center DataFlowBootStrap successful! listening port: {}", getAppConfig().getPort());
     }
 }

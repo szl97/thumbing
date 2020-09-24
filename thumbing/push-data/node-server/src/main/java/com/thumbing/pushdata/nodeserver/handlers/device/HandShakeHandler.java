@@ -1,13 +1,10 @@
 package com.thumbing.pushdata.nodeserver.handlers.device;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
+import com.thumbing.pushdata.common.cache.DeviceCache;
 import com.thumbing.pushdata.common.constants.AttributeEnum;
-import com.thumbing.pushdata.common.constants.OperationEnum;
-import com.thumbing.pushdata.common.message.ConnectSet;
 import com.thumbing.pushdata.common.message.DefinedMessage;
 import com.thumbing.pushdata.common.message.HandShake;
 import com.thumbing.pushdata.nodeserver.channel.DeviceDataChannelManager;
-import com.thumbing.pushdata.nodeserver.channel.SyncClientChannelManager;
 import com.thumbing.pushdata.nodeserver.config.NodeServerConfig;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
@@ -32,7 +29,7 @@ public class HandShakeHandler implements IDeviceDataHandler<HandShake> {
     private DeviceDataChannelManager channelManager;
 
     @Autowired
-    private SyncClientChannelManager syncClientChannelManager;
+    private DeviceCache cache;
 
     @Autowired
     private NodeServerConfig nodeServerConfig;
@@ -50,23 +47,7 @@ public class HandShakeHandler implements IDeviceDataHandler<HandShake> {
         attributeEnums.add(AttributeEnum.CHANNEL_ATTR_HANDSHAKE);
         channelManager.bindAttributes(message.getUserId(), channel, attributeEnums);
         log.debug("Device connect with node server,channel:{}", channel);
-        List<Channel> channels = syncClientChannelManager.getAllChannels();
-        List<Long> devices = new ArrayList<>();
-        devices.add(message.getUserId());
-        channels.forEach(
-                c-> {
-                    try {
-                        c.writeAndFlush(ConnectSet.builder().name(nodeServerConfig.getName())
-                                .operation(OperationEnum.ADD)
-                                .userIds(devices)
-                                .build()
-                                .encode());
-                    } catch (JsonProcessingException e) {
-                        e.printStackTrace();
-                    }
-
-                }
-        );
-        log.debug("node server send sync client request");
+        cache.add(nodeServerConfig.getName(), message.getUserId());
+        log.debug("node server save client");
     }
 }

@@ -1,11 +1,13 @@
 package com.thumbing.pushdata.datacenter.handlers;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.thumbing.pushdata.common.cache.DeviceCache;
 import com.thumbing.pushdata.common.channel.IChannelManager;
 import com.thumbing.pushdata.common.handlers.IMessageHandler;
 import com.thumbing.pushdata.common.message.DefinedMessage;
 import com.thumbing.pushdata.common.message.PushData;
-import com.thumbing.pushdata.datacenter.device.DeviceManager;
+import com.thumbing.pushdata.datacenter.monitors.CenterZkMonitor;
+import com.thumbing.pushdata.datacenter.utils.NodeServerUtils;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import lombok.Data;
@@ -16,6 +18,7 @@ import org.springframework.stereotype.Component;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 
 /**
  * @Author: Stan Sai
@@ -30,7 +33,10 @@ public class PushDataHandler implements IMessageHandler<PushData> {
     private IChannelManager channelManager;
 
     @Autowired
-    private DeviceManager deviceManager;
+    private CenterZkMonitor zkMonitor;
+
+    @Autowired
+    private DeviceCache cache;
 
     @Override
     public boolean support(DefinedMessage message) {
@@ -39,10 +45,11 @@ public class PushDataHandler implements IMessageHandler<PushData> {
 
     @Override
     public void call(ChannelHandlerContext ctx, PushData message) {
+        Set<String> nodes = zkMonitor.getAllNodes();
         HashMap<String, List<Long>> map = new HashMap<>();
         message.getToUserIds().forEach(
                 a -> {
-                    String name = deviceManager.getNodeServer(a);
+                    String name = NodeServerUtils.getNodeServer(cache, nodes, a);
                     if (name != null) {
                         if (!map.containsKey(name)) {
                             map.put(name, new ArrayList<>());

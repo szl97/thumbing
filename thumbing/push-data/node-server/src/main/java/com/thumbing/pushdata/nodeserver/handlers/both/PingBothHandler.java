@@ -4,7 +4,6 @@ import com.thumbing.pushdata.common.handlers.PingHandler;
 import com.thumbing.pushdata.common.message.Ping;
 import com.thumbing.pushdata.nodeserver.handlers.center.ICenterDataHandler;
 import com.thumbing.pushdata.nodeserver.handlers.device.IDeviceDataHandler;
-import com.thumbing.pushdata.nodeserver.handlers.sync.ISyncClientHandler;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -16,6 +15,6 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Component
 @Data
-public class PingBothHandler extends PingHandler implements ISyncClientHandler<Ping>, ICenterDataHandler<Ping>, IDeviceDataHandler<Ping> {
+public class PingBothHandler extends PingHandler implements ICenterDataHandler<Ping>, IDeviceDataHandler<Ping> {
 
 }

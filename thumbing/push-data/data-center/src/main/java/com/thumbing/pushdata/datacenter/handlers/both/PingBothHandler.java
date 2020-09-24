@@ -3,7 +3,6 @@ package com.thumbing.pushdata.datacenter.handlers.both;
 import com.thumbing.pushdata.common.handlers.PingHandler;
 import com.thumbing.pushdata.common.message.Ping;
 import com.thumbing.pushdata.datacenter.handlers.data.IDeviceDataHandler;
-import com.thumbing.pushdata.datacenter.handlers.monitors.IMonitorsHandler;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -16,6 +15,6 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Component
 @Data
-public class PingBothHandler extends PingHandler implements IMonitorsHandler<Ping>, IDeviceDataHandler<Ping> {
+public class PingBothHandler extends PingHandler implements IDeviceDataHandler<Ping> {
 
 }
