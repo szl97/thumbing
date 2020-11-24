@@ -1,3 +1,5 @@
+社交软件的后端和部分前端实现
+
 ### 框架设计思路
 
 -只有gateway端口堆外暴露，所有api request经过gateway转发,gateway中设定了路由规则，并进行登录认证和安全认证，gateway由Spring Cloud GateWay实现
