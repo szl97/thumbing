@@ -55,16 +55,14 @@ redis管理工具：another redis desktop management
 
 4.jpa: https://github.com/wenhao/jpa-spec 大部分jpa的工具类模仿了jpa specification
 
-5.mongodb: https://www.runoob.com/mongodb/mongodb-tutorial.html 清楚概念会用即可
+5.mongodb: https://www.runoob.com/mongodb/mongodb-tutorial.html
 
 6.elasticsearch: https://www.elastic.co/ https://www.elastic.co/cn/elasticsearch/
 
 7.xxl-job: https://www.xuxueli.com/xxl-job
 
-8.docker: 自行搜索
+8.docker: https://docs.docker.com/
 
-9.Spring Cloud: gateway, security, eureka, feign, ribbon, hystric, nocas和dubbo没有采用，但是道理差不多，也可以学习 https://spring.io/projects/spring-cloud
+9.Spring Cloud: https://spring.io/projects/spring-cloud
 
 10.https
-
-11.阿里云部署
