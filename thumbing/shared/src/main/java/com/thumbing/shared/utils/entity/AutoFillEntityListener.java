@@ -1,10 +1,7 @@
 package com.thumbing.shared.utils.entity;
 
-import com.thumbing.shared.auth.model.UserContext;
 import com.thumbing.shared.constants.EntityConstants;
 import com.thumbing.shared.utils.generateid.SnowFlake;
-import com.thumbing.shared.utils.security.SecurityUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.PrePersist;
